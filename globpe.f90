@@ -291,7 +291,7 @@ minwater = max( 0., minwater )
 if ( abs(nmlo)>=2 ) nriver=1
 read(99, skyin)
 read(99, datafile)
-read(99, kuonml)
+!~ read(99, kuonml)
 ! try reading boundary layer turbulence namelist
 read(99, turbnml, iostat=ierr)
 if ( ierr /= 0 ) rewind(99)       ! rewind namelist if turbnml is not found
