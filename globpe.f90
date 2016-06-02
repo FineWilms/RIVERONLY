@@ -855,19 +855,19 @@ do kktau = 1,ntau   ! ****** start of main time loop
     end if  ! (ntau<10*nperday)
   endif   ! (mod(ktau,nperday)==0)
   
-  if ( namip /= 0 ) then
-    if ( nmlo == 0 ) then
-      if ( mod(ktau,nperday) == 0 ) then
-        if ( myid == 0 ) then
-          write(6,*) 'amipsst called at end of day for ktau,mtimer,namip ',ktau,mtimer,namip  
-        end if
-        call amipsst
-      end if
-    else
+  !~ if ( namip /= 0 ) then
+    !~ if ( nmlo == 0 ) then
+      !~ if ( mod(ktau,nperday) == 0 ) then
+        !~ if ( myid == 0 ) then
+          !~ write(6,*) 'amipsst called at end of day for ktau,mtimer,namip ',ktau,mtimer,namip  
+        !~ end if
+        !~ call amipsst
+      !~ end if
+    !~ else
       ! call evey time-step for nudging
-      call amipsst
-    end if
-  end if
+      !~ call amipsst
+    !~ end if
+  !~ end if
 
 #ifdef vampir
   ! Flush vampir trace information to disk to save memory.
