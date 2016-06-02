@@ -303,13 +303,13 @@ if ( myid==0 ) then
 end if
 !if (nh/=0) then
 ! Non-hydrostatic case
-if ( nh==2 .and. lapsbot/=3 ) stop 'nh=2 needs lapsbot=3'
-if ( abs(epsp)<=1. ) then
-  ! exact treatment when epsp is constant
-  call eig(sig,sigmh,tbar,lapsbot,isoth,dt,epsp,epsh,nsig,bet,betm,nh)
-else
-  call eig(sig,sigmh,tbar,lapsbot,isoth,dt,0.,0.,nsig,bet,betm,nh)
-end if
+!~ if ( nh==2 .and. lapsbot/=3 ) stop 'nh=2 needs lapsbot=3'
+!~ if ( abs(epsp)<=1. ) then
+  !~ ! exact treatment when epsp is constant
+  !~ call eig(sig,sigmh,tbar,lapsbot,isoth,dt,epsp,epsh,nsig,bet,betm,nh)
+!~ else
+  !~ call eig(sig,sigmh,tbar,lapsbot,isoth,dt,0.,0.,nsig,bet,betm,nh)
+!~ end if
 !else
 !  ! MJT notes - The hydrostatic case could have called
 !  ! eig and avoided a ccmpi_bcast.  However, since eig
