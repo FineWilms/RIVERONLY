@@ -623,7 +623,7 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use tkeeps, only : tke,eps,zidry                 ! TKE-EPS boundary layer
-use tracermodule, only : tracname,writetrpm      ! Tracer routines
+!~ use tracermodule, only : tracname,writetrpm      ! Tracer routines
 use tracers_m                                    ! Tracer data
 use vegpar_m                                     ! Vegetation arrays
 use vvel_m                                       ! Additional vertical velocity
@@ -1406,27 +1406,27 @@ if( myid==0 .or. local ) then
       call attrib(idnc,idim(1:4),4,'eps','Eddy dissipation rate','m2/s3',0.,6.5,0,itype)
     end if
 
-    ! TRACER --------------------------------------------------------
-    if ( ngas>0 ) then
-      if ( itype==-1 ) then ! restart
-        do igas=1,ngas
-          write(trnum,'(i3.3)') igas
-          lname = 'Tracer (inst.) '//trim(tracname(igas))
-          call attrib(idnc,idim(1:4),4,'tr'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
-        enddo ! igas loop
-      else                  ! history
-        do igas=1,ngas
-          write(trnum,'(i3.3)') igas
-!         rml 19/09/07 use tracname as part of tracer long name
-          !lname = 'Tracer (inst.) '//trim(tracname(igas))
-          !call attrib(idnc,idim(1:4),4,'tr'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
-          lname = 'Tracer (average) '//trim(tracname(igas))
-          call attrib(idnc,idim(1:4),4,'trav'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
-!         rml 14/5/10 option to write out local time afternoon averages
-          if (writetrpm) call attrib(idnc,idim(1:4),4,'trpm'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
-        enddo ! igas loop
-      end if
-    endif   ! (ngas>0)
+    !~ ! TRACER --------------------------------------------------------
+    !~ if ( ngas>0 ) then
+      !~ if ( itype==-1 ) then ! restart
+        !~ do igas=1,ngas
+          !~ write(trnum,'(i3.3)') igas
+          !~ lname = 'Tracer (inst.) '//trim(tracname(igas))
+          !~ call attrib(idnc,idim(1:4),4,'tr'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
+        !~ enddo ! igas loop
+      !~ else                  ! history
+        !~ do igas=1,ngas
+          !~ write(trnum,'(i3.3)') igas
+!~ !         rml 19/09/07 use tracname as part of tracer long name
+          !~ !lname = 'Tracer (inst.) '//trim(tracname(igas))
+          !~ !call attrib(idnc,idim(1:4),4,'tr'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
+          !~ lname = 'Tracer (average) '//trim(tracname(igas))
+          !~ call attrib(idnc,idim(1:4),4,'trav'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
+!~ !         rml 14/5/10 option to write out local time afternoon averages
+          !~ if (writetrpm) call attrib(idnc,idim(1:4),4,'trpm'//trnum,lname,'ppm',0.,6.5E6,0,-1) ! -1 = long
+        !~ enddo ! igas loop
+      !~ end if
+    !~ endif   ! (ngas>0)
 
     !~ ! AEROSOL ---------------------------------------------------
     !~ if ( abs(iaero)>=2 ) then  
@@ -2149,19 +2149,19 @@ if ( ngas>0 ) then
       !call histwrt4(tr(:,:,igas),    'tr'//trnum,  idnc,iarch,local,.true.)
       call histwrt4(traver(:,:,igas),'trav'//trnum,idnc,iarch,local,lave)
       ! rml 14/5/10 option to write out local time afternoon average
-      if ( writetrpm ) then
-        ! first divide by number of contributions to average
-        do k = 1,klt
-          trpm(1:ifull,k,igas) = trpm(1:ifull,k,igas)/float(npm)
-        enddo
-        call histwrt4(trpm(:,:,igas),'trpm'//trnum,idnc,iarch,local,.true.)
-      endif
+      !~ if ( writetrpm ) then
+        !~ ! first divide by number of contributions to average
+        !~ do k = 1,klt
+          !~ trpm(1:ifull,k,igas) = trpm(1:ifull,k,igas)/float(npm)
+        !~ enddo
+        !~ call histwrt4(trpm(:,:,igas),'trpm'//trnum,idnc,iarch,local,.true.)
+      !~ endif
     enddo ! igas loop
     ! reset arrays
-    if ( writetrpm ) then
-      trpm = 0.
-      npm  = 0
-    endif
+    !~ if ( writetrpm ) then
+      !~ trpm = 0.
+      !~ npm  = 0
+    !~ endif
   end if
 endif  ! (ngasc>0)
 

@@ -41,20 +41,20 @@ contains
 ! *********************************************************************
 
 subroutine init_ts(ngas,dt)
-use tracermodule, only : sitefile,shipfile
+!~ use tracermodule, only : sitefile,shipfile
 implicit none
 integer ngas
 real dt
 
-if (sitefile.ne.'') call readsitelist(ngas)
-if (shipfile.ne.'') call readshiplist(ngas,dt)
+!~ if (sitefile.ne.'') call readsitelist(ngas)
+!~ if (shipfile.ne.'') call readshiplist(ngas,dt)
 
 return
 end subroutine init_ts
 
 ! ********************************************************************
 subroutine write_ts(ktau,ntau,dt)
-use tracermodule, only : sitefile,shipfile
+!~ use tracermodule, only : sitefile,shipfile
 implicit none
 include 'dates.h'
 integer jyear,jmonth,jday,jhour,jmin
@@ -73,9 +73,9 @@ mstart=24*60*(ndoy(jmonth)+jday-1) + 60*jhour + jmin ! mins from start of year
 mins = mtimer + mstart
 
 !   rml 25/08/03 write tracer data to timeseries file
-if (sitefile.ne.'') call writetimeseries(ktau,ntau,jyear,mins)
+!~ if (sitefile.ne.'') call writetimeseries(ktau,ntau,jyear,mins)
 !     rml 26/11/03 write mobile tracer data to file
-if (shipfile.ne.'') call writeshipts(ktau,ntau,dt)
+!~ if (shipfile.ne.'') call writeshipts(ktau,ntau,dt)
 
 return
 
@@ -92,7 +92,7 @@ subroutine readsitelist(ntrac)
 use cc_mpi, only : myid, indv_mpi, fproc, ipan, ccmpi_abort
 use infile
 !     rml 19/09/07 add tracname so that can be written to ts output file
-use tracermodule, only : sitefile,tracname
+!~ use tracermodule, only : sitefile,tracname
 use vecsuv_m
 use xyzinfo_m
 implicit none
@@ -124,10 +124,10 @@ integer iq
 windconv = .false.
 
 !     read file of site locations for timeseries output
-open(88,file=sitefile,form='formatted', status='unknown')
-read(88,*) head
+!~ open(88,file=sitefile,form='formatted', status='unknown')
+!~ read(88,*) head
 !     number of gridpoints and output frequency (number of timesteps)
-read(88,*) ngrdpts1,ntsfreq
+!~ read(88,*) ngrdpts1,ntsfreq
 allocate(templist(ngrdpts1,3))
 if ( nproc > 1 ) then
   allocate(surforder(ngrdpts1) )
@@ -140,52 +140,52 @@ kount500=0
 ! Perhaps need to have an additional netcdf variable for ip, so
 ! that the original order can be reconstructed from the multiple files.
 k = 0
-do ip=1,ngrdpts1
-  read(88,*) i,i1,ig,jg,tmpval
-  ! Convert to local indices. Same code used in indata for stations.
-  ! Should be generalised to a routine?
-  nface=(jg-1)/il_g
-!       Note that the second argument to fproc is the j index on the
-!       face, not the global j index,   
-  if ( fproc(ig,jg - nface*il_g,nface) == myid ) then
-     ! Point is in my region
-     iqg = ig + (jg-1)*il_g
-     ! Local indices on this processor
-     call indv_mpi(iqg,ii,jj,n)
-     k = k + 1
-     istn = ii
-     jstn = jj+(n-1)*ipan
-     templist(k,:) = (/ istn, jstn, tmpval /)
-!          check if any profiles requested
-     if (templist(k,3).eq.99) kountprof=kountprof+1
-     if (templist(k,3).eq.98) kount500=kount500+1
-     ! Define order variable to allow merging the separate processor files
-     if ( nproc > 1 ) surforder(k) = ip
-  end if
-enddo
+!~ do ip=1,ngrdpts1
+  !~ read(88,*) i,i1,ig,jg,tmpval
+  !~ ! Convert to local indices. Same code used in indata for stations.
+  !~ ! Should be generalised to a routine?
+  !~ nface=(jg-1)/il_g
+!~ !       Note that the second argument to fproc is the j index on the
+!~ !       face, not the global j index,   
+  !~ if ( fproc(ig,jg - nface*il_g,nface) == myid ) then
+     !~ ! Point is in my region
+     !~ iqg = ig + (jg-1)*il_g
+     !~ ! Local indices on this processor
+     !~ call indv_mpi(iqg,ii,jj,n)
+     !~ k = k + 1
+     !~ istn = ii
+     !~ jstn = jj+(n-1)*ipan
+     !~ templist(k,:) = (/ istn, jstn, tmpval /)
+!~ !          check if any profiles requested
+     !~ if (templist(k,3).eq.99) kountprof=kountprof+1
+     !~ if (templist(k,3).eq.98) kount500=kount500+1
+     !~ ! Define order variable to allow merging the separate processor files
+     !~ if ( nproc > 1 ) surforder(k) = ip
+  !~ end if
+!~ enddo
 
 ngrdpts1 = k ! Reset to the actual number I have
 
 !     Read in any additional variables to output besides tracer
 n2d=0
 n3d=0
-read(88,*,end=880) head
-read(88,*) n3d
-allocate(varname3(n3d))
-windconv = .false.
-do n=1,n3d
-  read(88,*) varname3(n)
-!       rml 19/09/07 check if wind conversion required
-  if (trim(varname3(n)).eq.'u'.or.trim(varname3(n)).eq.'v') windconv=.true.
-enddo
-read(88,*) head
-read(88,*) n2d
-allocate(varname2(n2d))
-do n=1,n2d
-  read(88,*) varname2(n)
-enddo
-880  continue
-close(88)
+!~ read(88,*,end=880) head
+!~ read(88,*) n3d
+!~ allocate(varname3(n3d))
+!~ windconv = .false.
+!~ do n=1,n3d
+  !~ read(88,*) varname3(n)
+!~ !       rml 19/09/07 check if wind conversion required
+  !~ if (trim(varname3(n)).eq.'u'.or.trim(varname3(n)).eq.'v') windconv=.true.
+!~ enddo
+!~ read(88,*) head
+!~ read(88,*) n2d
+!~ allocate(varname2(n2d))
+!~ do n=1,n2d
+  !~ read(88,*) varname2(n)
+!~ enddo
+!~ 880  continue
+!~ close(88)
 
 !     rml 19/09/07 fill arrays needed for wind conversion
 if (windconv) then
@@ -309,7 +309,7 @@ if (ngrdpts>0) then
   call ccnf_enddef(tsid(1))
 !
 !     rml 19/09/07 write tracer name array
-  call ccnf_put_vara(tsid(1),tracnamid,tracname)
+  !~ call ccnf_put_vara(tsid(1),tracnamid,tracname)
 
 !     write grid point arrays
   call ccnf_put_vara(tsid(1),gridid,listijk)
@@ -349,7 +349,7 @@ use prec_m      ! precip
 use sigs_m      ! sigma levels for pressure
 use soil_m      ! albedo
 use soilsnow_m  ! soil temp (tgg)
-use tracermodule, only : co2em
+!~ use tracermodule, only : co2em
 use tracers_m   ! ntrac and tr array
 use vegpar_m    ! rlai
 use vvel_m      ! vertical velocity
@@ -457,7 +457,7 @@ if (mod(ktau,ntsfreq).eq.0) then
         if (writesurf(n)) then
            kount=kount+1
            iq = listijk(n,1) + (listijk(n,2)-1)*il
-           cts(kount,:)=co2em(iq,:)
+           !~ cts(kount,:)=co2em(iq,:)
         endif
       enddo 
       start(1)=1; start(2)=1; start(3)=indextime
@@ -501,7 +501,7 @@ subroutine readshiplist(ntrac,dt)
 !
 use cc_mpi
 use infile
-use tracermodule, only : shipfile
+!~ use tracermodule, only : shipfile
 implicit none
 integer ntrac,i,i2,ierr
 integer dtlsdim,nvaldim,outshipid(3),dims(2),tracdim
@@ -517,7 +517,7 @@ if ( nproc > 1 ) then
    call ccmpi_abort(-1)
 end if
 !     open file with ship locations
-call ccnf_open(shipfile,inshipid(1),ierr)
+!~ call ccnf_open(shipfile,inshipid(1),ierr)
 call ncmsg("readshiplist",ierr)
 call ccnf_inq_dimlen(inshipid(1),'npts',nshippts)
 !     read times for ship samples

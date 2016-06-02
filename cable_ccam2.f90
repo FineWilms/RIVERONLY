@@ -220,7 +220,7 @@ call solargh(fjd,bpyear,r1,dlt,alp,slag)
 call zenith(fjd,r1,dlt,slag,rlatt,rlongg,dhr,ifull,coszro2,taudar2)
 
 ! calculate CO2 concentration
-call setco2for(atmco2)
+!~ call setco2for(atmco2)
 
 ! set meteorological forcing
 tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
@@ -571,52 +571,52 @@ end do
 return
 end subroutine sib4
 
-! *************************************************************************************
-subroutine setco2for(atmco2)
-! set co2 forcing for cable
-! constant: atmospheric co2 = 360 ppm 
-! host: atmospheric co2 follows that from CCAM radiation scheme
-! interactive: atmospheric co2 taken from tracer (usually cable+fos+ocean)
+!~ ! *************************************************************************************
+!~ subroutine setco2for(atmco2)
+!~ ! set co2 forcing for cable
+!~ ! constant: atmospheric co2 = 360 ppm 
+!~ ! host: atmospheric co2 follows that from CCAM radiation scheme
+!~ ! interactive: atmospheric co2 taken from tracer (usually cable+fos+ocean)
 
-use cc_mpi, only : myid
-use radisw_m, only : rrvco2
-use tracermodule, only : tractype,tracname
-use tracers_m, only : tr,ngas
+!~ use cc_mpi, only : myid
+!~ use radisw_m, only : rrvco2
+!~ use tracermodule, only : tractype,tracname
+!~ use tracers_m, only : tr,ngas
 
-implicit none
+!~ implicit none
 
-include 'newmpar.h'
-include 'parm.h'
+!~ include 'newmpar.h'
+!~ include 'parm.h'
 
-integer ico2,igas
-real, dimension(ifull), intent(out) :: atmco2
+!~ integer ico2,igas
+!~ real, dimension(ifull), intent(out) :: atmco2
 
-ico2=0
-if ( tracerco2==1 ) then
-  do igas=1,ngas
-    if ( trim(tractype(igas))=='online' .and. trim(tracname(igas))=='cbmnep' ) then
-      ico2=igas
-      exit
-    end if
-  end do
-  if ( ico2>0 ) then
-    atmco2 = tr(1:ifull,1,ico2) ! use interactive tracers
-  else
-    atmco2 = 1.E6*rrvco2        ! from radiative CO2 forcings
-  end if
-else
-  atmco2 = 1.E6*rrvco2          ! from radiative CO2 forcings
-end if
-if ( myid==0 .and. ktau==1 ) then
-  if ( ico2==0 ) then
-    write(6,*) "CABLE using prescribed CO2 from radiative forcings"
-  else
-    write(6,*) "CABLE using prognostic CO2 from tracer"
-  end if
-end if
+!~ ico2=0
+!~ if ( tracerco2==1 ) then
+  !~ do igas=1,ngas
+    !~ if ( trim(tractype(igas))=='online' .and. trim(tracname(igas))=='cbmnep' ) then
+      !~ ico2=igas
+      !~ exit
+    !~ end if
+  !~ end do
+  !~ if ( ico2>0 ) then
+    !~ atmco2 = tr(1:ifull,1,ico2) ! use interactive tracers
+  !~ else
+    !~ atmco2 = 1.E6*rrvco2        ! from radiative CO2 forcings
+  !~ end if
+!~ else
+  !~ atmco2 = 1.E6*rrvco2          ! from radiative CO2 forcings
+!~ end if
+!~ if ( myid==0 .and. ktau==1 ) then
+  !~ if ( ico2==0 ) then
+    !~ write(6,*) "CABLE using prescribed CO2 from radiative forcings"
+  !~ else
+    !~ write(6,*) "CABLE using prognostic CO2 from tracer"
+  !~ end if
+!~ end if
 
-return
-end subroutine setco2for
+!~ return
+!~ end subroutine setco2for
 
 ! *************************************************************************************
 subroutine cbmemiss(trsrc,mvegt,mode)
