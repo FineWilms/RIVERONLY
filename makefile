@@ -94,7 +94,7 @@ endif
 #~ optical_path.o gas_tf.o lw_gases_stdtf.o \
 #~ netcdf_m.o mpif_m.o
 
-OBJS = convjlm.o depts.o estab.o gettin.o \
+OBJS = convjlm.o estab.o gettin.o \
 globpe.o gwdrag.o hordifg.o hs_phys.o indata.o infile.o ints.o \
 helmsolve.o jimcc.o nesting.o nonlin.o \
 outcdf.o pbldif.o  scrnout.o setxyz.o sflux.o \
@@ -121,7 +121,6 @@ cable_air.o cable_albedo.o cable_canopy.o cable_carbon.o cable_ccam2.o cable_com
 cable_data.o cable_define_types.o cable_radiation.o cable_roughness.o cable_soilsnow.o \
 casa_cnp.o casa_variable.o \
 ateb.o mlo.o mlodynamics.o river.o tkeeps.o \
-rad_utilities.o  esfsw_driver.o esfsw_parameters.o \
 netcdf_m.o mpif_m.o
 
 globpea: $(OBJS)
@@ -136,10 +135,10 @@ netcdf_m.o: netcdf_m.f90
 	$(FC) -c $(PPFLAG90) $(NCFLAG) $<
 mpif_m.o: mpif_m.f90
 	$(FC) -c $(PPFLAG90) $(MPIFLAG) $<
-esfsw_driver.o: esfsw_driver.f90
-	$(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
-esfsw_parameters.o: esfsw_parameters.f90
-	$(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
+#~ esfsw_driver.o: esfsw_driver.f90
+	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
+#~ esfsw_parameters.o: esfsw_parameters.f90
+	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
 #~ gas_tf.o: gas_tf.f90
 	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
 #~ longwave_clouds.o: longwave_clouds.f90
@@ -156,8 +155,8 @@ esfsw_parameters.o: esfsw_parameters.f90
 	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
 #~ optical_path.o: optical_path.f90
 	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
-rad_utilities.o: rad_utilities.f90
-	$(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
+#~ rad_utilities.o: rad_utilities.f90
+	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
 #~ sealw99.o: sealw99.f90
 	#~ $(FC) -c $(REAL8FLAG) $(PPFLAG90) $(FFLAGS) $<
 stacklimit.o: stacklimit.c
@@ -209,13 +208,13 @@ cloudmod.o : cfrac_m.o estab.o kuocomb_m.o morepbl_m.o sigs_m.o vvel_m.o newmpar
 #~ co2_read.o : cc_mpi.o co2dta_m.o radisw_m.o filnames.h newmpar.h parm.h rdparm.h
 convjlm.o : aerosolldr.o arrays_m.o cc_mpi.o cfrac_m.o diag_m.o estab.o extraout_m.o indices_m.o kuocomb_m.o latlong_m.o liqwpar_m.o map_m.o morepbl_m.o nharrs_m.o nlin_m.o pbl_m.o prec_m.o screen_m.o sigs_m.o soil_m.o soilsnow_m.o tkeeps.o tracers_m.o vvel_m.o work2_m.o const_phys.h kuocom.h newmpar.h parm.h parmdyn.h
 #~ daviesnudge.o : aerosolldr.o arrays_m.o cc_mpi.o sigs_m.o newmpar.h parm.h
-depts.o : bigxy4_m.o cc_mpi.o indices_m.o map_m.o uvbar_m.o vecsuv_m.o work3f_m.o xyzinfo_m.o const_phys.h newmpar.h parm.h parmgeom.h
+#~ depts.o : bigxy4_m.o cc_mpi.o indices_m.o map_m.o uvbar_m.o vecsuv_m.o work3f_m.o xyzinfo_m.o const_phys.h newmpar.h parm.h parmgeom.h
 diag_m.o : cc_mpi.o sigs_m.o sumdd_m.o xyzinfo_m.o newmpar.h parm.h
 e1e288.o : kdacom_m.o radisw_m.o tabcom_m.o tfcom_m.o hcon.h newmpar.h rdparm.h
 e3v88.o : tabcom_m.o hcon.h newmpar.h rdparm.h
 eig.o : cc_mpi.o vecs_m.o const_phys.h newmpar.h
-esfsw_driver.o : esfsw_parameters.o rad_utilities.o
-esfsw_parameters.o : rad_utilities.o
+#~ esfsw_driver.o : esfsw_parameters.o rad_utilities.o
+#~ esfsw_parameters.o : rad_utilities.o
 estab.o : const_phys.h
 #~ fst88.o : cc_mpi.o cldcom_m.o diag_m.o kdacom_m.o lwout_m.o radisw_m.o rdflux_m.o srccom_m.o tabcom_m.o tfcom_m.o hcon.h newmpar.h parm.h rdparm.h rnddta.h
 #~ gas_tf.o : longwave_params.o rad_utilities.o

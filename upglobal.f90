@@ -85,7 +85,7 @@ do k = 1,kl
   vx(1:ifull,k) = vx(1:ifull,k) - 0.5*dt*(1.-epsf)*f(1:ifull)*u(1:ifull,k) ! end of Eq. 130
 end do      ! k loop
 
-call depts1(x3d,y3d,z3d)
+!~ call depts1(x3d,y3d,z3d)
       
 !     calculate factr for choice of nt_adv, as usually used
 select case(nt_adv)
