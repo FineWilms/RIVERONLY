@@ -63,7 +63,7 @@ subroutine nestin
 use aerosolldr                   ! LDR prognostic aerosols
 use arrays_m                     ! Atmosphere dyamics prognostic arrays
 use cc_mpi                       ! CC MPI routines
-use daviesnudge                  ! Far-field nudging
+!~ use daviesnudge                  ! Far-field nudging
 use diag_m                       ! Diagnostic routines
 use indices_m                    ! Grid index arrays
 use latlong_m                    ! Lat/lon coordinates
@@ -149,7 +149,7 @@ if( mtimer>mtimeb ) then  ! allows for dt<1 minute
       xtghostb(:,:,:) = xtg(1:ifull,:,:)
     end if
         
-    call setdavvertwgt
+    !~ call setdavvertwgt
     
     ! record time of saved data
     mtimeb = mtimer
@@ -298,11 +298,11 @@ end if ! (mtimer>mtimeb)
 timerm = ktau*dt/60.   ! real value in minutes (in case dt < 60 seconds)
 cona = (mtimeb-timerm)/real(mtimeb-mtimea)
 conb = (timerm-mtimea)/real(mtimeb-mtimea)
-psls(:) = cona*psla(:) + conb*pslb(:)
-tt (:,:) = cona*ta(:,:) + conb*tb(:,:)
-qgg(:,:) = cona*qa(:,:) + conb*qb(:,:)
-uu (:,:) = cona*ua(:,:) + conb*ub(:,:)
-vv (:,:) = cona*va(:,:) + conb*vb(:,:)
+!~ psls(:) = cona*psla(:) + conb*pslb(:)
+!~ tt (:,:) = cona*ta(:,:) + conb*tb(:,:)
+!~ qgg(:,:) = cona*qa(:,:) + conb*qb(:,:)
+!~ uu (:,:) = cona*ua(:,:) + conb*ub(:,:)
+!~ vv (:,:) = cona*va(:,:) + conb*vb(:,:)
 
 ! calculate time interpolated tss 
 if ( namip==0 ) then     ! namip SSTs/sea-ice take precedence
@@ -337,9 +337,9 @@ if ( namip==0 ) then     ! namip SSTs/sea-ice take precedence
   endif     ! nmlo==0 ..else..
 endif       ! namip==0
      
-if ( abs(iaero)>=2 .and. nud_aero/=0 ) then
-  xtgdav(:,:,:) = cona*xtghosta(:,:,:) + conb*xtghostb(:,:,:)
-end if
+!~ if ( abs(iaero)>=2 .and. nud_aero/=0 ) then
+  !~ xtgdav(:,:,:) = cona*xtghosta(:,:,:) + conb*xtghostb(:,:,:)
+!~ end if
      
 return
 end subroutine nestin
@@ -353,7 +353,7 @@ subroutine nestinb
 use aerosolldr                   ! LDR prognostic aerosols
 use arrays_m                     ! Atmosphere dyamics prognostic arrays
 use cc_mpi                       ! CC MPI routines
-use daviesnudge                  ! Far-field nudging
+!~ use daviesnudge                  ! Far-field nudging
 use diag_m                       ! Diagnostic routines
 use indices_m                    ! Grid index arrays
 use latlong_m                    ! Lat/lon coordinates
@@ -409,7 +409,7 @@ if ( mtimer>mtimeb ) then
       call specinit
     end if
     ! define vertical weights
-    call setdavvertwgt
+    !~ call setdavvertwgt
   end if
           
 ! following (till end of subr) reads in next bunch of data in readiness
@@ -521,7 +521,7 @@ subroutine getspecdata(pslb,ub,vb,tb,qb,xtgb)
 use aerosolldr                   ! Aerosol interface
 use arrays_m                     ! Atmosphere dyamics prognostic arrays
 use cc_mpi                       ! CC MPI routines
-use daviesnudge                  ! Far-field nudging
+!~ use daviesnudge                  ! Far-field nudging
 use liqwpar_m                    ! Cloud water mixing ratios
 use nharrs_m                     ! Non-hydrostatic atmosphere arrays
 use savuvt_m                     ! Saved dynamic arrays
@@ -623,10 +623,10 @@ if ( nud_uv/=0 ) then
       vb(1:ifull,k) = -sinth(:)*dum(:)
     end do
   end if
-  do k = kbotdav,ktopdav
-    ub(:,k) = ub(:,k)*vertwgt(k)
-    vb(:,k) = vb(:,k)*vertwgt(k)
-  end do
+  !~ do k = kbotdav,ktopdav
+    !~ ub(:,k) = ub(:,k)*vertwgt(k)
+    !~ vb(:,k) = vb(:,k)*vertwgt(k)
+  !~ end do
   u(1:ifull,kbotdav:ktopdav) = u(1:ifull,kbotdav:ktopdav) + ub(:,kbotdav:ktopdav)
   v(1:ifull,kbotdav:ktopdav) = v(1:ifull,kbotdav:ktopdav) + vb(:,kbotdav:ktopdav)
   savu(1:ifull,kbotdav:ktopdav) = savu(1:ifull,kbotdav:ktopdav) + ub(:,kbotdav:ktopdav)
@@ -637,15 +637,15 @@ if ( nud_uv/=0 ) then
   savv2(1:ifull,kbotdav:ktopdav) = savv2(1:ifull,kbotdav:ktopdav) + vb(:,kbotdav:ktopdav)
 end if
 if ( nud_t>0 ) then
-  do k = kbotdav,ktopdav
-    tb(:,k) = tb(:,k)*vertwgt(k)
-  end do
+  !~ do k = kbotdav,ktopdav
+    !~ tb(:,k) = tb(:,k)*vertwgt(k)
+  !~ end do
   t(1:ifull,kbotdav:ktopdav) = t(1:ifull,kbotdav:ktopdav) + tb(:,kbotdav:ktopdav)
 end if
 if ( nud_q>0 ) then
-  do k = kbotdav,ktopdav
-    qb(:,k) = qb(:,k)*vertwgt(k)
-  end do
+  !~ do k = kbotdav,ktopdav
+    !~ qb(:,k) = qb(:,k)*vertwgt(k)
+  !~ end do
   qg(1:ifull,kbotdav:ktopdav) = max(qg(1:ifull,kbotdav:ktopdav)+qb(:,kbotdav:ktopdav), 0.)
 end if
 if ( nud_t>0 .or. nud_q>0 ) then
@@ -658,11 +658,11 @@ if ( nud_t>0 .or. nud_q>0 ) then
   phi(:,:) = phi(:,:) + phi_nh(:,:)
 end if
 if ( abs(iaero)>=2 .and. nud_aero>0 ) then
-  do ntr = 1,size(xtg,3)
-    do k = kbotdav,ktopdav
-      xtgb(:,k,ntr) = xtgb(:,k,ntr)*vertwgt(k)
-    end do
-  end do
+  !~ do ntr = 1,size(xtg,3)
+    !~ do k = kbotdav,ktopdav
+      !~ xtgb(:,k,ntr) = xtgb(:,k,ntr)*vertwgt(k)
+    !~ end do
+  !~ end do
   xtg(1:ifull,kbotdav:ktopdav,:) = max(xtg(1:ifull,kbotdav:ktopdav,:)+xtgb(:,kbotdav:ktopdav,:), 0.)
 end if
 
@@ -2958,47 +2958,47 @@ else
 return
 end subroutine specinit
 
-subroutine setdavvertwgt
+!~ subroutine setdavvertwgt
 
-use daviesnudge                  ! Far-field nudging
-use sigs_m                       ! Atmosphere sigma levels
+!~ use daviesnudge                  ! Far-field nudging
+!~ use sigs_m                       ! Atmosphere sigma levels
 
-implicit none
+!~ implicit none
 
-include 'newmpar.h'              ! Grid parameters
-include 'parm.h'                 ! Model configuration
+!~ include 'newmpar.h'              ! Grid parameters
+!~ include 'parm.h'                 ! Model configuration
 
-integer klow, khigh, k
-real siglow, sighigh
+!~ integer klow, khigh, k
+!~ real siglow, sighigh
 
-siglow = sig(kbotdav) - sigramplow
-sighigh = sig(ktopdav) + sigramphigh
+!~ siglow = sig(kbotdav) - sigramplow
+!~ sighigh = sig(ktopdav) + sigramphigh
 
-do klow = 1,kl-1
-  if ( siglow>=sig(klow) ) exit
-end do
-do khigh = kl,2,-1
-  if ( sighigh<=sig(khigh) ) exit
-end do
+!~ do klow = 1,kl-1
+  !~ if ( siglow>=sig(klow) ) exit
+!~ end do
+!~ do khigh = kl,2,-1
+  !~ if ( sighigh<=sig(khigh) ) exit
+!~ end do
 
-do k = 1,kbotdav-1
-  vertwgt(k) = 0.
-end do
-do k = kbotdav,klow-1
-  vertwgt(k) = (sig(kbotdav)-sig(k))/(sig(kbotdav)-siglow)
-end do
-do k = klow,khigh
-  vertwgt(k) = 1.
-end do
-do k = khigh+1,ktopdav
-  vertwgt(k) = (sig(k)-sig(ktopdav))/(sighigh-sig(ktopdav))
-end do
-do k = ktopdav+1,kl
-  vertwgt(k) = 0.
-end do
+!~ do k = 1,kbotdav-1
+  !~ vertwgt(k) = 0.
+!~ end do
+!~ do k = kbotdav,klow-1
+  !~ vertwgt(k) = (sig(kbotdav)-sig(k))/(sig(kbotdav)-siglow)
+!~ end do
+!~ do k = klow,khigh
+  !~ vertwgt(k) = 1.
+!~ end do
+!~ do k = khigh+1,ktopdav
+  !~ vertwgt(k) = (sig(k)-sig(ktopdav))/(sighigh-sig(ktopdav))
+!~ end do
+!~ do k = ktopdav+1,kl
+  !~ vertwgt(k) = 0.
+!~ end do
 
-return
-end subroutine setdavvertwgt
+!~ return
+!~ end subroutine setdavvertwgt
 
 
 !     Little function to convert kdate_r in form YYYYMMDD to no. of   !  Y2K

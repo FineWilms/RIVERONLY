@@ -597,7 +597,7 @@ use carbpools_m                                  ! Carbon pools
 use cc_mpi                                       ! CC MPI routines
 use cfrac_m                                      ! Cloud fraction
 use cloudmod                                     ! Prognostic strat cloud
-use daviesnudge                                  ! Far-field nudging
+!~ use daviesnudge                                  ! Far-field nudging
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
 use gdrag_m                                      ! Gravity wave drag

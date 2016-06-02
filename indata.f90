@@ -46,7 +46,7 @@ use ateb                                         ! Urban
 use bigxy4_m                                     ! Grid interpolation
 use cable_ccam, only : loadcbmparm,loadtile      ! CABLE interface
 use cc_mpi                                       ! CC MPI routines
-use daviesnudge                                  ! Far-field nudging
+!~ use daviesnudge                                  ! Far-field nudging
 use diag_m                                       ! Diagnostic routines
 use epst_m                                       ! Off-centre terms
 use extraout_m                                   ! Additional diagnostics
@@ -1594,160 +1594,160 @@ ps(1:ifull)=1.e5*exp(psl(1:ifull))
 !--------------------------------------------------------------
 ! UPDATE DAVIES NUDGING ARRAYS (nbd and nud_hrs)
 ! Must occur after defining initial atmosphere fields
-if(nbd/=0.and.nud_hrs/=0)then
-  call davset   ! as entry in subr. davies, sets psls,qgg,tt,uu,vv
-  if ( myid==0 ) then
-    allocate(davt_g(ifull_g))
+!~ if(nbd/=0.and.nud_hrs/=0)then
+  !~ call davset   ! as entry in subr. davies, sets psls,qgg,tt,uu,vv
+  !~ if ( myid==0 ) then
+    !~ allocate(davt_g(ifull_g))
     ! Set up the weights using global array and indexing
     ! This needs the global function indglobal for calculating the 1D index
-    davt_g(:) = 0.
-    if(nbd==1)then
-      davt_g(:) = 1./nud_hrs !  e.g. 1/48
-    endif                !  (nbd>0)
-    if(nbd==-1)then    ! linearly increasing nudging, just on panel 4
-      centi=.5*(il_g+1)
-      do j=1,il_g
-        do i=1,il_g
-          dist=max(abs(i-centi),abs(j-centi)) ! dist from centre of panel
-          distx=dist/(.5*il_g) ! between 0. and 1.
-          davt_g(indglobal(j,i,4))=(1.-distx)/abs(nud_hrs) !  e.g. 1/24
-        enddo            ! i loop
-      enddo              ! j loop
-    endif                !  (nbd==-1) 
-    if(nbd==-2)then    ! quadr. increasing nudging, just on panel 4
-      centi=.5*(il_g+1)
-      do j=1,il_g  
-        do i=1,il_g
-          dist=max(abs(i-centi),abs(j-centi)) ! dist from centre of panel
-          distx=dist/(.5*il_g) ! between 0. and 1.
-          davt_g(indglobal(j,i,4))=(1.-distx**2)/abs(nud_hrs) !  e.g. 1/24
-        enddo            ! i loop
-      enddo              ! j loop
-    endif                !  (nbd==-2) 
-    if(abs(nbd)==3)then !usual far-field with no nudging on panel 1
-      do n=0,5
-        do j=il_g/2+1,il_g
-          ! linearly between 0 (at il/2) and 1/abs(nud_hrs) (at il+1)
-          rhs=(j-il_g/2)/((il_g/2+1.)*nud_hrs)
-          do i=1,il_g
-            if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            if(n==2)davt_g(indglobal(j,i,n))=rhs
-            if(n==3)davt_g(indglobal(j,i,n))=rhs
-            if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          enddo          ! i loop
-        enddo            ! j loop
-      enddo              ! n loop
-      do j=1,il_g          ! full nudging on furthest panel
-        do i=1,il_g
-          davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        enddo            ! i loop
-      enddo              ! j loop
-    endif                !  (nbd==-3) 
-    if(abs(nbd)==4)then    ! another special form with no nudging on panel 1
-      do n=0,5
-        do j=1,il_g
-          ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il+.5)
-          rhs=(j-.5)/(il_g*nud_hrs)
-          do i=1,il_g
-            if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            if(n==2)davt_g(indglobal(j,i,n))=rhs
-            if(n==3)davt_g(indglobal(j,i,n))=rhs
-            if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          enddo          ! i loop
-        enddo            ! j loop
-      enddo              ! n loop
-      do j=1,il_g        ! full nudging on furthest panel
-        do i=1,il_g
-          davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        enddo            ! i loop
-      enddo              ! j loop
-    endif                !  (nbd==-4) 
-    if(abs(nbd)==5)then    ! another special form with some nudging on panel 1
-      do n=0,5
-        do j=il_g/2+1,il_g
-          ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il+.5)
-          rhs=(.5*il_g+j-.5)/(1.5*il_g*nud_hrs)
-          do i=1,il_g
-            if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            if(n==2)davt_g(indglobal(j,i,n))=rhs
-            if(n==3)davt_g(indglobal(j,i,n))=rhs
-            if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          enddo          ! i loop
-        enddo            ! j loop
-      enddo              ! n loop
-      ril2=il_g/2
-      do j=1,jl
-        do i=1,il
-          rhs=max(abs(i-.5-ril2),abs(j-.5-ril2))/(1.5*il_g*nud_hrs)
-          davt_g(indglobal(i,il_g+1-j,1))=rhs  ! panel 1
-        enddo
-      enddo
-      do j=1,il_g        ! full nudging on furthest panel
-        do i=1,il_g
-          davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        enddo            ! i loop
-      enddo              ! j loop
-    endif                !  (nbd==-5)
-    if(abs(nbd)==6)then ! more like 1-way nesting
-      do j=1,il_g   ! full nudging on all further panels; 6 rows on 1
-        do i=1,il_g
-          davt_g(indglobal(j,i,0))=1./nud_hrs !  e.g. 1/48
-          davt_g(indglobal(j,i,2))=1./nud_hrs !  e.g. 1/48
-          davt_g(indglobal(j,i,3))=1./nud_hrs !  e.g. 1/48
-          davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-          davt_g(indglobal(j,i,5))=1./nud_hrs !  e.g. 1/48
-          davt_g(indglobal(j,i,1))=0.
-        enddo            ! i loop
-      enddo              ! j loop
-      do j=0,5
-        ! linearly between 0 and 1/abs(nud_hrs) over 6 rows
-        rhs=(6-j)/(6.*nud_hrs)
-        do i=1+j,il_g-j
-          davt_g(indglobal(i,j+1,1))=rhs
-          davt_g(indglobal(i,il_g-j,1))=rhs
-          davt_g(indglobal(j+1,i,1))=rhs
-          davt_g(indglobal(il_g-j,i,1))=rhs
-        enddo         ! i loop
-      enddo           ! j loop
-    endif             !  (nbd==-6)
-    if(abs(nbd)==7)then    ! another special form with no nudging on panel 1
-      do n=0,5
-        do j=1,il_g
-          ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il/2)
-          rhs=min((j-.5)/(.5*il_g*nud_hrs),1./nud_hrs)
-          do i=1,il_g
-            if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            if(n==2)davt_g(indglobal(j,i,n))=rhs
-            if(n==3)davt_g(indglobal(j,i,n))=rhs
-            if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          enddo          ! i loop
-        enddo            ! j loop
-      enddo              ! n loop
-      do j=1,il_g        ! full nudging on furthest panel
-        do i=1,il_g
-          davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        enddo            ! i loop
-      enddo              ! j loop
-    endif                !  (nbd==-7)  
-    call ccmpi_distribute(davt,davt_g)
-    deallocate(davt_g)
-  else
-    call ccmpi_distribute(davt)
-  end if ! myid==0
+    !~ davt_g(:) = 0.
+    !~ if(nbd==1)then
+      !~ davt_g(:) = 1./nud_hrs !  e.g. 1/48
+    !~ endif                !  (nbd>0)
+    !~ if(nbd==-1)then    ! linearly increasing nudging, just on panel 4
+      !~ centi=.5*(il_g+1)
+      !~ do j=1,il_g
+        !~ do i=1,il_g
+          !~ dist=max(abs(i-centi),abs(j-centi)) ! dist from centre of panel
+          !~ distx=dist/(.5*il_g) ! between 0. and 1.
+          !~ davt_g(indglobal(j,i,4))=(1.-distx)/abs(nud_hrs) !  e.g. 1/24
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+    !~ endif                !  (nbd==-1) 
+    !~ if(nbd==-2)then    ! quadr. increasing nudging, just on panel 4
+      !~ centi=.5*(il_g+1)
+      !~ do j=1,il_g  
+        !~ do i=1,il_g
+          !~ dist=max(abs(i-centi),abs(j-centi)) ! dist from centre of panel
+          !~ distx=dist/(.5*il_g) ! between 0. and 1.
+          !~ davt_g(indglobal(j,i,4))=(1.-distx**2)/abs(nud_hrs) !  e.g. 1/24
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+    !~ endif                !  (nbd==-2) 
+    !~ if(abs(nbd)==3)then !usual far-field with no nudging on panel 1
+      !~ do n=0,5
+        !~ do j=il_g/2+1,il_g
+          !~ ! linearly between 0 (at il/2) and 1/abs(nud_hrs) (at il+1)
+          !~ rhs=(j-il_g/2)/((il_g/2+1.)*nud_hrs)
+          !~ do i=1,il_g
+            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
+            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
+          !~ enddo          ! i loop
+        !~ enddo            ! j loop
+      !~ enddo              ! n loop
+      !~ do j=1,il_g          ! full nudging on furthest panel
+        !~ do i=1,il_g
+          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+    !~ endif                !  (nbd==-3) 
+    !~ if(abs(nbd)==4)then    ! another special form with no nudging on panel 1
+      !~ do n=0,5
+        !~ do j=1,il_g
+          !~ ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il+.5)
+          !~ rhs=(j-.5)/(il_g*nud_hrs)
+          !~ do i=1,il_g
+            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
+            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
+          !~ enddo          ! i loop
+        !~ enddo            ! j loop
+      !~ enddo              ! n loop
+      !~ do j=1,il_g        ! full nudging on furthest panel
+        !~ do i=1,il_g
+          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+    !~ endif                !  (nbd==-4) 
+    !~ if(abs(nbd)==5)then    ! another special form with some nudging on panel 1
+      !~ do n=0,5
+        !~ do j=il_g/2+1,il_g
+          !~ ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il+.5)
+          !~ rhs=(.5*il_g+j-.5)/(1.5*il_g*nud_hrs)
+          !~ do i=1,il_g
+            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
+            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
+          !~ enddo          ! i loop
+        !~ enddo            ! j loop
+      !~ enddo              ! n loop
+      !~ ril2=il_g/2
+      !~ do j=1,jl
+        !~ do i=1,il
+          !~ rhs=max(abs(i-.5-ril2),abs(j-.5-ril2))/(1.5*il_g*nud_hrs)
+          !~ davt_g(indglobal(i,il_g+1-j,1))=rhs  ! panel 1
+        !~ enddo
+      !~ enddo
+      !~ do j=1,il_g        ! full nudging on furthest panel
+        !~ do i=1,il_g
+          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+    !~ endif                !  (nbd==-5)
+    !~ if(abs(nbd)==6)then ! more like 1-way nesting
+      !~ do j=1,il_g   ! full nudging on all further panels; 6 rows on 1
+        !~ do i=1,il_g
+          !~ davt_g(indglobal(j,i,0))=1./nud_hrs !  e.g. 1/48
+          !~ davt_g(indglobal(j,i,2))=1./nud_hrs !  e.g. 1/48
+          !~ davt_g(indglobal(j,i,3))=1./nud_hrs !  e.g. 1/48
+          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
+          !~ davt_g(indglobal(j,i,5))=1./nud_hrs !  e.g. 1/48
+          !~ davt_g(indglobal(j,i,1))=0.
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+      !~ do j=0,5
+        !~ ! linearly between 0 and 1/abs(nud_hrs) over 6 rows
+        !~ rhs=(6-j)/(6.*nud_hrs)
+        !~ do i=1+j,il_g-j
+          !~ davt_g(indglobal(i,j+1,1))=rhs
+          !~ davt_g(indglobal(i,il_g-j,1))=rhs
+          !~ davt_g(indglobal(j+1,i,1))=rhs
+          !~ davt_g(indglobal(il_g-j,i,1))=rhs
+        !~ enddo         ! i loop
+      !~ enddo           ! j loop
+    !~ endif             !  (nbd==-6)
+    !~ if(abs(nbd)==7)then    ! another special form with no nudging on panel 1
+      !~ do n=0,5
+        !~ do j=1,il_g
+          !~ ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il/2)
+          !~ rhs=min((j-.5)/(.5*il_g*nud_hrs),1./nud_hrs)
+          !~ do i=1,il_g
+            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
+            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
+            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
+          !~ enddo          ! i loop
+        !~ enddo            ! j loop
+      !~ enddo              ! n loop
+      !~ do j=1,il_g        ! full nudging on furthest panel
+        !~ do i=1,il_g
+          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
+        !~ enddo            ! i loop
+      !~ enddo              ! j loop
+    !~ endif                !  (nbd==-7)  
+    !~ call ccmpi_distribute(davt,davt_g)
+    !~ deallocate(davt_g)
+  !~ else
+    !~ call ccmpi_distribute(davt)
+  !~ end if ! myid==0
   ! davu calc moved below next bounds call
-  if(nproc==1)then
-    write(6,*)'davt for i=il/2'
-    write(6,'(20f6.3)') (davt(iq),iq=il/2,ifull,il)
-  endif
-  if(diag)call printa('davt',davt,0,0,ia,ib,ja,jb,0.,real(nud_hrs))     
-endif                    ! (nbd.ne.0.and.nud_hrs.ne.0)
+  !~ if(nproc==1)then
+    !~ write(6,*)'davt for i=il/2'
+    !~ write(6,'(20f6.3)') (davt(iq),iq=il/2,ifull,il)
+  !~ endif
+  !~ if(diag)call printa('davt',davt,0,0,ia,ib,ja,jb,0.,real(nud_hrs))     
+!~ endif                    ! (nbd.ne.0.and.nud_hrs.ne.0)
 
-if(nbd>=3)then   ! separate (global) davu from (f-f) davt
-  davu(:) = 1./nudu_hrs    !  e.g. 1/48
-  write(6,*) 'all davu set to ',1./nudu_hrs 
-elseif (nbd.ne.0) then
-  davu(:) = davt(:)
-endif
+!~ if(nbd>=3)then   ! separate (global) davu from (f-f) davt
+  !~ davu(:) = 1./nudu_hrs    !  e.g. 1/48
+  !~ write(6,*) 'all davu set to ',1./nudu_hrs 
+!~ elseif (nbd.ne.0) then
+  !~ davu(:) = davt(:)
+!~ endif
 
 
 !--------------------------------------------------------------
