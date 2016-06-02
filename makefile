@@ -101,7 +101,7 @@ outcdf.o pbldif.o  scrnout.o setxyz.o sflux.o \
 soilsnow.o staguv.o eig.o updps.o vadvtvd.o \
 cloudmod.o latltoij.o \
 cldblk.o  \
-e3v88.o hconst.o ozoneread.o \
+hconst.o ozoneread.o \
 table.o zenith.o cc_mpi.o diag_m.o sumdd_m.o \
 utilities.o onthefly.o timeseries.o \
 stacklimit.o \
@@ -210,7 +210,7 @@ convjlm.o : aerosolldr.o arrays_m.o cc_mpi.o cfrac_m.o diag_m.o estab.o extraout
 #~ depts.o : bigxy4_m.o cc_mpi.o indices_m.o map_m.o uvbar_m.o vecsuv_m.o work3f_m.o xyzinfo_m.o const_phys.h newmpar.h parm.h parmgeom.h
 diag_m.o : cc_mpi.o sigs_m.o sumdd_m.o xyzinfo_m.o newmpar.h parm.h
 #~ e1e288.o : kdacom_m.o radisw_m.o tabcom_m.o tfcom_m.o hcon.h newmpar.h rdparm.h
-e3v88.o : tabcom_m.o hcon.h newmpar.h rdparm.h
+#~ e3v88.o : tabcom_m.o hcon.h newmpar.h rdparm.h
 eig.o : cc_mpi.o vecs_m.o const_phys.h newmpar.h
 #~ esfsw_driver.o : esfsw_parameters.o rad_utilities.o
 #~ esfsw_parameters.o : rad_utilities.o
