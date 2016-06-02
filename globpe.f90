@@ -84,7 +84,7 @@ use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
 use sbar_m                                 ! Saved dynamic arrays
 use screen_m                               ! Screen level diagnostics
-use seaesfrad_m                            ! SEA-ESF radiation
+!~ use seaesfrad_m                            ! SEA-ESF radiation
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
@@ -185,9 +185,9 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nhorps,nperavg,ia,ib, &
     minwater,ocnsmag,ocneps,mlodiff,zomode,zoseaice,factchseaice, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
-! radiation namelist
-namelist/skyin/mins_rad,sw_resolution,sw_diff_streams,            &
-    liqradmethod,iceradmethod,carbonradmethod
+!~ ! radiation namelist
+!~ namelist/skyin/mins_rad,sw_resolution,sw_diff_streams,            &
+    !~ liqradmethod,iceradmethod,carbonradmethod
 ! file namelist
 namelist/datafile/ifile,ofile,albfile,co2emfile,eigenv,hfile,     &
     icefile,mesonest,nmifile,o3file,radfile,restfile,rsmfile,     &
@@ -289,7 +289,7 @@ wlev     = ol
 mindep   = max( 0., mindep )
 minwater = max( 0., minwater )
 if ( abs(nmlo)>=2 ) nriver=1
-read(99, skyin)
+!~ read(99, skyin)
 read(99, datafile)
 !~ read(99, kuonml)
 ! try reading boundary layer turbulence namelist

@@ -156,7 +156,7 @@ use mlo, only : mindep              & ! Ocean physics and prognostic arrays
     ,factchseaice
 use mlodynamics                       ! Ocean dynamics
 use parmhdff_m                        ! Horizontal diffusion parameters
-use seaesfrad_m                       ! SEA-ESF radiation
+!~ use seaesfrad_m                       ! SEA-ESF radiation
 use tkeeps                            ! TKE-EPS boundary layer
 use tracers_m                         ! Tracer data
 
@@ -412,7 +412,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'helim',helim)
     call ccnf_put_attg(idnc,'helmmeth',helmmeth)
     call ccnf_put_attg(idnc,'iaero',iaero)   
-    call ccnf_put_attg(idnc,'iceradmethod',iceradmethod)   
+    !~ call ccnf_put_attg(idnc,'iceradmethod',iceradmethod)   
     call ccnf_put_attg(idnc,'jalbfix',jalbfix)
     call ccnf_put_attg(idnc,'kblock',kblock)
     call ccnf_put_attg(idnc,'kbotdav',kbotdav)
@@ -423,7 +423,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'ktopdav',ktopdav)
     call ccnf_put_attg(idnc,'ktopmlo',ktopmlo)
     call ccnf_put_attg(idnc,'leap',leap)
-    call ccnf_put_attg(idnc,'liqradmethod',liqradmethod)    
+    !~ call ccnf_put_attg(idnc,'liqradmethod',liqradmethod)    
     call ccnf_put_attg(idnc,'lgwd',lgwd)
     call ccnf_put_attg(idnc,'m_fly',m_fly)
     call ccnf_put_attg(idnc,'mbd',mbd)
@@ -508,8 +508,8 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'zvolcemi',zvolcemi)
 
     call ccnf_put_attg(idnc,'mins_rad',mins_rad)
-    call ccnf_put_attg(idnc,'sw_diff_streams',sw_diff_streams)
-    call ccnf_put_attg(idnc,'sw_resolution',sw_resolution)
+    !~ call ccnf_put_attg(idnc,'sw_diff_streams',sw_diff_streams)
+    !~ call ccnf_put_attg(idnc,'sw_resolution',sw_resolution)
     
     call ccnf_put_attg(idnc,'acon',acon)
     call ccnf_put_attg(idnc,'alflnd',alflnd)
