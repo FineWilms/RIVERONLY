@@ -893,11 +893,11 @@ call END_LOG(sfluxurban_end)                                                    
       
 ! scrnout is the standard CCAM screen level diagnostics.
 ! autoscrn contains the newer diagnostic calculation
-if (nmlo==0.and.(nsib==3.or.nsib==5).and.rescrn==0) then
-  call scrnout(zo,ustar,factch,wetfac,qsttg,qgscrn,tscrn,uscrn,u10,rhscrn,af,aft,ri,vmod,bprm,cms,chs,chnsea,nalpha)
-else
-  call autoscrn
-end if
+!~ if (nmlo==0.and.(nsib==3.or.nsib==5).and.rescrn==0) then
+  !~ call scrnout(zo,ustar,factch,wetfac,qsttg,qgscrn,tscrn,uscrn,u10,rhscrn,af,aft,ri,vmod,bprm,cms,chs,chnsea,nalpha)
+!~ else
+  !~ call autoscrn
+!~ end if
 
 ! ----------------------------------------------------------------------
 evap(:)=evap(:)+dt*eg(:)/hl !time integ value in mm (wrong for snow)
