@@ -297,7 +297,7 @@ use extraout_m                                 ! Additional diagnostics
 use infile                                     ! Input file routines
 use latlong_m                                  ! Lat/lon coordinates
 use mlo, only : wlev,micdwn,mloregrid,wrtemp   ! Ocean physics and prognostic arrays
-use mlodynamics                                ! Ocean dynamics
+!~ use mlodynamics                                ! Ocean dynamics
 use morepbl_m                                  ! Additional boundary layer diagnostics
 use nharrs_m, only : phi_nh,lrestart           ! Non-hydrostatic atmosphere arrays
 use nsibd_m, only : isoilm                     ! Land-surface arrays
@@ -1049,13 +1049,13 @@ if ( nested/=1 ) then
       nstag       = ierc(3)
       nstagu      = ierc(4)
       nstagoff    = ierc(5)
-      nstagoffmlo = ierc(6)
+      !~ nstagoffmlo = ierc(6)
       if ( myid==0 ) then
         write(6,*) "Continue stagging from"
         write(6,*) "nstag,nstagu,nstagoff ",nstag,nstagu,nstagoff
-        if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-          write(6,*) "nstagoffmlo ",nstagoffmlo
-        end if
+        !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
+          !~ write(6,*) "nstagoffmlo ",nstagoffmlo
+        !~ end if
       end if
     end if
   else
@@ -1404,20 +1404,20 @@ if ( nested/=1 ) then
     end if
 
     ! OCEAN DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-      oldu1=0.
-      oldu2=0.
-      oldv1=0.
-      oldv2=0.
-      ipice=0.
-      if ( lrestart ) then
-        call histrd4(iarchi,ier,'oldu1',ik,ok,oldu1,ifull)
-        call histrd4(iarchi,ier,'oldv1',ik,ok,oldv1,ifull)
-        call histrd4(iarchi,ier,'oldu2',ik,ok,oldu2,ifull)
-        call histrd4(iarchi,ier,'oldv2',ik,ok,oldv2,ifull)
-        call histrd1(iarchi,ier,'ipice',ik,ipice,ifull)
-      end if
-    end if
+    !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
+      !~ oldu1=0.
+      !~ oldu2=0.
+      !~ oldv1=0.
+      !~ oldv2=0.
+      !~ ipice=0.
+      !~ if ( lrestart ) then
+        !~ call histrd4(iarchi,ier,'oldu1',ik,ok,oldu1,ifull)
+        !~ call histrd4(iarchi,ier,'oldv1',ik,ok,oldv1,ifull)
+        !~ call histrd4(iarchi,ier,'oldu2',ik,ok,oldu2,ifull)
+        !~ call histrd4(iarchi,ier,'oldv2',ik,ok,oldv2,ifull)
+        !~ call histrd1(iarchi,ier,'ipice',ik,ipice,ifull)
+      !~ end if
+    !~ end if
        
   end if ! (nested==0)
 

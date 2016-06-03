@@ -57,7 +57,7 @@ use latlong_m                                    ! Lat/lon coordinates
 use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use mlo                                          ! Ocean physics and prognostic arrays
-use mlodynamics                                  ! Ocean dynamics
+!~ use mlodynamics                                  ! Ocean dynamics
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m, only : lrestart                    ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
@@ -602,7 +602,7 @@ if (nmlo/=0.and.abs(nmlo)<=9) then
     dep=max(dep,2.*minwater)
   end where
   call mloinit(ifull,dep,0)
-  call mlodyninit
+  !~ call mlodyninit
 end if
 if ( abs(nmlo)>=2 .or. nriver==1 ) then
   if (myid==0) write(6,*) 'Initialising river routing'

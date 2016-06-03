@@ -154,7 +154,7 @@ use liqwpar_m                         ! Cloud water mixing ratios
 use mlo, only : mindep              & ! Ocean physics and prognostic arrays
     ,minwater,mxd,zomode,zoseaice   &
     ,factchseaice
-use mlodynamics                       ! Ocean dynamics
+!~ use mlodynamics                       ! Ocean dynamics
 use parmhdff_m                        ! Horizontal diffusion parameters
 !~ use seaesfrad_m                       ! SEA-ESF radiation
 use tkeeps                            ! TKE-EPS boundary layer
@@ -437,7 +437,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'mindep',mindep)
     call ccnf_put_attg(idnc,'minwater',minwater)
     call ccnf_put_attg(idnc,'mloalpha',mloalpha)
-    call ccnf_put_attg(idnc,'mlodiff',mlodiff)
+    !~ call ccnf_put_attg(idnc,'mlodiff',mlodiff)
     call ccnf_put_attg(idnc,'mup',mup)
     call ccnf_put_attg(idnc,'mxd',mxd)
     call ccnf_put_attg(idnc,'nalpha',nalpha)
@@ -483,8 +483,8 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'nudu_hrs',nudu_hrs)
     call ccnf_put_attg(idnc,'nurban',nurban)
     call ccnf_put_attg(idnc,'nvmix',nvmix)
-    call ccnf_put_attg(idnc,'ocneps',ocneps)
-    call ccnf_put_attg(idnc,'ocnsmag',ocnsmag)
+    !~ call ccnf_put_attg(idnc,'ocneps',ocneps)
+    !~ call ccnf_put_attg(idnc,'ocnsmag',ocnsmag)
     call ccnf_put_attg(idnc,'ol',ol)
     call ccnf_put_attg(idnc,'panfg',panfg)
     call ccnf_put_attg(idnc,'panzo',panzo)
@@ -608,7 +608,7 @@ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use mlo, only : wlev,mlosave,mlodiag, &          ! Ocean physics and prognostic arrays
                 mloexpdep,wrtemp
-use mlodynamics                                  ! Ocean dynamics
+!~ use mlodynamics                                  ! Ocean dynamics
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
@@ -1572,9 +1572,9 @@ if( myid==0 .or. local ) then
     zsoil(6)=zse(1)+zse(2)+zse(3)+zse(4)+zse(5)+zse(6)*0.5
     call ccnf_put_vara(idnc,idms,1,ms,zsoil)
         
-    if ( abs(nmlo)>0 .and. abs(nmlo)<=9 ) then
-      call ccnf_put_vara(idnc,idoc,1,wlev,gosig)
-    end if
+    !~ if ( abs(nmlo)>0 .and. abs(nmlo)<=9 ) then
+      !~ call ccnf_put_vara(idnc,idoc,1,wlev,gosig)
+    !~ end if
 
     call ccnf_put_vara(idnc,'ds',1,ds)
     call ccnf_put_vara(idnc,'dt',1,dt)
@@ -1595,8 +1595,8 @@ if( myid==0 .or. local ) then
   idum=idum-max(abs(nstagin),1) ! should be -ve
   call ccnf_put_vara(idnc,'nstagoff',iarch,idum)
   if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-    idum=mod(ktau-nstagoffmlo,max(2*mstagf,1))
-    idum=idum-max(2*mstagf,1) ! should be -ve
+    !~ idum=mod(ktau-nstagoffmlo,max(2*mstagf,1))
+    !~ idum=idum-max(2*mstagf,1) ! should be -ve
     call ccnf_put_vara(idnc,'nstagoffmlo',iarch,idum)
   end if
   if ( myid==0 ) then
@@ -2207,17 +2207,17 @@ if ( itype==-1 ) then
   call histwrt4(savu2,     'savu2', idnc,iarch,local,.true.)
   call histwrt4(savv2,     'savv2', idnc,iarch,local,.true.)
   if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-    do k=1,wlev
-      write(vname,'("oldu1",I2.2)') k
-      call histwrt3(oldu1(:,k),vname,idnc,iarch,local,.true.)
-      write(vname,'("oldv1",I2.2)') k
-      call histwrt3(oldv1(:,k),vname,idnc,iarch,local,.true.)
-      write(vname,'("oldu2",I2.2)') k
-      call histwrt3(oldu2(:,k),vname,idnc,iarch,local,.true.)
-      write(vname,'("oldv2",I2.2)') k
-      call histwrt3(oldv2(:,k),vname,idnc,iarch,local,.true.)
-    end do
-    call histwrt3(ipice,'ipice',idnc,iarch,local,.true.)
+    !~ do k=1,wlev
+      !~ write(vname,'("oldu1",I2.2)') k
+      !~ call histwrt3(oldu1(:,k),vname,idnc,iarch,local,.true.)
+      !~ write(vname,'("oldv1",I2.2)') k
+      !~ call histwrt3(oldv1(:,k),vname,idnc,iarch,local,.true.)
+      !~ write(vname,'("oldu2",I2.2)') k
+      !~ call histwrt3(oldu2(:,k),vname,idnc,iarch,local,.true.)
+      !~ write(vname,'("oldv2",I2.2)') k
+      !~ call histwrt3(oldv2(:,k),vname,idnc,iarch,local,.true.)
+    !~ end do
+    !~ call histwrt3(ipice,'ipice',idnc,iarch,local,.true.)
   end if
   call histwrt3(wbice(1,1),'wbice1',idnc,iarch,local,.true.)
   call histwrt3(wbice(1,2),'wbice2',idnc,iarch,local,.true.)

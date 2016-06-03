@@ -66,7 +66,7 @@ use liqwpar_m                              ! Cloud water mixing ratios
 use map_m                                  ! Grid map arrays
 use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
    ,minwater,zomode,zoseaice,factchseaice
-use mlodynamics                            ! Ocean dynamics
+!~ use mlodynamics                            ! Ocean dynamics
 use morepbl_m                              ! Additional boundary layer diagnostics
 !~ use nesting                                ! Nesting and assimilation
 use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
@@ -182,7 +182,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nhorps,nperavg,ia,ib, &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,nmr,ktopdav,     &
     nud_sst,nud_sss,mfix_tr,mfix_aero,kbotmlo,ktopmlo,mloalpha,   &
     nud_ouv,nud_sfh,bpyear,rescrn,helmmeth,nmlo,ol,mxd,mindep,    &
-    minwater,ocnsmag,ocneps,mlodiff,zomode,zoseaice,factchseaice, &
+    minwater,zomode,zoseaice,factchseaice, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 !~ ! radiation namelist

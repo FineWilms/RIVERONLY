@@ -44,7 +44,7 @@ use gdrag_m                        ! Gravity wave drag
 use liqwpar_m                      ! Cloud water mixing ratios
 use map_m                          ! Grid map arrays
 use mlo                            ! Ocean physics and prognostic arrays
-use mlodynamics                    ! Ocean dynamics routines
+!~ use mlodynamics                    ! Ocean dynamics routines
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nharrs_m                       ! Non-hydrostatic atmosphere arrays
 use nsibd_m                        ! Land-surface arrays
@@ -551,37 +551,37 @@ elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                     
     dumw(1:ifull) = 0.                                                                           ! MLO
   end if                                                                                         ! MLO
                                                                                                  ! MLO
-  ! Ocean mixing                                                                                 ! MLO
-  where (.not.land(1:ifull))                                                                     ! MLO
-    rnet(:)=sgsave(:)-rgsave(:)-stefbo*tss(:)**4 ! use tss as should be tss(t=tau) for MLO       ! MLO
-  end where                                                                                      ! MLO
-  dumsg(:)=sgsave(:)/(1.-swrsave*albvisnir(:,1)-(1.-swrsave)*albvisnir(:,2))                     ! MLO
-  dumrg(:)=-rgsave(:)                                                                            ! MLO
-  dumx(:)=condx(:)/dt                                                                            ! MLO
-  dums(:)=(conds(:)+condg(:))/dt                                                                 ! MLO
-  if (abs(nmlo)>=3) then                                                                         ! MLO
-    call mloeval(tss,zo,cduv,cdtq,fg,eg,wetfac,epot,epan,fracice,sicedep,snowd,dt,azmin,azmin, & ! MLO
-                 dumsg,dumrg,dumx,dums,uav,vav,t(1:ifull,1),qg(1:ifull,1),ps(1:ifull),         & ! MLO
-                 f(1:ifull),swrsave,fbeamvis,fbeamnir,dumw,0,.true.,oldu=oldu1(:,1),           & ! MLO
-                 oldv=oldv1(:,1))                                                                ! MLO
-  else                                                                                           ! MLO
-    call mloeval(tss,zo,cduv,cdtq,fg,eg,wetfac,epot,epan,fracice,sicedep,snowd,dt,azmin,azmin, & ! MLO
-                 dumsg,dumrg,dumx,dums,uav,vav,t(1:ifull,1),qg(1:ifull,1),ps(1:ifull),         & ! MLO
-                 f(1:ifull),swrsave,fbeamvis,fbeamnir,dumw,0,.true.)                             ! MLO
-  end if                                                                                         ! MLO
-  call mloextra(0,zoh,azmin,0)                                                                   ! MLO
-  call mloextra(3,zoq,azmin,0)                                                                   ! MLO
-  call mloextra(1,taux,azmin,0)                                                                  ! MLO
-  call mloextra(2,tauy,azmin,0)                                                                  ! MLO
-  do k=1,ms                                                                                      ! MLO
-    call mloexport(0,tgg(:,k),k,0)                                                               ! MLO
-    where ( tgg(:,k)<100. )                                                                      ! MLO
-      tgg(:,k) = tgg(:,k) + wrtemp                                                               ! MLO
-    end where                                                                                    ! MLO
-  end do                                                                                         ! MLO
-  do k=1,3                                                                                       ! MLO
-    call mloexpice(tggsn(:,k),k,0)                                                               ! MLO
-  end do                                                                                         ! MLO
+  !~ ! Ocean mixing                                                                                 ! MLO
+  !~ where (.not.land(1:ifull))                                                                     ! MLO
+    !~ rnet(:)=sgsave(:)-rgsave(:)-stefbo*tss(:)**4 ! use tss as should be tss(t=tau) for MLO       ! MLO
+  !~ end where                                                                                      ! MLO
+  !~ dumsg(:)=sgsave(:)/(1.-swrsave*albvisnir(:,1)-(1.-swrsave)*albvisnir(:,2))                     ! MLO
+  !~ dumrg(:)=-rgsave(:)                                                                            ! MLO
+  !~ dumx(:)=condx(:)/dt                                                                            ! MLO
+  !~ dums(:)=(conds(:)+condg(:))/dt                                                                 ! MLO
+  !~ if (abs(nmlo)>=3) then                                                                         ! MLO
+    !~ call mloeval(tss,zo,cduv,cdtq,fg,eg,wetfac,epot,epan,fracice,sicedep,snowd,dt,azmin,azmin, & ! MLO
+                 !~ dumsg,dumrg,dumx,dums,uav,vav,t(1:ifull,1),qg(1:ifull,1),ps(1:ifull),         & ! MLO
+                 !~ f(1:ifull),swrsave,fbeamvis,fbeamnir,dumw,0,.true.,oldu=oldu1(:,1),           & ! MLO
+                 !~ oldv=oldv1(:,1))                                                                ! MLO
+  !~ else                                                                                           ! MLO
+    !~ call mloeval(tss,zo,cduv,cdtq,fg,eg,wetfac,epot,epan,fracice,sicedep,snowd,dt,azmin,azmin, & ! MLO
+                 !~ dumsg,dumrg,dumx,dums,uav,vav,t(1:ifull,1),qg(1:ifull,1),ps(1:ifull),         & ! MLO
+                 !~ f(1:ifull),swrsave,fbeamvis,fbeamnir,dumw,0,.true.)                             ! MLO
+  !~ end if                                                                                         ! MLO
+  !~ call mloextra(0,zoh,azmin,0)                                                                   ! MLO
+  !~ call mloextra(3,zoq,azmin,0)                                                                   ! MLO
+  !~ call mloextra(1,taux,azmin,0)                                                                  ! MLO
+  !~ call mloextra(2,tauy,azmin,0)                                                                  ! MLO
+  !~ do k=1,ms                                                                                      ! MLO
+    !~ call mloexport(0,tgg(:,k),k,0)                                                               ! MLO
+    !~ where ( tgg(:,k)<100. )                                                                      ! MLO
+      !~ tgg(:,k) = tgg(:,k) + wrtemp                                                               ! MLO
+    !~ end where                                                                                    ! MLO
+  !~ end do                                                                                         ! MLO
+  !~ do k=1,3                                                                                       ! MLO
+    !~ call mloexpice(tggsn(:,k),k,0)                                                               ! MLO
+  !~ end do                                                                                         ! MLO
                                                                                                  ! MLO
   ! stuff to keep tpan over land working                                                         ! MLO
   rid=min(grav*zmin*(1.-tpan*srcp/t(1:ifull,1))/vmag**2,ri_max)                                  ! MLO
