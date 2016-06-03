@@ -70,9 +70,9 @@ contains
 ! Main interface for input data that reads grid metadata
     
 subroutine onthefly(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice,snowd,qfg, &
-                    qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,ocndwn,xtgdwn)
+                    qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,ocndwn)
 
-use aerosolldr       ! LDR prognostic aerosols
+!~ use aerosolldr       ! LDR prognostic aerosols
 use cc_mpi           ! CC MPI routines
 use infile           ! Input file routines
 use mlo              ! Ocean physics and prognostic arrays
@@ -96,7 +96,7 @@ integer, dimension(nihead) :: nahead
 integer, dimension(ifull), intent(out) :: isflag
 real timer
 real, dimension(ifull,wlev,4), intent(out) :: mlodwn
-real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
+!~ real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
 real, dimension(ifull,2), intent(out) :: ocndwn
@@ -264,7 +264,7 @@ fwsize = pil*pjl*pnpan*mynproc
 
 call onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
                    snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,   &
-                   ocndwn,xtgdwn)
+                   ocndwn)
 
 if ( myid==0 ) write(6,*) "Leaving onthefly"
 
@@ -283,9 +283,9 @@ return
 ! restart files, then there is no need for message passing.
 subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
                          snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,   &
-                         ocndwn,xtgdwn)
+                         ocndwn)
       
-use aerosolldr, only : ssn,naero               ! LDR aerosol scheme
+!~ use aerosolldr, only : ssn,naero               ! LDR aerosol scheme
 use ateb, only : atebdwn                       ! Urban
 use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
@@ -347,7 +347,7 @@ real(kind=8), dimension(:,:), allocatable, save :: xx4, yy4
 #endif
 real(kind=8), dimension(dk*dk*6):: z_a, x_a, y_a
 real, dimension(ifull,wlev,4), intent(out) :: mlodwn
-real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
+!~ real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
 real, dimension(ifull,2), intent(out) :: ocndwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
@@ -897,21 +897,21 @@ else
   qg(1:ifull,:) = qgmin
 end if ! (nested==0.or.(nested==1.and.nud_q/=0))
 
-!------------------------------------------------------------
-! Aerosol data
-if ( abs(iaero)>=2 .and. ( nested/=1.or.nud_aero/=0 ) ) then
-  call gethist4a('dms',  xtgdwn(:,:,1), 5)
-  call gethist4a('so2',  xtgdwn(:,:,2), 5)
-  call gethist4a('so4',  xtgdwn(:,:,3), 5)
-  call gethist4a('bco',  xtgdwn(:,:,4), 5)
-  call gethist4a('bci',  xtgdwn(:,:,5), 5)
-  call gethist4a('oco',  xtgdwn(:,:,6), 5)
-  call gethist4a('oci',  xtgdwn(:,:,7), 5)
-  call gethist4a('dust1',xtgdwn(:,:,8), 5)
-  call gethist4a('dust2',xtgdwn(:,:,9), 5)
-  call gethist4a('dust3',xtgdwn(:,:,10),5)
-  call gethist4a('dust4',xtgdwn(:,:,11),5)
-end if
+!~ !------------------------------------------------------------
+!~ ! Aerosol data
+!~ if ( abs(iaero)>=2 .and. ( nested/=1.or.nud_aero/=0 ) ) then
+  !~ call gethist4a('dms',  xtgdwn(:,:,1), 5)
+  !~ call gethist4a('so2',  xtgdwn(:,:,2), 5)
+  !~ call gethist4a('so4',  xtgdwn(:,:,3), 5)
+  !~ call gethist4a('bco',  xtgdwn(:,:,4), 5)
+  !~ call gethist4a('bci',  xtgdwn(:,:,5), 5)
+  !~ call gethist4a('oco',  xtgdwn(:,:,6), 5)
+  !~ call gethist4a('oci',  xtgdwn(:,:,7), 5)
+  !~ call gethist4a('dust1',xtgdwn(:,:,8), 5)
+  !~ call gethist4a('dust2',xtgdwn(:,:,9), 5)
+  !~ call gethist4a('dust3',xtgdwn(:,:,10),5)
+  !~ call gethist4a('dust4',xtgdwn(:,:,11),5)
+!~ end if
 
 !------------------------------------------------------------
 ! re-grid surface pressure by mapping to MSLP, interpolating and then map to surface pressure
@@ -1330,13 +1330,13 @@ if ( nested/=1 ) then
   !------------------------------------------------------------------
   ! Aerosol data ( non-nudged or diagnostic )
   if ( abs(iaero)>=2 ) then
-    call gethist4a('seasalt1',ssn(:,:,1),5)
-    call gethist4a('seasalt2',ssn(:,:,2),5)
+    !~ call gethist4a('seasalt1',ssn(:,:,1),5)
+    !~ call gethist4a('seasalt2',ssn(:,:,2),5)
     ! Factor 1.e3 to convert to g/m2, x 3 to get sulfate from sulfur
     so4t(:)=0.
-    do k=1,kl
-      so4t(:)=so4t(:)+3.e3*xtgdwn(:,k,3)*(-1.e5*exp(psl(1:ifull))*dsig(k))/grav
-    enddo
+    !~ do k=1,kl
+      !~ so4t(:)=so4t(:)+3.e3*xtgdwn(:,k,3)*(-1.e5*exp(psl(1:ifull))*dsig(k))/grav
+    !~ enddo
   end if
   
   ! -----------------------------------------------------------------

@@ -145,7 +145,7 @@ end subroutine outfile
 ! CONFIGURE DIMENSIONS FOR OUTPUT NETCDF FILES
 subroutine cdfout(rundate,itype,nstagin,jalbfix,nalpha,mins_rad)
 
-use aerosolldr                        ! LDR prognostic aerosols
+!~ use aerosolldr                        ! LDR prognostic aerosols
 use cable_ccam, only : proglai        ! CABLE
 use cc_mpi                            ! CC MPI routines
 !~ use cloudmod                          ! Prognostic cloud fraction
@@ -387,7 +387,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_def_var(idnc,'dt','float',idv)
 
     ! store CCAM parameters
-    call ccnf_put_attg(idnc,'aeroindir',aeroindir)
+    !~ call ccnf_put_attg(idnc,'aeroindir',aeroindir)
     call ccnf_put_attg(idnc,'alphaj',alphaj)
     if (amipo3) then
       namipo3=1
@@ -505,7 +505,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'zobgin',zobgin)
     call ccnf_put_attg(idnc,'zomode',zomode)
     call ccnf_put_attg(idnc,'zoseaice',zoseaice)
-    call ccnf_put_attg(idnc,'zvolcemi',zvolcemi)
+    !~ call ccnf_put_attg(idnc,'zvolcemi',zvolcemi)
 
     call ccnf_put_attg(idnc,'mins_rad',mins_rad)
     !~ call ccnf_put_attg(idnc,'sw_diff_streams',sw_diff_streams)
@@ -586,8 +586,8 @@ end subroutine cdfout
 ! CREATE ATTRIBUTES AND WRITE OUTPUT
 subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 
-use aerointerface                                ! Aerosol interface
-use aerosolldr                                   ! LDR prognostic aerosols
+!~ use aerointerface                                ! Aerosol interface
+!~ use aerosolldr                                   ! LDR prognostic aerosols
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use ateb, only : atebsave                        ! Urban
 use cable_ccam, only : savetile, savetiledef     ! CABLE interface
@@ -2186,7 +2186,7 @@ if ( abs(iaero)>=2 ) then
       tv(:)     = t(1:ifull,k)*(1.+1.61*qg(1:ifull,k)-qtot(:))   ! virtual temperature
       rhoa(:,k) = ps(1:ifull)*sig(k)/(rdry*tv(:))                !density of air
     end do
-    call aerodrop(1,ifull,tmpry,rhoa)
+    !~ call aerodrop(1,ifull,tmpry,rhoa)
     !~ call histwrt4(tmpry,'cdn',idnc,iarch,local,.true.)
   end if
 end if

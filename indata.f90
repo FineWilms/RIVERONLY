@@ -39,8 +39,8 @@ contains
     
 subroutine indataf(hourst,jalbfix,lapsbot,isoth,nsig,io_nest)
      
-use aerointerface                                ! Aerosol interface
-use aerosolldr, only : xtg,naero                 ! LDR prognostic aerosols
+!~ use aerointerface                                ! Aerosol interface
+!~ use aerosolldr, only : xtg,naero                 ! LDR prognostic aerosols
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use ateb                                         ! Urban
 use bigxy4_m                                     ! Grid interpolation
@@ -117,7 +117,7 @@ real, dimension(ifull) :: dep, depth, rlai
 real, dimension(ifull,5) :: duma
 real, dimension(ifull,2) :: ocndwn
 real, dimension(ifull,wlev,4) :: mlodwn
-real, dimension(ifull,kl,naero) :: xtgdwn
+!~ real, dimension(ifull,kl,naero) :: xtgdwn
 real, dimension(ifull,kl,9) :: dumb
 real, dimension(:,:), allocatable :: glob2d
 real, dimension(:), allocatable :: davt_g
@@ -619,7 +619,7 @@ select case(abs(iaero))
     if(myid==0)write(6,*)'so4total data read from file ',so4tfile
     call readreal(so4tfile,so4t,ifull)
   case(2)
-    call load_aerosolldr(so4tfile,oxidantfile,kdate)
+    !~ call load_aerosolldr(so4tfile,oxidantfile,kdate)
 end select
 
   
@@ -679,7 +679,7 @@ if ( io_in<4 ) then
     call onthefly(0,kdate,ktime,psl,zss,tss,sicedep,fracice,t,u,v, &
                   qg,tgg,wb,wbice,snowd,qfg,qlg,qrg,qsng,qgrg,     &
                   tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,      &
-                  ocndwn,xtgdwn)
+                  ocndwn)
   endif   ! (abs(io_in)==1)
   call histclose
   if(mydiag)then
@@ -1160,7 +1160,7 @@ if ( .not.lrestart ) then
                     duma(:,5),dumb(:,:,1),dumb(:,:,2),dumb(:,:,3),            &
                     dumb(:,:,4),tgg,wb,wbice,snowd,dumb(:,:,5),dumb(:,:,6),   &
                     dumb(:,:,7),dumb(:,:,8),dumb(:,:,9),tggsn,smass,ssdn,     &
-                    ssdnn,snage,isflag,mlodwn,ocndwn,xtgdwn)
+                    ssdnn,snage,isflag,mlodwn,ocndwn)
       call histclose
       if ( kdate/=kdate_sav .or. ktime/=ktime_sav ) then
         if ( myid==0 ) then
@@ -1891,11 +1891,11 @@ if (nurban/=0) then
 end if
 
 
-!-----------------------------------------------------------------
-! UPDATE AEROSOL DATA (iaero)
-if ( abs(iaero)>=2 ) then
-  xtg(1:ifull,:,:)=xtgdwn(:,:,:)
-end if
+!~ !-----------------------------------------------------------------
+!~ ! UPDATE AEROSOL DATA (iaero)
+!~ if ( abs(iaero)>=2 ) then
+  !~ xtg(1:ifull,:,:)=xtgdwn(:,:,:)
+!~ end if
       
 
 !--------------------------------------------------------------     

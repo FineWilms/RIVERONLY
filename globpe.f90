@@ -68,7 +68,7 @@ use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
    ,minwater,zomode,zoseaice,factchseaice
 use mlodynamics                            ! Ocean dynamics
 use morepbl_m                              ! Additional boundary layer diagnostics
-use nesting                                ! Nesting and assimilation
+!~ use nesting                                ! Nesting and assimilation
 use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
    ,lrestart
 use nlin_m                                 ! Atmosphere non-linear dynamics
