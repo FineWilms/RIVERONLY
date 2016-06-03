@@ -52,7 +52,7 @@ use cfrac_m                                ! Cloud fraction
 use diag_m                                 ! Diagnostic routines
 use dpsdt_m                                ! Vertical velocity
 use epst_m                                 ! Off-centre terms
-use estab                                  ! Liquid saturation function
+!~ use estab                                  ! Liquid saturation function
 use extraout_m                             ! Additional diagnostics
 use gdrag_m, only : gdrag_init             ! Gravity wave drag
 use histave_m                              ! Time average arrays
@@ -566,7 +566,7 @@ call cfrac_init(ifull,iextra,kl)
 !~ call cloudmod_init(ifull,iextra,kl,ncloud)
 call dpsdt_init(ifull,iextra,kl)
 call epst_init(ifull,iextra,kl)
-call estab_init
+!~ call estab_init
 call extraout_init(ifull,iextra,kl,nextout)
 call gdrag_init(ifull,iextra,kl)
 call histave_init(ifull,iextra,kl,ms)

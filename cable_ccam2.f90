@@ -161,7 +161,7 @@ subroutine sib4
 use arrays_m
 use carbpools_m
 use cc_mpi
-use estab
+!~ use estab
 use extraout_m
 use infile
 use latlong_m
@@ -563,7 +563,7 @@ elsewhere
 endwhere
 do iq=1,ifull
   if ( land(iq) ) then
-    esatf = establ(tss(iq))
+    !~ esatf = establ(tss(iq))
     qsttg(iq) = 0.622*esatf/(ps(iq)-esatf)
   end if
 end do

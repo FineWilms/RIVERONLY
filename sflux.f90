@@ -38,7 +38,7 @@ use ateb                           ! Urban
 use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
-use estab                          ! Liquid saturation function
+!~ use estab                          ! Liquid saturation function
 use extraout_m                     ! Additional diagnostics
 use gdrag_m                        ! Gravity wave drag
 use liqwpar_m                      ! Cloud water mixing ratios
@@ -223,7 +223,7 @@ if (nmlo==0) then                                                               
   do iq=1,ifull                                                                                  ! sea
     ! drag coefficients  for momentum cduv                                                       ! sea
     ! for heat and moisture  cdtq                                                                ! sea
-    es = establ(tpan(iq))                                                                        ! sea
+    !~ es = establ(tpan(iq))                                                                        ! sea
     constz=ps(iq)-es                                                                             ! sea
     qsttg(iq)= .98*.622*es/constz  ! with Zeng 1998 for sea water                                ! sea
     xx=grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))                                                      ! sea
@@ -369,7 +369,7 @@ if (nmlo==0) then                                                               
     if(sicedep(iq)>0.)then                                                                       ! sice
       ! non-leads for sea ice points                                                             ! sice
       ! N.B. tggsn( ,1) holds tice                                                               ! sice
-      es = establ(tggsn(iq,1))                                                                   ! sice
+      !~ es = establ(tggsn(iq,1))                                                                   ! sice
       constz=ps(iq)-es                                                                           ! sice
       qsttg(iq)= .622*es/constz                                                                  ! sice
       drst=qsttg(iq)*ps(iq)*hlars/(tggsn(iq,1)*tggsn(iq,1)*constz)                               ! sice
@@ -449,7 +449,7 @@ if (nmlo==0) then                                                               
       tggsn(iq,1)=min(tggsn(iq,1),271.2)   ! jlm fix Tue  05-30-2000                             ! sice
       fgf(iq) =fgf(iq) +deltat*dfgdt(iq)                                                         ! sice
       fev(iq) =fev(iq) +deltat*degdt(iq)                                                         ! sice
-      es = establ(tggsn(iq,1))                                                                   ! sice
+      !~ es = establ(tggsn(iq,1))                                                                   ! sice
       constz=ps(iq)-es                                                                           ! sice
       qsttg(iq)=.622*es/constz                                                                   ! sice
                                                                                                  ! sice
@@ -515,7 +515,7 @@ elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                     
   end if                                                                                         ! MLO
                                                                                                  ! MLO
   ! pan evaporation diagnostic                                                                   ! MLO
-  qsttg=qsat(ps(1:ifull),tpan)                                                                   ! MLO
+  !~ qsttg=qsat(ps(1:ifull),tpan)                                                                   ! MLO
   do ip=1,ipland                                                                                 ! MLO
     iq=iperm(ip)                                                                                 ! MLO
     ri(iq)=min(grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))/vmag(iq)**2,ri_max)                          ! MLO
@@ -609,7 +609,7 @@ elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                     
   endwhere                                                                                       ! MLO
   do iq=1,ifull                                                                                  ! MLO
     if (.not.land(iq)) then                                                                      ! MLO
-      esatf = establ(tss(iq))                                                                    ! MLO
+      !~ esatf = establ(tss(iq))                                                                    ! MLO
       qsttg(iq)=.622*esatf/(ps(iq)-esatf)                                                        ! MLO
       !rhscrn(iq)=100.*min(qgscrn(iq)/qsttg(iq),1.)                                              ! MLO
     end if                                                                                       ! MLO
@@ -635,7 +635,7 @@ select case(nsib)                                                               
       ! fh itself was only used outside this loop in sib0 (jlm)                                  ! land
       iq=iperm(ip)                                                                               ! land
       zobg=zobgin                                                                                ! land
-      es = establ(tss(iq))                                                                       ! land
+      !~ es = establ(tss(iq))                                                                       ! land
       qsttg(iq)= .622*es/(ps(iq)-es)  ! prim for scrnout, bur recalc end sib3                    ! land
       ! factch is sqrt(zo/zt) for land use in unstable fh                                        ! land
       factch(iq)=sqrt(7.4)                                                                       ! land
@@ -813,7 +813,7 @@ select case(nsib)                                                               
     ! update remaining diagnostic arrays                                                         ! cable
     where ( land(1:ifull) )                                                                      ! cable
       factch(1:ifull) = sqrt(zo(1:ifull)/zoh(1:ifull))                                           ! cable 
-      qsttg(1:ifull) = qsat(ps(1:ifull),tss(1:ifull))                                            ! cable
+      !~ qsttg(1:ifull) = qsat(ps(1:ifull),tss(1:ifull))                                            ! cable
       taux(1:ifull) = rho(1:ifull)*cduv(1:ifull)*u(1:ifull,1)                                    ! cable
       tauy(1:ifull) = rho(1:ifull)*cduv(1:ifull)*v(1:ifull,1)                                    ! cable
       sno(1:ifull) = sno(1:ifull) + conds(1:ifull)                                               ! cable
@@ -876,7 +876,7 @@ if (nurban/=0) then                                                             
   ! calculate screen level diagnostics                                                           ! urban
   !call atebscrnout(tscrn,qgscrn,uscrn,u10,0)                                                    ! urban
   where ( land(1:ifull) )                                                                        ! urban
-    qsttg(1:ifull) = qsat(ps(1:ifull),tss(1:ifull))                                              ! urban
+    !~ qsttg(1:ifull) = qsat(ps(1:ifull),tss(1:ifull))                                              ! urban
     rnet(1:ifull) = sgsave(1:ifull) - rgsave(1:ifull) - stefbo*tss(1:ifull)**4                   ! urban
     taux(1:ifull) = rho(1:ifull)*cduv(1:ifull)*u(1:ifull,1)                                      ! urban
     tauy(1:ifull) = rho(1:ifull)*cduv(1:ifull)*v(1:ifull,1)                                      ! urban
@@ -945,7 +945,7 @@ subroutine sib3(nalpha,taftfh,taftfhg,aft,rho)
       
 use arrays_m                     ! Atmosphere dyamics prognostic arrays
 use cc_mpi                       ! CC MPI routines
-use estab                        ! Liquid saturation function
+!~ use estab                        ! Liquid saturation function
 use extraout_m                   ! Additional diagnostics
 use latlong_m                    ! Lat/lon coordinates
 use liqwpar_m                    ! Cloud water mixing ratios
@@ -1098,7 +1098,7 @@ do ip=1,ipland
   endif ! ntest
   ! bare ground calculation
   tgss=isflag(iq)*tggsn(iq,1) + (1-isflag(iq))*tgg(iq,1)
-  esattg=establ(tgss)
+  !~ esattg=establ(tgss)
   qsttg(iq)=.622*esattg/(ps(iq)-esattg)
   tgss2=tgss*tgss
   dqsttg(iq)=qsttg(iq)*ps(iq)*hlars/((ps(iq)-esattg)*tgss2)
@@ -1295,7 +1295,7 @@ do ip=1,ipland  ! all land points in this nsib=3 loop
   ! depth of the reservoir of water on the canopy
   rmcmax(iq) = max(0.5,srlai(iq)) * .1
   omc(iq) = cansto(iq)  ! value from previous timestep as starting guess
-  f3=max(1.-.00025*(establ(t(iq,1))-qg(iq,1)*ps(iq)/.622),.05)
+  !~ f3=max(1.-.00025*(establ(t(iq,1))-qg(iq,1)*ps(iq)/.622),.05)
   res(iq)=max(30.,rsmin(iq)*f1*f2/(f3*f4))
   if(ntest==1.and.iq==idjd.and.mydiag)then
     write(6,*) 'rlai,srlai,wbav,den ',rlai(iq),srlai(iq),wbav,den
@@ -1317,7 +1317,7 @@ do icount=1,itnmeth     ! jlm new iteration
   ! transpiration
   do ip=1,ipland  ! all land points in this nsib=3 loop
     iq=iperm(ip)
-    esatf = establ(tgfnew(iq))
+    !~ esatf = establ(tgfnew(iq))
     qsatgf=.622*esatf/(ps(iq)-esatf)
     ! wet evaporation
     ewwwa = rho(iq) *(qsatgf-qg(iq,1))/airr(iq) ! in W/m**2 /hl
@@ -1369,7 +1369,7 @@ do icount=1,itnmeth     ! jlm new iteration
       iq=idjd
       write(6,*) 'ktau,icount,iq,omc,cc ',ktau,icount,iq,omc(iq),cc(iq)
       write(6,*) 'rmc,rmcmax,ewww ',cansto(iq),rmcmax(iq),ewww(iq)
-      esatf = establ(tgfnew(iq))  ! value for next itn
+      !~ esatf = establ(tgfnew(iq))  ! value for next itn
       qsatgf=.622*esatf/(ps(iq)-esatf)
       ewwwa = rho(iq) *(qsatgf-qg(iq,1))/airr(iq)
       write(6,*) 'esatf,qsatgf,ewwwa ',esatf,qsatgf,ewwwa
@@ -1472,7 +1472,7 @@ do ip=1,ipland  ! all land points in this nsib=3 loop
   else
     tss(iq)=tsigmf(iq)*tgf(iq)+(1.-tsigmf(iq))*tgss
   endif       ! tsigmf<= .01
-  es = establ(tss(iq))     !  from 27/12/05
+  !~ es = establ(tss(iq))     !  from 27/12/05
   qsttg(iq)= .622*es/(ps(iq)-es)  ! recal for scrnout, esp. snow    
 
 enddo   ! ip=1,ipland
