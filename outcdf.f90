@@ -60,60 +60,60 @@ character(len=8) :: rundate
 
 call START_LOG(outfile_begin)
       
-if ( myid==0 ) then
-  write(6,*) "ofile written for iout: ",iout
-  write(6,*) "kdate,ktime,mtimer:     ",kdate,ktime,mtimer
-end if
+!~ if ( myid==0 ) then
+  !~ write(6,*) "ofile written for iout: ",iout
+  !~ write(6,*) "kdate,ktime,mtimer:     ",kdate,ktime,mtimer
+!~ end if
 
-if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
-  if ( ktau==nwrite/2 .or. ktau==nwrite ) then
-!        usually after first 24 hours, save soil variables for next run
-    if ( ktau==nwrite ) then  ! 24 hour write
-      if ( ktime==1200 ) then
-        co2out=co2_12     ! 'co2.1200'
-        radonout=radon_12 ! 'radon.1200'
-        surfout=surf_12   ! 'current.1200'
-        qgout='qg_12'
-      else
-        co2out=co2_00     !  'co2.0000'
-        radonout=radon_00 ! 'radon.0000'
-        surfout=surf_00   ! 'current.0000'
-        qgout='qg_00'
-      endif
-    else                    ! 12 hour write
-      if(ktime==1200)then
-        co2out=co2_00     !  'co2.0000'
-        radonout=radon_00 ! 'radon.0000'
-        surfout=surf_00   ! 'current.0000'
-        qgout='qg_00'
-      else
-        co2out=co2_12     ! 'co2.1200'
-        radonout=radon_12 ! 'radon.1200'
-        surfout=surf_12   ! 'current.1200'
-        qgout='qg_12'
-      endif
-    endif               ! (ktau.eq.nwrite)
-    if ( myid == 0 ) then
-      write(6,*) "writing current soil & snow variables to ",surfout
-      open(unit=77,file=surfout,form='formatted',status='unknown')
-      write (77,*) kdate,ktime,' ktau = ',ktau
-    end if
-    call writeglobvar(77, wb, fmt='(14f6.3)')
-    call writeglobvar(77, tgg, fmt='(12f7.2)')
-    call writeglobvar(77, tss, fmt='(12f7.2)')
-    call writeglobvar(77, snowd, fmt='(12f7.1)')
-    call writeglobvar(77, sicedep, fmt='(12f7.1)')
-    if ( myid == 0 ) close (77)
-    if ( nrungcm==-2 .or. nrungcm==-5 ) then
-      if ( myid == 0 ) then
-        write(6,*) "writing special qgout file: ",qgout
-        open(unit=77,file=qgout,form='unformatted',status='unknown')
-      end if
-      call writeglobvar(77, qg)
-      if ( myid == 0 ) close (77)
-    endif  ! (nrungcm.eq.-2.or.nrungcm.eq.-5)
-  endif    ! (ktau.eq.nwrite/2.or.ktau.eq.nwrite)
-endif      ! (nrungcm.eq.-2.or.nrungcm.eq.-3.or.nrungcm.eq.-5)
+!~ if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
+  !~ if ( ktau==nwrite/2 .or. ktau==nwrite ) then
+!~ !        usually after first 24 hours, save soil variables for next run
+    !~ if ( ktau==nwrite ) then  ! 24 hour write
+      !~ if ( ktime==1200 ) then
+        !~ co2out=co2_12     ! 'co2.1200'
+        !~ radonout=radon_12 ! 'radon.1200'
+        !~ surfout=surf_12   ! 'current.1200'
+        !~ qgout='qg_12'
+      !~ else
+        !~ co2out=co2_00     !  'co2.0000'
+        !~ radonout=radon_00 ! 'radon.0000'
+        !~ surfout=surf_00   ! 'current.0000'
+        !~ qgout='qg_00'
+      !~ endif
+    !~ else                    ! 12 hour write
+      !~ if(ktime==1200)then
+        !~ co2out=co2_00     !  'co2.0000'
+        !~ radonout=radon_00 ! 'radon.0000'
+        !~ surfout=surf_00   ! 'current.0000'
+        !~ qgout='qg_00'
+      !~ else
+        !~ co2out=co2_12     ! 'co2.1200'
+        !~ radonout=radon_12 ! 'radon.1200'
+        !~ surfout=surf_12   ! 'current.1200'
+        !~ qgout='qg_12'
+      !~ endif
+    !~ endif               ! (ktau.eq.nwrite)
+    !~ if ( myid == 0 ) then
+      !~ write(6,*) "writing current soil & snow variables to ",surfout
+      !~ open(unit=77,file=surfout,form='formatted',status='unknown')
+      !~ write (77,*) kdate,ktime,' ktau = ',ktau
+    !~ end if
+    !~ call writeglobvar(77, wb, fmt='(14f6.3)')
+    !~ call writeglobvar(77, tgg, fmt='(12f7.2)')
+    !~ call writeglobvar(77, tss, fmt='(12f7.2)')
+    !~ call writeglobvar(77, snowd, fmt='(12f7.1)')
+    !~ call writeglobvar(77, sicedep, fmt='(12f7.1)')
+    !~ if ( myid == 0 ) close (77)
+    !~ if ( nrungcm==-2 .or. nrungcm==-5 ) then
+      !~ if ( myid == 0 ) then
+        !~ write(6,*) "writing special qgout file: ",qgout
+        !~ open(unit=77,file=qgout,form='unformatted',status='unknown')
+      !~ end if
+      !~ call writeglobvar(77, qg)
+      !~ if ( myid == 0 ) close (77)
+    !~ endif  ! (nrungcm.eq.-2.or.nrungcm.eq.-5)
+  !~ endif    ! (ktau.eq.nwrite/2.or.ktau.eq.nwrite)
+!~ endif      ! (nrungcm.eq.-2.or.nrungcm.eq.-3.or.nrungcm.eq.-5)
 
 !---------------------------------------------------------------------------
 if ( iout==19 ) then
@@ -388,126 +388,126 @@ if ( myid==0 .or. localhist ) then
 
     ! store CCAM parameters
     !~ call ccnf_put_attg(idnc,'aeroindir',aeroindir)
-    call ccnf_put_attg(idnc,'alphaj',alphaj)
-    if (amipo3) then
-      namipo3=1
-    else
-      namipo3=0
-    end if
-    call ccnf_put_attg(idnc,'amipo3',namipo3)
-    call ccnf_put_attg(idnc,'av_vmod',av_vmod)
-    call ccnf_put_attg(idnc,'bpyear',bpyear)
-    call ccnf_put_attg(idnc,'ccycle',ccycle)
-    call ccnf_put_attg(idnc,'cgmap_offset',cgmap_offset)
-    call ccnf_put_attg(idnc,'cgmap_scale',cgmap_scale)
+    !~ call ccnf_put_attg(idnc,'alphaj',alphaj)
+    !~ if (amipo3) then
+      !~ namipo3=1
+    !~ else
+      !~ namipo3=0
+    !~ end if
+    !~ call ccnf_put_attg(idnc,'amipo3',namipo3)
+    !~ call ccnf_put_attg(idnc,'av_vmod',av_vmod)
+    !~ call ccnf_put_attg(idnc,'bpyear',bpyear)
+    !~ call ccnf_put_attg(idnc,'ccycle',ccycle)
+    !~ call ccnf_put_attg(idnc,'cgmap_offset',cgmap_offset)
+    !~ call ccnf_put_attg(idnc,'cgmap_scale',cgmap_scale)
     !~ call ccnf_put_attg(idnc,'ch_dust',ch_dust)
-    call ccnf_put_attg(idnc,'charnock',charnock)
-    call ccnf_put_attg(idnc,'chn10',chn10)
-    call ccnf_put_attg(idnc,'epsf',epsf)
-    call ccnf_put_attg(idnc,'epsh',epsh)
-    call ccnf_put_attg(idnc,'epsp',epsp)
-    call ccnf_put_attg(idnc,'epsu',epsu)
-    call ccnf_put_attg(idnc,'factchseaice',factchseaice)
-    call ccnf_put_attg(idnc,'fc2',fc2)
-    call ccnf_put_attg(idnc,'helim',helim)
-    call ccnf_put_attg(idnc,'helmmeth',helmmeth)
-    call ccnf_put_attg(idnc,'iaero',iaero)   
+    !~ call ccnf_put_attg(idnc,'charnock',charnock)
+    !~ call ccnf_put_attg(idnc,'chn10',chn10)
+    !~ call ccnf_put_attg(idnc,'epsf',epsf)
+    !~ call ccnf_put_attg(idnc,'epsh',epsh)
+    !~ call ccnf_put_attg(idnc,'epsp',epsp)
+    !~ call ccnf_put_attg(idnc,'epsu',epsu)
+    !~ call ccnf_put_attg(idnc,'factchseaice',factchseaice)
+    !~ call ccnf_put_attg(idnc,'fc2',fc2)
+    !~ call ccnf_put_attg(idnc,'helim',helim)
+    !~ call ccnf_put_attg(idnc,'helmmeth',helmmeth)
+    !~ call ccnf_put_attg(idnc,'iaero',iaero)   
     !~ call ccnf_put_attg(idnc,'iceradmethod',iceradmethod)   
-    call ccnf_put_attg(idnc,'jalbfix',jalbfix)
-    call ccnf_put_attg(idnc,'kblock',kblock)
-    call ccnf_put_attg(idnc,'kbotdav',kbotdav)
-    call ccnf_put_attg(idnc,'kbotmlo',kbotmlo)
-    call ccnf_put_attg(idnc,'khdif',khdif)
-    call ccnf_put_attg(idnc,'khor',khor)
-    call ccnf_put_attg(idnc,'knh',knh)
-    call ccnf_put_attg(idnc,'ktopdav',ktopdav)
-    call ccnf_put_attg(idnc,'ktopmlo',ktopmlo)
-    call ccnf_put_attg(idnc,'leap',leap)
+    !~ call ccnf_put_attg(idnc,'jalbfix',jalbfix)
+    !~ call ccnf_put_attg(idnc,'kblock',kblock)
+    !~ call ccnf_put_attg(idnc,'kbotdav',kbotdav)
+    !~ call ccnf_put_attg(idnc,'kbotmlo',kbotmlo)
+    !~ call ccnf_put_attg(idnc,'khdif',khdif)
+    !~ call ccnf_put_attg(idnc,'khor',khor)
+    !~ call ccnf_put_attg(idnc,'knh',knh)
+    !~ call ccnf_put_attg(idnc,'ktopdav',ktopdav)
+    !~ call ccnf_put_attg(idnc,'ktopmlo',ktopmlo)
+    !~ call ccnf_put_attg(idnc,'leap',leap)
     !~ call ccnf_put_attg(idnc,'liqradmethod',liqradmethod)    
-    call ccnf_put_attg(idnc,'lgwd',lgwd)
-    call ccnf_put_attg(idnc,'m_fly',m_fly)
-    call ccnf_put_attg(idnc,'mbd',mbd)
-    call ccnf_put_attg(idnc,'mbd_maxscale',mbd_maxscale)
-    call ccnf_put_attg(idnc,'mex',mex)
-    call ccnf_put_attg(idnc,'mfix',mfix)
-    call ccnf_put_attg(idnc,'mfix_aero',mfix_aero)
-    call ccnf_put_attg(idnc,'mfix_qg',mfix_qg)
-    call ccnf_put_attg(idnc,'mfix_tr',mfix_tr)
-    call ccnf_put_attg(idnc,'mh_bs',mh_bs)
-    call ccnf_put_attg(idnc,'mindep',mindep)
-    call ccnf_put_attg(idnc,'minwater',minwater)
-    call ccnf_put_attg(idnc,'mloalpha',mloalpha)
+    !~ call ccnf_put_attg(idnc,'lgwd',lgwd)
+    !~ call ccnf_put_attg(idnc,'m_fly',m_fly)
+    !~ call ccnf_put_attg(idnc,'mbd',mbd)
+    !~ call ccnf_put_attg(idnc,'mbd_maxscale',mbd_maxscale)
+    !~ call ccnf_put_attg(idnc,'mex',mex)
+    !~ call ccnf_put_attg(idnc,'mfix',mfix)
+    !~ call ccnf_put_attg(idnc,'mfix_aero',mfix_aero)
+    !~ call ccnf_put_attg(idnc,'mfix_qg',mfix_qg)
+    !~ call ccnf_put_attg(idnc,'mfix_tr',mfix_tr)
+    !~ call ccnf_put_attg(idnc,'mh_bs',mh_bs)
+    !~ call ccnf_put_attg(idnc,'mindep',mindep)
+    !~ call ccnf_put_attg(idnc,'minwater',minwater)
+    !~ call ccnf_put_attg(idnc,'mloalpha',mloalpha)
     !~ call ccnf_put_attg(idnc,'mlodiff',mlodiff)
-    call ccnf_put_attg(idnc,'mup',mup)
-    call ccnf_put_attg(idnc,'mxd',mxd)
-    call ccnf_put_attg(idnc,'nalpha',nalpha)
-    call ccnf_put_attg(idnc,'namip',namip)
-    call ccnf_put_attg(idnc,'nbarewet',nbarewet)
-    call ccnf_put_attg(idnc,'nbd',nbd)
-    call ccnf_put_attg(idnc,'newrough',newrough)
-    call ccnf_put_attg(idnc,'newtop',newtop)
-    call ccnf_put_attg(idnc,'newztsea',newztsea)
-    call ccnf_put_attg(idnc,'nglacier',nglacier)
-    call ccnf_put_attg(idnc,'ngwd',ngwd)
-    call ccnf_put_attg(idnc,'nh',nh)
-    call ccnf_put_attg(idnc,'nhor',nhor)
-    call ccnf_put_attg(idnc,'nhorjlm',nhorjlm)
-    call ccnf_put_attg(idnc,'nhorps',nhorps)
-    call ccnf_put_attg(idnc,'nhstest',nhstest)
-    call ccnf_put_attg(idnc,'nlocal',nlocal)
-    call ccnf_put_attg(idnc,'nmlo',nmlo)
-    call ccnf_put_attg(idnc,'nmr',nmr)
-    call ccnf_put_attg(idnc,'nplens',nplens)
-    call ccnf_put_attg(idnc,'nrad',nrad)
-    call ccnf_put_attg(idnc,'nritch_t',nritch_t)
-    call ccnf_put_attg(idnc,'nriver',nriver)
-    call ccnf_put_attg(idnc,'nsemble',nsemble)
-    call ccnf_put_attg(idnc,'nsib',nsib)
-    call ccnf_put_attg(idnc,'nsigmf',nsigmf)
-    call ccnf_put_attg(idnc,'nspecial',nspecial)
-    call ccnf_put_attg(idnc,'nstagu',nstagu)
-    call ccnf_put_attg(idnc,'nt_adv',nt_adv)
-    call ccnf_put_attg(idnc,'ntaft',ntaft)
-    call ccnf_put_attg(idnc,'ntbar',ntbar)
-    call ccnf_put_attg(idnc,'ntsea',ntsea)
-    call ccnf_put_attg(idnc,'ntsur',ntsur)
-    call ccnf_put_attg(idnc,'nud_hrs',nud_hrs)
-    call ccnf_put_attg(idnc,'nud_ouv',nud_ouv)
-    call ccnf_put_attg(idnc,'nud_p',nud_p)
-    call ccnf_put_attg(idnc,'nud_q',nud_q)
-    call ccnf_put_attg(idnc,'nud_sfh',nud_sfh)
-    call ccnf_put_attg(idnc,'nud_sss',nud_sss)    
-    call ccnf_put_attg(idnc,'nud_sst',nud_sst)
-    call ccnf_put_attg(idnc,'nud_t',nud_t)
-    call ccnf_put_attg(idnc,'nud_uv',nud_uv)
-    call ccnf_put_attg(idnc,'nudu_hrs',nudu_hrs)
-    call ccnf_put_attg(idnc,'nurban',nurban)
-    call ccnf_put_attg(idnc,'nvmix',nvmix)
+    !~ call ccnf_put_attg(idnc,'mup',mup)
+    !~ call ccnf_put_attg(idnc,'mxd',mxd)
+    !~ call ccnf_put_attg(idnc,'nalpha',nalpha)
+    !~ call ccnf_put_attg(idnc,'namip',namip)
+    !~ call ccnf_put_attg(idnc,'nbarewet',nbarewet)
+    !~ call ccnf_put_attg(idnc,'nbd',nbd)
+    !~ call ccnf_put_attg(idnc,'newrough',newrough)
+    !~ call ccnf_put_attg(idnc,'newtop',newtop)
+    !~ call ccnf_put_attg(idnc,'newztsea',newztsea)
+    !~ call ccnf_put_attg(idnc,'nglacier',nglacier)
+    !~ call ccnf_put_attg(idnc,'ngwd',ngwd)
+    !~ call ccnf_put_attg(idnc,'nh',nh)
+    !~ call ccnf_put_attg(idnc,'nhor',nhor)
+    !~ call ccnf_put_attg(idnc,'nhorjlm',nhorjlm)
+    !~ call ccnf_put_attg(idnc,'nhorps',nhorps)
+    !~ call ccnf_put_attg(idnc,'nhstest',nhstest)
+    !~ call ccnf_put_attg(idnc,'nlocal',nlocal)
+    !~ call ccnf_put_attg(idnc,'nmlo',nmlo)
+    !~ call ccnf_put_attg(idnc,'nmr',nmr)
+    !~ call ccnf_put_attg(idnc,'nplens',nplens)
+    !~ call ccnf_put_attg(idnc,'nrad',nrad)
+    !~ call ccnf_put_attg(idnc,'nritch_t',nritch_t)
+    !~ call ccnf_put_attg(idnc,'nriver',nriver)
+    !~ call ccnf_put_attg(idnc,'nsemble',nsemble)
+    !~ call ccnf_put_attg(idnc,'nsib',nsib)
+    !~ call ccnf_put_attg(idnc,'nsigmf',nsigmf)
+    !~ call ccnf_put_attg(idnc,'nspecial',nspecial)
+    !~ call ccnf_put_attg(idnc,'nstagu',nstagu)
+    !~ call ccnf_put_attg(idnc,'nt_adv',nt_adv)
+    !~ call ccnf_put_attg(idnc,'ntaft',ntaft)
+    !~ call ccnf_put_attg(idnc,'ntbar',ntbar)
+    !~ call ccnf_put_attg(idnc,'ntsea',ntsea)
+    !~ call ccnf_put_attg(idnc,'ntsur',ntsur)
+    !~ call ccnf_put_attg(idnc,'nud_hrs',nud_hrs)
+    !~ call ccnf_put_attg(idnc,'nud_ouv',nud_ouv)
+    !~ call ccnf_put_attg(idnc,'nud_p',nud_p)
+    !~ call ccnf_put_attg(idnc,'nud_q',nud_q)
+    !~ call ccnf_put_attg(idnc,'nud_sfh',nud_sfh)
+    !~ call ccnf_put_attg(idnc,'nud_sss',nud_sss)    
+    !~ call ccnf_put_attg(idnc,'nud_sst',nud_sst)
+    !~ call ccnf_put_attg(idnc,'nud_t',nud_t)
+    !~ call ccnf_put_attg(idnc,'nud_uv',nud_uv)
+    !~ call ccnf_put_attg(idnc,'nudu_hrs',nudu_hrs)
+    !~ call ccnf_put_attg(idnc,'nurban',nurban)
+    !~ call ccnf_put_attg(idnc,'nvmix',nvmix)
     !~ call ccnf_put_attg(idnc,'ocneps',ocneps)
     !~ call ccnf_put_attg(idnc,'ocnsmag',ocnsmag)
-    call ccnf_put_attg(idnc,'ol',ol)
-    call ccnf_put_attg(idnc,'panfg',panfg)
-    call ccnf_put_attg(idnc,'panzo',panzo)
-    call ccnf_put_attg(idnc,'precon',precon)
-    call ccnf_put_attg(idnc,'proglai',proglai)
-    call ccnf_put_attg(idnc,'qgmin',qgmin)
-    call ccnf_put_attg(idnc,'rescrn',rescrn)
-    call ccnf_put_attg(idnc,'restol',restol)
-    call ccnf_put_attg(idnc,'rhsat',rhsat)
-    call ccnf_put_attg(idnc,'sigbot_gwd',sigbot_gwd)
-    call ccnf_put_attg(idnc,'sigramphigh',sigramphigh)
-    call ccnf_put_attg(idnc,'sigramplow',sigramplow)
-    call ccnf_put_attg(idnc,'snmin',snmin)
-    call ccnf_put_attg(idnc,'tbave',tbave)
-    call ccnf_put_attg(idnc,'tblock',tblock)
-    call ccnf_put_attg(idnc,'tss_sh',tss_sh)
-    call ccnf_put_attg(idnc,'vmodmin',vmodmin)
-    call ccnf_put_attg(idnc,'zobgin',zobgin)
-    call ccnf_put_attg(idnc,'zomode',zomode)
-    call ccnf_put_attg(idnc,'zoseaice',zoseaice)
+    !~ call ccnf_put_attg(idnc,'ol',ol)
+    !~ call ccnf_put_attg(idnc,'panfg',panfg)
+    !~ call ccnf_put_attg(idnc,'panzo',panzo)
+    !~ call ccnf_put_attg(idnc,'precon',precon)
+    !~ call ccnf_put_attg(idnc,'proglai',proglai)
+    !~ call ccnf_put_attg(idnc,'qgmin',qgmin)
+    !~ call ccnf_put_attg(idnc,'rescrn',rescrn)
+    !~ call ccnf_put_attg(idnc,'restol',restol)
+    !~ call ccnf_put_attg(idnc,'rhsat',rhsat)
+    !~ call ccnf_put_attg(idnc,'sigbot_gwd',sigbot_gwd)
+    !~ call ccnf_put_attg(idnc,'sigramphigh',sigramphigh)
+    !~ call ccnf_put_attg(idnc,'sigramplow',sigramplow)
+    !~ call ccnf_put_attg(idnc,'snmin',snmin)
+    !~ call ccnf_put_attg(idnc,'tbave',tbave)
+    !~ call ccnf_put_attg(idnc,'tblock',tblock)
+    !~ call ccnf_put_attg(idnc,'tss_sh',tss_sh)
+    !~ call ccnf_put_attg(idnc,'vmodmin',vmodmin)
+    !~ call ccnf_put_attg(idnc,'zobgin',zobgin)
+    !~ call ccnf_put_attg(idnc,'zomode',zomode)
+    !~ call ccnf_put_attg(idnc,'zoseaice',zoseaice)
     !~ call ccnf_put_attg(idnc,'zvolcemi',zvolcemi)
 
-    call ccnf_put_attg(idnc,'mins_rad',mins_rad)
+    !~ call ccnf_put_attg(idnc,'mins_rad',mins_rad)
     !~ call ccnf_put_attg(idnc,'sw_diff_streams',sw_diff_streams)
     !~ call ccnf_put_attg(idnc,'sw_resolution',sw_resolution)
     
