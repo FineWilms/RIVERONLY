@@ -468,7 +468,7 @@ use aerosolldr           ! LDR prognostic aerosols
 use arrays_m             ! Atmosphere dyamics prognostic arrays
 use cc_mpi               ! CC MPI routines
 use cfrac_m              ! Cloud fraction
-use cloudmod             ! Prognostic strat cloud
+!~ use cloudmod             ! Prognostic strat cloud
 use extraout_m           ! Additional diagnostics
 use infile               ! Input file routines
 use kuocomb_m            ! JLM convection
@@ -565,7 +565,7 @@ do k = 1,kl
 end do
 
 ! estimate convective cloud fraction from leoncld.f
-call convectivecloudfrac(clcon,cldcon=cldcon)
+!~ call convectivecloudfrac(clcon,cldcon=cldcon)
 do k = 1,kl
   ! MJT notes - Assume rain for JLM convection
   !where ( k>kbsav .and. k<=ktsave .and. t(1:ifull,k)>ticeu )

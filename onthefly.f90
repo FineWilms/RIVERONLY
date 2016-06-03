@@ -292,7 +292,7 @@ use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
 use carbpools_m                                ! Carbon pools
 use cc_mpi                                     ! CC MPI routines
 use cfrac_m                                    ! Cloud fraction
-use cloudmod                                   ! Prognostic strat cloud
+!~ use cloudmod                                   ! Prognostic strat cloud
 use extraout_m                                 ! Additional diagnostics      
 use infile                                     ! Input file routines
 use latlong_m                                  ! Lat/lon coordinates
@@ -1303,10 +1303,10 @@ if ( nested/=1 ) then
       call gethist4a('sfrac',sfrac,5)         ! SNOW FRACTION
       call gethist4a('gfrac',gfrac,5)         ! GRAUPEL FRACTION
     end if
-    if ( ncloud >= 4 ) then
-      call gethist4a('stratcf',stratcloud,5)  ! STRAT CLOUD FRACTION
-      call gethist4a('strat_nt',nettend,5)    ! STRAT NET TENDENCY
-    end if ! (ncloud>=4)
+    !~ if ( ncloud >= 4 ) then
+      !~ call gethist4a('stratcf',stratcloud,5)  ! STRAT CLOUD FRACTION
+      !~ call gethist4a('strat_nt',nettend,5)    ! STRAT NET TENDENCY
+    !~ end if ! (ncloud>=4)
   end if   ! (nested==0)
 
   !------------------------------------------------------------------

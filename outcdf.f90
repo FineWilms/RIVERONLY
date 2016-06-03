@@ -148,7 +148,7 @@ subroutine cdfout(rundate,itype,nstagin,jalbfix,nalpha,mins_rad)
 use aerosolldr                        ! LDR prognostic aerosols
 use cable_ccam, only : proglai        ! CABLE
 use cc_mpi                            ! CC MPI routines
-use cloudmod                          ! Prognostic cloud fraction
+!~ use cloudmod                          ! Prognostic cloud fraction
 use infile                            ! Input file routines
 use liqwpar_m                         ! Cloud water mixing ratios
 use mlo, only : mindep              & ! Ocean physics and prognostic arrays
@@ -596,7 +596,7 @@ use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
 use carbpools_m                                  ! Carbon pools
 use cc_mpi                                       ! CC MPI routines
 use cfrac_m                                      ! Cloud fraction
-use cloudmod                                     ! Prognostic strat cloud
+!~ use cloudmod                                     ! Prognostic strat cloud
 !~ use daviesnudge                                  ! Far-field nudging
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
@@ -2122,12 +2122,12 @@ if ( ldr/=0 ) then
     call histwrt4(sfrac,'sfrac',idnc,iarch,local,.true.)
     call histwrt4(gfrac,'gfrac',idnc,iarch,local,.true.)
   end if
-  if ( ncloud>=4 ) then
-    call histwrt4(stratcloud,'stratcf',idnc,iarch,local,.true.)  
-    if ( itype==-1 ) then
-      call histwrt4(nettend,'strat_nt',idnc,iarch,local,.true.)
-    end if
-  end if
+  !~ if ( ncloud>=4 ) then
+    !~ call histwrt4(stratcloud,'stratcf',idnc,iarch,local,.true.)  
+    !~ if ( itype==-1 ) then
+      !~ call histwrt4(nettend,'strat_nt',idnc,iarch,local,.true.)
+    !~ end if
+  !~ end if
 endif
       
 ! TURBULENT MIXING --------------------------------------------
