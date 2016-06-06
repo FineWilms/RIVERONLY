@@ -102,7 +102,7 @@ if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
     !~ call writeglobvar(77, tgg, fmt='(12f7.2)')
     call writeglobvar(77, tss, fmt='(12f7.2)')
     call writeglobvar(77, snowd, fmt='(12f7.1)')
-    call writeglobvar(77, sicedep, fmt='(12f7.1)')
+    !~ call writeglobvar(77, sicedep, fmt='(12f7.1)')
     if ( myid == 0 ) close (77)
     if ( nrungcm==-2 .or. nrungcm==-5 ) then
       if ( myid == 0 ) then
@@ -772,8 +772,8 @@ if( myid==0 .or. local ) then
     call attrib(idnc,idim(1:2),2,'map',lname,'none',.001,1500.,0,itype)
     !~ lname = 'Coriolis factor'
     !~ call attrib(idnc,idim(1:2),2,'cor',lname,'1/sec',-1.5e-4,1.5e-4,0,itype)
-    lname = 'Urban fraction'
-    call attrib(idnc,idim(1:2),2,'sigmu',lname,'none',0.,3.25,0,itype)
+    !~ lname = 'Urban fraction'
+    !~ call attrib(idnc,idim(1:2),2,'sigmu',lname,'none',0.,3.25,0,itype)
     lname = 'Soil type'
     call attrib(idnc,idim(1:2),2,'soilt',lname,'none',-65.,65.,0,itype)
     lname = 'Vegetation type'
@@ -821,8 +821,8 @@ if( myid==0 .or. local ) then
     !~ lname = 'Fraction of canopy that is wet'
     !~ call attrib(idnc,jdim(1:3),3,'fwet',lname,'none',0.,1.,0,itype)
 
-    lname = 'Snow depth (liquid water)'
-    call attrib(idnc,jdim(1:3),3,'snd',lname,'mm',0.,6500.,0,-1)  ! -1=long
+    !~ lname = 'Snow depth (liquid water)'
+    !~ call attrib(idnc,jdim(1:3),3,'snd',lname,'mm',0.,6500.,0,-1)  ! -1=long
     !~ lname = 'Soil temperature lev 1'
     !~ call attrib(idnc,jdim(1:3),3,'tgg1',lname,'K',100.,425.,0,itype)
     !~ lname = 'Soil temperature lev 2'
@@ -896,10 +896,10 @@ if( myid==0 .or. local ) then
     lname = 'Surface wetness fraction'
     call attrib(idnc,jdim(1:3),3,'wetfac',lname,'none',-6.5,6.5,0,itype)
 
-    lname = 'Sea ice depth'
-    call attrib(idnc,jdim(1:3),3,'siced',lname,'m',0.,65.,0,-1)
-    lname = 'Sea ice fraction'
-    call attrib(idnc,jdim(1:3),3,'fracice',lname,'none',0.,6.5,0,itype)
+    !~ lname = 'Sea ice depth'
+    !~ call attrib(idnc,jdim(1:3),3,'siced',lname,'m',0.,65.,0,-1)
+    !~ lname = 'Sea ice fraction'
+    !~ call attrib(idnc,jdim(1:3),3,'fracice',lname,'none',0.,6.5,0,itype)
     !~ lname = '10m wind speed'
     !~ call attrib(idnc,jdim(1:3),3,'u10',lname,'m/s',0.,130.,0,itype)
     !~ lname = 'Maximum CAPE'
@@ -1628,7 +1628,7 @@ if ( ktau==0 .or. itype==-1 ) then  ! also for restart file
   call histwrt3(he,'he',idnc,iarch,local,.true.)
   call histwrt3(em,'map',idnc,iarch,local,.true.)
   !~ call histwrt3(f,'cor',idnc,iarch,local,.true.)
-  call histwrt3(sigmu,'sigmu',idnc,iarch,local,.true.)
+  !~ call histwrt3(sigmu,'sigmu',idnc,iarch,local,.true.)
   aa(:) = real(isoilm_in(:)) ! use the raw soil data here
   call histwrt3(aa,'soilt',idnc,iarch,local,.true.)
   aa(:) = real(ivegt(:))
@@ -1674,7 +1674,7 @@ endif ! (ktau==0.or.itype==-1)
 !~ call histwrt3(aa,'grpl',idnc,iarch,local,lwrite)
 aa(:) = runoff(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'runoff',idnc,iarch,local,lwrite)
-aa(:) = swrsave*albvisnir(:,1)+(1.-swrsave)*albvisnir(:,2)
+!~ aa(:) = swrsave*albvisnir(:,1)+(1.-swrsave)*albvisnir(:,2)
 !~ call histwrt3(aa,'alb',idnc,iarch,local,.true.)
 !~ call histwrt3(fwet,'fwet',idnc,iarch,local,lwrite)
 
@@ -1692,13 +1692,13 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
     !~ end where
   !~ end do
   where (.not.land(1:ifull))
-    fracice = micdwn(:,5)
-    sicedep = micdwn(:,6)
+    !~ fracice = micdwn(:,5)
+    !~ sicedep = micdwn(:,6)
     snowd   = micdwn(:,7)*1000.
   end where
 end if
 
-call histwrt3(snowd,'snd', idnc,iarch,local,.true.)  ! long write
+!~ call histwrt3(snowd,'snd', idnc,iarch,local,.true.)  ! long write
 !~ do k=1,ms
   !~ where ( tgg(:,k)<100. .and. itype==1 )
     !~ aa(:)=tgg(:,k)+wrtemp
@@ -1769,8 +1769,8 @@ call histwrt3(aa,'wetfrac6',idnc,iarch,local,.true.)
 call histwrt3(wetfac,'wetfac',idnc,iarch,local,.true.)
       
 ! SEAICE ------------------------------------------------------       
-call histwrt3(sicedep,'siced',idnc,iarch,local,.true.)
-call histwrt3(fracice,'fracice',idnc,iarch,local,.true.)
+!~ call histwrt3(sicedep,'siced',idnc,iarch,local,.true.)
+!~ call histwrt3(fracice,'fracice',idnc,iarch,local,.true.)
      
 ! DIAGNOSTICS -------------------------------------------------
 lwrite=(ktau>0)
