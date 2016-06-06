@@ -907,8 +907,8 @@ if( myid==0 .or. local ) then
     !~ lname = 'Average CAPE'
     !~ call attrib(idnc,jdim(1:3),3,'cape_ave',lname,'J/kg',0.,20000.,0,itype)    
     
-    lname = 'Maximum precip rate in a timestep'
-    call attrib(idnc,jdim(1:3),3,'maxrnd',lname,'mm/day',0.,2600.,1,-1) ! -1=long
+    !~ lname = 'Maximum precip rate in a timestep'
+    !~ call attrib(idnc,jdim(1:3),3,'maxrnd',lname,'mm/day',0.,2600.,1,-1) ! -1=long
     !~ lname = 'Maximum screen temperature'
     !~ call attrib(idnc,jdim(1:3),3,'tmaxscr',lname,'K',100.,425.,1,itype)
     !~ lname = 'Minimum screen temperature'
@@ -1000,12 +1000,12 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'ctop_ave',lname,'sigma',0.,1.1,0,itype)
     !~ lname = 'Avg dew flux'
     !~ call attrib(idnc,jdim(1:3),3,'dew_ave',lname,'W/m2',-100.,1000.,0,itype)
-    lname = 'Avg evaporation'
-    call attrib(idnc,jdim(1:3),3,'evap',lname,'mm',-100.,100.,0,itype)
-    lname = 'Avg potential "pan" evaporation'
-    call attrib(idnc,jdim(1:3),3,'epan_ave',lname,'W/m2',-1000.,10.e3,0,itype)
-    lname = 'Avg potential evaporation'
-    call attrib(idnc,jdim(1:3),3,'epot_ave',lname,'W/m2',-1000.,10.e3,0,itype)
+    !~ lname = 'Avg evaporation'
+    !~ call attrib(idnc,jdim(1:3),3,'evap',lname,'mm',-100.,100.,0,itype)
+    !~ lname = 'Avg potential "pan" evaporation'
+    !~ call attrib(idnc,jdim(1:3),3,'epan_ave',lname,'W/m2',-1000.,10.e3,0,itype)
+    !~ lname = 'Avg potential evaporation'
+    !~ call attrib(idnc,jdim(1:3),3,'epot_ave',lname,'W/m2',-1000.,10.e3,0,itype)
     !~ lname = 'Avg latent heat flux'
     !~ call attrib(idnc,jdim(1:3),3,'eg_ave',lname,'W/m2',-1000.,3000.,0,itype)
     !~ lname = 'Avg sensible heat flux'
@@ -1014,10 +1014,10 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'rnet_ave',lname,'none',-3000.,3000.,0,itype)
     lname = 'Avg flux into tgg1 layer'
     call attrib(idnc,jdim(1:3),3,'ga_ave',lname,'W/m2',-1000.,1000.,0,itype)
-    lname = 'Avg ice water path'
-    call attrib(idnc,jdim(1:3),3,'iwp_ave',lname,'kg/m2',0.,6.,0,itype)
-    lname = 'Avg liquid water path'
-    call attrib(idnc,jdim(1:3),3,'lwp_ave',lname,'kg/m2',0.,6.,0,itype)
+    !~ lname = 'Avg ice water path'
+    !~ call attrib(idnc,jdim(1:3),3,'iwp_ave',lname,'kg/m2',0.,6.,0,itype)
+    !~ lname = 'Avg liquid water path'
+    !~ call attrib(idnc,jdim(1:3),3,'lwp_ave',lname,'kg/m2',0.,6.,0,itype)
     !~ lname = 'Low cloud ave'
     !~ call attrib(idnc,jdim(1:3),3,'cll',lname,'frac',0.,1.,0,itype)
     !~ lname = 'Mid cloud ave'
@@ -1059,16 +1059,16 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'uscrn',lname,'m/s',0.,65.,0,itype)
     !~ lname = 'Net radiation'
     !~ call attrib(idnc,jdim(1:3),3,'rnet',lname,'W/m2',-3000.,3000.,0,itype)
-    lname = 'Potential "pan" evaporation'
-    call attrib(idnc,jdim(1:3),3,'epan',lname,'W/m2',-1000.,10.e3,0,itype)
+    !~ lname = 'Potential "pan" evaporation'
+    !~ call attrib(idnc,jdim(1:3),3,'epan',lname,'W/m2',-1000.,10.e3,0,itype)
     !~ lname = 'Latent heat flux'
     !~ call attrib(idnc,jdim(1:3),3,'eg',lname,'W/m2',-1000.,3000.,0,itype)
     !~ lname = 'Sensible heat flux'
     !~ call attrib(idnc,jdim(1:3),3,'fg',lname,'W/m2',-3000.,3000.,0,itype)
-    lname = 'x-component wind stress'
-    call attrib(idnc,jdim(1:3),3,'taux',lname,'N/m2',-50.,50.,0,itype)
-    lname = 'y-component wind stress'
-    call attrib(idnc,jdim(1:3),3,'tauy',lname,'N/m2',-50.,50.,0,itype)
+    !~ lname = 'x-component wind stress'
+    !~ call attrib(idnc,jdim(1:3),3,'taux',lname,'N/m2',-50.,50.,0,itype)
+    !~ lname = 'y-component wind stress'
+    !~ call attrib(idnc,jdim(1:3),3,'tauy',lname,'N/m2',-50.,50.,0,itype)
     if ( nextout>=1 ) then
       if ( myid==0 ) write(6,*) 'nextout=',nextout
       !~ lname = 'LW at TOA'
@@ -1842,24 +1842,24 @@ if ( itype/=-1 ) then  ! these not written to restart file
     !~ call histwrt3( u10_3hr(1,7), 'u10_21',idnc,iarch,local,lday)
     !~ call histwrt3( v10_3hr(1,7), 'v10_21',idnc,iarch,local,lday)
   !~ endif  ! nextout>=3
-  if ( nextout>=4 .and. nllp==3 ) then  
-    do k=1,klt
-      do iq=1,ilt*jlt        
-        tr(iq,k,ngas+1)=tr(iq,k,ngas+1)-rlatt(iq)*180./pi
-        tr(iq,k,ngas+2)=tr(iq,k,ngas+2)-rlongg(iq)*180./pi
-        if(tr(iq,k,ngas+2)>180.)tr(iq,k,ngas+2)=tr(iq,k,ngas+2)-360.
-        if(tr(iq,k,ngas+2)<-180.)tr(iq,k,ngas+2)=tr(iq,k,ngas+2)+360.
-        tr(iq,k,ngas+3)=tr(iq,k,ngas+3)-.01*ps(iq)*sig(k)  ! in hPa
-      enddo
-    enddo
-!   N.B. does not yet properly handle across Grenwich Meridion
-    tmpry=tr(1:ifull,:,ngas+1)
-    call histwrt4(tmpry,'del_lat',idnc,iarch,local,.true.)
-    tmpry=tr(1:ifull,:,ngas+2)
-    call histwrt4(tmpry,'del_lon',idnc,iarch,local,.true.)
-    tmpry=tr(1:ifull,:,ngas+3)
-    call histwrt4(tmpry,'del_p',idnc,iarch,local,.true.)
-  endif  ! (nextout>=4.and.nllp==3)
+  !~ if ( nextout>=4 .and. nllp==3 ) then  
+    !~ do k=1,klt
+      !~ do iq=1,ilt*jlt        
+        !~ tr(iq,k,ngas+1)=tr(iq,k,ngas+1)-rlatt(iq)*180./pi
+        !~ tr(iq,k,ngas+2)=tr(iq,k,ngas+2)-rlongg(iq)*180./pi
+        !~ if(tr(iq,k,ngas+2)>180.)tr(iq,k,ngas+2)=tr(iq,k,ngas+2)-360.
+        !~ if(tr(iq,k,ngas+2)<-180.)tr(iq,k,ngas+2)=tr(iq,k,ngas+2)+360.
+        !~ tr(iq,k,ngas+3)=tr(iq,k,ngas+3)-.01*ps(iq)*sig(k)  ! in hPa
+      !~ enddo
+    !~ enddo
+!~ !   N.B. does not yet properly handle across Grenwich Meridion
+    !~ tmpry=tr(1:ifull,:,ngas+1)
+    !~ call histwrt4(tmpry,'del_lat',idnc,iarch,local,.true.)
+    !~ tmpry=tr(1:ifull,:,ngas+2)
+    !~ call histwrt4(tmpry,'del_lon',idnc,iarch,local,.true.)
+    !~ tmpry=tr(1:ifull,:,ngas+3)
+    !~ call histwrt4(tmpry,'del_p',idnc,iarch,local,.true.)
+  !~ endif  ! (nextout>=4.and.nllp==3)
   ! only write these once per avg period
   !~ call histwrt3(tscr_ave,'tscr_ave',idnc,iarch,local,lave)
   !~ call histwrt3(cbas_ave,'cbas_ave',idnc,iarch,local,lave)
@@ -1887,20 +1887,20 @@ if ( itype/=-1 ) then  ! these not written to restart file
   !~ call histwrt3(tsu_ave,'tsu_ave',idnc,iarch,local,lave)
   !~ call histwrt3(alb_ave,'alb_ave',idnc,iarch,local,lrad)
   !~ call histwrt3(psl_ave,'pmsl_ave',idnc,iarch,local,lave)
-  if ( nmlo/=0 ) then
-    call histwrt3(mixdep_ave,'mixd_ave',idnc,iarch,local,lave)
-  end if
+  !~ if ( nmlo/=0 ) then
+    !~ call histwrt3(mixdep_ave,'mixd_ave',idnc,iarch,local,lave)
+  !~ end if
   lwrite=(ktau>0)
   !~ call histwrt3(tscrn,'tscrn',idnc,iarch,local,lwrite)
   !~ call histwrt3(qgscrn,'qgscrn',idnc,iarch,local,lwrite)
   !~ call histwrt3(rhscrn,'rhscrn',idnc,iarch,local,lwrite)
   !~ call histwrt3(uscrn,'uscrn',idnc,iarch,local,lwrite)
   !~ call histwrt3(rnet,'rnet',idnc,iarch,local,lwrite)
-  call histwrt3(epan,'epan',idnc,iarch,local,lwrite)
+  !~ call histwrt3(epan,'epan',idnc,iarch,local,lwrite)
   !~ call histwrt3(eg,'eg',idnc,iarch,local,lwrite)
   !~ call histwrt3(fg,'fg',idnc,iarch,local,lwrite)
-  call histwrt3(taux,'taux',idnc,iarch,local,lwrite)
-  call histwrt3(tauy,'tauy',idnc,iarch,local,lwrite)
+  !~ call histwrt3(taux,'taux',idnc,iarch,local,lwrite)
+  !~ call histwrt3(tauy,'tauy',idnc,iarch,local,lwrite)
   ! "extra" outputs
   if ( nextout>=1 ) then
     !~ call histwrt3(rtu_ave,'rtu_ave',idnc,iarch,local,lrad)
