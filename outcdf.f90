@@ -31,7 +31,7 @@
 module outcdf
     
 private
-public outfile, freqfile, mslp
+public outfile, mslp
 
 character(len=3), dimension(12), parameter :: month = (/'jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'/)
 
@@ -2206,7 +2206,7 @@ if ( itype==-1 ) then
   call histwrt4(savv1,     'savv1', idnc,iarch,local,.true.)
   call histwrt4(savu2,     'savu2', idnc,iarch,local,.true.)
   call histwrt4(savv2,     'savv2', idnc,iarch,local,.true.)
-  if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
+  !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
     !~ do k=1,wlev
       !~ write(vname,'("oldu1",I2.2)') k
       !~ call histwrt3(oldu1(:,k),vname,idnc,iarch,local,.true.)
@@ -2218,7 +2218,7 @@ if ( itype==-1 ) then
       !~ call histwrt3(oldv2(:,k),vname,idnc,iarch,local,.true.)
     !~ end do
     !~ call histwrt3(ipice,'ipice',idnc,iarch,local,.true.)
-  end if
+  !~ end if
   call histwrt3(wbice(1,1),'wbice1',idnc,iarch,local,.true.)
   call histwrt3(wbice(1,2),'wbice2',idnc,iarch,local,.true.)
   call histwrt3(wbice(1,3),'wbice3',idnc,iarch,local,.true.)
@@ -2259,205 +2259,203 @@ end subroutine openhist
 !--------------------------------------------------------------
 ! HIGH FREQUENCY OUTPUT FILES
       
-subroutine freqfile
+!~ subroutine freqfile
 
-use arrays_m                          ! Atmosphere dyamics prognostic arrays
-use cc_mpi                            ! CC MPI routines
-use infile                            ! Input file routines
-use morepbl_m                         ! Additional boundary layer diagnostics
-use parmhdff_m                        ! Horizontal diffusion parameters
-use screen_m                          ! Screen level diagnostics
-use sigs_m                            ! Atmosphere sigma levels
-use tracers_m                         ! Tracer data
+!~ use arrays_m                          ! Atmosphere dyamics prognostic arrays
+!~ use cc_mpi                            ! CC MPI routines
+!~ use infile                            ! Input file routines
+!~ use morepbl_m                         ! Additional boundary layer diagnostics
+!~ use parmhdff_m                        ! Horizontal diffusion parameters
+!~ use screen_m                          ! Screen level diagnostics
+!~ use sigs_m                            ! Atmosphere sigma levels
+!~ use tracers_m                         ! Tracer data
       
-implicit none
+!~ implicit none
 
-include 'newmpar.h'                   ! Grid parameters
-include 'dates.h'                     ! Date data
-include 'filnames.h'                  ! Filenames
-include 'kuocom.h'                    ! Convection parameters
-include 'parm.h'                      ! Model configuration
-include 'parmdyn.h'                   ! Dynamics parameters
-include 'parmgeom.h'                  ! Coordinate data
-include 'parmhor.h'                   ! Horizontal advection parameters
+!~ include 'newmpar.h'                   ! Grid parameters
+!~ include 'dates.h'                     ! Date data
+!~ include 'filnames.h'                  ! Filenames
+!~ include 'kuocom.h'                    ! Convection parameters
+!~ include 'parm.h'                      ! Model configuration
+!~ include 'parmdyn.h'                   ! Dynamics parameters
+!~ include 'parmgeom.h'                  ! Coordinate data
+!~ include 'parmhor.h'                   ! Horizontal advection parameters
 
-integer leap
-common/leap_yr/leap                   ! Leap year (1 to allow leap years)
+!~ integer leap
+!~ common/leap_yr/leap                   ! Leap year (1 to allow leap years)
       
-integer, parameter :: freqvars = 8  ! number of variables to write
-integer, parameter :: nihead   = 54
-integer, parameter :: nrhead   = 14
-integer, dimension(nihead) :: nahead
-integer, dimension(tblock) :: datedat
-integer, dimension(4) :: adim
-integer, dimension(3) :: sdim
-integer, dimension(1) :: start,ncount
-integer ixp,iyp,izp
-integer icy,icm,icd,ich,icmi,ics,ti
-integer i,j,n,fiarch
-integer, save :: fncid = -1
-integer, save :: idnt = 0
-integer, save :: idkdate = 0
-integer, save :: idktime = 0
-integer, save :: idmtimer = 0
-real, dimension(:,:,:), allocatable, save :: freqstore
-real, dimension(ifull) :: umag, pmsl
-real, dimension(il_g) :: xpnt
-real, dimension(jl_g) :: ypnt
-real, dimension(1) :: zpnt
-real, dimension(nrhead) :: ahead
-real(kind=8), dimension(tblock) :: tpnt
-logical, save :: first = .true.
-character(len=180) :: ffile
-character(len=40) :: lname
-character(len=33) :: grdtim
-character(len=20) :: timorg
+!~ integer, parameter :: freqvars = 8  ! number of variables to write
+!~ integer, parameter :: nihead   = 54
+!~ integer, parameter :: nrhead   = 14
+!~ integer, dimension(nihead) :: nahead
+!~ integer, dimension(tblock) :: datedat
+!~ integer, dimension(4) :: adim
+!~ integer, dimension(3) :: sdim
+!~ integer, dimension(1) :: start,ncount
+!~ integer ixp,iyp,izp
+!~ integer icy,icm,icd,ich,icmi,ics,ti
+!~ integer i,j,n,fiarch
+!~ integer, save :: fncid = -1
+!~ integer, save :: idnt = 0
+!~ integer, save :: idkdate = 0
+!~ integer, save :: idktime = 0
+!~ integer, save :: idmtimer = 0
+!~ real, dimension(:,:,:), allocatable, save :: freqstore
+!~ real, dimension(ifull) :: umag, pmsl
+!~ real, dimension(il_g) :: xpnt
+!~ real, dimension(jl_g) :: ypnt
+!~ real, dimension(1) :: zpnt
+!~ real, dimension(nrhead) :: ahead
+!~ real(kind=8), dimension(tblock) :: tpnt
+!~ logical, save :: first = .true.
+!~ character(len=180) :: ffile
+!~ character(len=40) :: lname
+!~ character(len=33) :: grdtim
+!~ character(len=20) :: timorg
 
-WRITE(6,*) 'FREQFILE ROUTINE '
+!~ call START_LOG(outfile_begin)
 
-call START_LOG(outfile_begin)
-
-! allocate arrays and open new file
-if ( first ) then
-  if ( myid==0 ) then
-    write(6,*) "Initialise high frequency output"
-  end if
-  allocate(freqstore(ifull,tblock,freqvars))
-  freqstore(:,:,:) = 0.
-  if ( localhist ) then
-    write(ffile,"(a,'.',i6.6)") trim(surfile), myid
-  else
-    ffile=surfile
-  end if
-  if ( myid==0 .or. localhist ) then
-    call ccnf_create(ffile,fncid)
-    ! Turn off the data filling
-    call ccnf_nofill(fncid)
-    ! Create dimensions
-    if ( localhist ) then
-      call ccnf_def_dim(fncid,'longitude',il,adim(1))
-      call ccnf_def_dim(fncid,'latitude',jl,adim(2))
-    else
-      call ccnf_def_dim(fncid,'longitude',il_g,adim(1))
-      call ccnf_def_dim(fncid,'latitude',jl_g,adim(2))
-    endif
-    call ccnf_def_dim(fncid,'lev',1,adim(3))
-    call ccnf_def_dimu(fncid,'time',adim(4))
-    ! Define coords.
-    call ccnf_def_var(fncid,'longitude','float',1,adim(1:1),ixp)
-    call ccnf_put_att(fncid,ixp,'point_spacing','even')
-    call ccnf_put_att(fncid,ixp,'units','degrees_east')
-    call ccnf_def_var(fncid,'latitude','float',1,adim(2:2),iyp)
-    call ccnf_put_att(fncid,iyp,'point_spacing','even')
-    call ccnf_put_att(fncid,iyp,'units','degrees_north')
-    call ccnf_def_var(fncid,'lev','float',1,adim(3:3),izp)
-    call ccnf_put_att(fncid,izp,'positive','down')
-    call ccnf_put_att(fncid,izp,'point_spacing','uneven')
-    call ccnf_put_att(fncid,izp,'units','sigma_level')
-    call ccnf_def_var(fncid,'time','double',1,adim(4:4),idnt)
-    call ccnf_put_att(fncid,idnt,'point_spacing','even')
-    icy=kdate/10000
-    icm=max(1,min(12,(kdate-icy*10000)/100))
-    icd=max(1,min(31,(kdate-icy*10000-icm*100)))
-    if ( icy<100 ) then
-      icy=icy+1900
-    end if
-    ich=ktime/100
-    icmi=(ktime-ich*100)
-    ics=0
-    write(timorg,'(i2.2,"-",a3,"-",i4.4,3(":",i2.2))') icd,month(icm),icy,ich,icmi,ics
-    call ccnf_put_att(fncid,idnt,'time_origin',timorg)
-    write(grdtim,'("seconds since ",i4.4,"-",i2.2,"-",i2.2," ",2(i2.2,":"),i2.2)') icy,icm,icd,ich,icmi,ics
-    call ccnf_put_att(fncid,idnt,'units',grdtim)
-    if ( leap==0 ) then
-      call ccnf_put_att(fncid,idnt,'calendar','noleap')
-    end if
-    call ccnf_def_var(fncid,'kdate','int',1,adim(4:4),idkdate)
-    call ccnf_def_var(fncid,'ktime','int',1,adim(4:4),idktime)
-    call ccnf_def_var(fncid,'mtimer','int',1,adim(4:4),idmtimer)
-    ! header data
-    ahead(1)=ds
-    ahead(2)=0.  !difknbd
-    ahead(3)=0.  ! was rhkuo for kuo scheme
-    ahead(4)=0.  !du
-    ahead(5)=rlong0     ! needed by cc2hist
-    ahead(6)=rlat0      ! needed by cc2hist
-    ahead(7)=schmidt    ! needed by cc2hist
-    ahead(8)=0.  !stl2
-    ahead(9)=0.  !relaxt
-    ahead(10)=0.  !hourbd
-    ahead(11)=tss_sh
-    ahead(12)=vmodmin
-    ahead(13)=av_vmod
-    ahead(14)=epsp
-    nahead(1)=il_g       ! needed by cc2hist
-    nahead(2)=jl_g       ! needed by cc2hist
-    nahead(3)=1          ! needed by cc2hist (turns off 3D fields)
-    nahead(4)=5
-    nahead(5)=0          ! nsd not used now
-    nahead(6)=io_in
-    nahead(7)=nbd
-    nahead(8)=0          ! not needed now  
-    nahead(9)=mex
-    nahead(10)=mup
-    nahead(11)=2 ! nem
-    nahead(12)=mtimer
-    nahead(13)=0         ! nmi
-    nahead(14)=nint(dt)  ! needed by cc2hist
-    nahead(15)=0         ! not needed now 
-    nahead(16)=nhor
-    nahead(17)=nkuo
-    nahead(18)=khdif
-    nahead(19)=kl        ! needed by cc2hist (was kwt)
-    nahead(20)=0  !iaa
-    nahead(21)=0  !jaa
-    nahead(22)=-4
-    nahead(23)=0       ! not needed now      
-    nahead(24)=0  !lbd
-    nahead(25)=nrun
-    nahead(26)=0
-    nahead(27)=khor
-    nahead(28)=ksc
-    nahead(29)=kountr
-    nahead(30)=1 ! ndiur
-    nahead(31)=0  ! spare
-    nahead(32)=nhorps
-    nahead(33)=nsoil
-    nahead(34)=ms        ! needed by cc2hist
-    nahead(35)=ntsur
-    nahead(36)=nrad
-    nahead(37)=kuocb
-    nahead(38)=nvmix
-    nahead(39)=ntsea
-    nahead(40)=0  
-    nahead(41)=nextout
-    nahead(42)=ilt
-    nahead(43)=ntrac     ! needed by cc2hist
-    nahead(44)=nsib
-    nahead(45)=nrungcm
-    nahead(46)=ncvmix
-    nahead(47)=ngwd
-    nahead(48)=lgwd
-    nahead(49)=mup
-    nahead(50)=nritch_t
-    nahead(51)=ldr
-    nahead(52)=nevapls
-    nahead(53)=nevapcc
-    nahead(54)=nt_adv
-    call ccnf_put_attg(fncid,'real_header',ahead)
-    call ccnf_put_attg(fncid,'int_header',nahead)
-    if ( localhist ) then
-      call ccnf_put_attg(fncid,'processor_num',myid)
-      call ccnf_put_attg(fncid,'nproc',nproc)
-#ifdef uniform_decomp
-      call ccnf_put_attg(fncid,'decomp','uniform1')
-#else
-      call ccnf_put_attg(fncid,'decomp','face')
-#endif
-    endif 
-    ! define variables
-    sdim(1:2)=adim(1:2)
-    sdim(3)=adim(4)
+!~ ! allocate arrays and open new file
+!~ if ( first ) then
+  !~ if ( myid==0 ) then
+    !~ write(6,*) "Initialise high frequency output"
+  !~ end if
+  !~ allocate(freqstore(ifull,tblock,freqvars))
+  !~ freqstore(:,:,:) = 0.
+  !~ if ( localhist ) then
+    !~ write(ffile,"(a,'.',i6.6)") trim(surfile), myid
+  !~ else
+    !~ ffile=surfile
+  !~ end if
+  !~ if ( myid==0 .or. localhist ) then
+    !~ call ccnf_create(ffile,fncid)
+    !~ ! Turn off the data filling
+    !~ call ccnf_nofill(fncid)
+    !~ ! Create dimensions
+    !~ if ( localhist ) then
+      !~ call ccnf_def_dim(fncid,'longitude',il,adim(1))
+      !~ call ccnf_def_dim(fncid,'latitude',jl,adim(2))
+    !~ else
+      !~ call ccnf_def_dim(fncid,'longitude',il_g,adim(1))
+      !~ call ccnf_def_dim(fncid,'latitude',jl_g,adim(2))
+    !~ endif
+    !~ call ccnf_def_dim(fncid,'lev',1,adim(3))
+    !~ call ccnf_def_dimu(fncid,'time',adim(4))
+    !~ ! Define coords.
+    !~ call ccnf_def_var(fncid,'longitude','float',1,adim(1:1),ixp)
+    !~ call ccnf_put_att(fncid,ixp,'point_spacing','even')
+    !~ call ccnf_put_att(fncid,ixp,'units','degrees_east')
+    !~ call ccnf_def_var(fncid,'latitude','float',1,adim(2:2),iyp)
+    !~ call ccnf_put_att(fncid,iyp,'point_spacing','even')
+    !~ call ccnf_put_att(fncid,iyp,'units','degrees_north')
+    !~ call ccnf_def_var(fncid,'lev','float',1,adim(3:3),izp)
+    !~ call ccnf_put_att(fncid,izp,'positive','down')
+    !~ call ccnf_put_att(fncid,izp,'point_spacing','uneven')
+    !~ call ccnf_put_att(fncid,izp,'units','sigma_level')
+    !~ call ccnf_def_var(fncid,'time','double',1,adim(4:4),idnt)
+    !~ call ccnf_put_att(fncid,idnt,'point_spacing','even')
+    !~ icy=kdate/10000
+    !~ icm=max(1,min(12,(kdate-icy*10000)/100))
+    !~ icd=max(1,min(31,(kdate-icy*10000-icm*100)))
+    !~ if ( icy<100 ) then
+      !~ icy=icy+1900
+    !~ end if
+    !~ ich=ktime/100
+    !~ icmi=(ktime-ich*100)
+    !~ ics=0
+    !~ write(timorg,'(i2.2,"-",a3,"-",i4.4,3(":",i2.2))') icd,month(icm),icy,ich,icmi,ics
+    !~ call ccnf_put_att(fncid,idnt,'time_origin',timorg)
+    !~ write(grdtim,'("seconds since ",i4.4,"-",i2.2,"-",i2.2," ",2(i2.2,":"),i2.2)') icy,icm,icd,ich,icmi,ics
+    !~ call ccnf_put_att(fncid,idnt,'units',grdtim)
+    !~ if ( leap==0 ) then
+      !~ call ccnf_put_att(fncid,idnt,'calendar','noleap')
+    !~ end if
+    !~ call ccnf_def_var(fncid,'kdate','int',1,adim(4:4),idkdate)
+    !~ call ccnf_def_var(fncid,'ktime','int',1,adim(4:4),idktime)
+    !~ call ccnf_def_var(fncid,'mtimer','int',1,adim(4:4),idmtimer)
+    !~ ! header data
+    !~ ahead(1)=ds
+    !~ ahead(2)=0.  !difknbd
+    !~ ahead(3)=0.  ! was rhkuo for kuo scheme
+    !~ ahead(4)=0.  !du
+    !~ ahead(5)=rlong0     ! needed by cc2hist
+    !~ ahead(6)=rlat0      ! needed by cc2hist
+    !~ ahead(7)=schmidt    ! needed by cc2hist
+    !~ ahead(8)=0.  !stl2
+    !~ ahead(9)=0.  !relaxt
+    !~ ahead(10)=0.  !hourbd
+    !~ ahead(11)=tss_sh
+    !~ ahead(12)=vmodmin
+    !~ ahead(13)=av_vmod
+    !~ ahead(14)=epsp
+    !~ nahead(1)=il_g       ! needed by cc2hist
+    !~ nahead(2)=jl_g       ! needed by cc2hist
+    !~ nahead(3)=1          ! needed by cc2hist (turns off 3D fields)
+    !~ nahead(4)=5
+    !~ nahead(5)=0          ! nsd not used now
+    !~ nahead(6)=io_in
+    !~ nahead(7)=nbd
+    !~ nahead(8)=0          ! not needed now  
+    !~ nahead(9)=mex
+    !~ nahead(10)=mup
+    !~ nahead(11)=2 ! nem
+    !~ nahead(12)=mtimer
+    !~ nahead(13)=0         ! nmi
+    !~ nahead(14)=nint(dt)  ! needed by cc2hist
+    !~ nahead(15)=0         ! not needed now 
+    !~ nahead(16)=nhor
+    !~ nahead(17)=nkuo
+    !~ nahead(18)=khdif
+    !~ nahead(19)=kl        ! needed by cc2hist (was kwt)
+    !~ nahead(20)=0  !iaa
+    !~ nahead(21)=0  !jaa
+    !~ nahead(22)=-4
+    !~ nahead(23)=0       ! not needed now      
+    !~ nahead(24)=0  !lbd
+    !~ nahead(25)=nrun
+    !~ nahead(26)=0
+    !~ nahead(27)=khor
+    !~ nahead(28)=ksc
+    !~ nahead(29)=kountr
+    !~ nahead(30)=1 ! ndiur
+    !~ nahead(31)=0  ! spare
+    !~ nahead(32)=nhorps
+    !~ nahead(33)=nsoil
+    !~ nahead(34)=ms        ! needed by cc2hist
+    !~ nahead(35)=ntsur
+    !~ nahead(36)=nrad
+    !~ nahead(37)=kuocb
+    !~ nahead(38)=nvmix
+    !~ nahead(39)=ntsea
+    !~ nahead(40)=0  
+    !~ nahead(41)=nextout
+    !~ nahead(42)=ilt
+    !~ nahead(43)=ntrac     ! needed by cc2hist
+    !~ nahead(44)=nsib
+    !~ nahead(45)=nrungcm
+    !~ nahead(46)=ncvmix
+    !~ nahead(47)=ngwd
+    !~ nahead(48)=lgwd
+    !~ nahead(49)=mup
+    !~ nahead(50)=nritch_t
+    !~ nahead(51)=ldr
+    !~ nahead(52)=nevapls
+    !~ nahead(53)=nevapcc
+    !~ nahead(54)=nt_adv
+    !~ call ccnf_put_attg(fncid,'real_header',ahead)
+    !~ call ccnf_put_attg(fncid,'int_header',nahead)
+    !~ if ( localhist ) then
+      !~ call ccnf_put_attg(fncid,'processor_num',myid)
+      !~ call ccnf_put_attg(fncid,'nproc',nproc)
+!~ #ifdef uniform_decomp
+      !~ call ccnf_put_attg(fncid,'decomp','uniform1')
+!~ #else
+      !~ call ccnf_put_attg(fncid,'decomp','face')
+!~ #endif
+    !~ endif 
+    !~ ! define variables
+    !~ sdim(1:2)=adim(1:2)
+    !~ sdim(3)=adim(4)
     !~ lname='x-component 10m wind'
     !~ call attrib(fncid,sdim,3,'uas',lname,'m/s',-130.,130.,0,1)
     !~ lname='y-component 10m wind'     
@@ -2475,44 +2473,44 @@ if ( first ) then
     !~ lname ='Mean sea level pressure'
     !~ call attrib(fncid,sdim,3,'pmsl',lname,'hPa',800.,1200.,0,1)    
 
-    ! end definition mode
-    call ccnf_enddef(fncid)
-    if ( localhist ) then
-      ! Set these to global indices (relative to panel 0 in uniform decomp)
-      do i=1,ipan
-        xpnt(i) = float(i) + ioff
-      end do
-      call ccnf_put_vara(fncid,ixp,1,il,xpnt(1:il))
-      i=1
-      do n=1,npan
-        do j=1,jpan
-          ypnt(i) = float(j) + joff + (n-noff)*il_g
-          i=i+1
-        end do
-      end do
-      call ccnf_put_vara(fncid,iyp,1,jl,ypnt(1:jl))
-    else
-      do i=1,il_g
-        xpnt(i) = float(i)
-      end do
-      call ccnf_put_vara(fncid,ixp,1,il_g,xpnt(1:il_g))
-      do j=1,jl_g
-        ypnt(j) = float(j)
-      end do
-      call ccnf_put_vara(fncid,iyp,1,jl_g,ypnt(1:jl_g))
-    end if
-    zpnt(1)=1.
-    call ccnf_put_vara(fncid,izp,1,1,zpnt(1:1))
-  end if
-  first=.false.
-  if ( myid==0 ) write(6,*) "Finished initialising high frequency output"
-end if
+    !~ ! end definition mode
+    !~ call ccnf_enddef(fncid)
+    !~ if ( localhist ) then
+      !~ ! Set these to global indices (relative to panel 0 in uniform decomp)
+      !~ do i=1,ipan
+        !~ xpnt(i) = float(i) + ioff
+      !~ end do
+      !~ call ccnf_put_vara(fncid,ixp,1,il,xpnt(1:il))
+      !~ i=1
+      !~ do n=1,npan
+        !~ do j=1,jpan
+          !~ ypnt(i) = float(j) + joff + (n-noff)*il_g
+          !~ i=i+1
+        !~ end do
+      !~ end do
+      !~ call ccnf_put_vara(fncid,iyp,1,jl,ypnt(1:jl))
+    !~ else
+      !~ do i=1,il_g
+        !~ xpnt(i) = float(i)
+      !~ end do
+      !~ call ccnf_put_vara(fncid,ixp,1,il_g,xpnt(1:il_g))
+      !~ do j=1,jl_g
+        !~ ypnt(j) = float(j)
+      !~ end do
+      !~ call ccnf_put_vara(fncid,iyp,1,jl_g,ypnt(1:jl_g))
+    !~ end if
+    !~ zpnt(1)=1.
+    !~ call ccnf_put_vara(fncid,izp,1,1,zpnt(1:1))
+  !~ end if
+  !~ first=.false.
+  !~ if ( myid==0 ) write(6,*) "Finished initialising high frequency output"
+!~ end if
 
-! store output
-ti = mod(ktau,tblock*tbave)
-if ( ti==0 ) ti = tblock*tbave
-ti = (ti-1)/tbave + 1
-umag = sqrt(u(1:ifull,1)*u(1:ifull,1)+v(1:ifull,1)*v(1:ifull,1))
+!~ ! store output
+!~ ti = mod(ktau,tblock*tbave)
+!~ if ( ti==0 ) ti = tblock*tbave
+!~ ti = (ti-1)/tbave + 1
+!~ umag = sqrt(u(1:ifull,1)*u(1:ifull,1)+v(1:ifull,1)*v(1:ifull,1))
 !~ call mslp(pmsl,psl,zs,t)
 !~ freqstore(1:ifull,ti,1) = freqstore(1:ifull,ti,1) + u10*u(1:ifull,1)/max(umag,1.E-6)
 !~ freqstore(1:ifull,ti,2) = freqstore(1:ifull,ti,2) + u10*v(1:ifull,1)/max(umag,1.E-6)
@@ -2523,35 +2521,35 @@ umag = sqrt(u(1:ifull,1)*u(1:ifull,1)+v(1:ifull,1)*v(1:ifull,1))
 !~ freqstore(1:ifull,ti,7) = freqstore(1:ifull,ti,7) + condg*86400./dt
 !~ freqstore(1:ifull,ti,8) = freqstore(1:ifull,ti,8) + pmsl/100.
 
-! write data to file
-if ( mod(ktau,tblock*tbave)==0 ) then
-  if ( myid==0 .or. localhist ) then
-    if ( myid==0 ) then
-      write(6,*) "Write high frequency output"
-    end if
-    fiarch = ktau/tbave - tblock + 1
-    start(1) = fiarch
-    ncount(1) = tblock
-    do i = 1,tblock
-      tpnt(i)=real(ktau+(i-tblock)*tbave,8)*real(dt,8)
-    end do
-    call ccnf_put_vara(fncid,idnt,start,ncount,tpnt)
-    do i = 1,tblock
-      datedat(i) = kdate
-    end do
-    call ccnf_put_vara(fncid,idkdate,start,ncount,datedat)
-    do i = 1,tblock
-      datedat(i) = ktime
-    end do
-    call ccnf_put_vara(fncid,idktime,start,ncount,datedat)
-    do i = 1,tblock
-      datedat(i) = mtimer + nint(real((i-tblock)*tbave)*dt/60.)
-    end do
-    call ccnf_put_vara(fncid,idmtimer,start,ncount,datedat)
-  end if
+!~ ! write data to file
+!~ if ( mod(ktau,tblock*tbave)==0 ) then
+  !~ if ( myid==0 .or. localhist ) then
+    !~ if ( myid==0 ) then
+      !~ write(6,*) "Write high frequency output"
+    !~ end if
+    !~ fiarch = ktau/tbave - tblock + 1
+    !~ start(1) = fiarch
+    !~ ncount(1) = tblock
+    !~ do i = 1,tblock
+      !~ tpnt(i)=real(ktau+(i-tblock)*tbave,8)*real(dt,8)
+    !~ end do
+    !~ call ccnf_put_vara(fncid,idnt,start,ncount,tpnt)
+    !~ do i = 1,tblock
+      !~ datedat(i) = kdate
+    !~ end do
+    !~ call ccnf_put_vara(fncid,idkdate,start,ncount,datedat)
+    !~ do i = 1,tblock
+      !~ datedat(i) = ktime
+    !~ end do
+    !~ call ccnf_put_vara(fncid,idktime,start,ncount,datedat)
+    !~ do i = 1,tblock
+      !~ datedat(i) = mtimer + nint(real((i-tblock)*tbave)*dt/60.)
+    !~ end do
+    !~ call ccnf_put_vara(fncid,idmtimer,start,ncount,datedat)
+  !~ end if
 
   ! record output
-  freqstore(:,:,:) = freqstore(:,:,:)/real(tbave)
+  !~ freqstore(:,:,:) = freqstore(:,:,:)/real(tbave)
   !~ call freqwrite(fncid,'uas',   fiarch,tblock,localhist,freqstore(:,:,1))
   !~ call freqwrite(fncid,'vas',   fiarch,tblock,localhist,freqstore(:,:,2))
   !~ call freqwrite(fncid,'tscrn', fiarch,tblock,localhist,freqstore(:,:,3))
@@ -2560,22 +2558,22 @@ if ( mod(ktau,tblock*tbave)==0 ) then
   !~ call freqwrite(fncid,'sno',   fiarch,tblock,localhist,freqstore(:,:,6))
   !~ call freqwrite(fncid,'grpl',  fiarch,tblock,localhist,freqstore(:,:,7))
   !~ call freqwrite(fncid,'pmsl',  fiarch,tblock,localhist,freqstore(:,:,8))
-  freqstore(:,:,:) = 0.
-end if
+  !~ freqstore(:,:,:) = 0.
+!~ end if
 
-if ( myid==0 .or. localhist ) then
-  ! close file at end of run
-  if ( ktau==ntau ) then
-    call ccnf_close(fncid)
-  elseif ( mod(ktau,tblock*tbave)==0 ) then
-    call ccnf_sync(fncid)  
-  end if
-end if
+!~ if ( myid==0 .or. localhist ) then
+  !~ ! close file at end of run
+  !~ if ( ktau==ntau ) then
+    !~ call ccnf_close(fncid)
+  !~ elseif ( mod(ktau,tblock*tbave)==0 ) then
+    !~ call ccnf_sync(fncid)  
+  !~ end if
+!~ end if
       
-call END_LOG(outfile_end)
+!~ call END_LOG(outfile_end)
       
-return
-end subroutine freqfile
+!~ return
+!~ end subroutine freqfile
 
 subroutine mslp(pmsl,psl,zs,t)
 

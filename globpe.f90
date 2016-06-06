@@ -833,9 +833,9 @@ do kktau = 1,ntau   ! ****** start of main time loop
   endif    ! (ktau==ntau.or.mod(ktau,nwt)==0)
       
   ! write high temporal frequency fields
-  if ( surfile /= ' ' ) then
-    call freqfile
-  end if
+  !~ if ( surfile /= ' ' ) then
+    !~ call freqfile
+  !~ end if
   call log_on()
  
   if ( mod(ktau,nperavg) == 0 ) then   
