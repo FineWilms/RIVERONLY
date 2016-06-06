@@ -1044,10 +1044,10 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'alb_ave',lname,'none',0.,1.,0,itype)
     !~ lname = 'Avg mean sea level pressure'
     !~ call attrib(idnc,jdim(1:3),3,'pmsl_ave',lname,'hPa',800.,1200.,0,itype)
-    if ( abs(nmlo)>0.and.abs(nmlo)<=9 ) then
-      lname = 'Avg mixed layer depth'
-      call attrib(idnc,jdim(1:3),3,'mixd_ave',lname,'m',0.,1300.,0,itype)
-    end if
+    !~ if ( abs(nmlo)>0.and.abs(nmlo)<=9 ) then
+      !~ lname = 'Avg mixed layer depth'
+      !~ call attrib(idnc,jdim(1:3),3,'mixd_ave',lname,'m',0.,1300.,0,itype)
+    !~ end if
 
     !~ lname = 'Screen temperature'
     !~ call attrib(idnc,jdim(1:3),3,'tscrn',lname,'K',100.,425.,0,itype)
@@ -1352,14 +1352,14 @@ if( myid==0 .or. local ) then
         
     ! STANDARD 3D VARIABLES -------------------------------------
     if ( myid==0 ) write(6,*) '3d variables'
-    if ( nextout>=4 .and. nllp==3 ) then   ! N.B. use nscrn=1 for hourly output
-      lname = 'Delta latitude'
-      call attrib(idnc,idim(1:4),4,'del_lat',lname,'deg',-60.,60.,1,itype)
-      lname = 'Delta longitude'
-      call attrib(idnc,idim(1:4),4,'del_lon',lname,'deg',-180.,180.,1,itype)
-      lname = 'Delta pressure'
-      call attrib(idnc,idim(1:4),4,'del_p',lname,'hPa',-900.,900.,1,itype)
-    endif  ! (nextout>=4.and.nllp==3)
+    !~ if ( nextout>=4 .and. nllp==3 ) then   ! N.B. use nscrn=1 for hourly output
+      !~ lname = 'Delta latitude'
+      !~ call attrib(idnc,idim(1:4),4,'del_lat',lname,'deg',-60.,60.,1,itype)
+      !~ lname = 'Delta longitude'
+      !~ call attrib(idnc,idim(1:4),4,'del_lon',lname,'deg',-180.,180.,1,itype)
+      !~ lname = 'Delta pressure'
+      !~ call attrib(idnc,idim(1:4),4,'del_p',lname,'hPa',-900.,900.,1,itype)
+    !~ endif  ! (nextout>=4.and.nllp==3)
     !~ lname = 'Air temperature'
     !~ call attrib(idnc,idim(1:4),4,'temp',lname,'K',100.,350.,0,itype)
     !~ lname = 'x-component wind'
@@ -1373,32 +1373,32 @@ if( myid==0 .or. local ) then
     !~ lname = 'Covective heating'
     !~ call attrib(idnc,idim(1:4),4,'convh_ave',lname,'K/day',-10.,20.,0,itype)
         
-    ! CLOUD MICROPHYSICS --------------------------------------------
-    if ( ldr/=0 ) then
-      call attrib(idnc,idim(1:4),4,'qfg','Frozen water','kg/kg',0.,.065,0,itype)
-      call attrib(idnc,idim(1:4),4,'qlg','Liquid water','kg/kg',0.,.065,0,itype)
-      if ( ncloud>=2 ) then
-        call attrib(idnc,idim(1:4),4,'qrg','Rain',        'kg/kg',0.,.065,0,itype)
-      end if
-      if ( ncloud>=3 ) then
-        call attrib(idnc,idim(1:4),4,'qsng','Snow',       'kg/kg',0.,.065,0,itype)
-        call attrib(idnc,idim(1:4),4,'qgrg','Graupel',    'kg/kg',0.,.065,0,itype)
-      end if
+    !~ ! CLOUD MICROPHYSICS --------------------------------------------
+    !~ if ( ldr/=0 ) then
+      !~ call attrib(idnc,idim(1:4),4,'qfg','Frozen water','kg/kg',0.,.065,0,itype)
+      !~ call attrib(idnc,idim(1:4),4,'qlg','Liquid water','kg/kg',0.,.065,0,itype)
+      !~ if ( ncloud>=2 ) then
+        !~ call attrib(idnc,idim(1:4),4,'qrg','Rain',        'kg/kg',0.,.065,0,itype)
+      !~ end if
+      !~ if ( ncloud>=3 ) then
+        !~ call attrib(idnc,idim(1:4),4,'qsng','Snow',       'kg/kg',0.,.065,0,itype)
+        !~ call attrib(idnc,idim(1:4),4,'qgrg','Graupel',    'kg/kg',0.,.065,0,itype)
+      !~ end if
       !~ call attrib(idnc,idim(1:4),4,'cfrac','Cloud fraction',  'none',0.,1.,0,itype)
-      if ( ncloud>=2 ) then
-        call attrib(idnc,idim(1:4),4,'rfrac','Rain fraction',   'none',0.,1.,0,itype)
-      end if
-      if ( ncloud>=3 ) then
-        call attrib(idnc,idim(1:4),4,'sfrac','Snow fraction',   'none',0.,1.,0,itype)
-        call attrib(idnc,idim(1:4),4,'gfrac','Graupel fraction','none',0.,1.,0,itype)
-      end if
-      if ( ncloud>=4 ) then
-        call attrib(idnc,idim(1:4),4,'stratcf','Strat cloud fraction','none',0.,1.,0,itype)
-        if ( itype==-1 ) then
-          call attrib(idnc,idim(1:4),4,'strat_nt','Strat net temp tendency','K/s',0.,1.,0,itype)
-        end if
-      end if
-    end if
+      !~ if ( ncloud>=2 ) then
+        !~ call attrib(idnc,idim(1:4),4,'rfrac','Rain fraction',   'none',0.,1.,0,itype)
+      !~ end if
+      !~ if ( ncloud>=3 ) then
+        !~ call attrib(idnc,idim(1:4),4,'sfrac','Snow fraction',   'none',0.,1.,0,itype)
+        !~ call attrib(idnc,idim(1:4),4,'gfrac','Graupel fraction','none',0.,1.,0,itype)
+      !~ end if
+      !~ if ( ncloud>=4 ) then
+        !~ call attrib(idnc,idim(1:4),4,'stratcf','Strat cloud fraction','none',0.,1.,0,itype)
+        !~ if ( itype==-1 ) then
+          !~ call attrib(idnc,idim(1:4),4,'strat_nt','Strat net temp tendency','K/s',0.,1.,0,itype)
+        !~ end if
+      !~ end if
+    !~ end if
         
     ! TURBULENT MIXING ----------------------------------------------
     if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
@@ -2103,32 +2103,32 @@ enddo
 lwrite = (mod(ktau,nperavg)==0.or.ktau==ntau).and.(ktau>0)
 !~ call histwrt4(convh_ave,'convh_ave',idnc,iarch,local,lwrite)
       
-! MICROPHYSICS ------------------------------------------------
-if ( ldr/=0 ) then
-  call histwrt4(qfg,'qfg',idnc,iarch,local,.true.)
-  call histwrt4(qlg,'qlg',idnc,iarch,local,.true.)
-  if ( ncloud>=2 ) then
-    call histwrt4(qrg,'qrg',idnc,iarch,local,.true.)
-  end if
-  if ( ncloud>=3 ) then
-    call histwrt4(qsng,'qsng',idnc,iarch,local,.true.)
-    call histwrt4(qgrg,'qgrg',idnc,iarch,local,.true.)
-  end if
+!~ ! MICROPHYSICS ------------------------------------------------
+!~ if ( ldr/=0 ) then
+  !~ call histwrt4(qfg,'qfg',idnc,iarch,local,.true.)
+  !~ call histwrt4(qlg,'qlg',idnc,iarch,local,.true.)
+  !~ if ( ncloud>=2 ) then
+    !~ call histwrt4(qrg,'qrg',idnc,iarch,local,.true.)
+  !~ end if
+  !~ if ( ncloud>=3 ) then
+    !~ call histwrt4(qsng,'qsng',idnc,iarch,local,.true.)
+    !~ call histwrt4(qgrg,'qgrg',idnc,iarch,local,.true.)
+  !~ end if
   !~ call histwrt4(cfrac,'cfrac',idnc,iarch,local,.true.)
-  if ( ncloud>=2 ) then
-    call histwrt4(rfrac,'rfrac',idnc,iarch,local,.true.)
-  end if
-  if ( ncloud>=3 ) then
-    call histwrt4(sfrac,'sfrac',idnc,iarch,local,.true.)
-    call histwrt4(gfrac,'gfrac',idnc,iarch,local,.true.)
-  end if
+  !~ if ( ncloud>=2 ) then
+    !~ call histwrt4(rfrac,'rfrac',idnc,iarch,local,.true.)
+  !~ end if
+  !~ if ( ncloud>=3 ) then
+    !~ call histwrt4(sfrac,'sfrac',idnc,iarch,local,.true.)
+    !~ call histwrt4(gfrac,'gfrac',idnc,iarch,local,.true.)
+  !~ end if
   !~ if ( ncloud>=4 ) then
     !~ call histwrt4(stratcloud,'stratcf',idnc,iarch,local,.true.)  
     !~ if ( itype==-1 ) then
       !~ call histwrt4(nettend,'strat_nt',idnc,iarch,local,.true.)
     !~ end if
   !~ end if
-endif
+!~ endif
       
 ! TURBULENT MIXING --------------------------------------------
 if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
