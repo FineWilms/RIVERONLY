@@ -806,8 +806,8 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'tsu',lname,'K',100.,425.,0,itype)
     !~ lname = 'Pan temperature'
     !~ call attrib(idnc,jdim(1:3),3,'tpan',lname,'K',100.,425.,0,itype)
-    lname = 'Precipitation'
-    call attrib(idnc,jdim(1:3),3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
+    !~ lname = 'Precipitation'
+    !~ call attrib(idnc,jdim(1:3),3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     lname = 'Convective precipitation'
     call attrib(idnc,jdim(1:3),3,'rnc',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     !~ lname = 'Snowfall'
@@ -931,22 +931,22 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'u2max',lname,'m/s',-99.,99.,1,itype)
     !~ lname = 'y-component max level_2 wind'
     !~ call attrib(idnc,jdim(1:3),3,'v2max',lname,'m/s',-99.,99.,1,itype)
-    if ( l3hr ) then
-      lname = '3hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd03',lname,'mm',0.,1300.,1,itype)
-      lname = '6hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd06',lname,'mm',0.,1300.,1,itype)
-      lname = '9hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd09',lname,'mm',0.,1300.,1,itype)
-      lname = '12hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd12',lname,'mm',0.,1300.,1,itype)
-      lname = '15hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd15',lname,'mm',0.,1300.,1,itype)
-      lname = '18hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd18',lname,'mm',0.,1300.,1,itype)
-      lname = '21hr precipitation'
-      call attrib(idnc,jdim(1:3),3,'rnd21',lname,'mm',0.,1300.,1,itype)
-    end if
+    !~ if ( l3hr ) then
+      !~ lname = '3hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd03',lname,'mm',0.,1300.,1,itype)
+      !~ lname = '6hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd06',lname,'mm',0.,1300.,1,itype)
+      !~ lname = '9hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd09',lname,'mm',0.,1300.,1,itype)
+      !~ lname = '12hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd12',lname,'mm',0.,1300.,1,itype)
+      !~ lname = '15hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd15',lname,'mm',0.,1300.,1,itype)
+      !~ lname = '18hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd18',lname,'mm',0.,1300.,1,itype)
+      !~ lname = '21hr precipitation'
+      !~ call attrib(idnc,jdim(1:3),3,'rnd21',lname,'mm',0.,1300.,1,itype)
+    !~ end if
     lname = '24hr precipitation'
     call attrib(idnc,jdim(1:3),3,'rnd24',lname,'mm',0.,1300.,1,itype)
     if ( nextout>=2 .and. l3hr ) then  ! 6-hourly u10, v10, tscr, rh1
@@ -1664,8 +1664,8 @@ endif ! (ktau==0.or.itype==-1)
 !~ call histwrt3(tpan,'tpan',idnc,iarch,local,.true.)
 !~ ! scale up precip,precc,sno,runoff to mm/day (soon reset to 0 in globpe)
 !~ ! ktau in next line in case ntau (& thus ktau) < nwt 
-aa(:) = precip(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1))) 
-call histwrt3(aa,'rnd',idnc,iarch,local,lwrite)
+!~ aa(:) = precip(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1))) 
+!~ call histwrt3(aa,'rnd',idnc,iarch,local,lwrite)
 aa(:) = precc(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'rnc',idnc,iarch,local,lwrite)
 !~ aa(:) = sno(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
@@ -2464,8 +2464,8 @@ if ( first ) then
     !~ call attrib(fncid,sdim,3,'tscrn',lname,'K',100.,425.,0,1)
     lname='Screen mixing rato'     
     call attrib(fncid,sdim,3,'qgscrn',lname,'kg/kg',0.,.06,0,1)
-    lname='Precipitation'
-    call attrib(fncid,sdim,3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
+    !~ lname='Precipitation'
+    !~ call attrib(fncid,sdim,3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     !~ lname='Snowfall'
     !~ call attrib(fncid,sdim,3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     lname='Graupelfall'
@@ -2554,7 +2554,7 @@ if ( mod(ktau,tblock*tbave)==0 ) then
   !~ call freqwrite(fncid,'vas',   fiarch,tblock,localhist,freqstore(:,:,2))
   !~ call freqwrite(fncid,'tscrn', fiarch,tblock,localhist,freqstore(:,:,3))
   call freqwrite(fncid,'qgscrn',fiarch,tblock,localhist,freqstore(:,:,4))
-  call freqwrite(fncid,'rnd',   fiarch,tblock,localhist,freqstore(:,:,5))
+  !~ call freqwrite(fncid,'rnd',   fiarch,tblock,localhist,freqstore(:,:,5))
   !~ call freqwrite(fncid,'sno',   fiarch,tblock,localhist,freqstore(:,:,6))
   call freqwrite(fncid,'grpl',  fiarch,tblock,localhist,freqstore(:,:,7))
   call freqwrite(fncid,'pmsl',  fiarch,tblock,localhist,freqstore(:,:,8))
