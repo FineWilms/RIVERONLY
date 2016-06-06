@@ -818,62 +818,62 @@ if( myid==0 .or. local ) then
     call attrib(idnc,jdim(1:3),3,'runoff',lname,'mm/day',0.,1300.,0,-1) ! -1=long
     !~ lname = 'Surface albedo'
     !~ call attrib(idnc,jdim(1:3),3,'alb',lname,'none',0.,1.,0,itype)
-    lname = 'Fraction of canopy that is wet'
-    call attrib(idnc,jdim(1:3),3,'fwet',lname,'none',0.,1.,0,itype)
+    !~ lname = 'Fraction of canopy that is wet'
+    !~ call attrib(idnc,jdim(1:3),3,'fwet',lname,'none',0.,1.,0,itype)
 
     lname = 'Snow depth (liquid water)'
     call attrib(idnc,jdim(1:3),3,'snd',lname,'mm',0.,6500.,0,-1)  ! -1=long
-    lname = 'Soil temperature lev 1'
-    call attrib(idnc,jdim(1:3),3,'tgg1',lname,'K',100.,425.,0,itype)
-    lname = 'Soil temperature lev 2'
-    call attrib(idnc,jdim(1:3),3,'tgg2',lname,'K',100.,425.,0,itype)
-    lname = 'Soil temperature lev 3'
-    call attrib(idnc,jdim(1:3),3,'tgg3',lname,'K',100.,425.,0,itype)
-    lname = 'Soil temperature lev 4'
-    call attrib(idnc,jdim(1:3),3,'tgg4',lname,'K',100.,425.,0,itype)
-    lname = 'Soil temperature lev 5'
-    call attrib(idnc,jdim(1:3),3,'tgg5',lname,'K',100.,425.,0,itype)
-    lname = 'Soil temperature lev 6'
-    call attrib(idnc,jdim(1:3),3,'tgg6',lname,'K',100.,425.,0,itype)
+    !~ lname = 'Soil temperature lev 1'
+    !~ call attrib(idnc,jdim(1:3),3,'tgg1',lname,'K',100.,425.,0,itype)
+    !~ lname = 'Soil temperature lev 2'
+    !~ call attrib(idnc,jdim(1:3),3,'tgg2',lname,'K',100.,425.,0,itype)
+    !~ lname = 'Soil temperature lev 3'
+    !~ call attrib(idnc,jdim(1:3),3,'tgg3',lname,'K',100.,425.,0,itype)
+    !~ lname = 'Soil temperature lev 4'
+    !~ call attrib(idnc,jdim(1:3),3,'tgg4',lname,'K',100.,425.,0,itype)
+    !~ lname = 'Soil temperature lev 5'
+    !~ call attrib(idnc,jdim(1:3),3,'tgg5',lname,'K',100.,425.,0,itype)
+    !~ lname = 'Soil temperature lev 6'
+    !~ call attrib(idnc,jdim(1:3),3,'tgg6',lname,'K',100.,425.,0,itype)
  
-    if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-      do k=ms+1,wlev
-        write(lname,'("soil/ocean temperature lev ",I2)') k
-        write(vname,'("tgg",I2.2)') k
-        call attrib(idnc,jdim(1:3),3,vname,lname,'K',100.,425.,0,itype)
-      end do
-      do k=1,wlev
-        write(lname,'("ocean salinity lev ",I2)') k
-        write(vname,'("sal",I2.2)') k
-        call attrib(idnc,jdim(1:3),3,vname,lname,'PSU',0.,130.,0,itype)
-      end do
-      do k=1,wlev
-        write(lname,'("x-component current lev ",I2)') k
-        write(vname,'("uoc",I2.2)') k
-        call attrib(idnc,jdim(1:3),3,vname,lname,'m/s',-65.,65.,0,itype)
-        write(lname,'("y-component current lev ",I2)') k
-        write(vname,'("voc",I2.2)') k
-        call attrib(idnc,jdim(1:3),3,vname,lname,'m/s',-65.,65.,0,itype)
-      end do
-      lname = 'water surface height'
-      call attrib(idnc,jdim(1:3),3,'ocheight',lname,'m',-130.,130.,0,itype)          
-      lname = 'Snow temperature lev 1'
-      call attrib(idnc,jdim(1:3),3,'tggsn1',lname,'K',100.,425.,0,itype)
-      lname = 'Snow temperature lev 2'
-      call attrib(idnc,jdim(1:3),3,'tggsn2',lname,'K',100.,425.,0,itype)
-      lname = 'Snow temperature lev 3'
-      call attrib(idnc,jdim(1:3),3,'tggsn3',lname,'K',100.,425.,0,itype)
-      lname = 'Ice temperature lev 4'
-      call attrib(idnc,jdim(1:3),3,'tggsn4',lname,'K',100.,425.,0,itype)
-      lname = 'Ice heat store'
-      call attrib(idnc,jdim(1:3),3,'sto',lname,'J/m2',0.,1.3e10,0,itype)
-      lname = 'x-component ice velocity'
-      call attrib(idnc,jdim(1:3),3,'uic',lname,'m/s',-65.,65.,0,itype)
-      lname = 'y-component ice velocity'
-      call attrib(idnc,jdim(1:3),3,'vic',lname,'m/s',-65.,65.,0,itype)
-      lname = 'Ice salinity'
-      call attrib(idnc,jdim(1:3),3,'icesal',lname,'PSU',0.,130.,0,itype)
-    end if
+    !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
+      !~ do k=ms+1,wlev
+        !~ write(lname,'("soil/ocean temperature lev ",I2)') k
+        !~ write(vname,'("tgg",I2.2)') k
+        !~ call attrib(idnc,jdim(1:3),3,vname,lname,'K',100.,425.,0,itype)
+      !~ end do
+      !~ do k=1,wlev
+        !~ write(lname,'("ocean salinity lev ",I2)') k
+        !~ write(vname,'("sal",I2.2)') k
+        !~ call attrib(idnc,jdim(1:3),3,vname,lname,'PSU',0.,130.,0,itype)
+      !~ end do
+      !~ do k=1,wlev
+        !~ write(lname,'("x-component current lev ",I2)') k
+        !~ write(vname,'("uoc",I2.2)') k
+        !~ call attrib(idnc,jdim(1:3),3,vname,lname,'m/s',-65.,65.,0,itype)
+        !~ write(lname,'("y-component current lev ",I2)') k
+        !~ write(vname,'("voc",I2.2)') k
+        !~ call attrib(idnc,jdim(1:3),3,vname,lname,'m/s',-65.,65.,0,itype)
+      !~ end do
+      !~ lname = 'water surface height'
+      !~ call attrib(idnc,jdim(1:3),3,'ocheight',lname,'m',-130.,130.,0,itype)          
+      !~ lname = 'Snow temperature lev 1'
+      !~ call attrib(idnc,jdim(1:3),3,'tggsn1',lname,'K',100.,425.,0,itype)
+      !~ lname = 'Snow temperature lev 2'
+      !~ call attrib(idnc,jdim(1:3),3,'tggsn2',lname,'K',100.,425.,0,itype)
+      !~ lname = 'Snow temperature lev 3'
+      !~ call attrib(idnc,jdim(1:3),3,'tggsn3',lname,'K',100.,425.,0,itype)
+      !~ lname = 'Ice temperature lev 4'
+      !~ call attrib(idnc,jdim(1:3),3,'tggsn4',lname,'K',100.,425.,0,itype)
+      !~ lname = 'Ice heat store'
+      !~ call attrib(idnc,jdim(1:3),3,'sto',lname,'J/m2',0.,1.3e10,0,itype)
+      !~ lname = 'x-component ice velocity'
+      !~ call attrib(idnc,jdim(1:3),3,'uic',lname,'m/s',-65.,65.,0,itype)
+      !~ lname = 'y-component ice velocity'
+      !~ call attrib(idnc,jdim(1:3),3,'vic',lname,'m/s',-65.,65.,0,itype)
+      !~ lname = 'Ice salinity'
+      !~ call attrib(idnc,jdim(1:3),3,'icesal',lname,'PSU',0.,130.,0,itype)
+    !~ end if
     if ( nmlo<=-2 .or. (nmlo>=2.and.itype==-1) .or. nriver==1 ) then
       lname = 'Surface water depth'
       call attrib(idnc,jdim(1:3),3,'swater',lname,'mm',0.,6.5E3,0,-1) ! -1 = long
@@ -1676,16 +1676,16 @@ aa(:) = runoff(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'runoff',idnc,iarch,local,lwrite)
 aa(:) = swrsave*albvisnir(:,1)+(1.-swrsave)*albvisnir(:,2)
 !~ call histwrt3(aa,'alb',idnc,iarch,local,.true.)
-call histwrt3(fwet,'fwet',idnc,iarch,local,lwrite)
+!~ call histwrt3(fwet,'fwet',idnc,iarch,local,lwrite)
 
 ! MLO ---------------------------------------------------------      
 if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
   ocnheight = min(max(ocnheight,-130.),130.)
-  do k=1,ms
-    where (.not.land(1:ifull))
-      tgg(:,k) = mlodwn(:,k,1)
-    end where
-  end do
+  !~ do k=1,ms
+    !~ where (.not.land(1:ifull))
+      !~ tgg(:,k) = mlodwn(:,k,1)
+    !~ end where
+  !~ end do
   do k=1,3
     where (.not.land(1:ifull))
       tggsn(:,k) = micdwn(:,k)
@@ -1699,18 +1699,18 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
 end if
 
 call histwrt3(snowd,'snd', idnc,iarch,local,.true.)  ! long write
-do k=1,ms
-  where ( tgg(:,k)<100. .and. itype==1 )
-    aa(:)=tgg(:,k)+wrtemp
-  elsewhere
-    aa(:)=tgg(:,k)      ! Allows ocean temperatures to use a 290K offset
-  end where
-  write(vname,'("tgg",I1.1)') k
-  call histwrt3(aa,vname,idnc,iarch,local,.true.)
-  where ( tgg(:,k)<100. )
-    tgg(:,k)=tgg(:,k)+wrtemp
-  end where
-end do
+!~ do k=1,ms
+  !~ where ( tgg(:,k)<100. .and. itype==1 )
+    !~ aa(:)=tgg(:,k)+wrtemp
+  !~ elsewhere
+    !~ aa(:)=tgg(:,k)      ! Allows ocean temperatures to use a 290K offset
+  !~ end where
+  !~ write(vname,'("tgg",I1.1)') k
+  !~ call histwrt3(aa,vname,idnc,iarch,local,.true.)
+  !~ where ( tgg(:,k)<100. )
+    !~ tgg(:,k)=tgg(:,k)+wrtemp
+  !~ end where
+!~ end do
 
 !~ if ( abs(nmlo)<=9 ) then
   !~ if ( nmlo<0 .or. (nmlo>0.and.itype==-1) ) then
