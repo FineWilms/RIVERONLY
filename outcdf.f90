@@ -785,13 +785,13 @@ if( myid==0 .or. local ) then
     end if
 
 !   For time varying surface fields
-    if ( nsib==6 .or. nsib==7 ) then
-      lname = 'Stomatal resistance'
-      call attrib(idnc,jdim(1:3),3,'rs',lname,'none',0.,1000.,0,itype)
-    else
-      lname = 'Minimum stomatal resistance'
-      call attrib(idnc,idim(1:2),2,'rsmin',lname,'none',0.,1000.,0,itype)
-    end if
+    !~ if ( nsib==6 .or. nsib==7 ) then
+      !~ lname = 'Stomatal resistance'
+      !~ call attrib(idnc,jdim(1:3),3,'rs',lname,'none',0.,1000.,0,itype)
+    !~ else
+      !~ lname = 'Minimum stomatal resistance'
+      !~ call attrib(idnc,idim(1:2),2,'rsmin',lname,'none',0.,1000.,0,itype)
+    !~ end if
     !~ lname = 'Vegetation fraction'
     !~ call attrib(idnc,jdim(1:3),3,'sigmf',lname,'none',0.,3.25,0,itype)
     lname ='Scaled Log Surface pressure'
@@ -812,8 +812,8 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'rnc',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     !~ lname = 'Snowfall'
     !~ call attrib(idnc,jdim(1:3),3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
-    lname = 'Graupelfall'
-    call attrib(idnc,jdim(1:3),3,'grpl',lname,'mm/day',0.,1300.,0,-1) ! -1=long    
+    !~ lname = 'Graupelfall'
+    !~ call attrib(idnc,jdim(1:3),3,'grpl',lname,'mm/day',0.,1300.,0,-1) ! -1=long    
     lname = 'Runoff'
     call attrib(idnc,jdim(1:3),3,'runoff',lname,'mm/day',0.,1300.,0,-1) ! -1=long
     !~ lname = 'Surface albedo'
@@ -1360,8 +1360,8 @@ if( myid==0 .or. local ) then
       lname = 'Delta pressure'
       call attrib(idnc,idim(1:4),4,'del_p',lname,'hPa',-900.,900.,1,itype)
     endif  ! (nextout>=4.and.nllp==3)
-    lname = 'Air temperature'
-    call attrib(idnc,idim(1:4),4,'temp',lname,'K',100.,350.,0,itype)
+    !~ lname = 'Air temperature'
+    !~ call attrib(idnc,idim(1:4),4,'temp',lname,'K',100.,350.,0,itype)
     lname = 'x-component wind'
     call attrib(idnc,idim(1:4),4,'u',lname,'m/s',-150.,150.,0,itype)
     lname = 'y-component wind'
@@ -1670,8 +1670,8 @@ endif ! (ktau==0.or.itype==-1)
 !~ call histwrt3(aa,'rnc',idnc,iarch,local,lwrite)
 !~ aa(:) = sno(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 !~ call histwrt3(aa,'sno',idnc,iarch,local,lwrite)
-aa(:) = grpl(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
-call histwrt3(aa,'grpl',idnc,iarch,local,lwrite)
+!~ aa(:) = grpl(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
+!~ call histwrt3(aa,'grpl',idnc,iarch,local,lwrite)
 aa(:) = runoff(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'runoff',idnc,iarch,local,lwrite)
 aa(:) = swrsave*albvisnir(:,1)+(1.-swrsave)*albvisnir(:,2)
@@ -2092,7 +2092,7 @@ endif    ! (ktau>0.and.itype/=-1)
 
 ! ATMOSPHERE DYNAMICS ------------------------------------------
 lwrite = (ktau>0)
-call histwrt4(t,'temp',idnc,iarch,local,.true.)
+!~ call histwrt4(t,'temp',idnc,iarch,local,.true.)
 call histwrt4(u,'u',idnc,iarch,local,.true.)
 call histwrt4(v,'v',idnc,iarch,local,.true.)
 do k = 1,kl
@@ -2468,10 +2468,10 @@ if ( first ) then
     !~ call attrib(fncid,sdim,3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     !~ lname='Snowfall'
     !~ call attrib(fncid,sdim,3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
-    lname='Graupelfall'
-    call attrib(fncid,sdim,3,'grpl',lname,'mm/day',0.,1300.,0,-1) ! -1=long
-    lname ='Mean sea level pressure'
-    call attrib(fncid,sdim,3,'pmsl',lname,'hPa',800.,1200.,0,1)    
+    !~ lname='Graupelfall'
+    !~ call attrib(fncid,sdim,3,'grpl',lname,'mm/day',0.,1300.,0,-1) ! -1=long
+    !~ lname ='Mean sea level pressure'
+    !~ call attrib(fncid,sdim,3,'pmsl',lname,'hPa',800.,1200.,0,1)    
 
     ! end definition mode
     call ccnf_enddef(fncid)
@@ -2556,8 +2556,8 @@ if ( mod(ktau,tblock*tbave)==0 ) then
   !~ call freqwrite(fncid,'qgscrn',fiarch,tblock,localhist,freqstore(:,:,4))
   !~ call freqwrite(fncid,'rnd',   fiarch,tblock,localhist,freqstore(:,:,5))
   !~ call freqwrite(fncid,'sno',   fiarch,tblock,localhist,freqstore(:,:,6))
-  call freqwrite(fncid,'grpl',  fiarch,tblock,localhist,freqstore(:,:,7))
-  call freqwrite(fncid,'pmsl',  fiarch,tblock,localhist,freqstore(:,:,8))
+  !~ call freqwrite(fncid,'grpl',  fiarch,tblock,localhist,freqstore(:,:,7))
+  !~ call freqwrite(fncid,'pmsl',  fiarch,tblock,localhist,freqstore(:,:,8))
   freqstore(:,:,:) = 0.
 end if
 
