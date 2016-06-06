@@ -99,7 +99,7 @@ if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
       write (77,*) kdate,ktime,' ktau = ',ktau
     end if
     call writeglobvar(77, wb, fmt='(14f6.3)')
-    call writeglobvar(77, tgg, fmt='(12f7.2)')
+    !~ call writeglobvar(77, tgg, fmt='(12f7.2)')
     call writeglobvar(77, tss, fmt='(12f7.2)')
     call writeglobvar(77, snowd, fmt='(12f7.1)')
     call writeglobvar(77, sicedep, fmt='(12f7.1)')
@@ -1500,14 +1500,14 @@ if( myid==0 .or. local ) then
       call attrib(idnc,jdim(1:3),3,'wbice5',lname,'m3/m3',0.,1.,0,itype)
       lname = 'Soil ice lev 6'
       call attrib(idnc,jdim(1:3),3,'wbice6',lname,'m3/m3',0.,1.,0,itype)
-      if ( nmlo==0 ) then ! otherwise already defined above
-        lname = 'Snow temperature lev 1'
-        call attrib(idnc,jdim(1:3),3,'tggsn1',lname,'K',100.,425.,0,itype)
-        lname = 'Snow temperature lev 2'
-        call attrib(idnc,jdim(1:3),3,'tggsn2',lname,'K',100.,425.,0,itype)
-        lname = 'Snow temperature lev 3'
-        call attrib(idnc,jdim(1:3),3,'tggsn3',lname,'K',100.,425.,0,itype)
-      end if
+      !~ if ( nmlo==0 ) then ! otherwise already defined above
+        !~ lname = 'Snow temperature lev 1'
+        !~ call attrib(idnc,jdim(1:3),3,'tggsn1',lname,'K',100.,425.,0,itype)
+        !~ lname = 'Snow temperature lev 2'
+        !~ call attrib(idnc,jdim(1:3),3,'tggsn2',lname,'K',100.,425.,0,itype)
+        !~ lname = 'Snow temperature lev 3'
+        !~ call attrib(idnc,jdim(1:3),3,'tggsn3',lname,'K',100.,425.,0,itype)
+      !~ end if
       lname = 'Snow mass lev 1'
       call attrib(idnc,jdim(1:3),3,'smass1',lname,'K',0.,425.,0,itype)
       lname = 'Snow mass lev 2'
@@ -1686,11 +1686,11 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
       !~ tgg(:,k) = mlodwn(:,k,1)
     !~ end where
   !~ end do
-  do k=1,3
-    where (.not.land(1:ifull))
-      tggsn(:,k) = micdwn(:,k)
-    end where
-  end do
+  !~ do k=1,3
+    !~ where (.not.land(1:ifull))
+      !~ tggsn(:,k) = micdwn(:,k)
+    !~ end where
+  !~ end do
   where (.not.land(1:ifull))
     fracice = micdwn(:,5)
     sicedep = micdwn(:,6)
@@ -2225,11 +2225,11 @@ if ( itype==-1 ) then
   call histwrt3(wbice(1,4),'wbice4',idnc,iarch,local,.true.)
   call histwrt3(wbice(1,5),'wbice5',idnc,iarch,local,.true.)
   call histwrt3(wbice(1,6),'wbice6',idnc,iarch,local,.true.)
-  if ( nmlo==0 ) then ! otherwise already written above
-    call histwrt3(tggsn(1,1),'tggsn1',idnc,iarch,local,.true.)
-    call histwrt3(tggsn(1,2),'tggsn2',idnc,iarch,local,.true.)
-    call histwrt3(tggsn(1,3),'tggsn3',idnc,iarch,local,.true.)
-  end if
+  !~ if ( nmlo==0 ) then ! otherwise already written above
+    !~ call histwrt3(tggsn(1,1),'tggsn1',idnc,iarch,local,.true.)
+    !~ call histwrt3(tggsn(1,2),'tggsn2',idnc,iarch,local,.true.)
+    !~ call histwrt3(tggsn(1,3),'tggsn3',idnc,iarch,local,.true.)
+  !~ end if
   call histwrt3(smass(1,1),'smass1',idnc,iarch,local,.true.)
   call histwrt3(smass(1,2),'smass2',idnc,iarch,local,.true.)
   call histwrt3(smass(1,3),'smass3',idnc,iarch,local,.true.)
