@@ -2313,6 +2313,8 @@ character(len=40) :: lname
 character(len=33) :: grdtim
 character(len=20) :: timorg
 
+WRITE(6,*) 'FREQFILE ROUTINE '
+
 call START_LOG(outfile_begin)
 
 ! allocate arrays and open new file
@@ -2511,15 +2513,15 @@ ti = mod(ktau,tblock*tbave)
 if ( ti==0 ) ti = tblock*tbave
 ti = (ti-1)/tbave + 1
 umag = sqrt(u(1:ifull,1)*u(1:ifull,1)+v(1:ifull,1)*v(1:ifull,1))
-call mslp(pmsl,psl,zs,t)
-freqstore(1:ifull,ti,1) = freqstore(1:ifull,ti,1) + u10*u(1:ifull,1)/max(umag,1.E-6)
-freqstore(1:ifull,ti,2) = freqstore(1:ifull,ti,2) + u10*v(1:ifull,1)/max(umag,1.E-6)
-freqstore(1:ifull,ti,3) = freqstore(1:ifull,ti,3) + tscrn
+!~ call mslp(pmsl,psl,zs,t)
+!~ freqstore(1:ifull,ti,1) = freqstore(1:ifull,ti,1) + u10*u(1:ifull,1)/max(umag,1.E-6)
+!~ freqstore(1:ifull,ti,2) = freqstore(1:ifull,ti,2) + u10*v(1:ifull,1)/max(umag,1.E-6)
+!~ freqstore(1:ifull,ti,3) = freqstore(1:ifull,ti,3) + tscrn
 !~ freqstore(1:ifull,ti,4) = freqstore(1:ifull,ti,4) + qgscrn
-freqstore(1:ifull,ti,5) = freqstore(1:ifull,ti,5) + condx*86400./dt
-freqstore(1:ifull,ti,6) = freqstore(1:ifull,ti,6) + conds*86400./dt
-freqstore(1:ifull,ti,7) = freqstore(1:ifull,ti,7) + condg*86400./dt
-freqstore(1:ifull,ti,8) = freqstore(1:ifull,ti,8) + pmsl/100.
+!~ freqstore(1:ifull,ti,5) = freqstore(1:ifull,ti,5) + condx*86400./dt
+!~ freqstore(1:ifull,ti,6) = freqstore(1:ifull,ti,6) + conds*86400./dt
+!~ freqstore(1:ifull,ti,7) = freqstore(1:ifull,ti,7) + condg*86400./dt
+!~ freqstore(1:ifull,ti,8) = freqstore(1:ifull,ti,8) + pmsl/100.
 
 ! write data to file
 if ( mod(ktau,tblock*tbave)==0 ) then
