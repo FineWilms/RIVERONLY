@@ -463,7 +463,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_attg(idnc,'nriver',nriver)
     call ccnf_put_attg(idnc,'nsemble',nsemble)
     call ccnf_put_attg(idnc,'nsib',nsib)
-    call ccnf_put_attg(idnc,'nsigmf',nsigmf)
+    !~ call ccnf_put_attg(idnc,'nsigmf',nsigmf)
     call ccnf_put_attg(idnc,'nspecial',nspecial)
     call ccnf_put_attg(idnc,'nstagu',nstagu)
     call ccnf_put_attg(idnc,'nt_adv',nt_adv)
@@ -792,8 +792,8 @@ if( myid==0 .or. local ) then
       lname = 'Minimum stomatal resistance'
       call attrib(idnc,idim(1:2),2,'rsmin',lname,'none',0.,1000.,0,itype)
     end if
-    lname = 'Vegetation fraction'
-    call attrib(idnc,jdim(1:3),3,'sigmf',lname,'none',0.,3.25,0,itype)
+    !~ lname = 'Vegetation fraction'
+    !~ call attrib(idnc,jdim(1:3),3,'sigmf',lname,'none',0.,3.25,0,itype)
     lname ='Scaled Log Surface pressure'
     call attrib(idnc,jdim(1:3),3,'psf',lname,'none',-1.3,0.2,0,itype)
     lname ='Mean sea level pressure'
@@ -810,8 +810,8 @@ if( myid==0 .or. local ) then
     call attrib(idnc,jdim(1:3),3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     lname = 'Convective precipitation'
     call attrib(idnc,jdim(1:3),3,'rnc',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
-    lname = 'Snowfall'
-    call attrib(idnc,jdim(1:3),3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
+    !~ lname = 'Snowfall'
+    !~ call attrib(idnc,jdim(1:3),3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     lname = 'Graupelfall'
     call attrib(idnc,jdim(1:3),3,'grpl',lname,'mm/day',0.,1300.,0,-1) ! -1=long    
     lname = 'Runoff'
