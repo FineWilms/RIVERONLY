@@ -1668,8 +1668,8 @@ aa(:) = precip(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'rnd',idnc,iarch,local,lwrite)
 aa(:) = precc(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'rnc',idnc,iarch,local,lwrite)
-aa(:) = sno(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
-call histwrt3(aa,'sno',idnc,iarch,local,lwrite)
+!~ aa(:) = sno(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
+!~ call histwrt3(aa,'sno',idnc,iarch,local,lwrite)
 aa(:) = grpl(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
 call histwrt3(aa,'grpl',idnc,iarch,local,lwrite)
 aa(:) = runoff(1:ifull)*real(nperday)/real(min(nwt,max(ktau,1)))
@@ -2466,8 +2466,8 @@ if ( first ) then
     call attrib(fncid,sdim,3,'qgscrn',lname,'kg/kg',0.,.06,0,1)
     lname='Precipitation'
     call attrib(fncid,sdim,3,'rnd',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
-    lname='Snowfall'
-    call attrib(fncid,sdim,3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
+    !~ lname='Snowfall'
+    !~ call attrib(fncid,sdim,3,'sno',lname,'mm/day',0.,1300.,0,-1)  ! -1=long
     lname='Graupelfall'
     call attrib(fncid,sdim,3,'grpl',lname,'mm/day',0.,1300.,0,-1) ! -1=long
     lname ='Mean sea level pressure'
@@ -2555,7 +2555,7 @@ if ( mod(ktau,tblock*tbave)==0 ) then
   !~ call freqwrite(fncid,'tscrn', fiarch,tblock,localhist,freqstore(:,:,3))
   call freqwrite(fncid,'qgscrn',fiarch,tblock,localhist,freqstore(:,:,4))
   call freqwrite(fncid,'rnd',   fiarch,tblock,localhist,freqstore(:,:,5))
-  call freqwrite(fncid,'sno',   fiarch,tblock,localhist,freqstore(:,:,6))
+  !~ call freqwrite(fncid,'sno',   fiarch,tblock,localhist,freqstore(:,:,6))
   call freqwrite(fncid,'grpl',  fiarch,tblock,localhist,freqstore(:,:,7))
   call freqwrite(fncid,'pmsl',  fiarch,tblock,localhist,freqstore(:,:,8))
   freqstore(:,:,:) = 0.
