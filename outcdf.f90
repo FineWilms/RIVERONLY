@@ -1012,8 +1012,8 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'fg_ave',lname,'W/m2',-3000.,3000.,0,itype)
     !~ lname = 'Avg net radiation'
     !~ call attrib(idnc,jdim(1:3),3,'rnet_ave',lname,'none',-3000.,3000.,0,itype)
-    lname = 'Avg flux into tgg1 layer'
-    call attrib(idnc,jdim(1:3),3,'ga_ave',lname,'W/m2',-1000.,1000.,0,itype)
+    !~ lname = 'Avg flux into tgg1 layer'
+    !~ call attrib(idnc,jdim(1:3),3,'ga_ave',lname,'W/m2',-1000.,1000.,0,itype)
     !~ lname = 'Avg ice water path'
     !~ call attrib(idnc,jdim(1:3),3,'iwp_ave',lname,'kg/m2',0.,6.,0,itype)
     !~ lname = 'Avg liquid water path'
@@ -1069,8 +1069,8 @@ if( myid==0 .or. local ) then
     !~ call attrib(idnc,jdim(1:3),3,'taux',lname,'N/m2',-50.,50.,0,itype)
     !~ lname = 'y-component wind stress'
     !~ call attrib(idnc,jdim(1:3),3,'tauy',lname,'N/m2',-50.,50.,0,itype)
-    if ( nextout>=1 ) then
-      if ( myid==0 ) write(6,*) 'nextout=',nextout
+    !~ if ( nextout>=1 ) then
+      !~ if ( myid==0 ) write(6,*) 'nextout=',nextout
       !~ lname = 'LW at TOA'
       !~ call attrib(idnc,jdim(1:3),3,'rtu_ave',lname,'W/m2',0.,800.,0,itype)
       !~ lname = 'Clear sky LW at TOA'
@@ -1099,9 +1099,9 @@ if( myid==0 .or. local ) then
       !~ call attrib(idnc,jdim(1:3),3,'fbeam_ave',lname,'none',-3.25,3.25,0,itype)
       !~ lname = 'Surface pressure tendency'
       !~ call attrib(idnc,jdim(1:3),3,'dpsdt',lname,'hPa/day',-400.,400.,0,itype)
-      lname = 'friction velocity'
-      call attrib(idnc,jdim(1:3),3,'ustar',lname,'m/s',0.,10.,0,itype)
-    endif     ! (nextout>=1)
+      !~ lname = 'friction velocity'
+      !~ call attrib(idnc,jdim(1:3),3,'ustar',lname,'m/s',0.,10.,0,itype)
+    !~ endif     ! (nextout>=1)
     !~ if ( nextout>=1 .or. (nvmix==6.and.itype==-1) ) then
       !~ lname = 'PBL depth'
       !~ call attrib(idnc,jdim(1:3),3,'pblh',lname,'m',0.,13000.,0,itype)
@@ -1362,14 +1362,14 @@ if( myid==0 .or. local ) then
     endif  ! (nextout>=4.and.nllp==3)
     !~ lname = 'Air temperature'
     !~ call attrib(idnc,idim(1:4),4,'temp',lname,'K',100.,350.,0,itype)
-    lname = 'x-component wind'
-    call attrib(idnc,idim(1:4),4,'u',lname,'m/s',-150.,150.,0,itype)
-    lname = 'y-component wind'
-    call attrib(idnc,idim(1:4),4,'v',lname,'m/s',-150.,150.,0,itype)
+    !~ lname = 'x-component wind'
+    !~ call attrib(idnc,idim(1:4),4,'u',lname,'m/s',-150.,150.,0,itype)
+    !~ lname = 'y-component wind'
+    !~ call attrib(idnc,idim(1:4),4,'v',lname,'m/s',-150.,150.,0,itype)
     !~ lname = 'vertical velocity'
     !~ call attrib(idnc,idim(1:4),4,'omega',lname,'Pa/s',-65.,65.,0,itype)
-    lname = 'Water mixing ratio'
-    call attrib(idnc,idim(1:4),4,'mixr',lname,'kg/kg',0.,.065,0,itype)
+    !~ lname = 'Water mixing ratio'
+    !~ call attrib(idnc,idim(1:4),4,'mixr',lname,'kg/kg',0.,.065,0,itype)
     !~ lname = 'Covective heating'
     !~ call attrib(idnc,idim(1:4),4,'convh_ave',lname,'K/day',-10.,20.,0,itype)
         
@@ -1919,7 +1919,7 @@ if ( itype/=-1 ) then  ! these not written to restart file
     !~ call histwrt3(fbeam_ave,'fbeam_ave',idnc,iarch,local,lrad)
     lwrite=(ktau>0)
     !~ call histwrt3(dpsdt,'dpsdt',idnc,iarch,local,lwrite)
-    call histwrt3(ustar,'ustar',idnc,iarch,local,lwrite)
+    !~ call histwrt3(ustar,'ustar',idnc,iarch,local,lwrite)
   endif   ! nextout>=1
 endif    ! (ktau>0.and.itype/=-1)
       
@@ -2093,13 +2093,13 @@ endif    ! (ktau>0.and.itype/=-1)
 ! ATMOSPHERE DYNAMICS ------------------------------------------
 lwrite = (ktau>0)
 !~ call histwrt4(t,'temp',idnc,iarch,local,.true.)
-call histwrt4(u,'u',idnc,iarch,local,.true.)
-call histwrt4(v,'v',idnc,iarch,local,.true.)
+!~ call histwrt4(u,'u',idnc,iarch,local,.true.)
+!~ call histwrt4(v,'v',idnc,iarch,local,.true.)
 do k = 1,kl
   tmpry(1:ifull,k)=ps(1:ifull)*dpsldt(1:ifull,k)
 enddo
 !~ call histwrt4(tmpry,'omega',idnc,iarch,local,lwrite)
-call histwrt4(qg,'mixr',idnc,iarch,local,.true.)
+!~ call histwrt4(qg,'mixr',idnc,iarch,local,.true.)
 lwrite = (mod(ktau,nperavg)==0.or.ktau==ntau).and.(ktau>0)
 !~ call histwrt4(convh_ave,'convh_ave',idnc,iarch,local,lwrite)
       
