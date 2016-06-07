@@ -350,7 +350,7 @@ use sigs_m      ! sigma levels for pressure
 use soil_m      ! albedo
 use soilsnow_m  ! soil temp (tgg)
 !~ use tracermodule, only : co2em
-use tracers_m   ! ntrac and tr array
+!~ use tracers_m   ! ntrac and tr array
 use vegpar_m    ! rlai
 use vvel_m      ! vertical velocity
 implicit none
@@ -373,14 +373,14 @@ if (ngrdpts.eq.0) return
 if (mod(ktau,ntsfreq).eq.0) then
   tstime = real(jyear,8) + real(mins,8)/real(365.*24.*60.,8)
   call ccnf_put_vara(tsid(1),tsid(2),indextime,tstime)
-  allocate(cts(ngrdpts,ntrac))
+  !~ allocate(cts(ngrdpts,ntrac))
   do n=1,ngrdpts
     iq = listijk(n,1) + (listijk(n,2)-1)*il
 ! rml 23/2/10 add in background that removed at start of run
-    cts(n,:)=tr(iq,listijk(n,3),:)
+    !~ cts(n,:)=tr(iq,listijk(n,3),:)
   enddo
   start(1)=1; start(2)=1; start(3)=indextime
-  ncount(1)=ngrdpts; ncount(2)=ntrac; ncount(3)=1
+  ncount(1)=ngrdpts; ncount(3)=1
   call ccnf_put_vara(tsid(1),tsid(3),start,ncount,cts)
   deallocate(cts)
 
@@ -451,7 +451,7 @@ if (mod(ktau,ntsfreq).eq.0) then
     case ('pfrs')    ; temparr=frs
     case ('pblh')    ; temparr=pblh
     case ('flux')  
-      allocate(cts(ngrdpts1,ntrac))
+      !~ allocate(cts(ngrdpts1,ntrac))
       kount=0
       do n=1,ngrdpts
         if (writesurf(n)) then
@@ -461,7 +461,7 @@ if (mod(ktau,ntsfreq).eq.0) then
         endif
       enddo 
       start(1)=1; start(2)=1; start(3)=indextime
-      ncount(1)=ngrdpts1; ncount(2)=ntrac; ncount(3)=1
+      ncount(1)=ngrdpts1;ncount(3)=1
       call ccnf_put_vara(tsid(1),tsid(3+n3d+m),start,ncount,cts)
       deallocate(cts)
       surfflux=.true.
@@ -577,7 +577,7 @@ subroutine writeshipts(ktau,ntau,dt)
 !     rml 25/11/03 subroutine to write mobile timeseries e.g. ship
 !
 use infile
-use tracers_m
+!~ use tracers_m
 implicit none
 integer ktau,ntau,iloc,ilev,iship
 integer jdate1,jdate2,jtime1,jtime2,mon
@@ -642,8 +642,9 @@ do while (moredat)
     kount(1)=5; kount(2)=1
     call ccnf_put_vara(outshipid(1),outshipid(2),start,kount,info)
     start(1)=1; start(2)=nshipout
-    kount(1)=ntrac; kount(2)=1
-    call ccnf_put_vara(outshipid(1),outshipid(3),start,kount,tr(iloc,ilev,:))
+    !~ kount(1)=ntrac 
+    kount(2)=1
+    !~ call ccnf_put_vara(outshipid(1),outshipid(3),start,kount,tr(iloc,ilev,:))
 
     indship=indship+1
   else

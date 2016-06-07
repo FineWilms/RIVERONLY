@@ -110,7 +110,7 @@ module cable_ccam
 use cable_common_module
 use cable_data_module
 use cable_def_types_mod, cbm_ms => ms
-use cable_radiation_module
+!~ use cable_radiation_module
 use cable_roughness_module
 use cable_soil_snow_module
 use casa_cnp_module
@@ -275,7 +275,7 @@ canopy%oldcansto = canopy%cansto
 call ruff_resist(veg,rough,ssnow,canopy)
 !met%tk=met%tk+C%grav/C%capp*(rough%zref_tq + 0.9*rough%z0m)
 !~ call define_air(met,air)
-call init_radiation(met,rad,veg,canopy)
+!~ call init_radiation(met,rad,veg,canopy)
 !~ call surface_albedo(ssnow,veg,met,rad,soil,canopy)
 !~ call define_canopy(bal,rad,rough,air,met,dt,ssnow,soil,veg,canopy)
 ssnow%otss_0     = ssnow%otss

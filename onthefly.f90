@@ -308,7 +308,7 @@ use screen_m                                   ! Screen level diagnostics
 use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
 use tkeeps, only : tke,eps,zidry               ! TKE-EPS boundary layer
-use tracers_m                                  ! Tracer data
+!~ use tracers_m                                  ! Tracer data
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
 use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
@@ -1318,14 +1318,14 @@ if ( nested/=1 ) then
     if  (all(eps(1:ifull,:)==0.) ) eps(1:ifull,:)=1.E-7
   end if
 
-  !------------------------------------------------------------------
-  ! Tracer data
-  if ( ngas>0 ) then              
-    do igas=1,ngas              
-      write(trnum,'(i3.3)') igas
-      call gethist4a('tr'//trnum,tr(:,:,igas),7)
-    enddo                       
-  endif                         
+  !~ !------------------------------------------------------------------
+  !~ ! Tracer data
+  !~ if ( ngas>0 ) then              
+    !~ do igas=1,ngas              
+      !~ write(trnum,'(i3.3)') igas
+      !~ call gethist4a('tr'//trnum,tr(:,:,igas),7)
+    !~ enddo                       
+  !~ endif                         
 
   !------------------------------------------------------------------
   ! Aerosol data ( non-nudged or diagnostic )

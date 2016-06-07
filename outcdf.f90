@@ -43,7 +43,7 @@ use arrays_m
 use cc_mpi
 use pbl_m
 use soilsnow_m ! tgg,wb,snowd
-use tracers_m
+!~ use tracers_m
       
 implicit none
       
@@ -158,7 +158,7 @@ use mlo, only : mindep              & ! Ocean physics and prognostic arrays
 use parmhdff_m                        ! Horizontal diffusion parameters
 !~ use seaesfrad_m                       ! SEA-ESF radiation
 use tkeeps                            ! TKE-EPS boundary layer
-use tracers_m                         ! Tracer data
+!~ use tracers_m                         ! Tracer data
 
 implicit none
 
@@ -349,8 +349,8 @@ if ( myid==0 .or. localhist ) then
     nahead(39) = ntsea
     nahead(40) = 0    
     nahead(41) = nextout
-    nahead(42) = ilt
-    nahead(43) = ntrac     ! needed by cc2hist
+    !~ nahead(42) = ilt
+    !~ nahead(43) = ntrac     ! needed by cc2hist
     nahead(44) = nsib
     nahead(45) = nrungcm
     nahead(46) = ncvmix
@@ -624,7 +624,7 @@ use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use tkeeps, only : tke,eps,zidry                 ! TKE-EPS boundary layer
 !~ use tracermodule, only : tracname,writetrpm      ! Tracer routines
-use tracers_m                                    ! Tracer data
+!~ use tracers_m                                    ! Tracer data
 use vegpar_m                                     ! Vegetation arrays
 use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays
@@ -2137,17 +2137,17 @@ if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
 end if
 
 ! TRACERS -----------------------------------------------------
-if ( ngas>0 ) then
-  if ( itype==-1 ) then ! restart
-    do igas = 1,ngas
-      write(trnum,'(i3.3)') igas
-      call histwrt4(tr(:,:,igas),    'tr'//trnum,  idnc,iarch,local,.true.)
-    enddo ! igas loop
-  else                  ! history
-    do igas = 1,ngas
-      write(trnum,'(i3.3)') igas
+!~ if ( ngas>0 ) then
+  !~ if ( itype==-1 ) then ! restart
+    !~ do igas = 1,ngas
+      !~ write(trnum,'(i3.3)') igas
+      !~ call histwrt4(tr(:,:,igas),    'tr'//trnum,  idnc,iarch,local,.true.)
+    !~ enddo ! igas loop
+  !~ else                  ! history
+    !~ do igas = 1,ngas
+      !~ write(trnum,'(i3.3)') igas
       !call histwrt4(tr(:,:,igas),    'tr'//trnum,  idnc,iarch,local,.true.)
-      call histwrt4(traver(:,:,igas),'trav'//trnum,idnc,iarch,local,lave)
+      !~ call histwrt4(traver(:,:,igas),'trav'//trnum,idnc,iarch,local,lave)
       ! rml 14/5/10 option to write out local time afternoon average
       !~ if ( writetrpm ) then
         !~ ! first divide by number of contributions to average
@@ -2156,14 +2156,14 @@ if ( ngas>0 ) then
         !~ enddo
         !~ call histwrt4(trpm(:,:,igas),'trpm'//trnum,idnc,iarch,local,.true.)
       !~ endif
-    enddo ! igas loop
+    !~ enddo ! igas loop
     ! reset arrays
     !~ if ( writetrpm ) then
       !~ trpm = 0.
       !~ npm  = 0
     !~ endif
-  end if
-endif  ! (ngasc>0)
+  !~ end if
+!~ endif  ! (ngasc>0)
 
 ! AEROSOLS ----------------------------------------------------
 if ( abs(iaero)>=2 ) then

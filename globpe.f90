@@ -908,7 +908,7 @@ end
 
 
 !--------------------------------------------------------------
-! INTIAL PARAMETERS
+! INITIAL PARAMETERS
 blockdata main_blockdata
 
 implicit none
