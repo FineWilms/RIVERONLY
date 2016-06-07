@@ -59,7 +59,7 @@ use histave_m                              ! Time average arrays
 use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
 use infile                                 ! Input file routines
-use kuocomb_m                              ! JLM convection
+!~ use kuocomb_m                              ! JLM convection
 use latlong_m                              ! Lat/lon coordinates
 !~ use leoncld_mod                            ! Prognostic cloud condensate
 use liqwpar_m                              ! Cloud water mixing ratios
@@ -570,7 +570,7 @@ call epst_init(ifull,iextra,kl)
 call extraout_init(ifull,iextra,kl,nextout)
 call gdrag_init(ifull,iextra,kl)
 call histave_init(ifull,iextra,kl,ms)
-call kuocomb_init(ifull,iextra,kl)
+!~ call kuocomb_init(ifull,iextra,kl)
 call liqwpar_init(ifull,iextra,kl)
 call morepbl_init(ifull,iextra,kl)
 call nharrs_init(ifull,iextra,kl)
