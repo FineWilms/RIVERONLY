@@ -103,10 +103,10 @@
 
 module cable_ccam
 
-use cable_air_module
-use cable_albedo_module
-use cable_canopy_module
-use cable_carbon_module
+!~ use cable_air_module
+!~ use cable_albedo_module
+!~ use cable_canopy_module
+!~ use cable_carbon_module
 use cable_common_module
 use cable_data_module
 use cable_def_types_mod, cbm_ms => ms
@@ -274,10 +274,10 @@ canopy%oldcansto = canopy%cansto
 !call point2constants(C)
 call ruff_resist(veg,rough,ssnow,canopy)
 !met%tk=met%tk+C%grav/C%capp*(rough%zref_tq + 0.9*rough%z0m)
-call define_air(met,air)
+!~ call define_air(met,air)
 call init_radiation(met,rad,veg,canopy)
-call surface_albedo(ssnow,veg,met,rad,soil,canopy)
-call define_canopy(bal,rad,rough,air,met,dt,ssnow,soil,veg,canopy)
+!~ call surface_albedo(ssnow,veg,met,rad,soil,canopy)
+!~ call define_canopy(bal,rad,rough,air,met,dt,ssnow,soil,veg,canopy)
 ssnow%otss_0     = ssnow%otss
 ssnow%otss       = ssnow%tss
 ssnow%owetfac    = ssnow%wetfac
@@ -302,9 +302,9 @@ canopy%cdtq =  max( 0., canopy%cdtq )
 ! CASA CNP
 select case (icycle)
   case(0) ! off
-    call plantcarb(veg,bgc,met,canopy)
-    call soilcarb(soil,ssnow,veg,bgc,met,canopy)
-    call carbon_pl(dt,soil,ssnow,veg,canopy,bgc)
+    !~ call plantcarb(veg,bgc,met,canopy)
+    !~ call soilcarb(soil,ssnow,veg,bgc,met,canopy)
+    !~ call carbon_pl(dt,soil,ssnow,veg,canopy,bgc)
     canopy%fnpp = -canopy%fpn - canopy%frp
     canopy%fnee = canopy%fpn + canopy%frs + canopy%frp
   case(3) ! C+N+P
