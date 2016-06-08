@@ -652,8 +652,8 @@ else
   secs_rad = nint(real(kountr)*dt)        ! redefine to actual value
 end if
 
-! max/min diagnostics      
-#ifdef debug
+!~ ! max/min diagnostics      
+!~ #ifdef debug
 !~ call maxmin(u,' u',ktau,1.,kl)
 !~ call maxmin(v,' v',ktau,1.,kl)
 !~ dums(:,:) = sqrt(u(1:ifull,:)**2+v(1:ifull,:)**2)  ! 3D 
@@ -662,25 +662,25 @@ end if
 !~ call maxmin(qg,'qg',ktau,1.e3,kl)
 !~ call maxmin(qfg,'qf',ktau,1.e3,kl)
 !~ call maxmin(qlg,'ql',ktau,1.e3,kl)
-call maxmin(wb,'wb',ktau,1.,ms)
+!~ call maxmin(wb,'wb',ktau,1.,ms)
 !~ call maxmin(tggsn,'tS',ktau,1.,3)
 !~ call maxmin(tgg,'tgg',ktau,1.,ms)
-pwatr_l = 0.   ! in mm
-do k = 1,kl
-  pwatr_l = pwatr_l-sum(dsig(k)*wts(1:ifull)*(qg(1:ifull,k)+qlg(1:ifull,k)+qfg(1:ifull,k))*ps(1:ifull))
-enddo
-pwatr_l = pwatr_l/grav
-temparray(1) = pwatr_l
-call ccmpi_reduce( temparray(1:1), gtemparray(1:1), "sum", 0, comm_world )
-pwatr = gtemparray(1)
-if ( myid == 0 ) write (6,"('pwatr0 ',12f7.3)") pwatr
-if ( ntrac > 0 ) then
-  do ng = 1,ntrac
-    write (text,'("g",i1)')ng
-    call maxmin(tr(:,:,ng),text,ktau,1.,kl)
-  end do
-end if   ! (ntrac>0)
-#endif
+!~ pwatr_l = 0.   ! in mm
+!~ do k = 1,kl
+  !~ pwatr_l = pwatr_l-sum(dsig(k)*wts(1:ifull)*(qg(1:ifull,k)+qlg(1:ifull,k)+qfg(1:ifull,k))*ps(1:ifull))
+!~ enddo
+!~ pwatr_l = pwatr_l/grav
+!~ temparray(1) = pwatr_l
+!~ call ccmpi_reduce( temparray(1:1), gtemparray(1:1), "sum", 0, comm_world )
+!~ pwatr = gtemparray(1)
+!~ if ( myid == 0 ) write (6,"('pwatr0 ',12f7.3)") pwatr
+!~ if ( ntrac > 0 ) then
+  !~ do ng = 1,ntrac
+    !~ write (text,'("g",i1)')ng
+    !~ call maxmin(tr(:,:,ng),text,ktau,1.,kl)
+  !~ end do
+!~ end if   ! (ntrac>0)
+!~ #endif
 
       
 !--------------------------------------------------------------
