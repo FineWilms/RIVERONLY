@@ -1526,9 +1526,9 @@ if( myid==0 .or. local ) then
       call attrib(idnc,jdim(1:3),3,'sflag',lname,'none',0.,4.,0,itype)
       lname = 'Solar net at ground (+ve down)'
       call attrib(idnc,jdim(1:3),3,'sgsave',lname,'W/m2',-500.,2000.,0,itype)
-      if ( nsib==6 .or. nsib==7 ) then
-        call savetiledef(idnc,local,jdim)
-      end if
+      !~ if ( nsib==6 .or. nsib==7 ) then
+        !~ call savetiledef(idnc,local,jdim)
+      !~ end if
     endif  ! (itype==-1)
         
     if ( myid==0 ) write(6,*) 'finished defining attributes'
@@ -2240,9 +2240,9 @@ if ( itype==-1 ) then
   aa(:)=isflag(:)
   call histwrt3(aa,    'sflag', idnc,iarch,local,.true.)
   call histwrt3(sgsave,'sgsave',idnc,iarch,local,.true.)       
-  if ( nsib==6 .or. nsib==7 ) then
-    call savetile(idnc,local,iarch)
-  end if
+  !~ if ( nsib==6 .or. nsib==7 ) then
+    !~ call savetile(idnc,local,iarch)
+  !~ end if
 endif  ! (itype==-1)
 
 if ( myid==0 .or. local ) then
@@ -2575,50 +2575,50 @@ end subroutine openhist
 !~ return
 !~ end subroutine freqfile
 
-subroutine mslp(pmsl,psl,zs,t)
+!~ subroutine mslp(pmsl,psl,zs,t)
 
-use cc_mpi, only : mydiag
-use sigs_m
+!~ use cc_mpi, only : mydiag
+!~ use sigs_m
 
-implicit none
-! this one will ignore negative zs (i.e. over the ocean)
+!~ implicit none
+!~ ! this one will ignore negative zs (i.e. over the ocean)
 
-include 'newmpar.h'
-include 'const_phys.h'
-include 'parm.h'
+!~ include 'newmpar.h'
+!~ include 'const_phys.h'
+!~ include 'parm.h'
 
-integer, parameter :: meth=1 ! 0 for original, 1 for other jlm - always now
-integer, save :: lev = -1
-real c,conr,con
-real, dimension(ifull), intent(out) :: pmsl
-real, dimension(ifull), intent(in) :: psl,zs
-real, dimension(ifull) :: phi1,tsurf,tav,dlnps
-real, dimension(:,:), intent(in) :: t
+!~ integer, parameter :: meth=1 ! 0 for original, 1 for other jlm - always now
+!~ integer, save :: lev = -1
+!~ real c,conr,con
+!~ real, dimension(ifull), intent(out) :: pmsl
+!~ real, dimension(ifull), intent(in) :: psl,zs
+!~ real, dimension(ifull) :: phi1,tsurf,tav,dlnps
+!~ real, dimension(:,:), intent(in) :: t
       
-c=grav/stdlapse
-conr=c/rdry
-if ( lev<0 ) then
-  lev=1
-  do while (sig(lev+1)<=0.9)
-    lev=lev+1
-  end do
-end if
-con=sig(lev)**(rdry/c)/c
+!~ c=grav/stdlapse
+!~ conr=c/rdry
+!~ if ( lev<0 ) then
+  !~ lev=1
+  !~ do while (sig(lev+1)<=0.9)
+    !~ lev=lev+1
+  !~ end do
+!~ end if
+!~ con=sig(lev)**(rdry/c)/c
       
-if ( meth==1 ) then
-  phi1(:)=t(1:ifull,lev)*rdry*(1.-sig(lev))/sig(lev) ! phi of sig(lev) above sfce
-  tsurf(:)=t(1:ifull,lev)+phi1(:)*stdlapse/grav
-  tav(:)=tsurf(:)+zs(1:ifull)*.5*stdlapse/grav
-  dlnps(:)=zs(1:ifull)/(rdry*tav(:))
-  pmsl(:)=1.e5*exp(psl(:)+dlnps(:))
-end if  ! (meth==1)
+!~ if ( meth==1 ) then
+  !~ phi1(:)=t(1:ifull,lev)*rdry*(1.-sig(lev))/sig(lev) ! phi of sig(lev) above sfce
+  !~ tsurf(:)=t(1:ifull,lev)+phi1(:)*stdlapse/grav
+  !~ tav(:)=tsurf(:)+zs(1:ifull)*.5*stdlapse/grav
+  !~ dlnps(:)=zs(1:ifull)/(rdry*tav(:))
+  !~ pmsl(:)=1.e5*exp(psl(:)+dlnps(:))
+!~ end if  ! (meth==1)
       
-if ( nmaxpr==1 .and. mydiag ) then
-  write(6,*) 'meth,lev,sig(lev) ',meth,lev,sig(lev)
-  write(6,*) 'zs,t_lev,psl,pmsl ',zs(idjd),t(idjd,lev),psl(idjd),pmsl(idjd)
-end if
+!~ if ( nmaxpr==1 .and. mydiag ) then
+  !~ write(6,*) 'meth,lev,sig(lev) ',meth,lev,sig(lev)
+  !~ write(6,*) 'zs,t_lev,psl,pmsl ',zs(idjd),t(idjd,lev),psl(idjd),pmsl(idjd)
+!~ end if
       
-return
-end subroutine mslp
+!~ return
+!~ end subroutine mslp
 
 end module outcdf
