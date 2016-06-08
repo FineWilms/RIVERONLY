@@ -827,7 +827,7 @@ else
   zom=unpack(workb,upack,zom)
   zoh=unpack(workc,upack,zoh)
   zoq=unpack(workd,upack,zoq)
-  if (minval(workc)<=zr) write(6,*) "WARN: minimum zoh reached"
+  !~ if (minval(workc)<=zr) write(6,*) "WARN: minimum zoh reached"
 end if
 
 return

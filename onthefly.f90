@@ -772,24 +772,27 @@ else
         endwhere
       endif  ! (iers(3)/=0)
     endif    ! (iers(2)/=0) .. else ..    for sicedep
-
+write(6,*)'TEST01'
     ! fill surface temperature and sea-ice
     tss_l_a(:) = abs(tss_a(:))
     tss_s_a(:) = abs(tss_a(:))
-    if ( fnresid==1 ) then
-      call fill_cc1_gather(tss_l_a,sea_a)
-      call fill_cc1_gather(tss_s_a,land_a)
-      call fill_cc1_gather(sicedep_a,land_a)
-      call fill_cc1_gather(fracice_a,land_a)
-    else
-      call fill_cc1_nogather(tss_l_a,sea_a)
-      call fill_cc1_nogather(tss_s_a,land_a)
-      call fill_cc1_nogather(sicedep_a,land_a)
-      call fill_cc1_nogather(fracice_a,land_a)
-    end if
+    !~ if ( fnresid==1 ) then
+      !~ write(6,*)'TEST02'
+      !~ call fill_cc1_gather(tss_l_a,sea_a)
+      !~ call fill_cc1_gather(tss_s_a,land_a)
+      !~ call fill_cc1_gather(sicedep_a,land_a)
+      !~ call fill_cc1_gather(fracice_a,land_a)
+    !~ else
+      !~ write(6,*)'TEST03'
+      !~ call fill_cc1_nogather(tss_l_a,sea_a)
+      !~ call fill_cc1_nogather(tss_s_a,land_a)
+      !~ call fill_cc1_nogather(sicedep_a,land_a)
+      !~ call fill_cc1_nogather(fracice_a,land_a)
+    !~ end if
   end if ! myid==0
-
+write(6,*)'TEST04'
   if ( iotest ) then
+    write(6,*)'TEST05'
     ! This case occurs for missing sea-ice data
     if ( myid==0 ) then
       call ccmpi_distribute(zss,zss_a)
@@ -870,6 +873,7 @@ end if ! (tsstest) ..else..
 
 ! air temperature
 ! read for nested=0 or nested=1.and.(nud_t/=0.or.nud_p/=0)
+
 if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
   call gethist4a('temp',t,2,levkin=levkin,t_a_lev=t_a_lev)
 else
