@@ -638,11 +638,11 @@ if( myid==0 .or. local ) then
     
     ! STANDARD 3D VARIABLES -------------------------------------
     if ( myid==0 ) write(6,*) '3d variables'
-    ! TURBULENT MIXING ----------------------------------------------
-    if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
-      call attrib(idnc,idim(1:4),4,'tke','Turbulent Kinetic Energy','m2/s2',0.,65.,0,itype)
-      call attrib(idnc,idim(1:4),4,'eps','Eddy dissipation rate','m2/s3',0.,6.5,0,itype)
-    end if
+    !~ ! TURBULENT MIXING ----------------------------------------------
+    !~ if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
+      !~ call attrib(idnc,idim(1:4),4,'tke','Turbulent Kinetic Energy','m2/s2',0.,65.,0,itype)
+      !~ call attrib(idnc,idim(1:4),4,'eps','Eddy dissipation rate','m2/s3',0.,6.5,0,itype)
+    !~ end if
 
     ! RESTART ---------------------------------------------------
 
