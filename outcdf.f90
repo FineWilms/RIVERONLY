@@ -589,16 +589,16 @@ if( myid==0 .or. local ) then
     lname = 'Vegetation type'
     call attrib(idnc,idim(1:2),2,'vegt',lname,'none',0.,65.,0,itype)
 
-    if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-      lname = 'Water bathymetry'
-      call attrib(idnc,idim(1:2),2,'ocndepth',lname,'m',0.,32500.,0,itype)
-    end if
+    !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
+      !~ lname = 'Water bathymetry'
+      !~ call attrib(idnc,idim(1:2),2,'ocndepth',lname,'m',0.,32500.,0,itype)
+    !~ end if
 
 !   For time varying surface fields
-    lname ='Scaled Log Surface pressure'
-    call attrib(idnc,jdim(1:3),3,'psf',lname,'none',-1.3,0.2,0,itype)
-    lname ='Mean sea level pressure'
-    call attrib(idnc,jdim(1:3),3,'pmsl',lname,'hPa',800.,1200.,0,itype) 
+    !~ lname ='Scaled Log Surface pressure'
+    !~ call attrib(idnc,jdim(1:3),3,'psf',lname,'none',-1.3,0.2,0,itype)
+    !~ lname ='Mean sea level pressure'
+    !~ call attrib(idnc,jdim(1:3),3,'pmsl',lname,'hPa',800.,1200.,0,itype) 
     lname = 'Runoff'
     call attrib(idnc,jdim(1:3),3,'runoff',lname,'mm/day',0.,1300.,0,-1) ! -1=long
  
@@ -638,11 +638,11 @@ if( myid==0 .or. local ) then
     
     ! STANDARD 3D VARIABLES -------------------------------------
     if ( myid==0 ) write(6,*) '3d variables'
-    ! TURBULENT MIXING ----------------------------------------------
-    if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
-      call attrib(idnc,idim(1:4),4,'tke','Turbulent Kinetic Energy','m2/s2',0.,65.,0,itype)
-      call attrib(idnc,idim(1:4),4,'eps','Eddy dissipation rate','m2/s3',0.,6.5,0,itype)
-    end if
+    !~ ! TURBULENT MIXING ----------------------------------------------
+    !~ if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
+      !~ call attrib(idnc,idim(1:4),4,'tke','Turbulent Kinetic Energy','m2/s2',0.,65.,0,itype)
+      !~ call attrib(idnc,idim(1:4),4,'eps','Eddy dissipation rate','m2/s3',0.,6.5,0,itype)
+    !~ end if
 
     ! RESTART ---------------------------------------------------
     if ( myid==0 ) write(6,*) 'finished defining attributes'
@@ -713,18 +713,18 @@ if( myid==0 .or. local ) then
        
 endif ! myid == 0 .or. local
 
-! Export ocean data
-if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  mlodwn(:,:,1:2) = 999.
-  mlodwn(:,:,3:4) = 0.
-  micdwn = 999.
-  micdwn(:,8) = 0.
-  micdwn(:,9) = 0.
-  micdwn(:,10) = 0.
-  ocndep = 0. ! ocean depth
-  ocnheight = 0. ! free surface height
-  call mlosave(mlodwn,ocndep,ocnheight,micdwn,0)
-end if        
+!~ ! Export ocean data
+!~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
+  !~ mlodwn(:,:,1:2) = 999.
+  !~ mlodwn(:,:,3:4) = 0.
+  !~ micdwn = 999.
+  !~ micdwn(:,8) = 0.
+  !~ micdwn(:,9) = 0.
+  !~ micdwn(:,10) = 0.
+  !~ ocndep = 0. ! ocean depth
+  !~ ocnheight = 0. ! free surface height
+  !~ call mlosave(mlodwn,ocndep,ocnheight,micdwn,0)
+!~ end if        
 
 !**************************************************************
 ! WRITE TIME-INVARIANT VARIABLES
@@ -738,9 +738,9 @@ if ( ktau==0 .or. itype==-1 ) then  ! also for restart file
   call histwrt3(aa,'soilt',idnc,iarch,local,.true.)
   aa(:) = real(ivegt(:))
   call histwrt3(aa,'vegt',idnc,iarch,local,.true.)
-  if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-    call histwrt3(ocndep,'ocndepth',idnc,iarch,local,.true.)
-  end if
+  !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
+    !~ call histwrt3(ocndep,'ocndepth',idnc,iarch,local,.true.)
+  !~ end if
 endif ! (ktau==0.or.itype==-1) 
 
 !**************************************************************
