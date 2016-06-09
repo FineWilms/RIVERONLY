@@ -402,8 +402,6 @@ end subroutine cdfout
 ! CREATE ATTRIBUTES AND WRITE OUTPUT
 subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 
-!~ use aerointerface                                ! Aerosol interface
-!~ use aerosolldr                                   ! LDR prognostic aerosols
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use ateb, only : atebsave                        ! Urban
 use cable_ccam, only : savetile, savetiledef     ! CABLE interface
@@ -422,7 +420,6 @@ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use mlo, only : wlev,mlosave,mlodiag, &          ! Ocean physics and prognostic arrays
                 mloexpdep,wrtemp
-!~ use mlodynamics                                  ! Ocean dynamics
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
@@ -437,8 +434,6 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use tkeeps, only : tke,eps,zidry                 ! TKE-EPS boundary layer
-!~ use tracermodule, only : tracname,writetrpm      ! Tracer routines
-!~ use tracers_m                                    ! Tracer data
 use vegpar_m                                     ! Vegetation arrays
 use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays
@@ -589,16 +584,11 @@ if( myid==0 .or. local ) then
     lname = 'Vegetation type'
     call attrib(idnc,idim(1:2),2,'vegt',lname,'none',0.,65.,0,itype)
 
-    !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-      !~ lname = 'Water bathymetry'
-      !~ call attrib(idnc,idim(1:2),2,'ocndepth',lname,'m',0.,32500.,0,itype)
-    !~ end if
-
 !   For time varying surface fields
     lname ='Scaled Log Surface pressure'
     call attrib(idnc,jdim(1:3),3,'psf',lname,'none',-1.3,0.2,0,itype)
-    lname ='Mean sea level pressure'
-    call attrib(idnc,jdim(1:3),3,'pmsl',lname,'hPa',800.,1200.,0,itype) 
+    !~ lname ='Mean sea level pressure'
+    !~ call attrib(idnc,jdim(1:3),3,'pmsl',lname,'hPa',800.,1200.,0,itype) 
     lname = 'Runoff'
     call attrib(idnc,jdim(1:3),3,'runoff',lname,'mm/day',0.,1300.,0,-1) ! -1=long
  
@@ -638,11 +628,6 @@ if( myid==0 .or. local ) then
     
     ! STANDARD 3D VARIABLES -------------------------------------
     if ( myid==0 ) write(6,*) '3d variables'
-    !~ ! TURBULENT MIXING ----------------------------------------------
-    !~ if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
-      !~ call attrib(idnc,idim(1:4),4,'tke','Turbulent Kinetic Energy','m2/s2',0.,65.,0,itype)
-      !~ call attrib(idnc,idim(1:4),4,'eps','Eddy dissipation rate','m2/s3',0.,6.5,0,itype)
-    !~ end if
 
     ! RESTART ---------------------------------------------------
 
@@ -712,20 +697,7 @@ if( myid==0 .or. local ) then
     write(6,*) 'timer,timeg=',timer,timeg
   end if
        
-endif ! myid == 0 .or. local
-
-!~ ! Export ocean data
-!~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  !~ mlodwn(:,:,1:2) = 999.
-  !~ mlodwn(:,:,3:4) = 0.
-  !~ micdwn = 999.
-  !~ micdwn(:,8) = 0.
-  !~ micdwn(:,9) = 0.
-  !~ micdwn(:,10) = 0.
-  !~ ocndep = 0. ! ocean depth
-  !~ ocnheight = 0. ! free surface height
-  !~ call mlosave(mlodwn,ocndep,ocnheight,micdwn,0)
-!~ end if        
+endif ! myid == 0 .or. local     
 
 !**************************************************************
 ! WRITE TIME-INVARIANT VARIABLES
@@ -739,9 +711,6 @@ if ( ktau==0 .or. itype==-1 ) then  ! also for restart file
   call histwrt3(aa,'soilt',idnc,iarch,local,.true.)
   aa(:) = real(ivegt(:))
   call histwrt3(aa,'vegt',idnc,iarch,local,.true.)
-  !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-    !~ call histwrt3(ocndep,'ocndepth',idnc,iarch,local,.true.)
-  !~ end if
 endif ! (ktau==0.or.itype==-1) 
 
 !**************************************************************
@@ -802,30 +771,6 @@ endif    ! (ktau>0.and.itype/=-1)
 ! **************************************************************
 ! WRITE 4D VARIABLES (3D + Time)
 ! **************************************************************
-
-!~ ! ATMOSPHERE DYNAMICS ------------------------------------------
-!~ lwrite = (ktau>0)
-!~ do k = 1,kl
-  !~ tmpry(1:ifull,k)=ps(1:ifull)*dpsldt(1:ifull,k)
-!~ enddo
-!~ lwrite = (mod(ktau,nperavg)==0.or.ktau==ntau).and.(ktau>0)
-
-!~ ! TURBULENT MIXING --------------------------------------------
-!~ if ( nvmix==6 .and. (nextout>=1.or.itype==-1) ) then
-  !~ call histwrt4(tke,'tke',idnc,iarch,local,.true.)
-  !~ call histwrt4(eps,'eps',idnc,iarch,local,.true.)
-!~ end if
-
-!~ ! AEROSOLS ----------------------------------------------------
-!~ if ( abs(iaero)>=2 ) then
-  !~ if ( iaero<=-2 ) then
-    !~ do k = 1,kl
-      !~ qtot(:)   = qg(1:ifull,k)+qlg(1:ifull,k)+qrg(1:ifull,k)+qfg(1:ifull,k)+qsng(1:ifull,k)+qgrg(1:ifull,k)
-      !~ tv(:)     = t(1:ifull,k)*(1.+1.61*qg(1:ifull,k)-qtot(:))   ! virtual temperature
-      !~ rhoa(:,k) = ps(1:ifull)*sig(k)/(rdry*tv(:))                !density of air
-    !~ end do
-  !~ end if
-!~ end if
 
 if ( myid==0 .or. local ) then
   call ccnf_sync(idnc)
