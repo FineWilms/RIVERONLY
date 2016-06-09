@@ -1139,7 +1139,6 @@ if ( nested/=1 ) then
   end if
   if ( abs(nmlo)>=2 .or. nriver==1 ) then
     call gethist1('swater',watbdy)
-    write(6,*) "JWILMS: swater:",watbdy    
   end if
 
   !------------------------------------------------------------------
