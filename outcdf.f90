@@ -340,7 +340,7 @@ if ( myid==0 .or. localhist ) then
     nahead(36) = nrad
     nahead(37) = kuocb
     nahead(38) = nvmix
-    nahead(39) = ntsea
+    !~ nahead(39) = ntsea
     nahead(40) = 0    
     nahead(41) = nextout
 
@@ -579,8 +579,8 @@ if( myid==0 .or. local ) then
     call attrib(idnc,idim(1:2),2,'he',lname,'m',0.,90.e3,0,-1)
     lname = 'Map factor'
     call attrib(idnc,idim(1:2),2,'map',lname,'none',.001,1500.,0,itype)
-    lname = 'Soil type'
-    call attrib(idnc,idim(1:2),2,'soilt',lname,'none',-65.,65.,0,itype)
+    !~ lname = 'Soil type'
+    !~ call attrib(idnc,idim(1:2),2,'soilt',lname,'none',-65.,65.,0,itype)
     !~ lname = 'Vegetation type'
     !~ call attrib(idnc,idim(1:2),2,'vegt',lname,'none',0.,65.,0,itype)
 
@@ -613,18 +613,18 @@ if( myid==0 .or. local ) then
     ! PH - Add wetfac to output for mbase=-19 option
     lname = 'Surface wetness fraction'
     call attrib(idnc,jdim(1:3),3,'wetfac',lname,'none',-6.5,6.5,0,itype)
-    lname = 'Avg soil moisture 1'
-    call attrib(idnc,jdim(1:3),3,'wb1_ave',lname,'m3/m3',0.,1.,0,itype)
-    lname = 'Avg soil moisture 2'
-    call attrib(idnc,jdim(1:3),3,'wb2_ave',lname,'m3/m3',0.,1.,0,itype)
-    lname = 'Avg soil moisture 3'
-    call attrib(idnc,jdim(1:3),3,'wb3_ave',lname,'m3/m3',0.,1.,0,itype)
-    lname = 'Avg soil moisture 4'
-    call attrib(idnc,jdim(1:3),3,'wb4_ave',lname,'m3/m3',0.,1.,0,itype)
-    lname = 'Avg soil moisture 5'
-    call attrib(idnc,jdim(1:3),3,'wb5_ave',lname,'m3/m3',0.,1.,0,itype)
-    lname = 'Avg soil moisture 6'
-    call attrib(idnc,jdim(1:3),3,'wb6_ave',lname,'m3/m3',0.,1.,0,itype)
+    !~ lname = 'Avg soil moisture 1'
+    !~ call attrib(idnc,jdim(1:3),3,'wb1_ave',lname,'m3/m3',0.,1.,0,itype)
+    !~ lname = 'Avg soil moisture 2'
+    !~ call attrib(idnc,jdim(1:3),3,'wb2_ave',lname,'m3/m3',0.,1.,0,itype)
+    !~ lname = 'Avg soil moisture 3'
+    !~ call attrib(idnc,jdim(1:3),3,'wb3_ave',lname,'m3/m3',0.,1.,0,itype)
+    !~ lname = 'Avg soil moisture 4'
+    !~ call attrib(idnc,jdim(1:3),3,'wb4_ave',lname,'m3/m3',0.,1.,0,itype)
+    !~ lname = 'Avg soil moisture 5'
+    !~ call attrib(idnc,jdim(1:3),3,'wb5_ave',lname,'m3/m3',0.,1.,0,itype)
+    !~ lname = 'Avg soil moisture 6'
+    !~ call attrib(idnc,jdim(1:3),3,'wb6_ave',lname,'m3/m3',0.,1.,0,itype)
     
     ! STANDARD 3D VARIABLES -------------------------------------
     if ( myid==0 ) write(6,*) '3d variables'
@@ -707,8 +707,8 @@ if ( ktau==0 .or. itype==-1 ) then  ! also for restart file
   call histwrt3(zs,'zht',idnc,iarch,local,.true.)
   call histwrt3(he,'he',idnc,iarch,local,.true.)
   call histwrt3(em,'map',idnc,iarch,local,.true.)
-  aa(:) = real(isoilm_in(:)) ! use the raw soil data here
-  call histwrt3(aa,'soilt',idnc,iarch,local,.true.)
+  !~ aa(:) = real(isoilm_in(:)) ! use the raw soil data here
+  !~ call histwrt3(aa,'soilt',idnc,iarch,local,.true.)
   !~ aa(:) = real(ivegt(:))
   !~ call histwrt3(aa,'vegt',idnc,iarch,local,.true.)
 endif ! (ktau==0.or.itype==-1) 
@@ -754,19 +754,19 @@ call histwrt3(wetfac,'wetfac',idnc,iarch,local,.true.)
 ! DIAGNOSTICS -------------------------------------------------
 lwrite=(ktau>0)
       
-if ( itype/=-1 ) then  ! these not written to restart file
-  aa=rndmax(:)*86400./dt ! scale up to mm/day
-  call histwrt3(wb_ave(:,1),'wb1_ave',idnc,iarch,local,lave)
-  call histwrt3(wb_ave(:,2),'wb2_ave',idnc,iarch,local,lave)
-  call histwrt3(wb_ave(:,3),'wb3_ave',idnc,iarch,local,lave)
-  call histwrt3(wb_ave(:,4),'wb4_ave',idnc,iarch,local,lave)
-  call histwrt3(wb_ave(:,5),'wb5_ave',idnc,iarch,local,lave)
-  call histwrt3(wb_ave(:,6),'wb6_ave',idnc,iarch,local,lave)
-  lwrite=(ktau>0)
-  if ( nextout>=1 ) then
-    lwrite=(ktau>0)
-  endif   ! nextout>=1
-endif    ! (ktau>0.and.itype/=-1)
+!~ if ( itype/=-1 ) then  ! these not written to restart file
+  !~ aa=rndmax(:)*86400./dt ! scale up to mm/day
+  !~ call histwrt3(wb_ave(:,1),'wb1_ave',idnc,iarch,local,lave)
+  !~ call histwrt3(wb_ave(:,2),'wb2_ave',idnc,iarch,local,lave)
+  !~ call histwrt3(wb_ave(:,3),'wb3_ave',idnc,iarch,local,lave)
+  !~ call histwrt3(wb_ave(:,4),'wb4_ave',idnc,iarch,local,lave)
+  !~ call histwrt3(wb_ave(:,5),'wb5_ave',idnc,iarch,local,lave)
+  !~ call histwrt3(wb_ave(:,6),'wb6_ave',idnc,iarch,local,lave)
+  !~ lwrite=(ktau>0)
+  !~ if ( nextout>=1 ) then
+    !~ lwrite=(ktau>0)
+  !~ endif   ! nextout>=1
+!~ endif    ! (ktau>0.and.itype/=-1)
 
 ! **************************************************************
 ! WRITE 4D VARIABLES (3D + Time)
