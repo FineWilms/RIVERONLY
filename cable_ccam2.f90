@@ -159,25 +159,13 @@ contains
 subroutine sib4
 
 use arrays_m
-!~ use carbpools_m
 use cc_mpi
-!~ use extraout_m
 use infile
 use latlong_m
 use liqwpar_m
-!~ use morepbl_m
-!~ use nharrs_m
-!~ use nsibd_m
-!~ use pbl_m
-!~ use permsurf_m
-!~ use prec_m
-!~ use screen_m
-!~ use sigs_m
 use soil_m
 use soilsnow_m
-!~ use vegpar_m
 use work2_m, only : qsttg,zo,zoh,zoq,theta,vmod,wetfac
-!~ use work3_m, only : ga
 use zenith_m
   
 implicit none
@@ -196,17 +184,6 @@ real(r_2), dimension(mp) :: xksoil
 integer jyear,jmonth,jday,jhour,jmin
 integer k,mins,nb,iq,j
 integer idoy,is,ie
-
-!~ cansto=0.
-!~ fwet=0.
-!~ fnee=0.
-!~ fpn=0.
-!~ frd=0.
-!~ frp=0.
-!~ frpw=0.
-!~ frpr=0.
-!~ frs=0.
-!~ vlai=0.
 
 ! abort calculation if no land points on this processor  
 if (mp<=0) return
