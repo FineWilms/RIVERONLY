@@ -165,9 +165,8 @@ use latlong_m
 use liqwpar_m
 use soil_m
 use soilsnow_m
-use work2_m, only : qsttg,zo,zoh,zoq,theta,vmod,wetfac
-use zenith_m
-  
+use work2_m, only : wetfac
+
 implicit none
 
 include 'newmpar.h'
@@ -176,10 +175,7 @@ include 'dates.h'
 include 'parm.h'
 
 real fjd,r1,dlt,slag,dhr,alp,esatf
-real, dimension(ifull) :: coszro2,taudar2,tmps,atmco2
-real, dimension(ifull) :: tv,swdwn,alb
-real(r_2), dimension(mp) :: xKNlimiting,xkleafcold,xkleafdry
-real(r_2), dimension(mp) :: xkleaf,xnplimit,xNPuptake,xklitter
+real, dimension(ifull) :: tmps, coszro2, taudar2
 real(r_2), dimension(mp) :: xksoil
 integer jyear,jmonth,jday,jhour,jmin
 integer k,mins,nb,iq,j
@@ -190,13 +186,6 @@ if (mp<=0) return
 
 ! calculate zenith angle
 dhr = dt/3600.
-call getzinp(fjd,jyear,jmonth,jday,jhour,jmin,mins)
-fjd = float(mod(mins,525600))/1440.
-call solargh(fjd,bpyear,r1,dlt,alp,slag)
-call zenith(fjd,r1,dlt,slag,rlatt,rlongg,dhr,ifull,coszro2,taudar2)
-
-!~ ! Interpolate LAI.  Also need sigmf for LDR prognostic aerosols.
-!~ call setlai(sigmf,jyear,jmonth,jday,jhour,jmin)
 
 !--------------------------------------------------------------
 ! CABLE
@@ -204,19 +193,12 @@ ktau_gl          = 900
 kend_gl          = 999
 ssnow%owetfac    = ssnow%wetfac
 canopy%oldcansto = canopy%cansto
-!call point2constants(C)
+
 call ruff_resist(veg,rough,ssnow,canopy)
 ssnow%otss_0     = ssnow%otss
 ssnow%otss       = ssnow%tss
 ssnow%owetfac    = ssnow%wetfac
 call soil_snow(dt,soil,ssnow,canopy,met,bal,veg)
-
-      
-! Unpack tiles into grid point averages.
-! Note that albsav and albnirsav are the VIS and NIR albedo output from CABLE to
-! be used by the radiadiation scheme at the next time step.  albvisnir(:,1) and
-! albvisnir(:,2) are the VIS and NIR albedo used by the radiation scheme for the
-! current time step.
 do k=1,ms
   where ( land )
     tgg(:,k)=0.
@@ -248,11 +230,6 @@ do nb=1,maxnb
   ! hydrology
   runoff=runoff+unpack(sv(is:ie)*ssnow%runoff(is:ie)*dt,tmap(:,nb),0.) ! convert mm/s to mm
 end do
-
-! MJT notes - ustar, cduv, fg and eg are passed to the boundary layer turbulence scheme
-! zoh, zoq and zo are passed to the scrnout diagnostics routines
-! rsmin is typically used by CTM
-
 return
 end subroutine sib4
 
