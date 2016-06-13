@@ -174,8 +174,8 @@ include 'const_phys.h'
 include 'dates.h'
 include 'parm.h'
 
-real fjd,r1,dlt,slag,dhr,alp,esatf
-real, dimension(ifull) :: tmps, coszro2, taudar2
+real fjd, dhr
+real, dimension(ifull) :: tmps
 real(r_2), dimension(mp) :: xksoil
 integer jyear,jmonth,jday,jhour,jmin
 integer k,mins,nb,iq,j
@@ -194,7 +194,6 @@ kend_gl          = 999
 ssnow%owetfac    = ssnow%wetfac
 canopy%oldcansto = canopy%cansto
 
-call ruff_resist(veg,rough,ssnow,canopy)
 ssnow%otss_0     = ssnow%otss
 ssnow%otss       = ssnow%tss
 ssnow%owetfac    = ssnow%wetfac
