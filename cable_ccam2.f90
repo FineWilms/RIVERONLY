@@ -222,44 +222,44 @@ call zenith(fjd,r1,dlt,slag,rlatt,rlongg,dhr,ifull,coszro2,taudar2)
 ! calculate CO2 concentration
 !~ call setco2for(atmco2)
 
-! set meteorological forcing
-tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
-                     -qrg(1:ifull,1)-qsng(1:ifull,1)-qgrg(1:ifull,1))
-! swdwn is downwelling shortwave (positive) W/m^2
-albvissav = fbeamvis*albvisdir + (1.-fbeamvis)*albvisdif
-albnirsav = fbeamnir*albnirdir + (1.-fbeamnir)*albnirdif
-alb   = swrsave*albvissav + (1.-swrsave)*albnirsav
-swdwn = sgsave/(1.-alb)
-do nb=1,maxnb
-  is = pind(nb,1)
-  ie = pind(nb,2)
-  met%tk(is:ie)          =pack(theta,  tmap(:,nb))
-  met%ua(is:ie)          =pack(vmod,   tmap(:,nb))
-  met%ca(is:ie)          =pack(atmco2, tmap(:,nb))*1.e-6
-  met%coszen(is:ie)      =pack(coszro2,tmap(:,nb))             ! use instantaneous value
-  met%qv(is:ie)          =pack(qg(1:ifull,1),tmap(:,nb))       ! specific humidity in kg/kg
-  met%pmb(is:ie)         =pack(ps(1:ifull),  tmap(:,nb))*0.01  ! pressure in mb at ref height
-  met%precip(is:ie)      =pack(condx,  tmap(:,nb))             ! in mm not mm/sec
-  met%precip_sn(is:ie)   =pack(conds+condg,  tmap(:,nb))       ! in mm not mm/sec
-  met%hod(is:ie)         =pack(rlongg, tmap(:,nb))*12./pi+real(mtimer+jhour*60+jmin)/60.
+!~ ! set meteorological forcing
+!~ tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
+                     !~ -qrg(1:ifull,1)-qsng(1:ifull,1)-qgrg(1:ifull,1))
+!~ ! swdwn is downwelling shortwave (positive) W/m^2
+!~ albvissav = fbeamvis*albvisdir + (1.-fbeamvis)*albvisdif
+!~ albnirsav = fbeamnir*albnirdir + (1.-fbeamnir)*albnirdif
+!~ alb   = swrsave*albvissav + (1.-swrsave)*albnirsav
+!~ swdwn = sgsave/(1.-alb)
+!~ do nb=1,maxnb
+  !~ is = pind(nb,1)
+  !~ ie = pind(nb,2)
+  !~ met%tk(is:ie)          =pack(theta,  tmap(:,nb))
+  !~ met%ua(is:ie)          =pack(vmod,   tmap(:,nb))
+  !~ met%ca(is:ie)          =pack(atmco2, tmap(:,nb))*1.e-6
+  !~ met%coszen(is:ie)      =pack(coszro2,tmap(:,nb))             ! use instantaneous value
+  !~ met%qv(is:ie)          =pack(qg(1:ifull,1),tmap(:,nb))       ! specific humidity in kg/kg
+  !~ met%pmb(is:ie)         =pack(ps(1:ifull),  tmap(:,nb))*0.01  ! pressure in mb at ref height
+  !~ met%precip(is:ie)      =pack(condx,  tmap(:,nb))             ! in mm not mm/sec
+  !~ met%precip_sn(is:ie)   =pack(conds+condg,  tmap(:,nb))       ! in mm not mm/sec
+  !~ met%hod(is:ie)         =pack(rlongg, tmap(:,nb))*12./pi+real(mtimer+jhour*60+jmin)/60.
   ! swrsave indicates the fraction of net VIS radiation (compared to NIR)
   ! fbeamvis indicates the beam fraction of downwelling direct radiation (compared to diffuse) for VIS
   ! fbeamnir indicates the beam fraction of downwelling direct radiation (compared to diffuse) for NIR
-  met%fsd(is:ie,1)       =pack(swrsave*swdwn,        tmap(:,nb))
-  met%fsd(is:ie,2)       =pack((1.-swrsave)*swdwn,   tmap(:,nb))
-  rad%fbeam(is:ie,1)     =pack(fbeamvis,             tmap(:,nb))
-  rad%fbeam(is:ie,2)     =pack(fbeamnir,             tmap(:,nb))
-  met%fld(is:ie)         =pack(-rgsave,              tmap(:,nb))      ! long wave down (positive) W/m^2
-  rough%za_tq(is:ie)     =pack(bet(1)*tv+phi_nh(:,1),tmap(:,nb))/grav ! reference height
-end do
-met%doy         =fjd
-met%tvair       =met%tk
-met%tvrad       =met%tk
-met%ua          =max(met%ua,c%umin)
-met%coszen      =max(met%coszen,1.e-8) 
-met%hod         =mod(met%hod,24.)
-rough%za_uv     =rough%za_tq
-rad%fbeam(:,3)  =0.            ! dummy for now
+  !~ met%fsd(is:ie,1)       =pack(swrsave*swdwn,        tmap(:,nb))
+  !~ met%fsd(is:ie,2)       =pack((1.-swrsave)*swdwn,   tmap(:,nb))
+  !~ rad%fbeam(is:ie,1)     =pack(fbeamvis,             tmap(:,nb))
+  !~ rad%fbeam(is:ie,2)     =pack(fbeamnir,             tmap(:,nb))
+  !~ met%fld(is:ie)         =pack(-rgsave,              tmap(:,nb))      ! long wave down (positive) W/m^2
+  !~ rough%za_tq(is:ie)     =pack(bet(1)*tv+phi_nh(:,1),tmap(:,nb))/grav ! reference height
+!~ end do
+!~ met%doy         =fjd
+!~ met%tvair       =met%tk
+!~ met%tvrad       =met%tk
+!~ met%ua          =max(met%ua,c%umin)
+!~ met%coszen      =max(met%coszen,1.e-8) 
+!~ met%hod         =mod(met%hod,24.)
+!~ rough%za_uv     =rough%za_tq
+!~ rad%fbeam(:,3)  =0.            ! dummy for now
 !rough%hruff     =max(1.e-6,veg%hc-1.2*ssnow%snowd/max(ssnow%ssdnn,100.))
 
 ! Interpolate LAI.  Also need sigmf for LDR prognostic aerosols.
@@ -297,88 +297,7 @@ rad%trad         = ( (1.-rad%transd)*canopy%tv**4 + rad%transd*ssnow%tss**4 )**0
 !canopy%cdtq =  max( 0.1*canopy%cduv, canopy%cdtq )
 ! MJT suggestion
 canopy%cdtq =  max( 0., canopy%cdtq )
-
-!--------------------------------------------------------------
-! CASA CNP
-!~ WRITE(6,*) 'ICYCLE is ', icycle
-!~ select case (icycle)
-  !~ case(0) ! off
-    !~ call plantcarb(veg,bgc,met,canopy)
-    !~ call soilcarb(soil,ssnow,veg,bgc,met,canopy)
-    !~ call carbon_pl(dt,soil,ssnow,veg,canopy,bgc)
-    !~ canopy%fnpp = -canopy%fpn - canopy%frp
-    !~ canopy%fnee = canopy%fpn + canopy%frs + canopy%frp
-  !~ case(3) ! C+N+P
-    !~ ! update casamet
-    !~ casamet%tairk = casamet%tairk + met%tk
-    !~ casamet%tsoil = casamet%tsoil + ssnow%tgg
-    !~ casamet%moist = casamet%moist + ssnow%wb
-    !~ casaflux%cgpp = casaflux%cgpp + (-canopy%fpn+canopy%frday)*dt
-    !~ casaflux%crmplant(:,leaf) = casaflux%crmplant(:,leaf) + canopy%frday*dt
-    !~ ! run CASA CNP once per day
-    !~ if (mod(ktau,nperday)==0) then
-      !~ casamet%tairk=casamet%tairk/real(nperday)
-      !~ casamet%tsoil=casamet%tsoil/real(nperday)
-      !~ casamet%moist=casamet%moist/real(nperday)
-      !~ xKNlimiting = 1.
-      !~ idoy=nint(fjd)
-      !~ call phenology(idoy,veg,phen)
-      !~ call avgsoil(veg,soil,casamet)
-      !~ call casa_rplant(veg,casabiome,casapool,casaflux,casamet)
-      !~ call casa_allocation(veg,soil,casabiome,casaflux,casamet,phen)
-      !~ call casa_xrateplant(xkleafcold,xkleafdry,xkleaf,veg,casabiome, &
-                           !~ casamet,phen)
-      !~ call casa_coeffplant(xkleafcold,xkleafdry,xkleaf,veg,casabiome,casapool, &
-                           !~ casaflux,casamet)
-      !~ call casa_xnp(xnplimit,xNPuptake,veg,casabiome,casapool,casaflux,casamet)
-      !~ call casa_xratesoil(xklitter,xksoil,veg,soil,casamet)
-      !~ call casa_coeffsoil(xklitter,xksoil,veg,soil,casabiome,casaflux,casamet)
-      !~ call casa_xkN(xkNlimiting,casapool,casaflux,casamet,veg)
-      !~ do j=1,mlitter
-        !~ casaflux%klitter(:,j) = casaflux%klitter(:,j)*xkNlimiting
-      !~ end do
-      !~ call casa_nuptake(veg,xkNlimiting,casabiome,casapool,casaflux,casamet)
-      !~ call casa_puptake(veg,xkNlimiting,casabiome,casapool,casaflux,casamet)
-      !~ call casa_delplant(veg,casabiome,casapool,casaflux,casamet)
-      !~ call casa_delsoil(veg,casapool,casaflux,casamet)
-      !~ call casa_cnpcycle(veg,casabiome,casapool,casaflux,casamet)
-      !~ call casa_cnpbal(casapool,casaflux,casabal)
-      !~ casabal%FCgppyear = casabal%FCgppyear + casaflux%Cgpp   * deltpool
-      !~ casabal%FCrpyear  = casabal%FCrpyear  + casaflux%Crp    * deltpool
-      !~ casabal%FCnppyear = casabal%FCnppyear + casaflux%Cnpp   * deltpool
-      !~ casabal%FCrsyear  = casabal%FCrsyear  + casaflux%Crsoil * deltpool
-      !~ casabal%FCneeyear = casabal%FCneeyear + (casaflux%Cnpp-casaflux%Crsoil) * deltpool
-      !~ casabal%FNdepyear   = casabal%FNdepyear   + casaflux%Nmindep    * deltpool
-      !~ casabal%FNfixyear   = casabal%FNfixyear   + casaflux%Nminfix    * deltpool
-      !~ casabal%FNsnetyear  = casabal%FNsnetyear  + casaflux%Nsnet      * deltpool
-      !~ casabal%FNupyear    = casabal%FNupyear    + casaflux%Nminuptake * deltpool
-      !~ casabal%FNleachyear = casabal%FNleachyear + casaflux%Nminleach  * deltpool
-      !~ casabal%FNlossyear  = casabal%FNlossyear  + casaflux%Nminloss   * deltpool
-      !~ casabal%FPweayear   = casabal%FPweayear   + casaflux%Pwea       * deltpool
-      !~ casabal%FPdustyear  = casabal%FPdustyear  + casaflux%Pdep       * deltpool
-      !~ casabal%FPsnetyear  = casabal%FPsnetyear  + casaflux%Psnet      * deltpool
-      !~ casabal%FPupyear    = casabal%FPupyear    + casaflux%Plabuptake * deltpool
-      !~ casabal%FPleachyear = casabal%FPleachyear + casaflux%Pleach     * deltpool  
-      !~ casabal%FPlossyear  = casabal%FPlossyear  + casaflux%Ploss      * deltpool 
-
-      !~ ! reset casamet for next call
-      !~ casamet%tairk = 0.
-      !~ casamet%tsoil = 0.
-      !~ casamet%moist = 0.
-      !~ casaflux%cgpp = 0.
-      !~ casaflux%crmplant(:,leaf) = 0.
-    !~ end if
-    !~ canopy%frp  = real((casaflux%crmplant(:,wood)+casaflux%crmplant(:,xroot)+casaflux%crgplant(:))/86400._8)
-    !~ canopy%frs  = real(casaflux%Crsoil(:)/86400._8)
-    !~ canopy%frpw = real(casaflux%crmplant(:,wood)/86400._8)
-    !~ canopy%frpr = real(casaflux%crmplant(:,xroot)/86400._8)
-    !~ ! Set net ecosystem exchange after adjustments to frs:
-    !~ canopy%fnee = real((casaflux%Crsoil-casaflux%cnpp+casaflux%clabloss)/86400._8)
-  !~ case default
-    !~ write(6,*) "ERROR: Unknown icycle ",icycle
-    !~ stop
-!~ end select  
-  
+ 
 sum_flux%sumpn  = sum_flux%sumpn  + canopy%fpn*dt
 sum_flux%sumrd  = sum_flux%sumrd  + canopy%frday*dt
 sum_flux%dsumpn = sum_flux%dsumpn + canopy%fpn*dt
