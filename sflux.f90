@@ -35,7 +35,7 @@ use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
 use extraout_m                     ! Additional diagnostics
 use gdrag_m                        ! Gravity wave drag
-use liqwpar_m                      ! Cloud water mixing ratios
+!~ use liqwpar_m                      ! Cloud water mixing ratios
 use map_m                          ! Grid map arrays
 use mlo                            ! Ocean physics and prognostic arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
@@ -142,8 +142,8 @@ fm=0.          ! dummy value
 !      *****  check next comment
 !       sflux called at beginning of time loop, hence savu, savv
 
-tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
-                     -qrg(1:ifull,1)-qsng(1:ifull,1)-qgrg(1:ifull,1))
+!~ tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
+                     !~ -qrg(1:ifull,1)-qsng(1:ifull,1)-qgrg(1:ifull,1))
 azmin(:) = (bet(1)*tv(:)+phi_nh(:,1))/grav
 srcp = sig(1)**(rdry/cp)
 ga(:) = 0.              !  for ocean points in ga_ave diagnostic
