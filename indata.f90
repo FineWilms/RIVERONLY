@@ -50,7 +50,7 @@ use cc_mpi                                       ! CC MPI routines
 use diag_m                                       ! Diagnostic routines
 use epst_m                                       ! Off-centre terms
 use extraout_m                                   ! Additional diagnostics
-use gdrag_m                                      ! Gravity wave drag
+!~ use gdrag_m                                      ! Gravity wave drag
 use indices_m                                    ! Grid index arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
@@ -195,7 +195,7 @@ ivegt(:)=1
 isoilm(:)=1
 zs(:)=0.
 zsmask(:)=0.
-he(:)=0.         
+!~ he(:)=0.         
 land(:)=.false.
 kdate=kdate_s
 ktime=ktime_s
@@ -361,8 +361,8 @@ if ( io_in<=4 .and. nhstest>=0 ) then
   end if
   zs(1:ifull)     = duma(:,1)
   zsmask(1:ifull) = duma(:,2)
-  he(1:ifull)     = duma(:,3)
-  if ( mydiag ) write(6,*) 'he read in from topofile',he(idjd)
+  !~ he(1:ifull)     = duma(:,3)
+  !~ if ( mydiag ) write(6,*) 'he read in from topofile',he(idjd)
 
   ! special options for orography         
   !~ if ( nspecial==2 ) then  ! to flood Madagascar, or similar 
@@ -404,13 +404,13 @@ if ( io_in<=4 .and. nhstest>=0 ) then
 else                   ! aquaplanet test -1 to -8 or -22
   zs(:)=0.             ! or pgb from June 2003
   zsmask(:)=0.
-  he(:)=0.         
+  !~ he(:)=0.         
   land(:)=.false.
 endif  ! (io_in<=4.and.nhstest>=0)  ..else..
 
 if ( mydiag ) then
   write(6,"('zs#_topof ',9f8.1)") diagvals(zs)
-  write(6,"('he#_topof ',9f8.1)") diagvals(he)
+  !~ write(6,"('he#_topof ',9f8.1)") diagvals(he)
   write(6,"('zs#_mask ',9f8.2)") diagvals(zsmask)
 end if
 
@@ -1757,26 +1757,26 @@ ps(1:ifull)=1.e5*exp(psl(1:ifull))
 gwdfac=.01*lgwd       ! most runs used .02 up to fri  10-10-1997
 hefact=.1*abs(ngwd)   ! hal used hefact=1. (equiv to ngwd=10)
 if(myid==0)write(6,*)'hefact,helim,gwdfac: ',hefact,helim,gwdfac
-helo(:)=0.
-if(lgwd>0)then
-  do iq=1,ifull
-    if(land(iq))then
-      if(he(iq)==0.)write(6,*)'zero he over land for iq = ',iq
-      aa(iq)=min(gwdfac*max(he(iq),.01),.8*zmin)   ! already in meters
+!~ helo(:)=0.
+!~ if(lgwd>0)then
+  !~ do iq=1,ifull
+    !~ if(land(iq))then
+      !~ if(he(iq)==0.)write(6,*)'zero he over land for iq = ',iq
+      !~ aa(iq)=min(gwdfac*max(he(iq),.01),.8*zmin)   ! already in meters
       ! replace he by square of corresponding af value
-      helo(iq)=( .4/log(zmin/aa(iq)) )**2
-    endif
-  enddo   ! iq loop
-  if(mydiag)write(6,*)'for lgwd>0, typical zo#: ', diagvals(aa)
-end if ! lgwd>0
-if (ngwd/=0) then
+      !~ helo(iq)=( .4/log(zmin/aa(iq)) )**2
+    !~ endif
+  !~ enddo   ! iq loop
+  !~ if(mydiag)write(6,*)'for lgwd>0, typical zo#: ', diagvals(aa)
+!~ end if ! lgwd>0
+!~ if (ngwd/=0) then
 !****    limit launching height : Palmer et al use limit on variance of
 !****    (400 m)**2. we use launching height = std dev. we limit
 !****    launching height to  2*400=800 m. this may be a bit severe.
 !****    according to Palmer this prevents 2-grid noise at steep edge of
 !****    himalayas etc.
-  he(1:ifull)=min(hefact*he(1:ifull),helim)
-endif     ! (ngwd.ne.0)
+  !~ he(1:ifull)=min(hefact*he(1:ifull),helim)
+!~ endif     ! (ngwd.ne.0)
 
 
 !--------------------------------------------------------------
@@ -2002,11 +2002,11 @@ if(nstn>0)then
       iveg=ivegt(iq)
       isoil = isoilm(iq)
       wet3=(wb(iq,3)-swilt(isoil))/(sfc(isoil)-swilt(isoil))
-      write(6,98)iunp(nn),istn(nn),jstn(nn),iq,slon(nn),slat(nn),   &
-                 land(iq),rlongg(iq)*180/pi,rlatt(iq)*180/pi,       &
-                 isoilm(iq),ivegt(iq),zs(iq)/grav,albvisnir(iq,1),  &
-                 wb(iq,3),wet3,vlai(iq),zolnd(iq),he(iq),           &
-                 myid             
+      !~ write(6,98)iunp(nn),istn(nn),jstn(nn),iq,slon(nn),slat(nn),   &
+                 !~ land(iq),rlongg(iq)*180/pi,rlatt(iq)*180/pi,       &
+                 !~ isoilm(iq),ivegt(iq),zs(iq)/grav,albvisnir(iq,1),  &
+                 !~ wb(iq,3),wet3,vlai(iq),zolnd(iq),he(iq),           &
+                 !~ myid             
     end if               ! mystn
 98  format(i3,i4,i5,i6,2f7.2 ,l3,2f7.2, i3,i6,f7.1,f5.2,4f5.2,f7.1,i4)
     ! Put a barrier here to force stations to be printed in the right order

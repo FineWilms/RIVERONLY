@@ -411,7 +411,7 @@ use cc_mpi                                       ! CC MPI routines
 use cfrac_m                                      ! Cloud fraction
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
-use gdrag_m                                      ! Gravity wave drag
+!~ use gdrag_m                                      ! Gravity wave drag
 use histave_m                                    ! Time average arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
@@ -574,8 +574,8 @@ if( myid==0 .or. local ) then
 !   For time invariant surface fields
     lname = 'Surface geopotential'
     call attrib(idnc,idim(1:2),2,'zht',lname,'m2/s2',-1000.,90.e3,0,-1)
-    lname = 'Std Dev of surface height'
-    call attrib(idnc,idim(1:2),2,'he',lname,'m',0.,90.e3,0,-1)
+    !~ lname = 'Std Dev of surface height'
+    !~ call attrib(idnc,idim(1:2),2,'he',lname,'m',0.,90.e3,0,-1)
     lname = 'Map factor'
     call attrib(idnc,idim(1:2),2,'map',lname,'none',.001,1500.,0,itype)
 
@@ -687,7 +687,7 @@ endif ! myid == 0 .or. local
 
 if ( ktau==0 .or. itype==-1 ) then  ! also for restart file
   call histwrt3(zs,'zht',idnc,iarch,local,.true.)
-  call histwrt3(he,'he',idnc,iarch,local,.true.)
+  !~ call histwrt3(he,'he',idnc,iarch,local,.true.)
   call histwrt3(em,'map',idnc,iarch,local,.true.)
 endif ! (ktau==0.or.itype==-1) 
 
