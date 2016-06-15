@@ -36,9 +36,7 @@ use bigxy4_m                               ! Grid interpolation
 use carbpools_m, only : carbpools_init   & ! Carbon pools
     ,fpn,frs,frp
 use cc_mpi                                 ! CC MPI routines
-!~ use cfrac_m                                ! Cloud fraction
 use diag_m                                 ! Diagnostic routines
-!~ use dpsdt_m                                ! Vertical velocity
 use epst_m                                 ! Off-centre terms
 use extraout_m                             ! Additional diagnostics
 use gdrag_m, only : gdrag_init             ! Gravity wave drag
@@ -533,9 +531,9 @@ call histave_init(ifull,iextra,kl,ms)
 !~ call liqwpar_init(ifull,iextra,kl)
 call morepbl_init(ifull,iextra,kl)
 !~ call nharrs_init(ifull,iextra,kl)
-call nlin_init(ifull,iextra,kl)
+!~ call nlin_init(ifull,iextra,kl)
 call nsibd_init(ifull,iextra,kl,nsib)
-call parmhdff_init(ifull,iextra,kl)
+!~ call parmhdff_init(ifull,iextra,kl)
 call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
 call prec_init(ifull,iextra,kl)
