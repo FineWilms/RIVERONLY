@@ -1286,32 +1286,6 @@ if ( nested/=1 ) then
     if ( all(atebdwn(:,28)==0.) ) atebdwn(:,28)=0.85
   end if
 
-  !~ ! -----------------------------------------------------------------
-  !~ ! Read cloud fields
-  !~ if ( nested==0 .and. ldr/=0 ) then
-    !~ call gethist4a('qfg',qfg,5)               ! CLOUD FROZEN WATER
-    !~ call gethist4a('qlg',qlg,5)               ! CLOUD LIQUID WATER
-    !~ if ( ncloud>=2 ) then
-      !~ call gethist4a('qrg',qrg,5)             ! RAIN
-    !~ end if
-    !~ if ( ncloud>=3 ) then
-      !~ call gethist4a('qsng',qsng,5)           ! SNOW
-      !~ call gethist4a('qgrg',qgrg,5)           ! GRAUPEL
-    !~ end if
-    !~ call gethist4a('cfrac',cfrac,5)           ! CLOUD FRACTION
-    !~ if ( ncloud>=2 ) then
-      !~ call gethist4a('rfrac',rfrac,5)         ! RAIN FRACTION
-    !~ end if
-    !~ if ( ncloud>=3 ) then
-      !~ call gethist4a('sfrac',sfrac,5)         ! SNOW FRACTION
-      !~ call gethist4a('gfrac',gfrac,5)         ! GRAUPEL FRACTION
-    !~ end if
-    !~ if ( ncloud >= 4 ) then
-      !~ call gethist4a('stratcf',stratcloud,5)  ! STRAT CLOUD FRACTION
-      !~ call gethist4a('strat_nt',nettend,5)    ! STRAT NET TENDENCY
-    !~ end if ! (ncloud>=4)
-  !~ end if   ! (nested==0)
-
   !------------------------------------------------------------------
   ! TKE-eps data
   if ( nvmix==6 .and. nested==0 ) then
@@ -1321,25 +1295,10 @@ if ( nested/=1 ) then
     if  (all(eps(1:ifull,:)==0.) ) eps(1:ifull,:)=1.E-7
   end if
 
-  !~ !------------------------------------------------------------------
-  !~ ! Tracer data
-  !~ if ( ngas>0 ) then              
-    !~ do igas=1,ngas              
-      !~ write(trnum,'(i3.3)') igas
-      !~ call gethist4a('tr'//trnum,tr(:,:,igas),7)
-    !~ enddo                       
-  !~ endif                         
-
   !------------------------------------------------------------------
   ! Aerosol data ( non-nudged or diagnostic )
   if ( abs(iaero)>=2 ) then
-    !~ call gethist4a('seasalt1',ssn(:,:,1),5)
-    !~ call gethist4a('seasalt2',ssn(:,:,2),5)
-    ! Factor 1.e3 to convert to g/m2, x 3 to get sulfate from sulfur
     so4t(:)=0.
-    !~ do k=1,kl
-      !~ so4t(:)=so4t(:)+3.e3*xtgdwn(:,k,3)*(-1.e5*exp(psl(1:ifull))*dsig(k))/grav
-    !~ enddo
   end if
   
   ! -----------------------------------------------------------------
@@ -1406,22 +1365,6 @@ if ( nested/=1 ) then
       call histrd4(iarchi,ier,'savv2',ik,kk,savv2,ifull)
     end if
 
-    ! OCEAN DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-      !~ oldu1=0.
-      !~ oldu2=0.
-      !~ oldv1=0.
-      !~ oldv2=0.
-      !~ ipice=0.
-      !~ if ( lrestart ) then
-        !~ call histrd4(iarchi,ier,'oldu1',ik,ok,oldu1,ifull)
-        !~ call histrd4(iarchi,ier,'oldv1',ik,ok,oldv1,ifull)
-        !~ call histrd4(iarchi,ier,'oldu2',ik,ok,oldu2,ifull)
-        !~ call histrd4(iarchi,ier,'oldv2',ik,ok,oldv2,ifull)
-        !~ call histrd1(iarchi,ier,'ipice',ik,ipice,ifull)
-      !~ end if
-    !~ end if
-       
   end if ! (nested==0)
 
   ! -----------------------------------------------------------------

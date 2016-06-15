@@ -1566,25 +1566,25 @@ if ( mydiag ) then
   write(6,*)'with zs: ',zs(idjd),zs(ie(idjd)),zs(iw(idjd)),zs(in(idjd)),zs(is(idjd))
 end if
 
-! off-centre terms
-if(abs(epsp)>1.)then   ! e.g. 20. gives epsmax=.2 for del_orog=600 m
-  epsmax=abs(epsp)/100.
-  do iq=1,ifull      ! sliding epsf to epsmax
-    zsdiff=max(abs(zs(ie(iq))-zs(iq)),abs(zs(iw(iq))-zs(iq)),abs(zs(in(iq))-zs(iq)),abs(zs(is(iq))-zs(iq)) )
-    epst(iq)=max(epsf,min(epsmax*zsdiff/(600.*grav),epsmax))
-  enddo
-  epsf=0.
-else
-  epst(1:ifull)=abs(epsp)
-endif  ! (abs(epsp)>1.)
-if(abs(epsp)>99.)then  ! e.g. 200. to give epsmax=.2 for orog=600 m
-  epsmax=abs(epsp)/1000.
-  do iq=1,ifull
-    zsdiff=max(zs(iq)-zs(ie(iq)),zs(iq)-zs(iw(iq)),zs(iq)-zs(in(iq)),zs(iq)-zs(is(iq)),0. )
-    epst(iq)=min(epsmax*zsdiff/(600.*grav),epsmax) ! sliding 0. to epsmax
-  enddo
-endif  ! (abs(epsp)>99.)
-if(epsp>1..and.epsp<2.)epst(:)=epsp-1.
+!~ ! off-centre terms
+!~ if(abs(epsp)>1.)then   ! e.g. 20. gives epsmax=.2 for del_orog=600 m
+  !~ epsmax=abs(epsp)/100.
+  !~ do iq=1,ifull      ! sliding epsf to epsmax
+    !~ zsdiff=max(abs(zs(ie(iq))-zs(iq)),abs(zs(iw(iq))-zs(iq)),abs(zs(in(iq))-zs(iq)),abs(zs(is(iq))-zs(iq)) )
+    !~ epst(iq)=max(epsf,min(epsmax*zsdiff/(600.*grav),epsmax))
+  !~ enddo
+  !~ epsf=0.
+!~ else
+  !~ epst(1:ifull)=abs(epsp)
+!~ endif  ! (abs(epsp)>1.)
+!~ if(abs(epsp)>99.)then  ! e.g. 200. to give epsmax=.2 for orog=600 m
+  !~ epsmax=abs(epsp)/1000.
+  !~ do iq=1,ifull
+    !~ zsdiff=max(zs(iq)-zs(ie(iq)),zs(iq)-zs(iw(iq)),zs(iq)-zs(in(iq)),zs(iq)-zs(is(iq)),0. )
+    !~ epst(iq)=min(epsmax*zsdiff/(600.*grav),epsmax) ! sliding 0. to epsmax
+  !~ enddo
+!~ endif  ! (abs(epsp)>99.)
+!~ if(epsp>1..and.epsp<2.)epst(:)=epsp-1.
 
 ! saved albedo
 albvissav(:)=albvisnir(:,1) ! VIS
