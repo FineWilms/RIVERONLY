@@ -179,320 +179,6 @@ if ( ntsur/=7 ) vmod(:) = vmag(:)      ! gives usual way
 !--------------------------------------------------------------
 call START_LOG(sfluxwater_begin)
 if (nmlo==0) then                                                                                ! sea
-  !~ if(ntest==2.and.mydiag)write(6,*) 'before sea loop'                                            ! sea
-  !~ ! from June '03 use basic sea temp from tgg1 (so leads is sensible)                            ! sea
-  !~ ! all sea points in this loop; also open water of leads                                        ! sea
-  !~ if(charnock>0.)then                                                                            ! sea
-    !~ charnck(:)=charnock                                                                          ! sea
-  !~ elseif(charnock<-1.)then  ! zo like Moon (2004)                                                ! sea
-    !~ charnck(:)=max(.0000386*u10(:),.000085*u10(:)-.00058)                                        ! sea
-  !~ else                      ! like Makin (2002)                                                  ! sea
-    !~ charnck(:)=.008+3.e-4*(u10(:)-9.)**2/(1.+(.006+.00008*u10(:))*u10(:)**2)                     ! sea
-  !~ endif                                                                                          ! sea
-  !~ do iq=1,ifull                                                                                  ! sea
-    !~ if(.not.land(iq))then                                                                        ! sea
-      !~ wetfac(iq)=1.                                                                              ! sea
-      !~ ! tpan holds effective sea for this loop                                                   ! sea
-      !~ if(ntss_sh==0)then                                                                         ! sea
-        !~ dtsol=.01*sgsave(iq)/(1.+.25*vmod(iq)**2)   ! solar heating                              ! sea
-        !~ tpan(iq)=tgg(iq,1)+tss_sh*min(dtsol,8.)     ! of ssts                                    ! sea
-      !~ elseif(ntss_sh==3)then                                                                     ! sea
-        !~ dtsol=tss_sh*.01*sgsave(iq)/(1.+.035*vmod(iq)**3) ! solar heating                        ! sea
-        !~ tpan(iq)=tgg(iq,1)+min(dtsol,8.)                  ! of ssts                              ! sea
-      !~ elseif(ntss_sh==4)then                                                                     ! sea
-        !~ dtsol=tss_sh*.01*sgsave(iq)/(1.+vmod(iq)**4/81.) ! solar heating                         ! sea
-        !~ tpan(iq)=tgg(iq,1)+min(dtsol,8.)                 ! of ssts                               ! sea
-      !~ endif   ! (ntss_sh==0) .. else ..                                                          ! sea
-      !~ if(nplens/=0)then                                                                          ! sea
-        !~ ! calculate running total (over last 24 h) of daily precip in mm                         ! sea
-        !~ plens(iq)=(1.-dt/86400.)*plens(iq)+condx(iq)  ! in mm/day                                ! sea
-        !~ ! scale so that nplens m/s wind for 1/2 hr reduces effect by 1/1.2                       ! sea
-        !~ plens(iq)=plens(iq)/(1.+vmod(iq)*dt*.2/max(nplens*1800.,1.))                             ! sea
-        !~ ! produce a cooling of 4 K for an effective plens of 10 mm/day                           ! sea
-        !~ tpan(iq)=tpan(iq)-min(.4*plens(iq) , 6.)                                                 ! sea
-      !~ endif   !  (nplens/=0)                                                                     ! sea
-      !~ if(ntsea==1.and.condx(iq)>.1)tpan(iq)=t(iq,2)                                              ! sea
-      !~ if(ntsea==2.and.condx(iq)>.1)tpan(iq)=t(iq,1)                                              ! sea
-      !~ if(ntsea==3.and.condx(iq)>.1)tpan(iq)=.5*(t(iq,2)+tgg(iq,1))                               ! sea
-      !~ if(ntsea==4.and.condx(iq)>.1)tpan(iq)=.5*(t(iq,1)+tgg(iq,1))                               ! sea
-    !~ endif  ! (.not.land(iq))                                                                     ! sea
-  !~ enddo   ! iq loop                                                                              ! sea
-                                                                                                 ! sea
-  !~ ! here calculate fluxes for sea point, and nominal pan points                                  ! sea
-  !~ afrootpan=vkar/log(zmin/panzo)                                                                 ! sea
-  !~ do iq=1,ifull                                                                                  ! sea
-    !~ ! drag coefficients  for momentum cduv                                                       ! sea
-    !~ ! for heat and moisture  cdtq                                                                ! sea
-    !~ es = establ(tpan(iq))                                                                        ! sea
-    !~ constz=ps(iq)-es                                                                             ! sea
-    !~ qsttg(iq)= .98*.622*es/constz  ! with Zeng 1998 for sea water                                ! sea
-    !~ xx=grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))                                                      ! sea
-    !~ ri(iq)=min(xx/vmag(iq)**2 , ri_max)                                                          ! sea
-    !~ ! this is in-line ocenzo using latest coefficient, i.e. .018                                 ! sea
-    !~ consea=vmod(iq)*charnck(iq)/grav  ! usually charnock=.018                                    ! sea
-    !~ if(land(iq))then                                                                             ! sea
-      !~ zo(iq)=panzo                                                                               ! sea
-      !~ af(iq)=afrootpan**2                                                                        ! sea
-    !~ else                                                                                         ! sea
-      !~ if(charnock<0.)then  ! Moon (2004) over sea                                                ! sea
-        !~ zo(iq)=charnck(iq)                                                                       ! sea
-        !~ afroot=vkar/log(zmin/zo(iq))                                                             ! sea
-        !~ af(iq)=afroot**2                                                                         ! sea
-      !~ else            ! usual charnock method over sea                                           ! sea
-        !~ zo(iq)=.001    ! .0005 better first guess                                                ! sea
-        !~ if(ri(iq)>0.)then             ! stable sea points                                        ! sea
-          !~ fm=vmod(iq) /(1.+bprm*ri(iq))**2 ! N.B. this is vmod*fm                                ! sea
-          !~ con=consea*fm                                                                          ! sea
-          !~ do it=1,3                                                                              ! sea
-            !~ afroot=vkar/log(zmin/zo(iq))                                                         ! sea
-            !~ af(iq)=afroot**2                                                                     ! sea
-            !~ daf=2.*af(iq)*afroot/(vkar*zo(iq))                                                   ! sea
-            !~ zo(iq)=max(1.5e-5,zo(iq)-(zo(iq)-con*af(iq))/(1.-con*daf))                           ! sea
-            !~ zo(iq)=min(zo(iq),9.) ! JLM fix                                                      ! sea
-          !~ enddo    ! it=1,3                                                                      ! sea
-          !~ afroot=vkar/log(zmin/zo(iq))                                                           ! sea
-          !~ af(iq)=afroot**2                                                                       ! sea
-        !~ else                        ! unstable sea points                                        ! sea
-          !~ do it=1,3                                                                              ! sea
-            !~ afroot=vkar/log(zmin/zo(iq))                                                         ! sea
-            !~ af(iq)=afroot**2                                                                     ! sea
-            !~ daf=2.*af(iq)*afroot/(vkar*zo(iq))                                                   ! sea
-            !~ con1=cms*2.*bprm*sqrt(-ri(iq)*zmin/zo(iq))                                           ! sea
-            !~ den=1.+af(iq)*con1                                                                   ! sea
-            !~ dden=con1*(daf-.5*af(iq)/zo(iq))                                                     ! sea
-            !~ fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/den                                             ! sea
-            !~ dfm=2.*bprm*ri(iq)*dden/den**2                                                       ! sea
-            !~ zo(iq)=max(1.5e-5,zo(iq)-(zo(iq)-consea*af(iq)*fm)/(1.-consea*(daf*fm+af(iq)*dfm)))  ! sea
-            !~ zo(iq)=min(zo(iq),6.) ! JLM fix                                                      ! sea
-          !~ enddo  ! it=1,3                                                                        ! sea
-        !~ endif    ! (xx>0.) .. else..                                                             ! sea
-      !~ endif     ! (charnock<-1.) .. else ..                                                      ! sea
-    !~ endif      ! (land(iq)) .. else ..                                                           ! sea
-    !~ aft(iq)=chnsea                                                                               ! sea
-  !~ enddo  ! iq loop                                                                               ! sea
-                                                                                                 ! sea
-  !~ if(newztsea==0)then ! 0 for original, 1 for different zt over sea                              ! sea
-    !~ ! enhanced formula used in Feb '92 Air-Sea conference follows:                               ! sea
-    !~ ! factch=sqrt(zo*exp(vkar*vkar/(chnsea*log(zmin/zo)))/zmin)                                  ! sea
-    !~ where (.not.land)                                                                            ! sea
-      !~ factch(:)=1. ! factch is sqrt(zo/zt) only for use in unstable fh                           ! sea
-    !~ end where                                                                                    ! sea
-  !~ else                                                                                           ! sea
-    !~ where (.not.land)                                                                            ! sea
-      !~ factch(:)=sqrt(zo(:)*ztv) ! for use in unstable fh                                         ! sea
-    !~ end where                                                                                    ! sea
-  !~ endif  ! (newztsea==0)                                                                         ! sea
-                                                                                                 ! sea
-  !~ do iq=1,ifull ! done for all points; overwritten later for land                                ! sea
-    !~ ! Having settled on zo & af now do actual fh and fm calcs                                    ! sea
-    !~ if(ri(iq)>0.)then                                                                            ! sea
-      !~ fm=vmod(iq)/(1.+bprm*ri(iq))**2  ! no zo contrib for stable                                ! sea
-      !~ fh(iq)=fm                                                                                  ! sea
-    !~ else        ! ri is -ve                                                                      ! sea
-      !~ root=sqrt(-ri(iq)*zmin/zo(iq))                                                             ! sea
-      !~ ! First do momentum                                                                        ! sea
-      !~ denma=1.+cms*2.*bprm*af(iq)*root                                                           ! sea
-      !~ fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denma                                                 ! sea
-      !~ ! n.b. fm denotes ustar**2/(vmod(iq)*af)                                                   ! sea
-      !~ ! Now heat ; allow for smaller zo via aft and factch                                       ! sea
-      !~ ! N.B. for newztsea=1, zo contrib cancels in factch*root,                                  ! sea
-      !~ ! so eg (& epan) and fg  (also aft) then indept of zo                                      ! sea
-      !~ denha=1.+chs*2.*bprm*factch(iq)*aft(iq)*root                                               ! sea
-      !~ fh(iq)=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denha                                             ! sea
-    !~ endif                                                                                        ! sea
-                                                                                                 ! sea
-    !~ conh=rho(iq)*aft(iq)*cp                                                                      ! sea
-    !~ conw=rho(iq)*aft(iq)*hl                                                                      ! sea
-    !~ fg(iq)=conh*fh(iq)*(tpan(iq)-theta(iq))                                                      ! sea
-    !~ eg(iq)=conw*fh(iq)*(qsttg(iq)-qg(iq,1))                                                      ! sea
-    !~ rnet(iq)=sgsave(iq)-rgsave(iq)-stefbo*tpan(iq)**4                                            ! sea
-    !~ zoh(iq)=zo(iq)/(factch(iq)*factch(iq))                                                       ! sea
-    !~ zoq(iq)=zoh(iq)                                                                              ! sea
-    !~ ! cduv is now drag coeff *vmod                                                               ! sea
-    !~ cduv(iq) =af(iq)*fm                                                                          ! sea
-    !~ cdtq(iq) =aft(iq)*fh(iq)                                                                     ! sea
-    !~ ustar(iq) = sqrt(vmod(iq)*cduv(iq))                                                          ! sea
-    !~ ! Surface stresses taux, tauy: diagnostic only - unstaggered now                             ! sea
-    !~ taux(iq)=rho(iq)*cduv(iq)*u(iq,1)                                                            ! sea
-    !~ tauy(iq)=rho(iq)*cduv(iq)*v(iq,1)                                                            ! sea
-    ! note that iq==idjd  can only be true on the correct processor                              ! sea
-    !~ if(ntest==1.and.iq==idjd.and.mydiag)then                                                     ! sea
-      !~ write(6,*) 'in sea-type loop for iq,idjd: ',iq,idjd                                        ! sea
-      !~ write(6,*) 'zmin,zo,factch ',zmin,zo(iq),factch(iq)                                        ! sea
-      !~ write(6,*) 'ri,ustar,es ',ri(iq),ustar(iq),es                                              ! sea
-      !~ write(6,*) 'af,aft ',af(iq),aft(iq)                                                        ! sea
-      !~ write(6,*) 'tpan,tss,theta ',tpan(iq),tss(iq),theta(iq)                                    ! sea
-      !~ write(6,*) 'chnsea,rho,t1 ',chnsea,rho(iq),t(iq,1)                                         ! sea
-      !~ write(6,*) 'fm,fh,conh ',fm,fh(iq),conh                                                    ! sea
-      !~ write(6,*) 'vmod,cduv,fg ',vmod(iq),cduv(iq),fg(iq)                                        ! sea
-    !~ endif                                                                                        ! sea
-  !~ enddo     ! iq loop                                                                            ! sea
-  !~ epot(:) = eg(:)                                                                                ! sea
-  !~ epan(:) = eg(:)                                                                                ! sea
-  !~ ! section to update pan temperatures                                                           ! sea
-  do iq=1,ifull                                                                                  ! sea
-    if(land(iq))then                                                                             ! sea
-      rgg(iq)=5.67e-8*tpan(iq)**4                                                                ! sea
-      ! assume gflux = 0                                                                         ! sea
-      ! note pan depth=.254 m, spec heat water=4186 joule/kg K                                   ! sea
-      ! and change in heat supplied=spec_heatxmassxdelta_T                                       ! sea
-      ga(iq)=-slwa(iq)-rgg(iq)-panfg*fg(iq)                                                      ! sea
-      tpan(iq)=tpan(iq)+ga(iq)*dt/(4186.*.254*1000.)                                             ! sea
-    else                                                                                         ! sea
-      sno(iq)=sno(iq)+conds(iq)                                                                  ! sea
-      grpl(iq)=grpl(iq)+condg(iq)                                                                ! sea
-    endif  ! (land(iq))                                                                          ! sea
-  enddo   ! iq loop                                                                              ! sea
-                                                                                                 ! sea
-  if(nmaxpr==1.and.mydiag)then                                                                   ! sea
-    iq=idjd                                                                                      ! sea
-    write (6,"('after sea loop fg,tpan,epan,ri,fh,vmod',9f9.4)")           &                     ! sea
-        fg(idjd),tpan(idjd),epan(idjd),ri(idjd),fh(idjd),vmod(idjd)                              ! sea
-    write (6,"('u10,ustar,charnck,zo,cd',3f9.4,2f9.6)")                    &                     ! sea
-        u10(idjd),ustar(idjd),charnck(idjd),zo(idjd),cduv(idjd)/vmod(idjd)                       ! sea
-    if(ri(iq)>0.)then                                                                            ! sea
-      fm=vmod(iq)/(1.+bprm*ri(iq))**2                                                            ! sea
-    else                                                                                         ! sea
-      root=sqrt(-ri(iq)*zmin/zo(iq))                                                             ! sea
-      denma=1.+cms*2.*bprm*af(iq)*root                                                           ! sea
-      fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denma                                                 ! sea
-      denha=1.+chs*2.*bprm*factch(iq)*aft(iq)*root                                               ! sea
-    endif                                                                                        ! sea
-    write (6,"('after sea loop af,aft,factch,root,denha,denma,fm',9f9.4)") &                     ! sea
-        af(iq),aft(iq),factch(iq),root,denha,denma,fm                                            ! sea
-  endif                                                                                          ! sea
-  zminlog=log(zmin)                                                                              ! sea
-
-  fgf=0.                                                                                         ! sice
-  fev=0.                                                                                         ! sice
-  do iq=1,ifull                                                                                  ! sice
-    if(sicedep(iq)>0.)then                                                                       ! sice
-      ! non-leads for sea ice points                                                             ! sice
-      ! N.B. tggsn( ,1) holds tice                                                               ! sice
-      !~ es = establ(tggsn(iq,1))                                                                   ! sice
-      constz=ps(iq)-es                                                                           ! sice
-      qsttg(iq)= .622*es/constz                                                                  ! sice
-      drst=qsttg(iq)*ps(iq)*hlars/(tggsn(iq,1)*tggsn(iq,1)*constz)                               ! sice
-      xx=grav*zmin*(1.-tggsn(iq,1)*srcp/t(iq,1))                                                 ! sice
-      ri_ice=min(xx/vmag(iq)**2 , ri_max)                                                        ! sice
-      !factchice=1. ! factch is sqrt(zo/zt) for use in unstable fh                               ! sice
-      factchice=sqrt(7.4) ! same as land from 27/4/99                                            ! sice
-      zoice=.001                                                                                 ! sice
-      zologice=zminlog-log(zoice)   !   i.e. log(zmin/zo(iq))                                    ! sice
-      af(iq)=(vkar/zologice)**2                                                                  ! sice
-      ! MJT notes - following line does not agree with factchice                                 ! sice
-      aft(iq)=vkar**2/(zologice*zologice )                                                       ! sice
-      wetfac(iq)=1+.008*(tggsn(iq,1)-273.16)                                                     ! sice
-                                                                                                 ! sice
-      ! now do fh and fm calcs for sice                                                          ! sice
-      if(ri_ice>0.)then                                                                          ! sice
-        fm=vmod(iq)/(1.+bprm*ri_ice)**2                                                          ! sice
-        fh(iq)=fm                                                                                ! sice
-      else                                                                                       ! sice
-        root=sqrt(-ri_ice*zmin/zoice)                                                            ! sice
-        ! First do momentum                                                                      ! sice
-        denma=1.+cms*2.*bprm*af(iq)*root                                                         ! sice
-        fm=vmod(iq)-vmod(iq)*2.*bprm *ri_ice/denma                                               ! sice
-        ! n.b. fm denotes ustar**2/(vmod(iq)*af)                                                 ! sice
-        ! Now heat ; allow for smaller zo via aft and factch                                     ! sice
-        denha=1.+chs*2.*bprm*factchice*aft(iq)*root                                              ! sice
-        fh(iq)=vmod(iq)-(2.*bprm *ri_ice)/denha                                                  ! sice
-      endif                                                                                      ! sice
-                                                                                                 ! sice
-      conh=rho(iq)*aft(iq)*cp                                                                    ! sice
-      conw=rho(iq)*aft(iq)*hl                                                                    ! sice
-      ! fgice & egice renamed as fgf and fev from Aug 05 to aid diags                            ! sice	
-      fgf(iq)=conh*fh(iq)*(tggsn(iq,1)-theta(iq))                                                ! sice
-      dfgdt(iq)=conh*fh(iq)                                                                      ! sice
-      if(ntest==1.and.iq==idjd.and.mydiag)then                                                   ! sice
-        write(6,*) 'in sice loop'                                                                ! sice
-        write(6,*) 'zmin,zo,wetfac ',zmin,zoice,wetfac(iq)                                       ! sice
-        write(6,*) 'ri_ice,es ',ri_ice,es                                                        ! sice
-        write(6,*) 'af,aft,ustar ',af(iq),aft(iq),ustar(iq)                                      ! sice
-        write(6,*) 'chnsea,rho ',chnsea,rho(iq)                                                  ! sice
-        write(6,*) 'fm,fh,conh ',fm,fh(iq),conh                                                  ! sice
-      endif                                                                                      ! sice
-                                                                                                 ! sice
-      if(nalpha==1)then    ! beta scheme         sice here                                       ! sice
-        epotice=conw*fh(iq)*(qsttg(iq)-qg(iq,1))                                                 ! sice
-        fev(iq)=wetfac(iq)*epotice                                                               ! sice
-        degdt(iq)=wetfac(iq)*conw*fh(iq)*drst                                                    ! sice
-      else                   ! alpha scheme                                                      ! sice
-        ! following trick reduces -ve evap (dew) to 1/10th value                                 ! sice
-        qtgnet=qsttg(iq)*wetfac(iq) -qg(iq,1)                                                    ! sice
-        qtgair=qsttg(iq)*wetfac(iq)-max(qtgnet,.1*qtgnet)                                        ! sice
-        eg2=-conw*fh(iq)*qtgair                                                                  ! sice
-        eg1=conw*fh(iq)*qsttg(iq)                                                                ! sice
-        fev(iq) =eg1*wetfac(iq) +eg2                                                             ! sice
-        epotice    = conw*fh(iq)*(qsttg(iq)-qg(iq,1))                                            ! sice
-        deg=wetfac(iq)*conw*fh(iq)*drst                                                          ! sice
-        ! following reduces degdt by factor of 10 for dew                                        ! sice
-        degdt(iq)=.55*deg+sign(.45*deg,qtgnet)                                                   ! sice
-      endif                                                                                      ! sice
-                                                                                                 ! sice
-      ! section to update sea ice surface temperature;                                           ! sice
-      ! specified sea-ice thickness                                                              ! sice
-      ! over sea ice, set a minimum depth for this experiment of .1                              ! sice
-      ! sicedep(iq) = max(sicedep(iq) , 0.1)  fixed in indata/nestin from Jan 06                 ! sice
-      ! no snow on the ice assumed for now                                                       ! sice
-      gamm(iq) = 3.471e+05                                                                       ! sice
-      cie(iq) = 2.04/sicedep(iq)                                                                 ! sice
-      rgg(iq) = 5.67e-8*tggsn(iq,1)**4                                                           ! sice
-      ! gflux here is flux from ice to water, +ve downwards                                      ! sice
-      gflux(iq)=cie(iq)*(tggsn(iq,1)-271.2)                                                      ! sice
-      ga(iq)=-slwa(iq)-rgg(iq)-fev(iq)-fgf(iq)-gflux(iq)                                         ! sice
-      dirad(iq)=4.*5.67e-8*tggsn(iq,1)**3                                                        ! sice
-      b1=dirad(iq)+degdt(iq)+dfgdt(iq)+cie(iq)                                                   ! sice
-      gbot=(gamm(iq)/dt)+b1                                                                      ! sice
-      deltat=ga(iq)/gbot                                                                         ! sice
-      tggsn(iq,1)=tggsn(iq,1)+deltat                                                             ! sice
-      tggsn(iq,1)=min(tggsn(iq,1),271.2)   ! jlm fix Tue  05-30-2000                             ! sice
-      fgf(iq) =fgf(iq) +deltat*dfgdt(iq)                                                         ! sice
-      fev(iq) =fev(iq) +deltat*degdt(iq)                                                         ! sice
-      !~ es = establ(tggsn(iq,1))                                                                   ! sice
-      constz=ps(iq)-es                                                                           ! sice
-      qsttg(iq)=.622*es/constz                                                                   ! sice
-                                                                                                 ! sice
-      ! combine ice and leads contributions here                                                 ! sice
-      eg(iq) =fracice(iq)*fev(iq) + (1.-fracice(iq))*eg(iq)                                      ! sice
-      fg(iq) =fracice(iq)*fgf(iq) + (1.-fracice(iq))*fg(iq)                                      ! sice
-      ri(iq) =fracice(iq)*ri_ice  + (1.-fracice(iq))*ri(iq)                                      ! sice
-      zo(iq) =fracice(iq)*zoice   + (1.-fracice(iq))*zo(iq)                                      ! sice
-      factch(iq)=fracice(iq)*factchice + (1.-fracice(iq))*factch(iq)                             ! sice
-      zoh(iq)=zo(iq)/(factch(iq)*factch(iq))                                                     ! sice
-      zoq(iq)=zoh(iq)                                                                            ! sice
-      cduv(iq) =fracice(iq)*af(iq)*fm + (1.-fracice(iq))*cduv(iq)                                ! sice
-      cdtq(iq) =fracice(iq)*aft(iq)*fh(iq)+(1.-fracice(iq))*cdtq(iq)                             ! sice
-      ustar(iq) = sqrt(vmod(iq)*cduv(iq))                                                        ! sice
-      ! N.B. potential evaporation is now eg+eg2                                                 ! sice
-      epot(iq) =fracice(iq)*epotice + (1.-fracice(iq))*epot(iq)                                  ! sice
-      tss(iq) = fracice(iq)*tggsn(iq,1)+(1.-fracice(iq))*tpan(iq)                                ! sice
-      rnet(iq)=sgsave(iq)-rgsave(iq)-stefbo*tss(iq)**4                                           ! sice
-      ! Surface stresses taux, tauy: diagnostic only - unstag now                                ! sice
-      taux(iq)=rho(iq)*cduv(iq)*u(iq,1)                                                          ! sice
-      tauy(iq)=rho(iq)*cduv(iq)*v(iq,1)                                                          ! sice
-    endif  ! (sicedep(iq)>0.)                                                                    ! sice
-  enddo       ! iq loop                                                                          ! sice
-  where (.not.land)                                                                              ! sice
-    snowd=0.                                                                                     ! sice
-  end where                                                                                      ! sice
-  if(mydiag.and.nmaxpr==1)then                                                                   ! sice
-    write(6,*) 'after sice loop'                                                                 ! sice
-    iq=idjd                                                                                      ! sice
-    if(sicedep(iq)>0.)then                                                                       ! sice
-      b1=dirad(iq)+degdt(iq)+dfgdt(iq)+cie(iq)                                                   ! sice
-      gbot=(gamm(iq)/dt)+b1                                                                      ! sice
-      deltat=ga(iq)/gbot                                                                         ! sice
-      write(6,*) 'ri,vmag,vmod,cduv ',ri(iq),vmag(iq),vmod(iq),cduv(iq)                          ! sice
-      write(6,*) 'fh,tss,tpan,tggsn1 ',fh(iq),tss(iq),tpan(iq),tggsn(iq,1)                       ! sice
-      write(6,*) 'theta,t1,deltat ',theta(iq),t(iq,1),deltat                                     ! sice
-      write(6,*) 'b1,ga,gbot,af,aft ',b1,ga(iq),gbot,af(iq),aft(iq)                              ! sice
-      write(6,*) 'fg,fgice,factch ',fg(iq),fgf(iq),factch(iq)                                    ! sice
-      write(6,*) 'cie ',cie(iq)                                                                  ! sice
-      write(6,*) 'eg,egice(fev),ustar ',eg(iq),fev(iq),ustar(iq)                                 ! sice
-    end if ! sicedep(iq)>0.                                                                      ! sice
-  endif    ! (mydiag.and.nmaxpr==1)                                                              ! sice
-
   if ( nriver==1 ) then                                                                          ! river
     where ( .not.land(1:ifull) )                                                                 ! river
       watbdy(1:ifull) = 0. ! water enters ocean and is removed from rivers                       ! river
@@ -513,9 +199,9 @@ elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                     
     neta=0.                                                                                      ! MLO
     call mloimport(4,neta,0,0)                                                                   ! MLO
   end if                                                                                         ! MLO
-                                                                                                 ! MLO
+
   ! pan evaporation diagnostic                                                                   ! MLO
-  !~ qsttg=qsat(ps(1:ifull),tpan)                                                                   ! MLO
+
   do ip=1,ipland                                                                                 ! MLO
     iq=iperm(ip)                                                                                 ! MLO
     ri(iq)=min(grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))/vmag(iq)**2,ri_max)                          ! MLO
@@ -550,39 +236,7 @@ elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                     
   else                                                                                           ! MLO
     dumw(1:ifull) = 0.                                                                           ! MLO
   end if                                                                                         ! MLO
-                                                                                                 ! MLO
-  !~ ! Ocean mixing                                                                                 ! MLO
-  !~ where (.not.land(1:ifull))                                                                     ! MLO
-    !~ rnet(:)=sgsave(:)-rgsave(:)-stefbo*tss(:)**4 ! use tss as should be tss(t=tau) for MLO       ! MLO
-  !~ end where                                                                                      ! MLO
-  !~ dumsg(:)=sgsave(:)/(1.-swrsave*albvisnir(:,1)-(1.-swrsave)*albvisnir(:,2))                     ! MLO
-  !~ dumrg(:)=-rgsave(:)                                                                            ! MLO
-  !~ dumx(:)=condx(:)/dt                                                                            ! MLO
-  !~ dums(:)=(conds(:)+condg(:))/dt                                                                 ! MLO
-  !~ if (abs(nmlo)>=3) then                                                                         ! MLO
-    !~ call mloeval(tss,zo,cduv,cdtq,fg,eg,wetfac,epot,epan,fracice,sicedep,snowd,dt,azmin,azmin, & ! MLO
-                 !~ dumsg,dumrg,dumx,dums,uav,vav,t(1:ifull,1),qg(1:ifull,1),ps(1:ifull),         & ! MLO
-                 !~ f(1:ifull),swrsave,fbeamvis,fbeamnir,dumw,0,.true.,oldu=oldu1(:,1),           & ! MLO
-                 !~ oldv=oldv1(:,1))                                                                ! MLO
-  !~ else                                                                                           ! MLO
-    !~ call mloeval(tss,zo,cduv,cdtq,fg,eg,wetfac,epot,epan,fracice,sicedep,snowd,dt,azmin,azmin, & ! MLO
-                 !~ dumsg,dumrg,dumx,dums,uav,vav,t(1:ifull,1),qg(1:ifull,1),ps(1:ifull),         & ! MLO
-                 !~ f(1:ifull),swrsave,fbeamvis,fbeamnir,dumw,0,.true.)                             ! MLO
-  !~ end if                                                                                         ! MLO
-  !~ call mloextra(0,zoh,azmin,0)                                                                   ! MLO
-  !~ call mloextra(3,zoq,azmin,0)                                                                   ! MLO
-  !~ call mloextra(1,taux,azmin,0)                                                                  ! MLO
-  !~ call mloextra(2,tauy,azmin,0)                                                                  ! MLO
-  !~ do k=1,ms                                                                                      ! MLO
-    !~ call mloexport(0,tgg(:,k),k,0)                                                               ! MLO
-    !~ where ( tgg(:,k)<100. )                                                                      ! MLO
-      !~ tgg(:,k) = tgg(:,k) + wrtemp                                                               ! MLO
-    !~ end where                                                                                    ! MLO
-  !~ end do                                                                                         ! MLO
-  !~ do k=1,3                                                                                       ! MLO
-    !~ call mloexpice(tggsn(:,k),k,0)                                                               ! MLO
-  !~ end do                                                                                         ! MLO
-                                                                                                 ! MLO
+
   ! stuff to keep tpan over land working                                                         ! MLO
   rid=min(grav*zmin*(1.-tpan*srcp/t(1:ifull,1))/vmag**2,ri_max)                                  ! MLO
   where (rid>0.)                                                                                 ! MLO
@@ -607,200 +261,19 @@ elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                     
     ga=sgsave-rgsave-5.67e-8*tpan**4-panfg*fg                                                    ! MLO
     tpan=tpan+ga*dt/(4186.*.254*1000.)                                                           ! MLO
   endwhere                                                                                       ! MLO
-  do iq=1,ifull                                                                                  ! MLO
-    if (.not.land(iq)) then                                                                      ! MLO
-      !~ esatf = establ(tss(iq))                                                                    ! MLO
-      qsttg(iq)=.622*esatf/(ps(iq)-esatf)                                                        ! MLO
-      !rhscrn(iq)=100.*min(qgscrn(iq)/qsttg(iq),1.)                                              ! MLO
-    end if                                                                                       ! MLO
-  end do                                                                                         ! MLO
+ 
   if (nmaxpr==1) then                                                                            ! MLO
     if (myid==0) then                                                                            ! MLO
       write(6,*) "After MLO mixing"                                                              ! MLO
     end if                                                                                       ! MLO
     call ccmpi_barrier(comm_world)                                                               ! MLO
   end if                                                                                         ! MLO
-
-else                                                                                             ! PCOM
-  write(6,*) "ERROR: this option is for PCOM ocean model"                                        ! PCOM
-  call ccmpi_abort(-1)                                                                           ! PCOM
-  ! Include river routing before calling PCOM?                                                   ! PCOM
 end if                                                                                           ! PCOM
 call END_LOG(sfluxwater_end)                                                                     ! PCOM
 !--------------------------------------------------------------      
-call START_LOG(sfluxland_begin)                                                                  ! land
+call START_LOG(sfluxland_begin)    
+
 select case(nsib)                                                                                ! land
-  case(3,5)                                                                                      ! land
-    do ip=1,ipland  ! all land points in this shared loop                                        ! land
-      ! fh itself was only used outside this loop in sib0 (jlm)                                  ! land
-      iq=iperm(ip)                                                                               ! land
-      zobg=zobgin                                                                                ! land
-      !~ es = establ(tss(iq))                                                                       ! land
-      qsttg(iq)= .622*es/(ps(iq)-es)  ! prim for scrnout, bur recalc end sib3                    ! land
-      ! factch is sqrt(zo/zt) for land use in unstable fh                                        ! land
-      factch(iq)=sqrt(7.4)                                                                       ! land
-      if(snowd(iq)>0.)then                                                                       ! land
-        ! reduce zo over snow;                                                                   ! land
-        zobg=max(zobgin -snowd(iq)*0.00976/12., 0.00024)                                         ! land
-        zologbg=log(zmin/zobg)                                                                   ! land
-        ! following line is bit simpler than csiro9                                              ! land
-        zo(iq)=max(zolnd(iq) -.001*snowd(iq), .01)                                               ! land
-        zologx=log(zmin/zo(iq))                                                                  ! land
-      else  ! land but not snow                                                                  ! land
-        zo(iq)=zolnd(iq)                                                                         ! land
-        zologbg=zologbgin                                                                        ! land
-        zologx=zolog(iq)                                                                         ! land
-      endif     ! (snowd(iq)>0.)                                                                 ! land
-      if(nblend==1)then  ! blended zo for momentum                                               ! land
-        ! note that Dorman & Sellers zo is already an average,                                   ! land
-        ! accounting for sigmf, so may not wish to further blend zo                              ! land
-        afland=(vkar/((1.-sigmf(iq))*zologbg+sigmf(iq)*zologx))**2                               ! land
-      else    ! non-blended zo for momentum                                                      ! land
-        afland=(vkar/zologx)**2                                                                  ! land
-      endif   ! (nblend==1)                                                                      ! land
-      aftland=vkar**2/( zologx * (2.+zologx) )                                                   ! land
-      aft(iq)=aftland                                                                            ! land
-      aftlandg=vkar**2/( zologbg * (2.+zologbg) )                                                ! land
-      ! lgwd>0 enhances cduv (momentum) over orog under (stable & unst) condns                   ! land
-      af(iq)=afland+helo(iq)       ! jlm special gwd4b                                           ! land
-                                                                                                 ! land
-      ! Having settled on zo (and thus af) now do actual fh and fm calcs                         ! land
-      xx=grav*zmin*(1.-tss(iq)*srcp/t(iq,1))                                                     ! land
-      ri(iq)=min(xx/vmag(iq)**2 , ri_max)                                                        ! land
-      if(ri(iq)>0.)then                                                                          ! land
-        fm=vmod(iq)/(1.+bprm*ri(iq))**2                                                          ! land
-        fh(iq)=fm                                                                                ! land
-        fhbg=fh(iq)                                                                              ! land
-      else                                                                                       ! land
-        root=sqrt(-ri(iq)*zmin/zo(iq))  ! ignoring blending here                                 ! land
-        ! First do momentum                                                                      ! land
-        denma=1.+cms*2.*bprm*af(iq)*root                                                         ! land 
-        fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denma                                               ! land
-        ! n.b. fm denotes ustar**2/(vmod(iq)*af)                                                 ! land
-        ! Now heat ; allow for smaller zo via aft and factch                                     ! land
-        denha=1.+chs*2.*bprm*factch(iq)*aft(iq)*root                                             ! land
-        fh(iq)=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denha                                           ! land
-        rootbg=sqrt(-ri(iq)*zmin/zobg)                                                           ! land
-        denhabg=1.+chs*2.*bprm*factch(iq)*aftlandg*rootbg                                        ! land
-        fhbg=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denhabg                                           ! land
-      endif                                                                                      ! land
-      taftfhg_temp(iq)=aftlandg*fhbg ! uses fmroot above, for sib3                               ! land
-      taftfhg(iq)=aftlandg*fhbg ! value used for ntaft=3 (may need improving)                    ! land
-                                                                                                 ! land
-      zoh(iq)=zo(iq)/(factch(iq)*factch(iq))                                                     ! land
-      zoq(iq)=zoh(iq)                                                                            ! land
-      ! cduv is now drag coeff *vmod                                                             ! land
-      cduv(iq) =af(iq)*fm                                                                        ! land
-      cdtq(iq) =aft(iq)*fh(iq)                                                                   ! land
-      ustar(iq) = sqrt(vmod(iq)*cduv(iq))                                                        ! land
-      ! Surface stresses taux, tauy: diagnostic only - unstaggered now                           ! land
-      taux(iq)=rho(iq)*cduv(iq)*u(iq,1)                                                          ! land
-      tauy(iq)=rho(iq)*cduv(iq)*v(iq,1)                                                          ! land
-      if(ntest==1.and.iq==idjd.and.mydiag)then                                                   ! land
-        write(6,*) 'in main land loop'                                                           ! land
-        write(6,*) 'zmin,zobg,zobgin,snowd ',zmin,zobg,zobgin,snowd(iq)                          ! land
-        write(6,*) 'afland,aftland,zologbg ',afland,aftland,zologbg                              ! land
-        write(6,*) 'af,vmag,vmod,es ',af(iq),vmag(iq),vmod(iq),es                                ! land
-        write(6,*) 'tss,theta,t1 ',tss(iq),theta(iq),t(iq,1)                                     ! land
-        write(6,*) 'aft,fm,fh,rho,conh ',aft(iq),fm,fh(iq),rho(iq),conh                          ! land
-        write(6,*) 'ri,vmod,cduv,fg ',ri(iq),vmod(iq),cduv(iq),fg(iq)                            ! land
-      endif  ! (ntest==1.and.iq==idjd)                                                           ! land
-    enddo     ! ip=1,ipland                                                                      ! land
-                                                                                                 ! land
-    if(ntaft==0.or.ktau==1)then                                                                  ! land
-      do iq=1,ifull  ! will only use land values                                                 ! land
-        if(land(iq))then                                                                         ! land
-          taftfh(iq)=aft(iq)*fh(iq) ! uses fmroot above                                          ! land
-          taftfhg(iq)=taftfhg_temp(iq)                                                           ! land
-        endif                                                                                    ! land
-      enddo                                                                                      ! land
-    elseif(ntaft==1.)then                                                                        ! land
-      do iq=1,ifull         ! will only use land values                                          ! land
-        if(land(iq))then                                                                         ! land
-          thnew=aft(iq)*fh(iq) ! uses fmroot above                                               ! land
-          thgnew=taftfhg_temp(iq)                                                                ! land
-          if(thnew>2.*taftfh(iq).or.thnew<.5*taftfh(iq))then                                     ! land
-            taftfh(iq)=.5*(thnew+taftfh(iq))                                                     ! land
-          else                                                                                   ! land
-            taftfh(iq)=thnew                                                                     ! land
-          endif                                                                                  ! land
-          if(thgnew>2.*taftfhg(iq).or.thgnew<.5*taftfhg(iq))then                                 ! land
-            taftfhg(iq)=.5*(thgnew+taftfhg(iq))                                                  ! land
-          else                                                                                   ! land
-            taftfhg(iq)=thgnew                                                                   ! land
-          endif                                                                                  ! land
-        endif                                                                                    ! land
-      enddo                                                                                      ! land
-    elseif(ntaft==2)then    ! preferred faster option                                            ! land
-      do iq=1,ifull         ! will only use land values                                          ! land
-        if(land(iq))then                                                                         ! land
-          thnew=aft(iq)*fh(iq) ! uses fmroot above                                               ! land
-          thgnew=taftfhg_temp(iq)                                                                ! land
-          thnewa=min(thnew,max(2.*taftfh(iq),.5*(thnew+taftfh(iq))))                             ! land
-          taftfh(iq)=max(thnewa,min(.5*taftfh(iq),.5*(thnew+taftfh(iq))))                        ! land
-          thgnewa=min(thgnew,max(2.*taftfhg(iq),.5*(thgnew+taftfhg(iq))))                        ! land
-          taftfhg(iq)=max(thgnewa,min(.5*taftfhg(iq),.5*(thgnew+taftfhg(iq))))                   ! land
-        endif                                                                                    ! land
-      enddo                                                                                      ! land
-    elseif(ntaft==3)then                                                                         ! land
-      ! do vegetation calulation for taftfh                                                      ! land
-      do iq=1,ifull                                                                              ! land
-        if(land(iq))then                                                                         ! land
-          xx=grav*zmin*(1.-tgf(iq)*srcp/t(iq,1)) ! actually otgf                                 ! land
-          ri_tmp=min(xx/vmag(iq)**2 , ri_max)                                                    ! land
-          if(ri_tmp>0.)then                                                                      ! land
-            fh_tmp=vmod(iq)/(1.+bprm*ri_tmp)**2                                                  ! land
-          else                                                                                   ! land
-            root=sqrt(-ri_tmp*zmin/zo(iq))  ! ignoring blending                                  ! land
-            ! Now heat ; allow for smaller zo via aft and factch                                 ! land
-            denha=1.+chs*2.*bprm*factch(iq)*aft(iq)*root                                         ! land
-            fh_tmp=vmod(iq)-vmod(iq)*2.*bprm *ri_tmp/denha                                       ! land
-          endif                                                                                  ! land
-          taftfh(iq)=aft(iq)*fh_tmp ! uses fmroot above, for sib3                                ! land
-        endif                                                                                    ! land
-      enddo                                                                                      ! land
-    endif  ! (ntaft==0.or.ktau==1)  .. else ..                                                   ! land
-    if(ntest>0.and.mydiag)then                                                                   ! land
-      write(6,*) 'before sib3 zo,zolnd,af ',zo(idjd),zolnd(idjd),af(idjd)                        ! land
-      write(6,*) 'av_vmod,u,savu,v,savv',av_vmod,u(idjd,1),savu(idjd,1),v(idjd,1),savv(idjd,1)   ! land
-    endif                                                                                        ! land
-                                                                                                 ! land
-    call sib3(nalpha,taftfh,taftfhg,aft,rho) ! for nsib=3, 5                                     ! land
-                                                                                                 ! land
-    if(diag.or.ntest>0)then                                                                      ! land
-      if (mydiag) write(6,*) 'before call scrnout'                                               ! land
-      call maxmin(t,' t',ktau,1.,kl)                                                             ! land
-    endif                                                                                        ! land
-    ! MJT notes - This clobbers the af, ri, cduv, ustar, taux and                                ! land
-    ! tauy from the sice calculation above.                                                      ! land
-    if(ntsur/=5)then    ! ntsur=6 is default from Mar '05                                        ! land
-      ! preferred option to recalc cduv, ustar (gives better uscrn, u10)                         ! land
-      do iq=1,ifull                                                                              ! land
-        afroot=vkar/log(zmin/zo(iq))! land formula is bit different above                        ! land
-        af(iq)=afroot**2+helo(iq)                                                                ! land
-        xx=grav*zmin*(1.-tss(iq)*srcp/t(iq,1))                                                   ! land
-        ri(iq)=min(xx/vmag(iq)**2 , ri_max)                                                      ! land
-        if(ri(iq)>0.)then                                                                        ! land
-          fm=vmod(iq)/(1.+bprm*ri(iq))**2         ! Fm * vmod                                    ! land
-        else                                                                                     ! land
-          root=sqrt(-ri(iq)*zmin/zo(iq))                                                         ! land
-          denma=1.+cms*2.*bprm*af(iq)*root                                                       ! land
-          fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denma   ! Fm * vmod                               ! land
-          ! n.b. fm denotes ustar**2/(vmod(iq)*af)                                               ! land
-        endif                                                                                    ! land
-        ! cduv is now drag coeff *vmod                                                           ! land
-        cduv(iq) =af(iq)*fm                       ! Cd * vmod                                    ! land
-        ustar(iq) = sqrt(vmod(iq)*cduv(iq))                                                      ! land
-        ! Surface stresses taux, tauy: diagnostic only                                           ! land   
-        taux(iq)=rho(iq)*cduv(iq)*u(iq,1)                                                        ! land
-        tauy(iq)=rho(iq)*cduv(iq)*v(iq,1)                                                        ! land
-      enddo                                                                                      ! land
-    endif  ! (ntsur==6)                                                                          ! land
-                                                                                                 ! land
-  case(6)                                                                                        ! cable
-    write(6,*) "CABLE nsib=6 option is not supported"                                            ! cable
-    call ccmpi_abort(-1)                                                                         ! cable
-                                                                                                 ! cable
   case(7)                                                                                        ! cable
     if (nmaxpr==1) then                                                                          ! cable
       if (myid==0) then                                                                          ! cable
@@ -945,7 +418,6 @@ subroutine sib3(nalpha,taftfh,taftfhg,aft,rho)
       
 use arrays_m                     ! Atmosphere dyamics prognostic arrays
 use cc_mpi                       ! CC MPI routines
-!~ use estab                        ! Liquid saturation function
 use extraout_m                   ! Additional diagnostics
 use latlong_m                    ! Lat/lon coordinates
 use liqwpar_m                    ! Cloud water mixing ratios
@@ -996,14 +468,6 @@ integer, parameter :: nstomata=1  ! 0 for original; 1 for tropical C4
 integer, parameter :: newfgf=0    ! 0 for original; 1 with tscrn; 2 with aft too
 integer, parameter :: ndiag_arr=0 ! 0 off; 1 for diag arrays on
 integer, parameter :: neva=0      ! neva= 0 for diags off; neva= 1 for eva's diags on
-
-!     fle(isoil,w)=(w-swilt(isoil))/(sfc(isoil)-swilt(isoil))           !0 Eva's
-!     fle(isoil,w)= w/ssat(isoil)                                       !1 simplest bare
-!     fle(isoil,w)= (w-frac*max( w,swilt(isoil) ))/                     !2 jlm sugg. bare
-!    .               (ssat(isoil)*(1.-frac))                            !2 jlm sugg. bare
-!     fle(isoil,w)=10.*((w-ssoil(isoil))/ssat(isoil)+.1))               ! an old one
-!     fle(isoil,w)= w/sfc(isoil)                                        ! jlm for PIRCS
-!     fle(isoil,w)=(w-frac*swilt(isoil))/(sfc(isoil)-frac*swilt(isoil)) ! jlm special
      
 do iq=1,ifull
   if(land(iq))then
@@ -1108,7 +572,7 @@ do ip=1,ipland
   dfgdt(iq)=taftfhg(iq)*rho(iq)*cp
   fgg(iq)=dfgdt(iq)*(tgss-theta(iq))
 enddo         ! ip=1,ipland
-
+WRITE(6,*) 'NBAREWET is ', nbarewet 
 select case(nbarewet)
   case(0) ! original Eva's, same as NCAR
     do ip=1,ipland  ! all land points in this nsib=3 loop
