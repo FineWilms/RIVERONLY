@@ -299,7 +299,7 @@ use latlong_m                                  ! Lat/lon coordinates
 use mlo, only : wlev,micdwn,mloregrid,wrtemp   ! Ocean physics and prognostic arrays
 !~ use mlodynamics                                ! Ocean dynamics
 use morepbl_m                                  ! Additional boundary layer diagnostics
-use nharrs_m, only : phi_nh,lrestart           ! Non-hydrostatic atmosphere arrays
+!~ use nharrs_m, only : phi_nh,lrestart           ! Non-hydrostatic atmosphere arrays
 use nsibd_m, only : isoilm                     ! Land-surface arrays
 use river                                      ! River routing
 use savuvt_m                                   ! Saved dynamic arrays
@@ -971,102 +971,102 @@ if ( nested/=1 ) then
     end do
   end if
   
-  ! -----------------------------------------------------------------
-  ! verify if input is a restart file
-  if ( nested==0 ) then
-    if ( myid==0 .or. pfall ) then
-      if ( kk==kl .and. iotest ) then
-        lrestart = .true.
-        call ccnf_inq_varid(ncid,'dpsldt',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'zgnhs',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'sdot',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'pslx',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'savu',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'savv',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'savu1',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'savv1',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'savu2',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'savv2',idv,tst)
-        if ( tst ) lrestart = .false.
-        call ccnf_inq_varid(ncid,'nstag',idv,tst)
-        if ( tst ) then
-          lrestart = .false.
-        else 
-          call ccnf_get_vara(ncid,idv,iarchi,ierc(3))
-        end if
-        call ccnf_inq_varid(ncid,'nstagu',idv,tst)
-        if ( tst ) then
-          lrestart = .false.
-        else 
-          call ccnf_get_vara(ncid,idv,iarchi,ierc(4))
-        end if
-        call ccnf_inq_varid(ncid,'nstagoff',idv,tst)
-        if ( tst ) then
-          lrestart = .false.
-        else 
-          call ccnf_get_vara(ncid,idv,iarchi,ierc(5))
-        end if
-        if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-          if ( ok==wlev ) then
-            call ccnf_inq_varid(ncid,'oldu101',idv,tst)
-            if ( tst ) lrestart = .false.
-            call ccnf_inq_varid(ncid,'oldv101',idv,tst)
-            if ( tst ) lrestart = .false.
-            call ccnf_inq_varid(ncid,'oldu201',idv,tst)
-            if ( tst ) lrestart = .false.
-            call ccnf_inq_varid(ncid,'oldv201',idv,tst)
-            if ( tst ) lrestart = .false.
-            call ccnf_inq_varid(ncid,'ipice',idv,tst)
-            if ( tst ) lrestart = .false.
-            call ccnf_inq_varid(ncid,'nstagoffmlo',idv,tst)
-            if ( tst ) then
-              lrestart = .false.
-            else
-              call ccnf_get_vara(ncid,idv,iarchi,ierc(6))
-            end if
-          else
-            lrestart = .false.
-          end if
-        end if
-      else
-        lrestart = .false.
-      end if
-      ierc(1:2) = 0
-      if ( lrestart ) ierc(1)=1
-      call ccnf_inq_varid(ncid,'u10',idv,tst)
-      if ( tst ) ierc(2) = -1
-    end if
-    if ( .not.pfall ) then
-      call ccmpi_bcast(ierc(1:7+3*ms),0,comm_world)
-    end if
-    lrestart = (ierc(1)==1)
-    if ( lrestart ) then
-      nstag       = ierc(3)
-      nstagu      = ierc(4)
-      nstagoff    = ierc(5)
+  !~ ! -----------------------------------------------------------------
+  !~ ! verify if input is a restart file
+  !~ if ( nested==0 ) then
+    !~ if ( myid==0 .or. pfall ) then
+      !~ if ( kk==kl .and. iotest ) then
+        !~ lrestart = .true.
+        !~ call ccnf_inq_varid(ncid,'dpsldt',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'zgnhs',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'sdot',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'pslx',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'savu',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'savv',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'savu1',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'savv1',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'savu2',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'savv2',idv,tst)
+        !~ if ( tst ) lrestart = .false.
+        !~ call ccnf_inq_varid(ncid,'nstag',idv,tst)
+        !~ if ( tst ) then
+          !~ lrestart = .false.
+        !~ else 
+          !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(3))
+        !~ end if
+        !~ call ccnf_inq_varid(ncid,'nstagu',idv,tst)
+        !~ if ( tst ) then
+          !~ lrestart = .false.
+        !~ else 
+          !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(4))
+        !~ end if
+        !~ call ccnf_inq_varid(ncid,'nstagoff',idv,tst)
+        !~ if ( tst ) then
+          !~ lrestart = .false.
+        !~ else 
+          !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(5))
+        !~ end if
+        !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
+          !~ if ( ok==wlev ) then
+            !~ call ccnf_inq_varid(ncid,'oldu101',idv,tst)
+            !~ if ( tst ) lrestart = .false.
+            !~ call ccnf_inq_varid(ncid,'oldv101',idv,tst)
+            !~ if ( tst ) lrestart = .false.
+            !~ call ccnf_inq_varid(ncid,'oldu201',idv,tst)
+            !~ if ( tst ) lrestart = .false.
+            !~ call ccnf_inq_varid(ncid,'oldv201',idv,tst)
+            !~ if ( tst ) lrestart = .false.
+            !~ call ccnf_inq_varid(ncid,'ipice',idv,tst)
+            !~ if ( tst ) lrestart = .false.
+            !~ call ccnf_inq_varid(ncid,'nstagoffmlo',idv,tst)
+            !~ if ( tst ) then
+              !~ lrestart = .false.
+            !~ else
+              !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(6))
+            !~ end if
+          !~ else
+            !~ lrestart = .false.
+          !~ end if
+        !~ end if
+      !~ else
+        !~ lrestart = .false.
+      !~ end if
+      !~ ierc(1:2) = 0
+      !~ if ( lrestart ) ierc(1)=1
+      !~ call ccnf_inq_varid(ncid,'u10',idv,tst)
+      !~ if ( tst ) ierc(2) = -1
+    !~ end if
+    !~ if ( .not.pfall ) then
+      !~ call ccmpi_bcast(ierc(1:7+3*ms),0,comm_world)
+    !~ end if
+    !~ lrestart = (ierc(1)==1)
+    !~ if ( lrestart ) then
+      !~ nstag       = ierc(3)
+      !~ nstagu      = ierc(4)
+      !~ nstagoff    = ierc(5)
       !~ nstagoffmlo = ierc(6)
-      if ( myid==0 ) then
-        write(6,*) "Continue stagging from"
-        write(6,*) "nstag,nstagu,nstagoff ",nstag,nstagu,nstagoff
+      !~ if ( myid==0 ) then
+        !~ write(6,*) "Continue stagging from"
+        !~ write(6,*) "nstag,nstagu,nstagoff ",nstag,nstagu,nstagoff
         !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
           !~ write(6,*) "nstagoffmlo ",nstagoffmlo
         !~ end if
-      end if
-    end if
-  else
-    if ( .not.pfall ) then
-      call ccmpi_bcast(ierc(7:7+3*ms),0,comm_world)
-    end if            
-  end if ! nested==0 ..else..
+      !~ end if
+    !~ end if
+  !~ else
+    !~ if ( .not.pfall ) then
+      !~ call ccmpi_bcast(ierc(7:7+3*ms),0,comm_world)
+    !~ end if            
+  !~ end if ! nested==0 ..else..
         
   !------------------------------------------------------------------
   ! Read snow and soil tempertaure
@@ -1301,71 +1301,71 @@ if ( nested/=1 ) then
     so4t(:)=0.
   end if
   
-  ! -----------------------------------------------------------------
-  ! Restart fields
-  if ( nested==0 ) then
-    ! DPSLDT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    dpsldt=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'dpsldt',ik,kk,dpsldt,ifull)
-    end if
+  !~ ! -----------------------------------------------------------------
+  !~ ! Restart fields
+  !~ if ( nested==0 ) then
+    !~ ! DPSLDT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ dpsldt=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'dpsldt',ik,kk,dpsldt,ifull)
+    !~ end if
 
-    ! ZGNHS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    phi_nh = 0.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'zgnhs',ik,kk,phi_nh,ifull)
-    end if
+    !~ ! ZGNHS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ phi_nh = 0.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'zgnhs',ik,kk,phi_nh,ifull)
+    !~ end if
     
-    ! SDOT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    sdot=-999.
-    if ( lrestart ) then
-      sdot(:,1)=0.
-      call histrd4(iarchi,ier,'sdot',ik,kk,sdot(:,2:kk+1),ifull)
-    end if
+    !~ ! SDOT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ sdot=-999.
+    !~ if ( lrestart ) then
+      !~ sdot(:,1)=0.
+      !~ call histrd4(iarchi,ier,'sdot',ik,kk,sdot(:,2:kk+1),ifull)
+    !~ end if
 
-    ! PSLX !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    pslx=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'pslx',ik,kk,pslx,ifull)
-    end if
+    !~ ! PSLX !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ pslx=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'pslx',ik,kk,pslx,ifull)
+    !~ end if
           
-    ! SAVU !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    savu=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'savu',ik,kk,savu,ifull)
-    end if
+    !~ ! SAVU !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ savu=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'savu',ik,kk,savu,ifull)
+    !~ end if
           
-    ! SAVV !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    savv=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'savv',ik,kk,savv,ifull)
-    end if
+    !~ ! SAVV !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ savv=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'savv',ik,kk,savv,ifull)
+    !~ end if
 
-    ! SAVU1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    savu1=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'savu1',ik,kk,savu1,ifull)
-    end if
+    !~ ! SAVU1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ savu1=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'savu1',ik,kk,savu1,ifull)
+    !~ end if
           
-    ! SAVV1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    savv1=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'savv1',ik,kk,savv1,ifull)
-    end if
+    !~ ! SAVV1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ savv1=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'savv1',ik,kk,savv1,ifull)
+    !~ end if
 
-    ! SAVU2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    savu2=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'savu2',ik,kk,savu2,ifull)
-    end if
+    !~ ! SAVU2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ savu2=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'savu2',ik,kk,savu2,ifull)
+    !~ end if
           
-    ! SAVV2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    savv2=-999.
-    if ( lrestart ) then
-      call histrd4(iarchi,ier,'savv2',ik,kk,savv2,ifull)
-    end if
+    !~ ! SAVV2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !~ savv2=-999.
+    !~ if ( lrestart ) then
+      !~ call histrd4(iarchi,ier,'savv2',ik,kk,savv2,ifull)
+    !~ end if
 
-  end if ! (nested==0)
+  !~ end if ! (nested==0)
 
   ! -----------------------------------------------------------------
   ! soil ice and snow data
@@ -1415,9 +1415,9 @@ iarchi = iarchi + 1
 kdate_s = kdate_r
 ktime_s = ktime_r + 1
 
-if ( myid==0 .and. nested==0 ) then
-  write(6,*) "Final lrestart ",lrestart
-end if
+!~ if ( myid==0 .and. nested==0 ) then
+  !~ write(6,*) "Final lrestart ",lrestart
+!~ end if
 
 return
 end subroutine onthefly_work

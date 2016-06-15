@@ -39,7 +39,7 @@ use gdrag_m                        ! Gravity wave drag
 use map_m                          ! Grid map arrays
 use mlo                            ! Ocean physics and prognostic arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
-use nharrs_m                       ! Non-hydrostatic atmosphere arrays
+!~ use nharrs_m                       ! Non-hydrostatic atmosphere arrays
 use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
@@ -144,7 +144,7 @@ fm=0.          ! dummy value
 
 !~ tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
                      !~ -qrg(1:ifull,1)-qsng(1:ifull,1)-qgrg(1:ifull,1))
-azmin(:) = (bet(1)*tv(:)+phi_nh(:,1))/grav
+!~ azmin(:) = (bet(1)*tv(:)+phi_nh(:,1))/grav
 srcp = sig(1)**(rdry/cp)
 ga(:) = 0.              !  for ocean points in ga_ave diagnostic
 theta(:) = t(1:ifull,1)/srcp
