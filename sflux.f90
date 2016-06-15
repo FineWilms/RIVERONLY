@@ -137,21 +137,6 @@ root=0.        ! dummy value
 denha=0.       ! dummy value
 denma=0.       ! dummy value
 fm=0.          ! dummy value
-WRITE(6,*) 'NTEST is ', ntest
-WRITE(6,*) 'DIAG is ', diag
-if (diag.or.ntest==1) then
-  if (mydiag) then
-    if (land(idjd)) then
-      write(6,*) 'entering sflux ktau,nsib,ivegt,isoilm,land ',ktau,nsib,ivegt(idjd),isoilm(idjd),land(idjd)
-      write(6,*) 'idjd,id,jd,slwa,sgsave ',idjd,id,jd,slwa(idjd),sgsave(idjd)
-      write(6,*) 'snowd,sicedep,condx ',snowd(idjd),sicedep(idjd),condx(idjd)
-      write(6,*) 't1,tss ',t(idjd,1),tss(idjd)
-      write(6,*) 'wb ',(wb(idjd,k),k=1,ms)
-      write(6,*) 'tgg ',(tgg(idjd,k),k=1,ms)
-    endif
-  end if
-  call maxmin(t,' t',ktau,1.,kl)
-endif
 
 !     using av_vmod (1. for no time averaging)
 !      *****  check next comment

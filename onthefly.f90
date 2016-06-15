@@ -291,7 +291,7 @@ use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
 use carbpools_m                                ! Carbon pools
 use cc_mpi                                     ! CC MPI routines
-use cfrac_m                                    ! Cloud fraction
+!~ use cfrac_m                                    ! Cloud fraction
 !~ use cloudmod                                   ! Prognostic strat cloud
 use extraout_m                                 ! Additional diagnostics      
 use infile                                     ! Input file routines
@@ -1286,31 +1286,31 @@ if ( nested/=1 ) then
     if ( all(atebdwn(:,28)==0.) ) atebdwn(:,28)=0.85
   end if
 
-  ! -----------------------------------------------------------------
-  ! Read cloud fields
-  if ( nested==0 .and. ldr/=0 ) then
-    call gethist4a('qfg',qfg,5)               ! CLOUD FROZEN WATER
-    call gethist4a('qlg',qlg,5)               ! CLOUD LIQUID WATER
-    if ( ncloud>=2 ) then
-      call gethist4a('qrg',qrg,5)             ! RAIN
-    end if
-    if ( ncloud>=3 ) then
-      call gethist4a('qsng',qsng,5)           ! SNOW
-      call gethist4a('qgrg',qgrg,5)           ! GRAUPEL
-    end if
-    call gethist4a('cfrac',cfrac,5)           ! CLOUD FRACTION
-    if ( ncloud>=2 ) then
-      call gethist4a('rfrac',rfrac,5)         ! RAIN FRACTION
-    end if
-    if ( ncloud>=3 ) then
-      call gethist4a('sfrac',sfrac,5)         ! SNOW FRACTION
-      call gethist4a('gfrac',gfrac,5)         ! GRAUPEL FRACTION
-    end if
+  !~ ! -----------------------------------------------------------------
+  !~ ! Read cloud fields
+  !~ if ( nested==0 .and. ldr/=0 ) then
+    !~ call gethist4a('qfg',qfg,5)               ! CLOUD FROZEN WATER
+    !~ call gethist4a('qlg',qlg,5)               ! CLOUD LIQUID WATER
+    !~ if ( ncloud>=2 ) then
+      !~ call gethist4a('qrg',qrg,5)             ! RAIN
+    !~ end if
+    !~ if ( ncloud>=3 ) then
+      !~ call gethist4a('qsng',qsng,5)           ! SNOW
+      !~ call gethist4a('qgrg',qgrg,5)           ! GRAUPEL
+    !~ end if
+    !~ call gethist4a('cfrac',cfrac,5)           ! CLOUD FRACTION
+    !~ if ( ncloud>=2 ) then
+      !~ call gethist4a('rfrac',rfrac,5)         ! RAIN FRACTION
+    !~ end if
+    !~ if ( ncloud>=3 ) then
+      !~ call gethist4a('sfrac',sfrac,5)         ! SNOW FRACTION
+      !~ call gethist4a('gfrac',gfrac,5)         ! GRAUPEL FRACTION
+    !~ end if
     !~ if ( ncloud >= 4 ) then
       !~ call gethist4a('stratcf',stratcloud,5)  ! STRAT CLOUD FRACTION
       !~ call gethist4a('strat_nt',nettend,5)    ! STRAT NET TENDENCY
     !~ end if ! (ncloud>=4)
-  end if   ! (nested==0)
+  !~ end if   ! (nested==0)
 
   !------------------------------------------------------------------
   ! TKE-eps data

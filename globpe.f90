@@ -31,44 +31,27 @@
 
 program globpe
 
-!~ use aerointerface                          ! Aerosol interface
-!~ use aerosolldr, only : xtosav,xtg,naero  & ! LDR prognostic aerosols
-    !~ ,duste,dustwd,dustdd,dust_burden     &
-    !~ ,bce,bcwd,bcdd,bc_burden             &
-    !~ ,oce,ocwd,ocdd,oc_burden             &
-    !~ ,dmse,dmsso2o,dms_burden             &
-    !~ ,so2e,so2so4o,so2wd,so2dd,so2_burden &
-    !~ ,so4e,so4wd,so4dd,so4_burden         &
-    !~ ,Ch_dust
 use arrays_m                               ! Atmosphere dyamics prognostic arrays
 use bigxy4_m                               ! Grid interpolation
-!~ use cable_ccam, only : proglai             ! CABLE
 use carbpools_m, only : carbpools_init   & ! Carbon pools
     ,fpn,frs,frp
 use cc_mpi                                 ! CC MPI routines
 use cfrac_m                                ! Cloud fraction
-!~ use cloudmod                               ! Prognostic cloud fraction
-!~ use daviesnudge                            ! Far-field nudging
 use diag_m                                 ! Diagnostic routines
 use dpsdt_m                                ! Vertical velocity
 use epst_m                                 ! Off-centre terms
-!~ use estab                                  ! Liquid saturation function
 use extraout_m                             ! Additional diagnostics
 use gdrag_m, only : gdrag_init             ! Gravity wave drag
 use histave_m                              ! Time average arrays
 use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
 use infile                                 ! Input file routines
-!~ use kuocomb_m                              ! JLM convection
 use latlong_m                              ! Lat/lon coordinates
-!~ use leoncld_mod                            ! Prognostic cloud condensate
 use liqwpar_m                              ! Cloud water mixing ratios
 use map_m                                  ! Grid map arrays
 use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
    ,minwater,zomode,zoseaice,factchseaice
-!~ use mlodynamics                            ! Ocean dynamics
 use morepbl_m                              ! Additional boundary layer diagnostics
-!~ use nesting                                ! Nesting and assimilation
 use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
    ,lrestart
 use nlin_m                                 ! Atmosphere non-linear dynamics
@@ -78,23 +61,17 @@ use parmhdff_m                             ! Horizontal diffusion parameters
 use pbl_m                                  ! Boundary layer arrays
 use permsurf_m, only : permsurf_init       ! Fixed surface arrays
 use prec_m                                 ! Precipitation
-!~ use raddiag_m                              ! Radiation diagnostic
 use river                                  ! River routing
 use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
 use sbar_m                                 ! Saved dynamic arrays
 use screen_m                               ! Screen level diagnostics
-!~ use seaesfrad_m                            ! SEA-ESF radiation
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
 use tbar2d_m, only : tbar2d_init           ! Atmosphere dynamics reference temperature
 use timeseries, only : write_ts            ! Tracer time series
 use tkeeps                                 ! TKE-EPS boundary layer
-!~ use tracermodule, only : init_tracer     & ! Tracer routines
-   !~ ,trfiles,tracer_mass                  &
-   !~ ,interp_tracerflux,tracerlist
-!~ use tracers_m                              ! Tracer data
 use unn_m                                  ! Saved dynamic arrays
 use uvbar_m                                ! Saved dynamic arrays
 use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
@@ -185,9 +162,6 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nhorps,nperavg,ia,ib, &
     minwater,zomode,zoseaice,factchseaice, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
-!~ ! radiation namelist
-!~ namelist/skyin/mins_rad,sw_resolution,sw_diff_streams,            &
-    !~ liqradmethod,iceradmethod,carbonradmethod
 ! file namelist
 namelist/datafile/ifile,ofile,albfile,co2emfile,eigenv,hfile,     &
     icefile,mesonest,nmifile,o3file,radfile,restfile,rsmfile,     &
@@ -289,16 +263,10 @@ wlev     = ol
 mindep   = max( 0., mindep )
 minwater = max( 0., minwater )
 if ( abs(nmlo)>=2 ) nriver=1
-!~ read(99, skyin)
 read(99, datafile)
-!~ read(99, kuonml)
 ! try reading boundary layer turbulence namelist
 read(99, turbnml, iostat=ierr)
 if ( ierr /= 0 ) rewind(99)       ! rewind namelist if turbnml is not found
-! try reading tracer namelist
-!~ ngas = 0
-!~ read(99, trfiles, iostat=ierr)        
-!~ if ( ierr /= 0 ) rewind(99)       ! rewind namelist if trfiles is not found
 nagg = 10!max( 10, naero )           ! maximum size of aggregation
 nlx        = 0
 mtimer_sav = 0
@@ -314,7 +282,7 @@ kl      = 18 ! default number of vertical levels
 if ( myid==0 .and. io_in<=4 ) then
   ! open topo file and check its dimensions
   ! here used to supply rlong0,rlat0,schmidt
-  ! Remander of topo file is read in indata.f90
+  ! Remainder of topo file is read in indata.f90
   write(6,*) 'reading topofile header'
   call ccnf_open(topofile,ncidtopo,ierr)
   if ( ierr == 0 ) then
@@ -399,9 +367,6 @@ if ( mod(nproc,6)/=0 .and. mod(6,nproc)/=0 ) then
 end if
 #endif
 call proctest(npanels,il_g,nproc,nxp,nyp)
-!~ if ( nxp <= 0 ) then
-  !~ call badnproc(npanels,il_g,nproc)
-!~ end if
 jl_g    = il_g + npanels*il_g                 ! size of grid along all panels (usually 6*il_g)
 ifull_g = il_g*jl_g                           ! total number of global horizontal grid points
 iquad   = 1 + il_g*((8*npanels)/(npanels+4))  ! grid size for interpolation calculations
@@ -557,20 +522,14 @@ end if
 
 !--------------------------------------------------------------
 ! INITIALISE LOCAL ARRAYS
-!~ allocate( dums(ifull,kl), dumliq(ifull,kl) )
-!~ allocate( spare1(ifull), spare2(ifull) )
-!~ allocate( spmean(kl) )
 call arrays_init(ifull,iextra,kl)
 call carbpools_init(ifull,iextra,kl,nsib,ccycle)
-call cfrac_init(ifull,iextra,kl)
-!~ call cloudmod_init(ifull,iextra,kl,ncloud)
+!~ call cfrac_init(ifull,iextra,kl)
 call dpsdt_init(ifull,iextra,kl)
 call epst_init(ifull,iextra,kl)
-!~ call estab_init
 call extraout_init(ifull,iextra,kl,nextout)
 call gdrag_init(ifull,iextra,kl)
 call histave_init(ifull,iextra,kl,ms)
-!~ call kuocomb_init(ifull,iextra,kl)
 call liqwpar_init(ifull,iextra,kl)
 call morepbl_init(ifull,iextra,kl)
 call nharrs_init(ifull,iextra,kl)
@@ -580,7 +539,6 @@ call parmhdff_init(ifull,iextra,kl)
 call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
 call prec_init(ifull,iextra,kl)
-!~ call raddiag_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
 call sbar_init(ifull,iextra,kl)
@@ -601,17 +559,7 @@ call xarrs_init(ifull,iextra,kl)
 if ( nvmix==6 ) then
   call tkeinit(ifull,iextra,kl,0)
 end if
-!~ if ( tracerlist/=' ' ) then
-  !~ call init_tracer
-!~ end if
-!~ call work3sav_init(ifull,iextra,kl,ilt,jlt,klt,ngasmax) ! must occur after tracers_init
-!~ if ( nbd/=0 .or. mbd/=0 ) then
-  !~ if ( abs(iaero)>=2 .and. nud_aero/=0 ) then
-    !~ call dav_init(ifull,iextra,kl,naero,nbd)
-  !~ else
-    !~ call dav_init(ifull,iextra,kl,0,nbd)
-  !~ end if
-!~ end if
+
 ! Remaining arrays are allocated in indata.f90, since their
 ! definition requires additional input data (e.g, land-surface)
 
@@ -652,37 +600,6 @@ else
   secs_rad = nint(real(kountr)*dt)        ! redefine to actual value
 end if
 
-!~ ! max/min diagnostics      
-!~ #ifdef debug
-!~ call maxmin(u,' u',ktau,1.,kl)
-!~ call maxmin(v,' v',ktau,1.,kl)
-!~ dums(:,:) = sqrt(u(1:ifull,:)**2+v(1:ifull,:)**2)  ! 3D 
-!~ call maxmin(dums,'sp',ktau,1.,kl)
-!~ call maxmin(t,' t',ktau,1.,kl)
-!~ call maxmin(qg,'qg',ktau,1.e3,kl)
-!~ call maxmin(qfg,'qf',ktau,1.e3,kl)
-!~ call maxmin(qlg,'ql',ktau,1.e3,kl)
-!~ call maxmin(wb,'wb',ktau,1.,ms)
-!~ call maxmin(tggsn,'tS',ktau,1.,3)
-!~ call maxmin(tgg,'tgg',ktau,1.,ms)
-!~ pwatr_l = 0.   ! in mm
-!~ do k = 1,kl
-  !~ pwatr_l = pwatr_l-sum(dsig(k)*wts(1:ifull)*(qg(1:ifull,k)+qlg(1:ifull,k)+qfg(1:ifull,k))*ps(1:ifull))
-!~ enddo
-!~ pwatr_l = pwatr_l/grav
-!~ temparray(1) = pwatr_l
-!~ call ccmpi_reduce( temparray(1:1), gtemparray(1:1), "sum", 0, comm_world )
-!~ pwatr = gtemparray(1)
-!~ if ( myid == 0 ) write (6,"('pwatr0 ',12f7.3)") pwatr
-!~ if ( ntrac > 0 ) then
-  !~ do ng = 1,ntrac
-    !~ write (text,'("g",i1)')ng
-    !~ call maxmin(tr(:,:,ng),text,ktau,1.,kl)
-  !~ end do
-!~ end if   ! (ntrac>0)
-!~ #endif
-
-      
 !--------------------------------------------------------------
 ! NRUN COUNTER
 if ( myid == 0 ) then
@@ -762,9 +679,7 @@ do kktau = 1,ntau   ! ****** start of main time loop
   
   ! nriver=1 allows the rivers to work without the ocean model
 
-
     ! RIVER ROUTING ------------------------------------------------------
-
     call START_LOG(river_begin)
     if ( nmaxpr==1 ) then
       if ( myid==0 ) then
@@ -797,11 +712,7 @@ do kktau = 1,ntau   ! ****** start of main time loop
   ! DIAGNOSTICS ------------------------------------------------
 
   if ( mod(ktau,nmaxpr)==0 .or. ktau==ntau ) then
-
-
     call maxmin(wb,'wb',ktau,1.,ms)
- 
-
   endif                  ! (mod(ktau,nmaxpr)==0)
 
   ! update diag_averages and daily max and min screen temps 
@@ -831,11 +742,6 @@ do kktau = 1,ntau   ! ****** start of main time loop
       call START_LOG(maincalc_begin)
     endif  ! (ktau==ntau.and.irest==1)
   endif    ! (ktau==ntau.or.mod(ktau,nwt)==0)
-      
-  ! write high temporal frequency fields
-  !~ if ( surfile /= ' ' ) then
-    !~ call freqfile
-  !~ end if
   call log_on()
  
   if ( mod(ktau,nperavg) == 0 ) then   
@@ -855,20 +761,6 @@ do kktau = 1,ntau   ! ****** start of main time loop
     end if  ! (ntau<10*nperday)
   endif   ! (mod(ktau,nperday)==0)
   
-  !~ if ( namip /= 0 ) then
-    !~ if ( nmlo == 0 ) then
-      !~ if ( mod(ktau,nperday) == 0 ) then
-        !~ if ( myid == 0 ) then
-          !~ write(6,*) 'amipsst called at end of day for ktau,mtimer,namip ',ktau,mtimer,namip  
-        !~ end if
-        !~ call amipsst
-      !~ end if
-    !~ else
-      ! call evey time-step for nudging
-      !~ call amipsst
-    !~ end if
-  !~ end if
-
 #ifdef vampir
   ! Flush vampir trace information to disk to save memory.
   VT_BUFFER_FLUSH()
@@ -1066,9 +958,7 @@ end
 !--------------------------------------------------------------
 ! TEST GRID DECOMPOSITION    
 subroutine proctest(npanels,il_g,nproc,nxp,nyp)
-
 implicit none
-
 integer, intent(in) :: il_g, nproc, npanels
 integer, intent(out) :: nxp, nyp
 integer jl_g

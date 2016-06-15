@@ -234,7 +234,7 @@ end subroutine sib4
 
 ! *************************************************************************************
 subroutine cbmemiss(trsrc,mvegt,mode)
-  
+
 implicit none
   
 include 'newmpar.h'
@@ -244,7 +244,8 @@ integer, intent(in) :: mvegt,mode
 integer nb
 real, dimension(ifull), intent(out) :: trsrc
 real, dimension(ifull) :: fpn,frd,frp,frs
-  
+
+WRITE(6,*) 'IN CBMEMISS'
 if ( nsib/=6 .and. nsib/=7 ) then
   write(6,*) "ERROR: Attempted to read CABLE emissions with CABLE disabled"
   stop
@@ -393,6 +394,7 @@ real, dimension(ifull) :: albsoil, savannafrac
 real, dimension(12) :: xkmlabp,xpsorbmax,xfPleach
 character(len=*), intent(in) :: fveg,fvegprev,fvegnext,fphen,casafile
 
+WRITE(6,*) 'IN loadcbmparam'
 if ( myid==0 ) write(6,*) "Initialising CABLE"
 
 if ( cbm_ms/=ms ) then
