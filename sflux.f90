@@ -179,157 +179,157 @@ if ( ntsur/=7 ) vmod(:) = vmag(:)      ! gives usual way
 !--------------------------------------------------------------
 call START_LOG(sfluxwater_begin)
 if (nmlo==0) then                                                                                ! sea
-  if(ntest==2.and.mydiag)write(6,*) 'before sea loop'                                            ! sea
-  ! from June '03 use basic sea temp from tgg1 (so leads is sensible)                            ! sea
-  ! all sea points in this loop; also open water of leads                                        ! sea
-  if(charnock>0.)then                                                                            ! sea
-    charnck(:)=charnock                                                                          ! sea
-  elseif(charnock<-1.)then  ! zo like Moon (2004)                                                ! sea
-    charnck(:)=max(.0000386*u10(:),.000085*u10(:)-.00058)                                        ! sea
-  else                      ! like Makin (2002)                                                  ! sea
-    charnck(:)=.008+3.e-4*(u10(:)-9.)**2/(1.+(.006+.00008*u10(:))*u10(:)**2)                     ! sea
-  endif                                                                                          ! sea
-  do iq=1,ifull                                                                                  ! sea
-    if(.not.land(iq))then                                                                        ! sea
-      wetfac(iq)=1.                                                                              ! sea
-      ! tpan holds effective sea for this loop                                                   ! sea
-      if(ntss_sh==0)then                                                                         ! sea
-        dtsol=.01*sgsave(iq)/(1.+.25*vmod(iq)**2)   ! solar heating                              ! sea
-        tpan(iq)=tgg(iq,1)+tss_sh*min(dtsol,8.)     ! of ssts                                    ! sea
-      elseif(ntss_sh==3)then                                                                     ! sea
-        dtsol=tss_sh*.01*sgsave(iq)/(1.+.035*vmod(iq)**3) ! solar heating                        ! sea
-        tpan(iq)=tgg(iq,1)+min(dtsol,8.)                  ! of ssts                              ! sea
-      elseif(ntss_sh==4)then                                                                     ! sea
-        dtsol=tss_sh*.01*sgsave(iq)/(1.+vmod(iq)**4/81.) ! solar heating                         ! sea
-        tpan(iq)=tgg(iq,1)+min(dtsol,8.)                 ! of ssts                               ! sea
-      endif   ! (ntss_sh==0) .. else ..                                                          ! sea
-      if(nplens/=0)then                                                                          ! sea
-        ! calculate running total (over last 24 h) of daily precip in mm                         ! sea
-        plens(iq)=(1.-dt/86400.)*plens(iq)+condx(iq)  ! in mm/day                                ! sea
-        ! scale so that nplens m/s wind for 1/2 hr reduces effect by 1/1.2                       ! sea
-        plens(iq)=plens(iq)/(1.+vmod(iq)*dt*.2/max(nplens*1800.,1.))                             ! sea
-        ! produce a cooling of 4 K for an effective plens of 10 mm/day                           ! sea
-        tpan(iq)=tpan(iq)-min(.4*plens(iq) , 6.)                                                 ! sea
-      endif   !  (nplens/=0)                                                                     ! sea
-      if(ntsea==1.and.condx(iq)>.1)tpan(iq)=t(iq,2)                                              ! sea
-      if(ntsea==2.and.condx(iq)>.1)tpan(iq)=t(iq,1)                                              ! sea
-      if(ntsea==3.and.condx(iq)>.1)tpan(iq)=.5*(t(iq,2)+tgg(iq,1))                               ! sea
-      if(ntsea==4.and.condx(iq)>.1)tpan(iq)=.5*(t(iq,1)+tgg(iq,1))                               ! sea
-    endif  ! (.not.land(iq))                                                                     ! sea
-  enddo   ! iq loop                                                                              ! sea
+  !~ if(ntest==2.and.mydiag)write(6,*) 'before sea loop'                                            ! sea
+  !~ ! from June '03 use basic sea temp from tgg1 (so leads is sensible)                            ! sea
+  !~ ! all sea points in this loop; also open water of leads                                        ! sea
+  !~ if(charnock>0.)then                                                                            ! sea
+    !~ charnck(:)=charnock                                                                          ! sea
+  !~ elseif(charnock<-1.)then  ! zo like Moon (2004)                                                ! sea
+    !~ charnck(:)=max(.0000386*u10(:),.000085*u10(:)-.00058)                                        ! sea
+  !~ else                      ! like Makin (2002)                                                  ! sea
+    !~ charnck(:)=.008+3.e-4*(u10(:)-9.)**2/(1.+(.006+.00008*u10(:))*u10(:)**2)                     ! sea
+  !~ endif                                                                                          ! sea
+  !~ do iq=1,ifull                                                                                  ! sea
+    !~ if(.not.land(iq))then                                                                        ! sea
+      !~ wetfac(iq)=1.                                                                              ! sea
+      !~ ! tpan holds effective sea for this loop                                                   ! sea
+      !~ if(ntss_sh==0)then                                                                         ! sea
+        !~ dtsol=.01*sgsave(iq)/(1.+.25*vmod(iq)**2)   ! solar heating                              ! sea
+        !~ tpan(iq)=tgg(iq,1)+tss_sh*min(dtsol,8.)     ! of ssts                                    ! sea
+      !~ elseif(ntss_sh==3)then                                                                     ! sea
+        !~ dtsol=tss_sh*.01*sgsave(iq)/(1.+.035*vmod(iq)**3) ! solar heating                        ! sea
+        !~ tpan(iq)=tgg(iq,1)+min(dtsol,8.)                  ! of ssts                              ! sea
+      !~ elseif(ntss_sh==4)then                                                                     ! sea
+        !~ dtsol=tss_sh*.01*sgsave(iq)/(1.+vmod(iq)**4/81.) ! solar heating                         ! sea
+        !~ tpan(iq)=tgg(iq,1)+min(dtsol,8.)                 ! of ssts                               ! sea
+      !~ endif   ! (ntss_sh==0) .. else ..                                                          ! sea
+      !~ if(nplens/=0)then                                                                          ! sea
+        !~ ! calculate running total (over last 24 h) of daily precip in mm                         ! sea
+        !~ plens(iq)=(1.-dt/86400.)*plens(iq)+condx(iq)  ! in mm/day                                ! sea
+        !~ ! scale so that nplens m/s wind for 1/2 hr reduces effect by 1/1.2                       ! sea
+        !~ plens(iq)=plens(iq)/(1.+vmod(iq)*dt*.2/max(nplens*1800.,1.))                             ! sea
+        !~ ! produce a cooling of 4 K for an effective plens of 10 mm/day                           ! sea
+        !~ tpan(iq)=tpan(iq)-min(.4*plens(iq) , 6.)                                                 ! sea
+      !~ endif   !  (nplens/=0)                                                                     ! sea
+      !~ if(ntsea==1.and.condx(iq)>.1)tpan(iq)=t(iq,2)                                              ! sea
+      !~ if(ntsea==2.and.condx(iq)>.1)tpan(iq)=t(iq,1)                                              ! sea
+      !~ if(ntsea==3.and.condx(iq)>.1)tpan(iq)=.5*(t(iq,2)+tgg(iq,1))                               ! sea
+      !~ if(ntsea==4.and.condx(iq)>.1)tpan(iq)=.5*(t(iq,1)+tgg(iq,1))                               ! sea
+    !~ endif  ! (.not.land(iq))                                                                     ! sea
+  !~ enddo   ! iq loop                                                                              ! sea
                                                                                                  ! sea
-  ! here calculate fluxes for sea point, and nominal pan points                                  ! sea
-  afrootpan=vkar/log(zmin/panzo)                                                                 ! sea
-  do iq=1,ifull                                                                                  ! sea
-    ! drag coefficients  for momentum cduv                                                       ! sea
-    ! for heat and moisture  cdtq                                                                ! sea
+  !~ ! here calculate fluxes for sea point, and nominal pan points                                  ! sea
+  !~ afrootpan=vkar/log(zmin/panzo)                                                                 ! sea
+  !~ do iq=1,ifull                                                                                  ! sea
+    !~ ! drag coefficients  for momentum cduv                                                       ! sea
+    !~ ! for heat and moisture  cdtq                                                                ! sea
     !~ es = establ(tpan(iq))                                                                        ! sea
-    constz=ps(iq)-es                                                                             ! sea
-    qsttg(iq)= .98*.622*es/constz  ! with Zeng 1998 for sea water                                ! sea
-    xx=grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))                                                      ! sea
-    ri(iq)=min(xx/vmag(iq)**2 , ri_max)                                                          ! sea
-    ! this is in-line ocenzo using latest coefficient, i.e. .018                                 ! sea
-    consea=vmod(iq)*charnck(iq)/grav  ! usually charnock=.018                                    ! sea
-    if(land(iq))then                                                                             ! sea
-      zo(iq)=panzo                                                                               ! sea
-      af(iq)=afrootpan**2                                                                        ! sea
-    else                                                                                         ! sea
-      if(charnock<0.)then  ! Moon (2004) over sea                                                ! sea
-        zo(iq)=charnck(iq)                                                                       ! sea
-        afroot=vkar/log(zmin/zo(iq))                                                             ! sea
-        af(iq)=afroot**2                                                                         ! sea
-      else            ! usual charnock method over sea                                           ! sea
-        zo(iq)=.001    ! .0005 better first guess                                                ! sea
-        if(ri(iq)>0.)then             ! stable sea points                                        ! sea
-          fm=vmod(iq) /(1.+bprm*ri(iq))**2 ! N.B. this is vmod*fm                                ! sea
-          con=consea*fm                                                                          ! sea
-          do it=1,3                                                                              ! sea
-            afroot=vkar/log(zmin/zo(iq))                                                         ! sea
-            af(iq)=afroot**2                                                                     ! sea
-            daf=2.*af(iq)*afroot/(vkar*zo(iq))                                                   ! sea
-            zo(iq)=max(1.5e-5,zo(iq)-(zo(iq)-con*af(iq))/(1.-con*daf))                           ! sea
-            zo(iq)=min(zo(iq),9.) ! JLM fix                                                      ! sea
-          enddo    ! it=1,3                                                                      ! sea
-          afroot=vkar/log(zmin/zo(iq))                                                           ! sea
-          af(iq)=afroot**2                                                                       ! sea
-        else                        ! unstable sea points                                        ! sea
-          do it=1,3                                                                              ! sea
-            afroot=vkar/log(zmin/zo(iq))                                                         ! sea
-            af(iq)=afroot**2                                                                     ! sea
-            daf=2.*af(iq)*afroot/(vkar*zo(iq))                                                   ! sea
-            con1=cms*2.*bprm*sqrt(-ri(iq)*zmin/zo(iq))                                           ! sea
-            den=1.+af(iq)*con1                                                                   ! sea
-            dden=con1*(daf-.5*af(iq)/zo(iq))                                                     ! sea
-            fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/den                                             ! sea
-            dfm=2.*bprm*ri(iq)*dden/den**2                                                       ! sea
-            zo(iq)=max(1.5e-5,zo(iq)-(zo(iq)-consea*af(iq)*fm)/(1.-consea*(daf*fm+af(iq)*dfm)))  ! sea
-            zo(iq)=min(zo(iq),6.) ! JLM fix                                                      ! sea
-          enddo  ! it=1,3                                                                        ! sea
-        endif    ! (xx>0.) .. else..                                                             ! sea
-      endif     ! (charnock<-1.) .. else ..                                                      ! sea
-    endif      ! (land(iq)) .. else ..                                                           ! sea
-    aft(iq)=chnsea                                                                               ! sea
-  enddo  ! iq loop                                                                               ! sea
+    !~ constz=ps(iq)-es                                                                             ! sea
+    !~ qsttg(iq)= .98*.622*es/constz  ! with Zeng 1998 for sea water                                ! sea
+    !~ xx=grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))                                                      ! sea
+    !~ ri(iq)=min(xx/vmag(iq)**2 , ri_max)                                                          ! sea
+    !~ ! this is in-line ocenzo using latest coefficient, i.e. .018                                 ! sea
+    !~ consea=vmod(iq)*charnck(iq)/grav  ! usually charnock=.018                                    ! sea
+    !~ if(land(iq))then                                                                             ! sea
+      !~ zo(iq)=panzo                                                                               ! sea
+      !~ af(iq)=afrootpan**2                                                                        ! sea
+    !~ else                                                                                         ! sea
+      !~ if(charnock<0.)then  ! Moon (2004) over sea                                                ! sea
+        !~ zo(iq)=charnck(iq)                                                                       ! sea
+        !~ afroot=vkar/log(zmin/zo(iq))                                                             ! sea
+        !~ af(iq)=afroot**2                                                                         ! sea
+      !~ else            ! usual charnock method over sea                                           ! sea
+        !~ zo(iq)=.001    ! .0005 better first guess                                                ! sea
+        !~ if(ri(iq)>0.)then             ! stable sea points                                        ! sea
+          !~ fm=vmod(iq) /(1.+bprm*ri(iq))**2 ! N.B. this is vmod*fm                                ! sea
+          !~ con=consea*fm                                                                          ! sea
+          !~ do it=1,3                                                                              ! sea
+            !~ afroot=vkar/log(zmin/zo(iq))                                                         ! sea
+            !~ af(iq)=afroot**2                                                                     ! sea
+            !~ daf=2.*af(iq)*afroot/(vkar*zo(iq))                                                   ! sea
+            !~ zo(iq)=max(1.5e-5,zo(iq)-(zo(iq)-con*af(iq))/(1.-con*daf))                           ! sea
+            !~ zo(iq)=min(zo(iq),9.) ! JLM fix                                                      ! sea
+          !~ enddo    ! it=1,3                                                                      ! sea
+          !~ afroot=vkar/log(zmin/zo(iq))                                                           ! sea
+          !~ af(iq)=afroot**2                                                                       ! sea
+        !~ else                        ! unstable sea points                                        ! sea
+          !~ do it=1,3                                                                              ! sea
+            !~ afroot=vkar/log(zmin/zo(iq))                                                         ! sea
+            !~ af(iq)=afroot**2                                                                     ! sea
+            !~ daf=2.*af(iq)*afroot/(vkar*zo(iq))                                                   ! sea
+            !~ con1=cms*2.*bprm*sqrt(-ri(iq)*zmin/zo(iq))                                           ! sea
+            !~ den=1.+af(iq)*con1                                                                   ! sea
+            !~ dden=con1*(daf-.5*af(iq)/zo(iq))                                                     ! sea
+            !~ fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/den                                             ! sea
+            !~ dfm=2.*bprm*ri(iq)*dden/den**2                                                       ! sea
+            !~ zo(iq)=max(1.5e-5,zo(iq)-(zo(iq)-consea*af(iq)*fm)/(1.-consea*(daf*fm+af(iq)*dfm)))  ! sea
+            !~ zo(iq)=min(zo(iq),6.) ! JLM fix                                                      ! sea
+          !~ enddo  ! it=1,3                                                                        ! sea
+        !~ endif    ! (xx>0.) .. else..                                                             ! sea
+      !~ endif     ! (charnock<-1.) .. else ..                                                      ! sea
+    !~ endif      ! (land(iq)) .. else ..                                                           ! sea
+    !~ aft(iq)=chnsea                                                                               ! sea
+  !~ enddo  ! iq loop                                                                               ! sea
                                                                                                  ! sea
-  if(newztsea==0)then ! 0 for original, 1 for different zt over sea                              ! sea
-    ! enhanced formula used in Feb '92 Air-Sea conference follows:                               ! sea
-    ! factch=sqrt(zo*exp(vkar*vkar/(chnsea*log(zmin/zo)))/zmin)                                  ! sea
-    where (.not.land)                                                                            ! sea
-      factch(:)=1. ! factch is sqrt(zo/zt) only for use in unstable fh                           ! sea
-    end where                                                                                    ! sea
-  else                                                                                           ! sea
-    where (.not.land)                                                                            ! sea
-      factch(:)=sqrt(zo(:)*ztv) ! for use in unstable fh                                         ! sea
-    end where                                                                                    ! sea
-  endif  ! (newztsea==0)                                                                         ! sea
+  !~ if(newztsea==0)then ! 0 for original, 1 for different zt over sea                              ! sea
+    !~ ! enhanced formula used in Feb '92 Air-Sea conference follows:                               ! sea
+    !~ ! factch=sqrt(zo*exp(vkar*vkar/(chnsea*log(zmin/zo)))/zmin)                                  ! sea
+    !~ where (.not.land)                                                                            ! sea
+      !~ factch(:)=1. ! factch is sqrt(zo/zt) only for use in unstable fh                           ! sea
+    !~ end where                                                                                    ! sea
+  !~ else                                                                                           ! sea
+    !~ where (.not.land)                                                                            ! sea
+      !~ factch(:)=sqrt(zo(:)*ztv) ! for use in unstable fh                                         ! sea
+    !~ end where                                                                                    ! sea
+  !~ endif  ! (newztsea==0)                                                                         ! sea
                                                                                                  ! sea
-  do iq=1,ifull ! done for all points; overwritten later for land                                ! sea
-    ! Having settled on zo & af now do actual fh and fm calcs                                    ! sea
-    if(ri(iq)>0.)then                                                                            ! sea
-      fm=vmod(iq)/(1.+bprm*ri(iq))**2  ! no zo contrib for stable                                ! sea
-      fh(iq)=fm                                                                                  ! sea
-    else        ! ri is -ve                                                                      ! sea
-      root=sqrt(-ri(iq)*zmin/zo(iq))                                                             ! sea
-      ! First do momentum                                                                        ! sea
-      denma=1.+cms*2.*bprm*af(iq)*root                                                           ! sea
-      fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denma                                                 ! sea
-      ! n.b. fm denotes ustar**2/(vmod(iq)*af)                                                   ! sea
-      ! Now heat ; allow for smaller zo via aft and factch                                       ! sea
-      ! N.B. for newztsea=1, zo contrib cancels in factch*root,                                  ! sea
-      ! so eg (& epan) and fg  (also aft) then indept of zo                                      ! sea
-      denha=1.+chs*2.*bprm*factch(iq)*aft(iq)*root                                               ! sea
-      fh(iq)=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denha                                             ! sea
-    endif                                                                                        ! sea
+  !~ do iq=1,ifull ! done for all points; overwritten later for land                                ! sea
+    !~ ! Having settled on zo & af now do actual fh and fm calcs                                    ! sea
+    !~ if(ri(iq)>0.)then                                                                            ! sea
+      !~ fm=vmod(iq)/(1.+bprm*ri(iq))**2  ! no zo contrib for stable                                ! sea
+      !~ fh(iq)=fm                                                                                  ! sea
+    !~ else        ! ri is -ve                                                                      ! sea
+      !~ root=sqrt(-ri(iq)*zmin/zo(iq))                                                             ! sea
+      !~ ! First do momentum                                                                        ! sea
+      !~ denma=1.+cms*2.*bprm*af(iq)*root                                                           ! sea
+      !~ fm=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denma                                                 ! sea
+      !~ ! n.b. fm denotes ustar**2/(vmod(iq)*af)                                                   ! sea
+      !~ ! Now heat ; allow for smaller zo via aft and factch                                       ! sea
+      !~ ! N.B. for newztsea=1, zo contrib cancels in factch*root,                                  ! sea
+      !~ ! so eg (& epan) and fg  (also aft) then indept of zo                                      ! sea
+      !~ denha=1.+chs*2.*bprm*factch(iq)*aft(iq)*root                                               ! sea
+      !~ fh(iq)=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denha                                             ! sea
+    !~ endif                                                                                        ! sea
                                                                                                  ! sea
-    conh=rho(iq)*aft(iq)*cp                                                                      ! sea
-    conw=rho(iq)*aft(iq)*hl                                                                      ! sea
-    fg(iq)=conh*fh(iq)*(tpan(iq)-theta(iq))                                                      ! sea
-    eg(iq)=conw*fh(iq)*(qsttg(iq)-qg(iq,1))                                                      ! sea
-    rnet(iq)=sgsave(iq)-rgsave(iq)-stefbo*tpan(iq)**4                                            ! sea
-    zoh(iq)=zo(iq)/(factch(iq)*factch(iq))                                                       ! sea
-    zoq(iq)=zoh(iq)                                                                              ! sea
-    ! cduv is now drag coeff *vmod                                                               ! sea
-    cduv(iq) =af(iq)*fm                                                                          ! sea
-    cdtq(iq) =aft(iq)*fh(iq)                                                                     ! sea
-    ustar(iq) = sqrt(vmod(iq)*cduv(iq))                                                          ! sea
-    ! Surface stresses taux, tauy: diagnostic only - unstaggered now                             ! sea
-    taux(iq)=rho(iq)*cduv(iq)*u(iq,1)                                                            ! sea
-    tauy(iq)=rho(iq)*cduv(iq)*v(iq,1)                                                            ! sea
+    !~ conh=rho(iq)*aft(iq)*cp                                                                      ! sea
+    !~ conw=rho(iq)*aft(iq)*hl                                                                      ! sea
+    !~ fg(iq)=conh*fh(iq)*(tpan(iq)-theta(iq))                                                      ! sea
+    !~ eg(iq)=conw*fh(iq)*(qsttg(iq)-qg(iq,1))                                                      ! sea
+    !~ rnet(iq)=sgsave(iq)-rgsave(iq)-stefbo*tpan(iq)**4                                            ! sea
+    !~ zoh(iq)=zo(iq)/(factch(iq)*factch(iq))                                                       ! sea
+    !~ zoq(iq)=zoh(iq)                                                                              ! sea
+    !~ ! cduv is now drag coeff *vmod                                                               ! sea
+    !~ cduv(iq) =af(iq)*fm                                                                          ! sea
+    !~ cdtq(iq) =aft(iq)*fh(iq)                                                                     ! sea
+    !~ ustar(iq) = sqrt(vmod(iq)*cduv(iq))                                                          ! sea
+    !~ ! Surface stresses taux, tauy: diagnostic only - unstaggered now                             ! sea
+    !~ taux(iq)=rho(iq)*cduv(iq)*u(iq,1)                                                            ! sea
+    !~ tauy(iq)=rho(iq)*cduv(iq)*v(iq,1)                                                            ! sea
     ! note that iq==idjd  can only be true on the correct processor                              ! sea
-    if(ntest==1.and.iq==idjd.and.mydiag)then                                                     ! sea
-      write(6,*) 'in sea-type loop for iq,idjd: ',iq,idjd                                        ! sea
-      write(6,*) 'zmin,zo,factch ',zmin,zo(iq),factch(iq)                                        ! sea
-      write(6,*) 'ri,ustar,es ',ri(iq),ustar(iq),es                                              ! sea
-      write(6,*) 'af,aft ',af(iq),aft(iq)                                                        ! sea
-      write(6,*) 'tpan,tss,theta ',tpan(iq),tss(iq),theta(iq)                                    ! sea
-      write(6,*) 'chnsea,rho,t1 ',chnsea,rho(iq),t(iq,1)                                         ! sea
-      write(6,*) 'fm,fh,conh ',fm,fh(iq),conh                                                    ! sea
-      write(6,*) 'vmod,cduv,fg ',vmod(iq),cduv(iq),fg(iq)                                        ! sea
-    endif                                                                                        ! sea
-  enddo     ! iq loop                                                                            ! sea
-  epot(:) = eg(:)                                                                                ! sea
-  epan(:) = eg(:)                                                                                ! sea
-  ! section to update pan temperatures                                                           ! sea
+    !~ if(ntest==1.and.iq==idjd.and.mydiag)then                                                     ! sea
+      !~ write(6,*) 'in sea-type loop for iq,idjd: ',iq,idjd                                        ! sea
+      !~ write(6,*) 'zmin,zo,factch ',zmin,zo(iq),factch(iq)                                        ! sea
+      !~ write(6,*) 'ri,ustar,es ',ri(iq),ustar(iq),es                                              ! sea
+      !~ write(6,*) 'af,aft ',af(iq),aft(iq)                                                        ! sea
+      !~ write(6,*) 'tpan,tss,theta ',tpan(iq),tss(iq),theta(iq)                                    ! sea
+      !~ write(6,*) 'chnsea,rho,t1 ',chnsea,rho(iq),t(iq,1)                                         ! sea
+      !~ write(6,*) 'fm,fh,conh ',fm,fh(iq),conh                                                    ! sea
+      !~ write(6,*) 'vmod,cduv,fg ',vmod(iq),cduv(iq),fg(iq)                                        ! sea
+    !~ endif                                                                                        ! sea
+  !~ enddo     ! iq loop                                                                            ! sea
+  !~ epot(:) = eg(:)                                                                                ! sea
+  !~ epan(:) = eg(:)                                                                                ! sea
+  !~ ! section to update pan temperatures                                                           ! sea
   do iq=1,ifull                                                                                  ! sea
     if(land(iq))then                                                                             ! sea
       rgg(iq)=5.67e-8*tpan(iq)**4                                                                ! sea
