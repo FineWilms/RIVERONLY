@@ -701,11 +701,11 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
     mlodwn(:,:,2) = 34.72   
   end if ! (nestesd/=1.or.nud_sss/=0) ..else..
   ! ocean currents
-  if ( ( nested/=1 .or. nud_ouv/=0 ) .and. ok>0 ) then
-    call fillhistuv4o('uoc','voc',mlodwn(:,:,3),mlodwn(:,:,4),land_a,ocndwn(:,1))
-  else
+  !~ if ( ( nested/=1 .or. nud_ouv/=0 ) .and. ok>0 ) then
+    !~ call fillhistuv4o('uoc','voc',mlodwn(:,:,3),mlodwn(:,:,4),land_a,ocndwn(:,1))
+  !~ else
     mlodwn(:,:,3:4) = 0.               
-  end if ! (nestesd/=1.or.nud_ouv/=0) ..else..
+  !~ end if ! (nestesd/=1.or.nud_ouv/=0) ..else..
   ! water surface height
   if ( nested/=1 .or. nud_sfh/=0 ) then
     call fillhist1('ocheight',ocndwn(:,2),land_a)
@@ -970,104 +970,7 @@ if ( nested/=1 ) then
       if ( tst ) ierc(7+2*ms+k) = -1
     end do
   end if
-  
-  !~ ! -----------------------------------------------------------------
-  !~ ! verify if input is a restart file
-  !~ if ( nested==0 ) then
-    !~ if ( myid==0 .or. pfall ) then
-      !~ if ( kk==kl .and. iotest ) then
-        !~ lrestart = .true.
-        !~ call ccnf_inq_varid(ncid,'dpsldt',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'zgnhs',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'sdot',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'pslx',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'savu',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'savv',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'savu1',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'savv1',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'savu2',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'savv2',idv,tst)
-        !~ if ( tst ) lrestart = .false.
-        !~ call ccnf_inq_varid(ncid,'nstag',idv,tst)
-        !~ if ( tst ) then
-          !~ lrestart = .false.
-        !~ else 
-          !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(3))
-        !~ end if
-        !~ call ccnf_inq_varid(ncid,'nstagu',idv,tst)
-        !~ if ( tst ) then
-          !~ lrestart = .false.
-        !~ else 
-          !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(4))
-        !~ end if
-        !~ call ccnf_inq_varid(ncid,'nstagoff',idv,tst)
-        !~ if ( tst ) then
-          !~ lrestart = .false.
-        !~ else 
-          !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(5))
-        !~ end if
-        !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-          !~ if ( ok==wlev ) then
-            !~ call ccnf_inq_varid(ncid,'oldu101',idv,tst)
-            !~ if ( tst ) lrestart = .false.
-            !~ call ccnf_inq_varid(ncid,'oldv101',idv,tst)
-            !~ if ( tst ) lrestart = .false.
-            !~ call ccnf_inq_varid(ncid,'oldu201',idv,tst)
-            !~ if ( tst ) lrestart = .false.
-            !~ call ccnf_inq_varid(ncid,'oldv201',idv,tst)
-            !~ if ( tst ) lrestart = .false.
-            !~ call ccnf_inq_varid(ncid,'ipice',idv,tst)
-            !~ if ( tst ) lrestart = .false.
-            !~ call ccnf_inq_varid(ncid,'nstagoffmlo',idv,tst)
-            !~ if ( tst ) then
-              !~ lrestart = .false.
-            !~ else
-              !~ call ccnf_get_vara(ncid,idv,iarchi,ierc(6))
-            !~ end if
-          !~ else
-            !~ lrestart = .false.
-          !~ end if
-        !~ end if
-      !~ else
-        !~ lrestart = .false.
-      !~ end if
-      !~ ierc(1:2) = 0
-      !~ if ( lrestart ) ierc(1)=1
-      !~ call ccnf_inq_varid(ncid,'u10',idv,tst)
-      !~ if ( tst ) ierc(2) = -1
-    !~ end if
-    !~ if ( .not.pfall ) then
-      !~ call ccmpi_bcast(ierc(1:7+3*ms),0,comm_world)
-    !~ end if
-    !~ lrestart = (ierc(1)==1)
-    !~ if ( lrestart ) then
-      !~ nstag       = ierc(3)
-      !~ nstagu      = ierc(4)
-      !~ nstagoff    = ierc(5)
-      !~ nstagoffmlo = ierc(6)
-      !~ if ( myid==0 ) then
-        !~ write(6,*) "Continue stagging from"
-        !~ write(6,*) "nstag,nstagu,nstagoff ",nstag,nstagu,nstagoff
-        !~ if ( abs(nmlo)>=3 .and. abs(nmlo)<=9 ) then
-          !~ write(6,*) "nstagoffmlo ",nstagoffmlo
-        !~ end if
-      !~ end if
-    !~ end if
-  !~ else
-    !~ if ( .not.pfall ) then
-      !~ call ccmpi_bcast(ierc(7:7+3*ms),0,comm_world)
-    !~ end if            
-  !~ end if ! nested==0 ..else..
-        
+
   !------------------------------------------------------------------
   ! Read snow and soil tempertaure
   call gethist1('snd',snowd)
@@ -1230,16 +1133,7 @@ if ( nested/=1 ) then
   ! Read CABLE/CASA aggregate C+N+P pools
   if ( nsib>=6 ) then
     if ( ccycle==0 ) then
-      !if ( ierc(7)==0 ) then
-      !  do k=1,ncp
-      !    write(vname,'("cplant",I1.1)') k
-      !    call fillhist1(vname,cplant(:,k),sea_a)
-      !  end do
-      !  do k=1,ncs
-      !    write(vname,'("csoil",I1.1)') k
-      !    call fillhist1(vname,csoil(:,k),sea_a)
-      !  end do
-      !end if
+
     else
       if ( ierc(7)==0 ) then
         call fillhist4('cplant',cplant,mplant,sea_a)
@@ -1301,71 +1195,6 @@ if ( nested/=1 ) then
     so4t(:)=0.
   end if
   
-  !~ ! -----------------------------------------------------------------
-  !~ ! Restart fields
-  !~ if ( nested==0 ) then
-    !~ ! DPSLDT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ dpsldt=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'dpsldt',ik,kk,dpsldt,ifull)
-    !~ end if
-
-    !~ ! ZGNHS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ phi_nh = 0.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'zgnhs',ik,kk,phi_nh,ifull)
-    !~ end if
-    
-    !~ ! SDOT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ sdot=-999.
-    !~ if ( lrestart ) then
-      !~ sdot(:,1)=0.
-      !~ call histrd4(iarchi,ier,'sdot',ik,kk,sdot(:,2:kk+1),ifull)
-    !~ end if
-
-    !~ ! PSLX !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ pslx=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'pslx',ik,kk,pslx,ifull)
-    !~ end if
-          
-    !~ ! SAVU !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ savu=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'savu',ik,kk,savu,ifull)
-    !~ end if
-          
-    !~ ! SAVV !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ savv=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'savv',ik,kk,savv,ifull)
-    !~ end if
-
-    !~ ! SAVU1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ savu1=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'savu1',ik,kk,savu1,ifull)
-    !~ end if
-          
-    !~ ! SAVV1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ savv1=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'savv1',ik,kk,savv1,ifull)
-    !~ end if
-
-    !~ ! SAVU2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ savu2=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'savu2',ik,kk,savu2,ifull)
-    !~ end if
-          
-    !~ ! SAVV2 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !~ savv2=-999.
-    !~ if ( lrestart ) then
-      !~ call histrd4(iarchi,ier,'savv2',ik,kk,savv2,ifull)
-    !~ end if
-
-  !~ end if ! (nested==0)
 
   ! -----------------------------------------------------------------
   ! soil ice and snow data
@@ -3086,49 +2915,49 @@ return
 end subroutine fillhist4o
 
 ! This version reads, fills and interpolates ocean currents
-subroutine fillhistuv4o(uname,vname,uarout,varout,mask_a,bath)
+!~ subroutine fillhistuv4o(uname,vname,uarout,varout,mask_a,bath)
   
-use cc_mpi             ! CC MPI routines
-use infile             ! Input file routines
-use mlo                ! Ocean physics and prognostic arrays
+!~ use cc_mpi             ! CC MPI routines
+!~ use infile             ! Input file routines
+!~ use mlo                ! Ocean physics and prognostic arrays
       
-implicit none
+!~ implicit none
       
-include 'newmpar.h'    ! Grid parameters
-include 'darcdf.h'     ! Netcdf data
+!~ include 'newmpar.h'    ! Grid parameters
+!~ include 'darcdf.h'     ! Netcdf data
       
-integer ier
-real, dimension(:,:), intent(out) :: uarout, varout
-real, dimension(fwsize,ok) :: ucc, vcc
-real, dimension(ifull,ok) :: u_k, v_k
-real, dimension(ifull), intent(in) :: bath
-logical, dimension(:), intent(in) :: mask_a
-character(len=*), intent(in) :: uname, vname
+!~ integer ier
+!~ real, dimension(:,:), intent(out) :: uarout, varout
+!~ real, dimension(fwsize,ok) :: ucc, vcc
+!~ real, dimension(ifull,ok) :: u_k, v_k
+!~ real, dimension(ifull), intent(in) :: bath
+!~ logical, dimension(:), intent(in) :: mask_a
+!~ character(len=*), intent(in) :: uname, vname
 
-if ( iotest ) then
-  ! read without interpolation or redistribution
-  call histrd4(iarchi,ier,uname,ik,ok,u_k,ifull)
-  call histrd4(iarchi,ier,vname,ik,ok,v_k,ifull)
-else if ( fnresid==1 ) then
-  ! use bcast method for single input file
-  ! requires interpolation and redistribution
-  call histrd4(iarchi,ier,uname,ik,ok,ucc,6*ik*ik,nogather=.false.)
-  call histrd4(iarchi,ier,vname,ik,ok,vcc,6*ik*ik,nogather=.false.)
-  call interpcurrent4(u_k,v_k,ucc,vcc,mask_a,nogather=.false.)
-else
-  ! use RMA method for multiple input files
-  ! requires interpolation and redistribution
-  call histrd4(iarchi,ier,uname,ik,ok,ucc,6*ik*ik,nogather=.true.)
-  call histrd4(iarchi,ier,vname,ik,ok,vcc,6*ik*ik,nogather=.true.)
-  call interpcurrent4(u_k,v_k,ucc,vcc,mask_a,nogather=.true.)
-end if ! iotest
+!~ if ( iotest ) then
+  !~ ! read without interpolation or redistribution
+  !~ call histrd4(iarchi,ier,uname,ik,ok,u_k,ifull)
+  !~ call histrd4(iarchi,ier,vname,ik,ok,v_k,ifull)
+!~ else if ( fnresid==1 ) then
+  !~ ! use bcast method for single input file
+  !~ ! requires interpolation and redistribution
+  !~ call histrd4(iarchi,ier,uname,ik,ok,ucc,6*ik*ik,nogather=.false.)
+  !~ call histrd4(iarchi,ier,vname,ik,ok,vcc,6*ik*ik,nogather=.false.)
+  !~ call interpcurrent4(u_k,v_k,ucc,vcc,mask_a,nogather=.false.)
+!~ else
+  !~ ! use RMA method for multiple input files
+  !~ ! requires interpolation and redistribution
+  !~ call histrd4(iarchi,ier,uname,ik,ok,ucc,6*ik*ik,nogather=.true.)
+  !~ call histrd4(iarchi,ier,vname,ik,ok,vcc,6*ik*ik,nogather=.true.)
+  !~ call interpcurrent4(u_k,v_k,ucc,vcc,mask_a,nogather=.true.)
+!~ end if ! iotest
 
-! vertical interpolation
-call mloregrid(ok,bath,u_k,uarout,0)
-call mloregrid(ok,bath,v_k,varout,0)
+!~ ! vertical interpolation
+!~ call mloregrid(ok,bath,u_k,uarout,0)
+!~ call mloregrid(ok,bath,v_k,varout,0)
 
-return
-end subroutine fillhistuv4o
+!~ return
+!~ end subroutine fillhistuv4o
 
 ! *****************************************************************************
 ! FILE DATA MESSAGE PASSING ROUTINES
