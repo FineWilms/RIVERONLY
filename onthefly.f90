@@ -711,119 +711,36 @@ end if
 !--------------------------------------------------------------
 
 
-!--------------------------------------------------------------
-! read sea ice here for prescribed SSTs configuration and for
-! mixed-layer-ocean
-if ( tsstest ) then
-  call histrd1(iarchi,ier,'siced',  ik,sicedep,ifull)
-  call histrd1(iarchi,ier,'fracice',ik,fracice,ifull)
-  if ( any(fracice>1.) ) then
-    write(6,*) "ERROR: Invalid fracice in input file"
-    write(6,*) "Fracice should be between 0 and 1"
-    write(6,*) "maximum fracice ",maxval(fracice)
-    call ccmpi_abort(-1)
-  end if
-else
-  if ( fnresid==1 ) then
-    call histrd1(iarchi,ier,'siced',  ik,sicedep_a,6*ik*ik,nogather=.false.)
-    call histrd1(iarchi,ier,'fracice',ik,fracice_a,6*ik*ik,nogather=.false.)
-  else
-    call histrd1(iarchi,ier,'siced',  ik,sicedep_a,6*ik*ik,nogather=.true.)
-    call histrd1(iarchi,ier,'fracice',ik,fracice_a,6*ik*ik,nogather=.true.)
-  end if
-  if ( myid<fnresid ) then
-    if ( any(fracice_a>1.) ) then
-      write(6,*) "ERROR: Invalid fracice in input file"
-      write(6,*) "Fracice should be between 0 and 1"
-      write(6,*) "maximum fracice ",maxval(fracice_a)
-      call ccmpi_abort(-1)
-    end if
-  end if
-        
-  !~ ! diagnose sea-ice if required
-  !~ if ( fwsize>0 ) then
-    !~ if ( iers(2)==0 ) then  ! i.e. sicedep read in 
-      !~ if (iers(3)/=0 ) then ! i.e. sicedep read in; fracice not read in
-        !~ where ( sicedep_a(:)>0. )
-          !~ fracice_a(:) = 1.
-        !~ endwhere
-      !~ endif  ! (ierr/=0)  fracice
-    !~ else     ! sicedep not read in
-      !~ if ( iers(3)/=0 ) then  ! neither sicedep nor fracice read in
-        !~ sicedep_a(:) = 0.  ! Oct 08
-        !~ fracice_a(:) = 0.
-        !~ write(6,*)'pre-setting siced in onthefly from tss'
-        !~ where ( abs(tss_a(:))<=271.6 ) ! for ERA-Interim
-          !~ sicedep_a(:) = 1.  ! Oct 08   ! previously 271.2
-          !~ fracice_a(:) = 1.
-        !~ endwhere
-      !~ else  ! i.e. only fracice read in;  done in indata, nestin
-            !~ ! but needed here for onthefly (different dims) 28/8/08        
-        !~ where ( fracice_a(:)>.01 )
-          !~ sicedep_a(:) = 2.
-        !~ elsewhere
-          !~ sicedep_a(:) = 0.
-          !~ fracice_a(:) = 0.
-        !~ endwhere
-      !~ endif  ! (iers(3)/=0)
-    !~ endif    ! (iers(2)/=0) .. else ..    for sicedep
-!~ write(6,*)'TEST01'
-    !~ ! fill surface temperature and sea-ice
-    !~ tss_l_a(:) = abs(tss_a(:))
-    !~ tss_s_a(:) = abs(tss_a(:))
-  !~ end if ! myid==0
-!~ write(6,*)'TEST04'
-  !~ if ( iotest ) then
-    !~ write(6,*)'TEST05'
-    !~ ! This case occurs for missing sea-ice data
-    !~ if ( myid==0 ) then
-      !~ call ccmpi_distribute(zss,zss_a)
-      !~ call ccmpi_distribute(tss_l,tss_l_a)
-      !~ call ccmpi_distribute(tss_s,tss_s_a)
-      !~ call ccmpi_distribute(sicedep,sicedep_a)
-      !~ call ccmpi_distribute(fracice,fracice_a)
-    !~ else
-      !~ call ccmpi_distribute(zss)
-      !~ call ccmpi_distribute(tss_l)
-      !~ call ccmpi_distribute(tss_s)
-      !~ call ccmpi_distribute(sicedep)
-      !~ call ccmpi_distribute(fracice)
-    !~ end if
-!~ !   incorporate other target land mask effects
-    !~ where ( land(1:ifull) )
-      !~ sicedep = 0.
-      !~ fracice = 0.
-      !~ tss = tss_l
-    !~ elsewhere
-      !~ tss = tss_s
-    !~ end where
+!~ !--------------------------------------------------------------
+!~ ! read sea ice here for prescribed SSTs configuration and for
+!~ ! mixed-layer-ocean
+!~ if ( tsstest ) then
+  !~ call histrd1(iarchi,ier,'siced',  ik,sicedep,ifull)
+  !~ call histrd1(iarchi,ier,'fracice',ik,fracice,ifull)
+  !~ if ( any(fracice>1.) ) then
+    !~ write(6,*) "ERROR: Invalid fracice in input file"
+    !~ write(6,*) "Fracice should be between 0 and 1"
+    !~ write(6,*) "maximum fracice ",maxval(fracice)
+    !~ call ccmpi_abort(-1)
+  !~ end if
+!~ else
+  !~ if ( fnresid==1 ) then
+    !~ call histrd1(iarchi,ier,'siced',  ik,sicedep_a,6*ik*ik,nogather=.false.)
+    !~ call histrd1(iarchi,ier,'fracice',ik,fracice_a,6*ik*ik,nogather=.false.)
   !~ else
-!~ !   The routine doints1 does the gather, calls ints4 and redistributes
-    !~ if ( fnresid==1 ) then
-      !~ call doints1_gather(zss_a,     zss)
-      !~ call doints1_gather(tss_l_a,   tss_l)
-      !~ call doints1_gather(tss_s_a,   tss_s)
-      !~ call doints1_gather(fracice_a, fracice)
-      !~ call doints1_gather(sicedep_a, sicedep)
-    !~ else
-      !~ call doints1_nogather(zss_a,     zss)
-      !~ call doints1_nogather(tss_l_a,   tss_l)
-      !~ call doints1_nogather(tss_s_a,   tss_s)
-      !~ call doints1_nogather(fracice_a, fracice)
-      !~ call doints1_nogather(sicedep_a, sicedep)
+    !~ call histrd1(iarchi,ier,'siced',  ik,sicedep_a,6*ik*ik,nogather=.true.)
+    !~ call histrd1(iarchi,ier,'fracice',ik,fracice_a,6*ik*ik,nogather=.true.)
+  !~ end if
+  !~ if ( myid<fnresid ) then
+    !~ if ( any(fracice_a>1.) ) then
+      !~ write(6,*) "ERROR: Invalid fracice in input file"
+      !~ write(6,*) "Fracice should be between 0 and 1"
+      !~ write(6,*) "maximum fracice ",maxval(fracice_a)
+      !~ call ccmpi_abort(-1)
     !~ end if
-!~ !   incorporate other target land mask effects
-    !~ where ( land(1:ifull) )
-      !~ tss(1:ifull) = tss_l(1:ifull)
-    !~ elsewhere
-      !~ tss(1:ifull) = tss_s(1:ifull)   ! no sign switch in CCAM
-    !~ end where
-    !~ where ( land(1:ifull) .or. sicedep(1:ifull)<0.05 ) ! for sflux
-      !~ sicedep(1:ifull) = 0.
-      !~ fracice(1:ifull) = 0.
-    !~ end where
-  !~ end if ! iotest
-end if ! (tsstest) ..else..
+  !~ end if
+        
+!~ end if ! (tsstest) ..else..
 
 
 ! -------------------------------------------------------------------
