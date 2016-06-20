@@ -666,94 +666,52 @@ else
 end if ! (tsstest) ..else..
 
       
-!--------------------------------------------------------------
-! Read ocean data for nudging (sea-ice is read below)
-! read when nested=0 or nested==1.and.nud/=0 or nested=2
-if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  ! fixed ocean depth
-  ocndwn(:,1) = ocndep_l
-  ! ocean potential temperature
-  ! ocean temperature and soil temperature use the same arrays
-  ! as no fractional land or sea cover is allowed in CCAM
-  if ( ( nested/=1 .or. nud_sst/=0 ) .and. ok>0 ) then
-    !~ call fillhist4o('tgg',mlodwn(:,:,1),land_a,ocndwn(:,1))
-    if ( all(mlodwn(:,:,1)==0.) ) mlodwn(:,:,1) = 293. - wrtemp
-    if ( any(mlodwn(:,:,1)>100.) ) then
-      if ( myid==0 ) then
-        write(6,*) "Adjust input ocean data for high precision"
-      end if
-      where (mlodwn(:,:,1)>100.)
-        mlodwn(:,:,1) = mlodwn(:,:,1) - wrtemp ! backwards compatibility
-      end where
-    else
-      if ( myid==0 ) then
-        write(6,*) "High precision ocean data detected"
-      end if
-    end if
-  else
-    mlodwn(:,:,1) = 293. - wrtemp
-  end if ! (nestesd/=1.or.nud_sst/=0) ..else..
-  ! ocean salinity
-  if ( ( nested/=1 .or. nud_sss/=0 ) .and. ok>0 ) then
-    !~ call fillhist4o('sal',mlodwn(:,:,2),land_a,ocndwn(:,1))
-    mlodwn(:,:,2) = max( mlodwn(:,:,2), 0. )
-  else
-    mlodwn(:,:,2) = 34.72   
-  end if ! (nestesd/=1.or.nud_sss/=0) ..else..
-    mlodwn(:,:,3:4) = 0.               
-  ! water surface height
-  if ( nested/=1 .or. nud_sfh/=0 ) then
-    call fillhist1('ocheight',ocndwn(:,2),land_a)
-  else
-    ocndwn(:,2) = 0.
-  end if ! (nested/=1.or.nud_sfh/=0) ..else..
-end if
-!--------------------------------------------------------------
-
-
 !~ !--------------------------------------------------------------
-!~ ! read sea ice here for prescribed SSTs configuration and for
-!~ ! mixed-layer-ocean
-!~ if ( tsstest ) then
-  !~ call histrd1(iarchi,ier,'siced',  ik,sicedep,ifull)
-  !~ call histrd1(iarchi,ier,'fracice',ik,fracice,ifull)
-  !~ if ( any(fracice>1.) ) then
-    !~ write(6,*) "ERROR: Invalid fracice in input file"
-    !~ write(6,*) "Fracice should be between 0 and 1"
-    !~ write(6,*) "maximum fracice ",maxval(fracice)
-    !~ call ccmpi_abort(-1)
-  !~ end if
-!~ else
-  !~ if ( fnresid==1 ) then
-    !~ call histrd1(iarchi,ier,'siced',  ik,sicedep_a,6*ik*ik,nogather=.false.)
-    !~ call histrd1(iarchi,ier,'fracice',ik,fracice_a,6*ik*ik,nogather=.false.)
-  !~ else
-    !~ call histrd1(iarchi,ier,'siced',  ik,sicedep_a,6*ik*ik,nogather=.true.)
-    !~ call histrd1(iarchi,ier,'fracice',ik,fracice_a,6*ik*ik,nogather=.true.)
-  !~ end if
-  !~ if ( myid<fnresid ) then
-    !~ if ( any(fracice_a>1.) ) then
-      !~ write(6,*) "ERROR: Invalid fracice in input file"
-      !~ write(6,*) "Fracice should be between 0 and 1"
-      !~ write(6,*) "maximum fracice ",maxval(fracice_a)
-      !~ call ccmpi_abort(-1)
+!~ ! Read ocean data for nudging (sea-ice is read below)
+!~ ! read when nested=0 or nested==1.and.nud/=0 or nested=2
+!~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
+  !~ ! fixed ocean depth
+  !~ ocndwn(:,1) = ocndep_l
+  !~ ! ocean potential temperature
+  !~ ! ocean temperature and soil temperature use the same arrays
+  !~ ! as no fractional land or sea cover is allowed in CCAM
+  !~ if ( ( nested/=1 .or. nud_sst/=0 ) .and. ok>0 ) then
+    !~ call fillhist4o('tgg',mlodwn(:,:,1),land_a,ocndwn(:,1))
+    !~ if ( all(mlodwn(:,:,1)==0.) ) mlodwn(:,:,1) = 293. - wrtemp
+    !~ if ( any(mlodwn(:,:,1)>100.) ) then
+      !~ if ( myid==0 ) then
+        !~ write(6,*) "Adjust input ocean data for high precision"
+      !~ end if
+      !~ where (mlodwn(:,:,1)>100.)
+        !~ mlodwn(:,:,1) = mlodwn(:,:,1) - wrtemp ! backwards compatibility
+      !~ end where
+    !~ else
+      !~ if ( myid==0 ) then
+        !~ write(6,*) "High precision ocean data detected"
+      !~ end if
     !~ end if
-  !~ end if
-        
-!~ end if ! (tsstest) ..else..
-
+  !~ else
+    !~ mlodwn(:,:,1) = 293. - wrtemp
+  !~ end if ! (nestesd/=1.or.nud_sst/=0) ..else..
+  !~ ! ocean salinity
+  !~ if ( ( nested/=1 .or. nud_sss/=0 ) .and. ok>0 ) then
+    !~ call fillhist4o('sal',mlodwn(:,:,2),land_a,ocndwn(:,1))
+    !~ mlodwn(:,:,2) = max( mlodwn(:,:,2), 0. )
+  !~ else
+    !~ mlodwn(:,:,2) = 34.72   
+  !~ end if ! (nestesd/=1.or.nud_sss/=0) ..else..
+    !~ mlodwn(:,:,3:4) = 0.               
+  !~ ! water surface height
+  !~ if ( nested/=1 .or. nud_sfh/=0 ) then
+    !~ call fillhist1('ocheight',ocndwn(:,2),land_a)
+  !~ else
+    !~ ocndwn(:,2) = 0.
+  !~ end if ! (nested/=1.or.nud_sfh/=0) ..else..
+!~ end if
+!~ !--------------------------------------------------------------
 
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
-
-! air temperature
-! read for nested=0 or nested=1.and.(nud_t/=0.or.nud_p/=0)
-
-!~ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
-  !~ call gethist4a('temp',t,2,levkin=levkin,t_a_lev=t_a_lev)
-!~ else
-  !~ t(1:ifull,:) = 300.    
-!~ end if ! (nested==0.or.(nested==1.and.nud_test/=0))
 
 ! winds
 ! read for nested=0 or nested=1.and.nud_uv/=0
@@ -965,27 +923,6 @@ if ( nested/=1 ) then
     end if ! iotest
     zidry=max(zidry,1.)
   end if
-
-  !~ !------------------------------------------------------------------
-  !~ ! Read CABLE/CASA aggregate C+N+P pools
-  !~ if ( nsib>=6 ) then
-    !~ if ( ccycle==0 ) then
-
-    !~ else
-      !~ if ( ierc(7)==0 ) then
-        !~ call fillhist4('cplant',cplant,mplant,sea_a)
-        !~ call fillhist4('nplant',niplant,mplant,sea_a)
-        !~ call fillhist4('pplant',pplant,mplant,sea_a)
-        !~ call fillhist4('clitter',clitter,mlitter,sea_a)
-        !~ call fillhist4('nlitter',nilitter,mlitter,sea_a)
-        !~ call fillhist4('plitter',plitter,mlitter,sea_a)
-        !~ call fillhist4('csoil',csoil,msoil,sea_a)
-        !~ call fillhist4('nsoil',nisoil,msoil,sea_a)
-        !~ call fillhist4('psoil',psoil,msoil,sea_a)
-        !~ call fillhist1('glai',glai,sea_a)
-      !~ end if ! ierc(7)==0
-    !~ end if ! ccycle==0 ..else..
-  !~ end if ! if nsib==6.or.nsib==7
 
   !------------------------------------------------------------------
   ! Read urban data
