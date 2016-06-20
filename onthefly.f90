@@ -676,7 +676,7 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
   ! ocean temperature and soil temperature use the same arrays
   ! as no fractional land or sea cover is allowed in CCAM
   if ( ( nested/=1 .or. nud_sst/=0 ) .and. ok>0 ) then
-    call fillhist4o('tgg',mlodwn(:,:,1),land_a,ocndwn(:,1))
+    !~ call fillhist4o('tgg',mlodwn(:,:,1),land_a,ocndwn(:,1))
     if ( all(mlodwn(:,:,1)==0.) ) mlodwn(:,:,1) = 293. - wrtemp
     if ( any(mlodwn(:,:,1)>100.) ) then
       if ( myid==0 ) then
@@ -695,17 +695,12 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
   end if ! (nestesd/=1.or.nud_sst/=0) ..else..
   ! ocean salinity
   if ( ( nested/=1 .or. nud_sss/=0 ) .and. ok>0 ) then
-    call fillhist4o('sal',mlodwn(:,:,2),land_a,ocndwn(:,1))
+    !~ call fillhist4o('sal',mlodwn(:,:,2),land_a,ocndwn(:,1))
     mlodwn(:,:,2) = max( mlodwn(:,:,2), 0. )
   else
     mlodwn(:,:,2) = 34.72   
   end if ! (nestesd/=1.or.nud_sss/=0) ..else..
-  ! ocean currents
-  !~ if ( ( nested/=1 .or. nud_ouv/=0 ) .and. ok>0 ) then
-    !~ call fillhistuv4o('uoc','voc',mlodwn(:,:,3),mlodwn(:,:,4),land_a,ocndwn(:,1))
-  !~ else
     mlodwn(:,:,3:4) = 0.               
-  !~ end if ! (nestesd/=1.or.nud_ouv/=0) ..else..
   ! water surface height
   if ( nested/=1 .or. nud_sfh/=0 ) then
     call fillhist1('ocheight',ocndwn(:,2),land_a)
@@ -2871,52 +2866,9 @@ end if ! iotest
 return
 end subroutine fillhist4
 
-! This version reads, fills and interpolates a 3D field for the ocean
-subroutine fillhist4o(vname,varout,mask_a,bath)
+!~ ! This version reads, fills and interpolates a 3D field for the ocean
+!~ subroutine fillhist4o(vname,varout,mask_a,bath)
    
-use cc_mpi             ! CC MPI routines
-use infile             ! Input file routines
-use mlo                ! Ocean physics and prognostic arrays
-      
-implicit none
-      
-include 'newmpar.h'    ! Grid parameters
-include 'darcdf.h'     ! Netcdf data
-      
-integer ier
-real, dimension(:,:), intent(out) :: varout
-real, dimension(fwsize,ok) :: ucc
-real, dimension(ifull,ok) :: u_k
-real, dimension(ifull), intent(in) :: bath
-logical, dimension(:), intent(in) :: mask_a
-character(len=*), intent(in) :: vname
-
-if ( iotest ) then
-  ! read without interpolation or redistribution
-  call histrd4(iarchi,ier,vname,ik,ok,u_k,ifull)
-else if ( fnresid==1 ) then
-  ! use bcast method for single input file
-  ! requires interpolation and redistribution
-  call histrd4(iarchi,ier,vname,ik,ok,ucc,6*ik*ik,nogather=.false.)
-  call fill_cc4_gather(ucc,mask_a)
-  call doints4_gather(ucc, u_k)
-else
-  ! use RMA method for multiple input files
-  ! requires interpolation and redistribution
-  call histrd4(iarchi,ier,vname,ik,ok,ucc,6*ik*ik,nogather=.true.)
-  call fill_cc4_nogather(ucc,mask_a)
-  call doints4_nogather(ucc, u_k)
-end if ! iotest
-
-! vertical interpolation
-call mloregrid(ok,bath,u_k,varout,0)
-
-return
-end subroutine fillhist4o
-
-! This version reads, fills and interpolates ocean currents
-!~ subroutine fillhistuv4o(uname,vname,uarout,varout,mask_a,bath)
-  
 !~ use cc_mpi             ! CC MPI routines
 !~ use infile             ! Input file routines
 !~ use mlo                ! Ocean physics and prognostic arrays
@@ -2927,37 +2879,35 @@ end subroutine fillhist4o
 !~ include 'darcdf.h'     ! Netcdf data
       
 !~ integer ier
-!~ real, dimension(:,:), intent(out) :: uarout, varout
-!~ real, dimension(fwsize,ok) :: ucc, vcc
-!~ real, dimension(ifull,ok) :: u_k, v_k
+!~ real, dimension(:,:), intent(out) :: varout
+!~ real, dimension(fwsize,ok) :: ucc
+!~ real, dimension(ifull,ok) :: u_k
 !~ real, dimension(ifull), intent(in) :: bath
 !~ logical, dimension(:), intent(in) :: mask_a
-!~ character(len=*), intent(in) :: uname, vname
+!~ character(len=*), intent(in) :: vname
 
 !~ if ( iotest ) then
   !~ ! read without interpolation or redistribution
-  !~ call histrd4(iarchi,ier,uname,ik,ok,u_k,ifull)
-  !~ call histrd4(iarchi,ier,vname,ik,ok,v_k,ifull)
+  !~ call histrd4(iarchi,ier,vname,ik,ok,u_k,ifull)
 !~ else if ( fnresid==1 ) then
   !~ ! use bcast method for single input file
   !~ ! requires interpolation and redistribution
-  !~ call histrd4(iarchi,ier,uname,ik,ok,ucc,6*ik*ik,nogather=.false.)
-  !~ call histrd4(iarchi,ier,vname,ik,ok,vcc,6*ik*ik,nogather=.false.)
-  !~ call interpcurrent4(u_k,v_k,ucc,vcc,mask_a,nogather=.false.)
+  !~ call histrd4(iarchi,ier,vname,ik,ok,ucc,6*ik*ik,nogather=.false.)
+  !~ call fill_cc4_gather(ucc,mask_a)
+  !~ call doints4_gather(ucc, u_k)
 !~ else
   !~ ! use RMA method for multiple input files
   !~ ! requires interpolation and redistribution
-  !~ call histrd4(iarchi,ier,uname,ik,ok,ucc,6*ik*ik,nogather=.true.)
-  !~ call histrd4(iarchi,ier,vname,ik,ok,vcc,6*ik*ik,nogather=.true.)
-  !~ call interpcurrent4(u_k,v_k,ucc,vcc,mask_a,nogather=.true.)
+  !~ call histrd4(iarchi,ier,vname,ik,ok,ucc,6*ik*ik,nogather=.true.)
+  !~ call fill_cc4_nogather(ucc,mask_a)
+  !~ call doints4_nogather(ucc, u_k)
 !~ end if ! iotest
 
 !~ ! vertical interpolation
-!~ call mloregrid(ok,bath,u_k,uarout,0)
-!~ call mloregrid(ok,bath,v_k,varout,0)
+!~ call mloregrid(ok,bath,u_k,varout,0)
 
 !~ return
-!~ end subroutine fillhistuv4o
+!~ end subroutine fillhist4o
 
 ! *****************************************************************************
 ! FILE DATA MESSAGE PASSING ROUTINES
