@@ -838,30 +838,6 @@ write(6,*)'TEST04'
   end if ! iotest
 end if ! (tsstest) ..else..
 
-! to be depeciated !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!if (nspecial==44.or.nspecial==46) then
-!  do iq=1,ifull
-!    rlongd=rlongg(iq)*180./pi
-!    rlatd=rlatt(iq)*180./pi
-!    if (rlatd>=-43..and.rlatd<=-30.) then
-!      if (rlongd>=155..and.rlongd<=170.) then
-!        tss(iq)=tss(iq)+1.
-!      end if
-!    end if
-!  end do
-!end if
-!if (nspecial==45.or.nspecial==46) then
-!  do iq=1,ifull
-!    rlongd=rlongg(iq)*180./pi
-!    rlatd=rlatt(iq)*180./pi
-!    if (rlatd>=-15..and.rlatd<=-5.) then
-!      if (rlongd>=150..and.rlongd<=170.) then
-!        tss(iq)=tss(iq)+1.
-!      end if
-!    end if
-!  end do
-!end if
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
@@ -869,11 +845,11 @@ end if ! (tsstest) ..else..
 ! air temperature
 ! read for nested=0 or nested=1.and.(nud_t/=0.or.nud_p/=0)
 
-if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
-  call gethist4a('temp',t,2,levkin=levkin,t_a_lev=t_a_lev)
-else
-  t(1:ifull,:) = 300.    
-end if ! (nested==0.or.(nested==1.and.nud_test/=0))
+!~ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
+  !~ call gethist4a('temp',t,2,levkin=levkin,t_a_lev=t_a_lev)
+!~ else
+  !~ t(1:ifull,:) = 300.    
+!~ end if ! (nested==0.or.(nested==1.and.nud_test/=0))
 
 ! winds
 ! read for nested=0 or nested=1.and.nud_uv/=0
@@ -895,22 +871,6 @@ if ( nested==0 .or. ( nested==1.and.nud_q/=0 ) ) then
 else
   qg(1:ifull,:) = qgmin
 end if ! (nested==0.or.(nested==1.and.nud_q/=0))
-
-!~ !------------------------------------------------------------
-!~ ! Aerosol data
-!~ if ( abs(iaero)>=2 .and. ( nested/=1.or.nud_aero/=0 ) ) then
-  !~ call gethist4a('dms',  xtgdwn(:,:,1), 5)
-  !~ call gethist4a('so2',  xtgdwn(:,:,2), 5)
-  !~ call gethist4a('so4',  xtgdwn(:,:,3), 5)
-  !~ call gethist4a('bco',  xtgdwn(:,:,4), 5)
-  !~ call gethist4a('bci',  xtgdwn(:,:,5), 5)
-  !~ call gethist4a('oco',  xtgdwn(:,:,6), 5)
-  !~ call gethist4a('oci',  xtgdwn(:,:,7), 5)
-  !~ call gethist4a('dust1',xtgdwn(:,:,8), 5)
-  !~ call gethist4a('dust2',xtgdwn(:,:,9), 5)
-  !~ call gethist4a('dust3',xtgdwn(:,:,10),5)
-  !~ call gethist4a('dust4',xtgdwn(:,:,11),5)
-!~ end if
 
 !------------------------------------------------------------
 ! re-grid surface pressure by mapping to MSLP, interpolating and then map to surface pressure
@@ -946,8 +906,6 @@ if ( nested/=1 ) then
   if ( myid==0 .or. pfall ) then
     ierc(7:7+3*ms) = 0
     if ( ccycle==0 ) then
-      !call ccnf_inq_varid(ncid,'cplant1',idv,tst)
-      !if ( tst ) ierc(7)=-1
       ierc(7) = -1
     else
       call ccnf_inq_varid(ncid,'glai',idv,tst)
@@ -1025,19 +983,8 @@ if ( nested/=1 ) then
 
   !--------------------------------------------------
   ! Read MLO sea-ice data
-  if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-    if ( .not.allocated(micdwn) ) allocate( micdwn(ifull,11) )
-    call fillhist4('tggsn',micdwn(:,1:4),4,land_a)
-    micdwn(:,5) = fracice ! read above with nudging arrays
-    micdwn(:,6) = sicedep ! read above with nudging arrays
-    micdwn(:,7) = snowd*1.e-3
-    call fillhist1('sto',micdwn(:,8),land_a)
-    call fillhistuv1o('uic','vic',micdwn(:,9),micdwn(:,10),land_a)
-    call fillhist1('icesal',micdwn(:,11),land_a)
-  end if
-  if ( abs(nmlo)>=2 .or. nriver==1 ) then
     call gethist1('swater',watbdy)
-  end if
+
 
   !------------------------------------------------------------------
   ! Read soil moisture
@@ -1097,15 +1044,6 @@ if ( nested/=1 ) then
     wetfac(:) = 1.
   end where
 
-  !------------------------------------------------------------------
-  ! Read 10m wind speeds for special sea roughness length calculations
-  if ( nested==0 ) then
-    if ( ierc(2)==0 ) then
-      call gethist1('u10',u10)
-    else
-      u10=sqrt(u(1:ifull,1)**2+v(1:ifull,1)**2)*log(10./0.001)/log(zmin/0.001)
-    end if
-  end if
 
   !------------------------------------------------------------------
   ! Read sensible heat flux for convection
