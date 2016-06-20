@@ -1062,26 +1062,26 @@ if ( nested/=1 ) then
     zidry=max(zidry,1.)
   end if
 
-  !------------------------------------------------------------------
-  ! Read CABLE/CASA aggregate C+N+P pools
-  if ( nsib>=6 ) then
-    if ( ccycle==0 ) then
+  !~ !------------------------------------------------------------------
+  !~ ! Read CABLE/CASA aggregate C+N+P pools
+  !~ if ( nsib>=6 ) then
+    !~ if ( ccycle==0 ) then
 
-    else
-      if ( ierc(7)==0 ) then
-        call fillhist4('cplant',cplant,mplant,sea_a)
-        call fillhist4('nplant',niplant,mplant,sea_a)
-        call fillhist4('pplant',pplant,mplant,sea_a)
-        call fillhist4('clitter',clitter,mlitter,sea_a)
-        call fillhist4('nlitter',nilitter,mlitter,sea_a)
-        call fillhist4('plitter',plitter,mlitter,sea_a)
-        call fillhist4('csoil',csoil,msoil,sea_a)
-        call fillhist4('nsoil',nisoil,msoil,sea_a)
-        call fillhist4('psoil',psoil,msoil,sea_a)
-        call fillhist1('glai',glai,sea_a)
-      end if ! ierc(7)==0
-    end if ! ccycle==0 ..else..
-  end if ! if nsib==6.or.nsib==7
+    !~ else
+      !~ if ( ierc(7)==0 ) then
+        !~ call fillhist4('cplant',cplant,mplant,sea_a)
+        !~ call fillhist4('nplant',niplant,mplant,sea_a)
+        !~ call fillhist4('pplant',pplant,mplant,sea_a)
+        !~ call fillhist4('clitter',clitter,mlitter,sea_a)
+        !~ call fillhist4('nlitter',nilitter,mlitter,sea_a)
+        !~ call fillhist4('plitter',plitter,mlitter,sea_a)
+        !~ call fillhist4('csoil',csoil,msoil,sea_a)
+        !~ call fillhist4('nsoil',nisoil,msoil,sea_a)
+        !~ call fillhist4('psoil',psoil,msoil,sea_a)
+        !~ call fillhist1('glai',glai,sea_a)
+      !~ end if ! ierc(7)==0
+    !~ end if ! ccycle==0 ..else..
+  !~ end if ! if nsib==6.or.nsib==7
 
   !------------------------------------------------------------------
   ! Read urban data
