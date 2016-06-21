@@ -614,13 +614,13 @@ end if
   !~ end if
 !~ endif
 
-! -------------------------------------------------------------------
-! Read surface temperature 
-! read global tss to diagnose sea-ice or land-sea mask
-if ( tsstest ) then
-  call histrd1(iarchi,ier,'tsu',ik,tss,ifull)
-  zss(:) = zss_a(:) ! use saved zss arrays
-end if ! (tsstest) ..else..
+!~ ! -------------------------------------------------------------------
+!~ ! Read surface temperature 
+!~ ! read global tss to diagnose sea-ice or land-sea mask
+!~ if ( tsstest ) then
+  !~ call histrd1(iarchi,ier,'tsu',ik,tss,ifull)
+  !~ zss(:) = zss_a(:) ! use saved zss arrays
+!~ end if ! (tsstest) ..else..
 
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
