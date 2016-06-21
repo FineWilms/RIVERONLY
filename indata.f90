@@ -42,7 +42,7 @@ subroutine indataf(hourst,jalbfix,lapsbot,isoth,nsig,io_nest)
 !~ use aerointerface                                ! Aerosol interface
 !~ use aerosolldr, only : xtg,naero                 ! LDR prognostic aerosols
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
-use ateb                                         ! Urban
+!~ use ateb                                         ! Urban
 use bigxy4_m                                     ! Grid interpolation
 use cable_ccam, only : loadcbmparm,loadtile      ! CABLE interface
 use cc_mpi                                       ! CC MPI routines
@@ -519,31 +519,31 @@ if (nsib>=1) then
 end if   ! nsib>=1
 
 
-!-----------------------------------------------------------------
-! INITIALISE URBAN SCHEME (nurban)
-! nurban=0 no urban
-! nurban=1 urban (save in restart file)
-! nurban=-1 urban (save in history and restart files)
-if (nurban/=0) then
-  if (myid==0) write(6,*) 'Initialising ateb urban scheme'
-  if (lncveg==1) then
-    call surfread(sigmu,'urban',netcdfid=ncidveg)
-  else
-    call surfread(sigmu,'urban',filename=urbanfile)
-    sigmu=sigmu*0.01
-  end if
-  where (.not.land(1:ifull).or.sigmu<0.01)
-    sigmu(:)=0.
-  end where
-  call atebinit(ifull,sigmu(:),0)
-else
-  sigmu(:)=0.
-  call atebdisable(0) ! disable urban
-end if
+!~ !-----------------------------------------------------------------
+!~ ! INITIALISE URBAN SCHEME (nurban)
+!~ ! nurban=0 no urban
+!~ ! nurban=1 urban (save in restart file)
+!~ ! nurban=-1 urban (save in history and restart files)
+!~ if (nurban/=0) then
+  !~ if (myid==0) write(6,*) 'Initialising ateb urban scheme'
+  !~ if (lncveg==1) then
+    !~ call surfread(sigmu,'urban',netcdfid=ncidveg)
+  !~ else
+    !~ call surfread(sigmu,'urban',filename=urbanfile)
+    !~ sigmu=sigmu*0.01
+  !~ end if
+  !~ where (.not.land(1:ifull).or.sigmu<0.01)
+    !~ sigmu(:)=0.
+  !~ end where
+  !~ call atebinit(ifull,sigmu(:),0)
+!~ else
+  !~ sigmu(:)=0.
+  !~ call atebdisable(0) ! disable urban
+!~ end if
 
-if (myid==0.and.lncveg==1) then
-  call ccnf_close(ncidveg)
-end if
+!~ if (myid==0.and.lncveg==1) then
+  !~ call ccnf_close(ncidveg)
+!~ end if
 
 
 !~ ! fixes for Dean's land-use for CTM
@@ -1854,43 +1854,43 @@ if (nmlo/=0.and.abs(nmlo)<=9) then
 end if
 
 
-!-----------------------------------------------------------------
-! UPDATE URBAN DATA (nurban)
-if (nurban/=0) then
-  if (myid==0) write(6,*) 'Importing ateb urban data'
-  where(atebdwn(:,1)>=399.) ! must be the same as spval in onthefly.f
-    atebdwn(:,1)=tss                ! roof temp 1
-    atebdwn(:,2)=0.5*(tss+291.16)   ! roof temp 2
-    atebdwn(:,3)=0.5*(tss+291.16)   ! roof temp 3
-    atebdwn(:,4)=291.16             ! roof temp 4
-    atebdwn(:,5)=tss                ! walleast temp 1
-    atebdwn(:,6)=0.5*(tss+291.16)   ! walleast temp 2
-    atebdwn(:,7)=0.5*(tss+291.16)   ! walleast temp 3
-    atebdwn(:,8)=291.16             ! walleast temp 4
-    atebdwn(:,9)=tss                ! wallwest temp 1
-    atebdwn(:,10)=0.5*(tss+291.16)  ! wallwest temp 2
-    atebdwn(:,11)=0.5*(tss+291.16)  ! wallwest temp 3
-    atebdwn(:,12)=291.16            ! wallwest temp 4
-    atebdwn(:,13)=tss               ! road temp 1
-    atebdwn(:,14)=tss               ! road temp 2
-    atebdwn(:,15)=tss               ! road temp 3
-    atebdwn(:,16)=tss               ! road temp 4
-    atebdwn(:,17)=0.5*0.26+0.5*0.18 ! Soil water road
-    atebdwn(:,18)=0.18              ! Green roof water
-    atebdwn(:,19)=0.   ! roof water
-    atebdwn(:,20)=0.   ! road water
-    atebdwn(:,21)=0.   ! canyon leaf water
-    atebdwn(:,22)=0.   ! roof leaf water
-    atebdwn(:,23)=0.   ! roof snow
-    atebdwn(:,24)=0.   ! road snow
-    atebdwn(:,25)=100. ! roof snow density
-    atebdwn(:,26)=100. ! road snow density
-    atebdwn(:,27)=0.85 ! roof snow albedo
-    atebdwn(:,28)=0.85 ! road snow albedo
-  end where
-  call atebload(atebdwn,0)
-  deallocate(atebdwn)
-end if
+!~ !-----------------------------------------------------------------
+!~ ! UPDATE URBAN DATA (nurban)
+!~ if (nurban/=0) then
+  !~ if (myid==0) write(6,*) 'Importing ateb urban data'
+  !~ where(atebdwn(:,1)>=399.) ! must be the same as spval in onthefly.f
+    !~ atebdwn(:,1)=tss                ! roof temp 1
+    !~ atebdwn(:,2)=0.5*(tss+291.16)   ! roof temp 2
+    !~ atebdwn(:,3)=0.5*(tss+291.16)   ! roof temp 3
+    !~ atebdwn(:,4)=291.16             ! roof temp 4
+    !~ atebdwn(:,5)=tss                ! walleast temp 1
+    !~ atebdwn(:,6)=0.5*(tss+291.16)   ! walleast temp 2
+    !~ atebdwn(:,7)=0.5*(tss+291.16)   ! walleast temp 3
+    !~ atebdwn(:,8)=291.16             ! walleast temp 4
+    !~ atebdwn(:,9)=tss                ! wallwest temp 1
+    !~ atebdwn(:,10)=0.5*(tss+291.16)  ! wallwest temp 2
+    !~ atebdwn(:,11)=0.5*(tss+291.16)  ! wallwest temp 3
+    !~ atebdwn(:,12)=291.16            ! wallwest temp 4
+    !~ atebdwn(:,13)=tss               ! road temp 1
+    !~ atebdwn(:,14)=tss               ! road temp 2
+    !~ atebdwn(:,15)=tss               ! road temp 3
+    !~ atebdwn(:,16)=tss               ! road temp 4
+    !~ atebdwn(:,17)=0.5*0.26+0.5*0.18 ! Soil water road
+    !~ atebdwn(:,18)=0.18              ! Green roof water
+    !~ atebdwn(:,19)=0.   ! roof water
+    !~ atebdwn(:,20)=0.   ! road water
+    !~ atebdwn(:,21)=0.   ! canyon leaf water
+    !~ atebdwn(:,22)=0.   ! roof leaf water
+    !~ atebdwn(:,23)=0.   ! roof snow
+    !~ atebdwn(:,24)=0.   ! road snow
+    !~ atebdwn(:,25)=100. ! roof snow density
+    !~ atebdwn(:,26)=100. ! road snow density
+    !~ atebdwn(:,27)=0.85 ! roof snow albedo
+    !~ atebdwn(:,28)=0.85 ! road snow albedo
+  !~ end where
+  !~ call atebload(atebdwn,0)
+  !~ deallocate(atebdwn)
+!~ end if
 
 
 !~ !-----------------------------------------------------------------
@@ -2765,93 +2765,16 @@ usuh   = min(usuhl,usuhm)
 ! find d/h and d 
 xx     = sqrt(ccd*max(rl,0.0005))  ! sqrt(7.5*rlai)
 dh     = 1.0 - (1.0 - exp(-xx))/xx ! .5*xx -.166*xx*xx + .
-!     dh close to 1 for large rlai (~.833 for rlai=6)    
-!        equals .03 for rlai=0 
+
 d      = dh*h                      ! not used
 ! find z0h and z0:
 z0h    = (1.0 - dh) * exp(psih - vonk/usuh)
-z0     = z0h*h
-!     for rlai=   0,   .2,   .4,   .5,   .6,    1,    2,    4,    6
-!     get z0h= .008, .077, .117, .128, .133, .109, .084, .058, .048      
+z0     = z0h*h 
 ! find coexp: see notes "simplified wind model ..." eq 34a
 coexp  = usuh / (vonk*ccw*(1.0 - dh))
 return ! ruff
 end subroutine cruf2
 !=======================================================================
 
-
-!~ !--------------------------------------------------------------
-!~ ! SPECIAL FUNCTION FOR SSTs
-!~ subroutine caispecial
-      
-!~ use cc_mpi
-!~ use infile
-!~ use latlong_m
-!~ use pbl_m
-!~ use soil_m
-!~ use soilsnow_m
-      
-!~ implicit none
-      
-!~ include 'newmpar.h'
-!~ include 'const_phys.h'  
-      
-!~ integer iq,ix
-!~ integer ncid,ncs,varid
-!~ integer, dimension(3) :: spos,npos
-!~ real x,r
-!~ real, dimension(300) :: sdata,ldata
-!~ logical tst
-      
-!~ if (myid==0) then
-  !~ write(6,*) "Reading nspecial=42 SSTs"
-  !~ spos=1
-  !~ call ccnf_open('sst_djf.cdf',ncid,ncs)
-  !~ if (ncs/=0) then
-    !~ write(6,*) "ERROR: Cannot open sst_djf.cdf"
-    !~ call ccmpi_abort(-1)
-  !~ end if
-  !~ npos=1
-  !~ npos(1)=300
-  !~ call ccnf_inq_varid(ncid,'SST_DJF',varid,tst)
-  !~ if (tst) then
-    !~ write(6,*) "ERROR: Cannot read SST_DJF"
-    !~ call ccmpi_abort(-1)
-  !~ end if
-  !~ call ccnf_get_vara(ncid,varid,spos(1:1),npos(1:1),sdata)
-  !~ npos=1
-  !~ npos(1)=300
-  !~ call ccnf_inq_varid(ncid,'YT_OCEAN',varid,tst)
-  !~ if (tst) then
-    !~ write(6,*) "ERROR: Cannot read SST_DJF"
-    !~ call ccmpi_abort(-1)
-  !~ end if
-  !~ call ccnf_get_vara(ncid,varid,spos(1:1),npos(1:1),ldata)
-  !~ call ccnf_close(ncid)
-  !~ sdata=sdata+273.16
-!~ end if
-!~ call ccmpi_bcast(sdata,0,comm_world)
-!~ call ccmpi_bcast(ldata,0,comm_world)
-      
-!~ do iq=1,ifull
-  !~ if (.not.land(iq)) then
-    !~ r=rlatt(iq)*180./pi
-    !~ if (r.lt.ldata(2)) then
-      !~ tss(iq)=sdata(2)
-    !~ elseif (r.gt.ldata(300)) then
-      !~ tss(iq)=sdata(300)
-    !~ else
-      !~ do ix=2,300
-        !~ if (ldata(ix).gt.r) exit
-      !~ end do
-      !~ x=(r-ldata(ix))/(ldata(ix+1)-ldata(ix))
-      !~ tss(iq)=(1.-x)*sdata(ix)+x*sdata(ix+1)
-    !~ end if
-    !~ tgg(iq,1)=tss(iq)
-  !~ end if
-!~ end do
-      
-!~ return
-!~ end subroutine caispecial
 
 end module indata
