@@ -639,67 +639,9 @@ if ( nested/=1 ) then
     end do
   end if
 
-  !~ !------------------------------------------------------------------
-  !~ ! Read snow and soil tempertaure
-  !~ call gethist1('snd',snowd)
-  !~ where ( .not.land(1:ifull) .and. (sicedep==0. .or. nmlo==0) )
-    !~ snowd = 0.
-  !~ end where
-  !~ if ( all(ierc(8:7+ms)==0) ) then
-    !~ call fillhist4('tgg',tgg,ms,sea_a)
-  !~ else
-    !~ do k = 1,ms 
-      !~ if ( ierc(7+k)==0 ) then
-        !~ write(vname,'("tgg",I1.1)') k
-      !~ else if ( k<=3 .and. ierc(7+2)==0 ) then
-        !~ vname="tgg2"
-      !~ else if ( k<=3 ) then
-        !~ vname="tb3"
-      !~ else if ( ierc(7+6)==0 ) then
-        !~ vname="tgg6"
-      !~ else
-        !~ vname="tb2"
-      !~ end if
-      !~ if ( iotest ) then
-        !~ if ( k==1 .and. ierc(7+1)/=0 ) then
-          !~ tgg(:,k) = tss(:)
-        !~ else
-          !~ call histrd1(iarchi,ier,vname,ik,tgg(:,k),ifull)
-        !~ end if
-      !~ else if ( fnresid==1 ) then
-        !~ if ( k==1 .and. ierc(7+1)/=0 ) then
-          !~ ucc(1:dk*dk*6) = tss_a(1:dk*dk*6)
-        !~ else
-          !~ call histrd1(iarchi,ier,vname,ik,ucc,6*ik*ik,nogather=.false.)
-        !~ end if
-        !~ call fill_cc1_gather(ucc,sea_a)
-        !~ call doints1_gather(ucc,tgg(:,k))
-      !~ else
-        !~ if ( k==1 .and. ierc(7+1)/=0 ) then
-          !~ ucc(1:fwsize) = tss_a(1:fwsize)
-        !~ else
-          !~ call histrd1(iarchi,ier,vname,ik,ucc,6*ik*ik,nogather=.true.)
-        !~ end if
-        !~ call fill_cc1_nogather(ucc,sea_a)
-        !~ call doints1_nogather(ucc,tgg(:,k))
-      !~ end if
-    !~ end do
-  !~ end if
-  !~ do k = 1,ms
-    !~ where ( tgg(:,k)<100. )
-      !~ tgg(:,k) = tgg(:,k) + wrtemp ! adjust range of soil temp for compressed history file
-    !~ end where
-  !~ end do  
-  !~ if ( .not.iotest ) then
-    !~ where ( snowd>0. .and. land(1:ifull) )
-      !~ tgg(:,1) = min( tgg(:,1), 270.1 )
-    !~ endwhere
-  !~ end if
-
   !--------------------------------------------------
   ! Read MLO sea-ice data
     call gethist1('swater',watbdy)
-
 
   !------------------------------------------------------------------
   ! Read soil moisture
