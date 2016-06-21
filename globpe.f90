@@ -37,7 +37,7 @@ use carbpools_m, only : carbpools_init   & ! Carbon pools
     ,fpn,frs,frp
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
-use epst_m                                 ! Off-centre terms
+!~ use epst_m                                 ! Off-centre terms
 use extraout_m                             ! Additional diagnostics
 use gdrag_m, only : gdrag_init             ! Gravity wave drag
 use histave_m                              ! Time average arrays
