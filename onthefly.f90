@@ -702,9 +702,9 @@ if ( nested/=1 ) then
   end where
 
 
-  !------------------------------------------------------------------
-  ! Read sensible heat flux for convection
-  call gethist1('fg',fg)
+  !~ !------------------------------------------------------------------
+  !~ ! Read sensible heat flux for convection
+  !~ call gethist1('fg',fg)
   
   !------------------------------------------------------------------
   ! Read urban data
