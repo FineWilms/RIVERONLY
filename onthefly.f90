@@ -599,20 +599,20 @@ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
   end if
 end if
 
-!--------------------------------------------------------------------
-! Read surface pressure
-! psf read when nested=0 or nested=1.and.nud_p/=0
-psl_a(:) = 0.
-psl(:)   = 0.
-if ( nested==0 .or. ( nested==1 .and. nud_test/=0 ) ) then
-  if ( iotest ) then
-    call histrd1(iarchi,ier,'psf',ik,psl,ifull)
-  else if ( fnresid==1 ) then
-    call histrd1(iarchi,ier,'psf',ik,psl_a,6*ik*ik,nogather=.false.)
-  else
-    call histrd1(iarchi,ier,'psf',ik,psl_a,6*ik*ik,nogather=.true.)
-  end if
-endif
+!~ !--------------------------------------------------------------------
+!~ ! Read surface pressure
+!~ ! psf read when nested=0 or nested=1.and.nud_p/=0
+!~ psl_a(:) = 0.
+!~ psl(:)   = 0.
+!~ if ( nested==0 .or. ( nested==1 .and. nud_test/=0 ) ) then
+  !~ if ( iotest ) then
+    !~ call histrd1(iarchi,ier,'psf',ik,psl,ifull)
+  !~ else if ( fnresid==1 ) then
+    !~ call histrd1(iarchi,ier,'psf',ik,psl_a,6*ik*ik,nogather=.false.)
+  !~ else
+    !~ call histrd1(iarchi,ier,'psf',ik,psl_a,6*ik*ik,nogather=.true.)
+  !~ end if
+!~ endif
 
 ! -------------------------------------------------------------------
 ! Read surface temperature 
@@ -620,43 +620,6 @@ endif
 if ( tsstest ) then
   call histrd1(iarchi,ier,'tsu',ik,tss,ifull)
   zss(:) = zss_a(:) ! use saved zss arrays
-!~ else
-  !~ if ( fnresid==1 ) then
-    !~ call histrd1(iarchi,ier,'tsu',ik,tss_a,6*ik*ik,nogather=.false.)
-  !~ else
-    !~ call histrd1(iarchi,ier,'tsu',ik,tss_a,6*ik*ik,nogather=.true.)
-  !~ end if
-      
-  !~ ! set up land-sea mask from either soilt, tss or zss
-  !~ if ( newfile .and. fwsize>0 ) then
-    !~ WRITE(6,*) 'NEMI IS ', nemi
-    !~ if ( nemi==3 ) then 
-      !~ land_a(:) = isoilm_a(:)>0
-      !~ numneg = count( .not.land_a(:) )
-      !~ if ( any(isoilm_a(:)<0) ) nemi = 2
-    !~ end if ! (nemi==3)
-    !~ if ( nemi==2 ) then
-      !~ numneg = 0
-      !~ do iq = 1,fwsize
-        !~ if ( tss_a(iq)>0. ) then ! over land
-          !~ land_a(iq) = .true.
-        !~ else                     ! over sea
-          !~ land_a(iq) = .false.
-          !~ numneg = numneg + 1
-        !~ endif               ! (tss(iq)>0) .. else ..
-      !~ enddo
-      !~ if ( numneg==0 ) nemi = 1  ! should be using zss in that case
-    !~ endif !  (nemi==2)
-    !~ tss_a(:) = abs(tss_a(:))
-    !~ if ( nemi==1 ) then
-      !~ land_a(:) = zss_a(:)>0.
-      !~ numneg = count(.not.land_a)
-    !~ endif ! (nemi==1)
-    !~ if ( myid==0 ) then
-      !~ write(6,*)'Land-sea mask using nemi = ',nemi
-    !~ end if
-    !~ sea_a(:) = .not.land_a(:)
-  !~ end if ! (newfile.and.fwsize>0)
 end if ! (tsstest) ..else..
 
 ! -------------------------------------------------------------------
@@ -951,9 +914,6 @@ iarchi = iarchi + 1
 kdate_s = kdate_r
 ktime_s = ktime_r + 1
 
-!~ if ( myid==0 .and. nested==0 ) then
-  !~ write(6,*) "Final lrestart ",lrestart
-!~ end if
 
 return
 end subroutine onthefly_work
