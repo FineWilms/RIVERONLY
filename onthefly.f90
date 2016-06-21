@@ -954,20 +954,20 @@ if ( nested/=1 ) then
     if ( all(atebdwn(:,28)==0.) ) atebdwn(:,28)=0.85
   end if
 
-  !------------------------------------------------------------------
-  ! TKE-eps data
-  if ( nvmix==6 .and. nested==0 ) then
-    call gethist4a('tke',tke,5)
-    if ( all(tke(1:ifull,:)==0.) ) tke(1:ifull,:)=1.5E-4
-    call gethist4a('eps',eps,5)
-    if  (all(eps(1:ifull,:)==0.) ) eps(1:ifull,:)=1.E-7
-  end if
+  !~ !------------------------------------------------------------------
+  !~ ! TKE-eps data
+  !~ if ( nvmix==6 .and. nested==0 ) then
+    !~ call gethist4a('tke',tke,5)
+    !~ if ( all(tke(1:ifull,:)==0.) ) tke(1:ifull,:)=1.5E-4
+    !~ call gethist4a('eps',eps,5)
+    !~ if  (all(eps(1:ifull,:)==0.) ) eps(1:ifull,:)=1.E-7
+  !~ end if
 
-  !------------------------------------------------------------------
-  ! Aerosol data ( non-nudged or diagnostic )
-  if ( abs(iaero)>=2 ) then
-    so4t(:)=0.
-  end if
+  !~ !------------------------------------------------------------------
+  !~ ! Aerosol data ( non-nudged or diagnostic )
+  !~ if ( abs(iaero)>=2 ) then
+    !~ so4t(:)=0.
+  !~ end if
   
 
   ! -----------------------------------------------------------------
@@ -2645,48 +2645,6 @@ end if ! iotest
 return
 end subroutine fillhist4
 
-!~ ! This version reads, fills and interpolates a 3D field for the ocean
-!~ subroutine fillhist4o(vname,varout,mask_a,bath)
-   
-!~ use cc_mpi             ! CC MPI routines
-!~ use infile             ! Input file routines
-!~ use mlo                ! Ocean physics and prognostic arrays
-      
-!~ implicit none
-      
-!~ include 'newmpar.h'    ! Grid parameters
-!~ include 'darcdf.h'     ! Netcdf data
-      
-!~ integer ier
-!~ real, dimension(:,:), intent(out) :: varout
-!~ real, dimension(fwsize,ok) :: ucc
-!~ real, dimension(ifull,ok) :: u_k
-!~ real, dimension(ifull), intent(in) :: bath
-!~ logical, dimension(:), intent(in) :: mask_a
-!~ character(len=*), intent(in) :: vname
-
-!~ if ( iotest ) then
-  !~ ! read without interpolation or redistribution
-  !~ call histrd4(iarchi,ier,vname,ik,ok,u_k,ifull)
-!~ else if ( fnresid==1 ) then
-  !~ ! use bcast method for single input file
-  !~ ! requires interpolation and redistribution
-  !~ call histrd4(iarchi,ier,vname,ik,ok,ucc,6*ik*ik,nogather=.false.)
-  !~ call fill_cc4_gather(ucc,mask_a)
-  !~ call doints4_gather(ucc, u_k)
-!~ else
-  !~ ! use RMA method for multiple input files
-  !~ ! requires interpolation and redistribution
-  !~ call histrd4(iarchi,ier,vname,ik,ok,ucc,6*ik*ik,nogather=.true.)
-  !~ call fill_cc4_nogather(ucc,mask_a)
-  !~ call doints4_nogather(ucc, u_k)
-!~ end if ! iotest
-
-!~ ! vertical interpolation
-!~ call mloregrid(ok,bath,u_k,varout,0)
-
-!~ return
-!~ end subroutine fillhist4o
 
 ! *****************************************************************************
 ! FILE DATA MESSAGE PASSING ROUTINES
