@@ -701,40 +701,35 @@ if ( nested/=1 ) then
     wetfac(:) = 1.
   end where
 
-
   !~ !------------------------------------------------------------------
-  !~ ! Read sensible heat flux for convection
-  !~ call gethist1('fg',fg)
-  
-  !------------------------------------------------------------------
-  ! Read urban data
-  if ( nurban/=0 ) then
-    if ( .not.allocated(atebdwn) ) allocate(atebdwn(ifull,28))
-    call fillhist4('rooftgg',atebdwn(:,1:4),  4,sea_a,filllimit=399.)
-    if ( all(atebdwn(:,1:4)==0.) ) atebdwn(:,1:4)=300.
-    call fillhist4('waletgg',atebdwn(:,5:8),  4,sea_a,filllimit=399.)
-    if ( all(atebdwn(:,5:8)==0.) ) atebdwn(:,5:8)=300.
-    call fillhist4('walwtgg',atebdwn(:,9:12), 4,sea_a,filllimit=399.)
-    if ( all(atebdwn(:,9:12)==0.) ) atebdwn(:,9:12)=300.
-    call fillhist4('roadtgg',atebdwn(:,13:16),4,sea_a,filllimit=399.)
-    if ( all(atebdwn(:,13:16)==0.) ) atebdwn(:,13:16)=300.
-    call fillhist1('urbnsmc',atebdwn(:,17),sea_a,filllimit=399.)
-    call fillhist1('urbnsmr',atebdwn(:,18),sea_a,filllimit=399.)
-    call fillhist1('roofwtr',atebdwn(:,19),sea_a,filllimit=399.)
-    call fillhist1('roadwtr',atebdwn(:,20),sea_a,filllimit=399.)
-    call fillhist1('urbwtrc',atebdwn(:,21),sea_a,filllimit=399.)
-    call fillhist1('urbwtrr',atebdwn(:,22),sea_a,filllimit=399.)
-    call fillhist1('roofsnd',atebdwn(:,23),sea_a,filllimit=399.)
-    call fillhist1('roadsnd',atebdwn(:,24),sea_a,filllimit=399.)
-    call fillhist1('roofden',atebdwn(:,25),sea_a,filllimit=399.)
-    if ( all(atebdwn(:,25)==0.) ) atebdwn(:,25)=100.
-    call fillhist1('roadden',atebdwn(:,26),sea_a,filllimit=399.)
-    if ( all(atebdwn(:,26)==0.) ) atebdwn(:,26)=100.
-    call fillhist1('roofsna',atebdwn(:,27),sea_a,filllimit=399.)
-    if ( all(atebdwn(:,27)==0.) ) atebdwn(:,27)=0.85
-    call fillhist1('roadsna',atebdwn(:,28),sea_a,filllimit=399.)
-    if ( all(atebdwn(:,28)==0.) ) atebdwn(:,28)=0.85
-  end if
+  !~ ! Read urban data
+  !~ if ( nurban/=0 ) then
+    !~ if ( .not.allocated(atebdwn) ) allocate(atebdwn(ifull,28))
+    !~ call fillhist4('rooftgg',atebdwn(:,1:4),  4,sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,1:4)==0.) ) atebdwn(:,1:4)=300.
+    !~ call fillhist4('waletgg',atebdwn(:,5:8),  4,sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,5:8)==0.) ) atebdwn(:,5:8)=300.
+    !~ call fillhist4('walwtgg',atebdwn(:,9:12), 4,sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,9:12)==0.) ) atebdwn(:,9:12)=300.
+    !~ call fillhist4('roadtgg',atebdwn(:,13:16),4,sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,13:16)==0.) ) atebdwn(:,13:16)=300.
+    !~ call fillhist1('urbnsmc',atebdwn(:,17),sea_a,filllimit=399.)
+    !~ call fillhist1('urbnsmr',atebdwn(:,18),sea_a,filllimit=399.)
+    !~ call fillhist1('roofwtr',atebdwn(:,19),sea_a,filllimit=399.)
+    !~ call fillhist1('roadwtr',atebdwn(:,20),sea_a,filllimit=399.)
+    !~ call fillhist1('urbwtrc',atebdwn(:,21),sea_a,filllimit=399.)
+    !~ call fillhist1('urbwtrr',atebdwn(:,22),sea_a,filllimit=399.)
+    !~ call fillhist1('roofsnd',atebdwn(:,23),sea_a,filllimit=399.)
+    !~ call fillhist1('roadsnd',atebdwn(:,24),sea_a,filllimit=399.)
+    !~ call fillhist1('roofden',atebdwn(:,25),sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,25)==0.) ) atebdwn(:,25)=100.
+    !~ call fillhist1('roadden',atebdwn(:,26),sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,26)==0.) ) atebdwn(:,26)=100.
+    !~ call fillhist1('roofsna',atebdwn(:,27),sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,27)==0.) ) atebdwn(:,27)=0.85
+    !~ call fillhist1('roadsna',atebdwn(:,28),sea_a,filllimit=399.)
+    !~ if ( all(atebdwn(:,28)==0.) ) atebdwn(:,28)=0.85
+  !~ end if
 
   ! -----------------------------------------------------------------
   ! soil ice and snow data
