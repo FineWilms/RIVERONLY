@@ -598,49 +598,23 @@ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
     call ccmpi_abort(-1)
   end if
 end if
-
-
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
 
 ! winds
 ! read for nested=0 or nested=1.and.nud_uv/=0
-
 u(1:ifull,:) = 0.
 v(1:ifull,:) = 0.
-
 ! mixing ratio
 qg(1:ifull,:) = qgmin
-
-
-!~ !------------------------------------------------------------
-!~ ! re-grid surface pressure by mapping to MSLP, interpolating and then map to surface pressure
-!~ ! requires psl_a, zss, zss_a, t and t_a_lev
-!~ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
-  !~ if ( .not.iotest ) then
-    !~ if ( fwsize>0 ) then
-      !~ ! ucc holds pmsl_a
-      !~ call mslpx(ucc,psl_a,zss_a,t_a_lev,sigin(levkin))  ! needs pmsl (preferred)
-    !~ end if
-    !~ if ( fnresid==1 ) then
-      !~ call doints1_gather(ucc,pmsl)
-    !~ else
-      !~ call doints1_nogather(ucc,pmsl)
-    !~ end if
-    !~ ! invert pmsl to get psl
-    !~ call to_pslx(pmsl,psl,zss,t(:,levk),levk)  ! on target grid
-  !~ end if ! .not.iotest
-!~ end if
-
-
 !**************************************************************
 ! This is the end of reading the nudging arrays
 !**************************************************************
 
-
 !--------------------------------------------------------------
 ! The following data is only read for initial conditions
 if ( nested/=1 ) then
+
 
   !------------------------------------------------------------------
   ! check soil variables
@@ -665,62 +639,62 @@ if ( nested/=1 ) then
     end do
   end if
 
-  !------------------------------------------------------------------
-  ! Read snow and soil tempertaure
-  call gethist1('snd',snowd)
-  where ( .not.land(1:ifull) .and. (sicedep==0. .or. nmlo==0) )
-    snowd = 0.
-  end where
-  if ( all(ierc(8:7+ms)==0) ) then
-    call fillhist4('tgg',tgg,ms,sea_a)
-  else
-    do k = 1,ms 
-      if ( ierc(7+k)==0 ) then
-        write(vname,'("tgg",I1.1)') k
-      else if ( k<=3 .and. ierc(7+2)==0 ) then
-        vname="tgg2"
-      else if ( k<=3 ) then
-        vname="tb3"
-      else if ( ierc(7+6)==0 ) then
-        vname="tgg6"
-      else
-        vname="tb2"
-      end if
-      if ( iotest ) then
-        if ( k==1 .and. ierc(7+1)/=0 ) then
-          tgg(:,k) = tss(:)
-        else
-          call histrd1(iarchi,ier,vname,ik,tgg(:,k),ifull)
-        end if
-      else if ( fnresid==1 ) then
-        if ( k==1 .and. ierc(7+1)/=0 ) then
-          ucc(1:dk*dk*6) = tss_a(1:dk*dk*6)
-        else
-          call histrd1(iarchi,ier,vname,ik,ucc,6*ik*ik,nogather=.false.)
-        end if
-        call fill_cc1_gather(ucc,sea_a)
-        call doints1_gather(ucc,tgg(:,k))
-      else
-        if ( k==1 .and. ierc(7+1)/=0 ) then
-          ucc(1:fwsize) = tss_a(1:fwsize)
-        else
-          call histrd1(iarchi,ier,vname,ik,ucc,6*ik*ik,nogather=.true.)
-        end if
-        call fill_cc1_nogather(ucc,sea_a)
-        call doints1_nogather(ucc,tgg(:,k))
-      end if
-    end do
-  end if
-  do k = 1,ms
-    where ( tgg(:,k)<100. )
-      tgg(:,k) = tgg(:,k) + wrtemp ! adjust range of soil temp for compressed history file
-    end where
-  end do  
-  if ( .not.iotest ) then
-    where ( snowd>0. .and. land(1:ifull) )
-      tgg(:,1) = min( tgg(:,1), 270.1 )
-    endwhere
-  end if
+  !~ !------------------------------------------------------------------
+  !~ ! Read snow and soil tempertaure
+  !~ call gethist1('snd',snowd)
+  !~ where ( .not.land(1:ifull) .and. (sicedep==0. .or. nmlo==0) )
+    !~ snowd = 0.
+  !~ end where
+  !~ if ( all(ierc(8:7+ms)==0) ) then
+    !~ call fillhist4('tgg',tgg,ms,sea_a)
+  !~ else
+    !~ do k = 1,ms 
+      !~ if ( ierc(7+k)==0 ) then
+        !~ write(vname,'("tgg",I1.1)') k
+      !~ else if ( k<=3 .and. ierc(7+2)==0 ) then
+        !~ vname="tgg2"
+      !~ else if ( k<=3 ) then
+        !~ vname="tb3"
+      !~ else if ( ierc(7+6)==0 ) then
+        !~ vname="tgg6"
+      !~ else
+        !~ vname="tb2"
+      !~ end if
+      !~ if ( iotest ) then
+        !~ if ( k==1 .and. ierc(7+1)/=0 ) then
+          !~ tgg(:,k) = tss(:)
+        !~ else
+          !~ call histrd1(iarchi,ier,vname,ik,tgg(:,k),ifull)
+        !~ end if
+      !~ else if ( fnresid==1 ) then
+        !~ if ( k==1 .and. ierc(7+1)/=0 ) then
+          !~ ucc(1:dk*dk*6) = tss_a(1:dk*dk*6)
+        !~ else
+          !~ call histrd1(iarchi,ier,vname,ik,ucc,6*ik*ik,nogather=.false.)
+        !~ end if
+        !~ call fill_cc1_gather(ucc,sea_a)
+        !~ call doints1_gather(ucc,tgg(:,k))
+      !~ else
+        !~ if ( k==1 .and. ierc(7+1)/=0 ) then
+          !~ ucc(1:fwsize) = tss_a(1:fwsize)
+        !~ else
+          !~ call histrd1(iarchi,ier,vname,ik,ucc,6*ik*ik,nogather=.true.)
+        !~ end if
+        !~ call fill_cc1_nogather(ucc,sea_a)
+        !~ call doints1_nogather(ucc,tgg(:,k))
+      !~ end if
+    !~ end do
+  !~ end if
+  !~ do k = 1,ms
+    !~ where ( tgg(:,k)<100. )
+      !~ tgg(:,k) = tgg(:,k) + wrtemp ! adjust range of soil temp for compressed history file
+    !~ end where
+  !~ end do  
+  !~ if ( .not.iotest ) then
+    !~ where ( snowd>0. .and. land(1:ifull) )
+      !~ tgg(:,1) = min( tgg(:,1), 270.1 )
+    !~ endwhere
+  !~ end if
 
   !--------------------------------------------------
   ! Read MLO sea-ice data
