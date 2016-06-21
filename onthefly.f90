@@ -605,24 +605,13 @@ end if
 
 ! winds
 ! read for nested=0 or nested=1.and.nud_uv/=0
-if ( nested==0 .or. ( nested==1.and.nud_uv/=0 ) ) then
-  !~ call gethistuv4a('u','v',u,v,3,4)
-else
-  u(1:ifull,:) = 0.
-  v(1:ifull,:) = 0.
-end if ! (nested==0.or.(nested==1.and.nud_uv/=0))
+
+u(1:ifull,:) = 0.
+v(1:ifull,:) = 0.
 
 ! mixing ratio
-! read for nested=0 or nested=1.and.nud_q/=0
-if ( nested==0 .or. ( nested==1.and.nud_q/=0 ) ) then
-  if ( iers(1)==0 ) then
-    call gethist4a('mixr',qg,2)      !     mixing ratio
-  else
-    call gethist4a('q',qg,2)         !     mixing ratio
-  end if
-else
-  qg(1:ifull,:) = qgmin
-end if ! (nested==0.or.(nested==1.and.nud_q/=0))
+qg(1:ifull,:) = qgmin
+
 
 !------------------------------------------------------------
 ! re-grid surface pressure by mapping to MSLP, interpolating and then map to surface pressure
