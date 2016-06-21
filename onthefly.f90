@@ -707,19 +707,6 @@ if ( nested/=1 ) then
   call gethist1('fg',fg)
   
   !------------------------------------------------------------------
-  ! Read boundary layer height for TKE-eps mixing and aerosols
-  call gethist1('pblh',pblh)
-  pblh=max(pblh,1.)
-  if ( nvmix==6 .and. nested==0 ) then
-    if ( iotest ) then
-      call histrd1(iarchi,ier,'dpblh',ik,zidry,ifull)
-    else
-      zidry=pblh 
-    end if ! iotest
-    zidry=max(zidry,1.)
-  end if
-
-  !------------------------------------------------------------------
   ! Read urban data
   if ( nurban/=0 ) then
     if ( .not.allocated(atebdwn) ) allocate(atebdwn(ifull,28))
