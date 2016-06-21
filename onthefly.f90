@@ -599,28 +599,6 @@ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
   end if
 end if
 
-!~ !--------------------------------------------------------------------
-!~ ! Read surface pressure
-!~ ! psf read when nested=0 or nested=1.and.nud_p/=0
-!~ psl_a(:) = 0.
-!~ psl(:)   = 0.
-!~ if ( nested==0 .or. ( nested==1 .and. nud_test/=0 ) ) then
-  !~ if ( iotest ) then
-    !~ call histrd1(iarchi,ier,'psf',ik,psl,ifull)
-  !~ else if ( fnresid==1 ) then
-    !~ call histrd1(iarchi,ier,'psf',ik,psl_a,6*ik*ik,nogather=.false.)
-  !~ else
-    !~ call histrd1(iarchi,ier,'psf',ik,psl_a,6*ik*ik,nogather=.true.)
-  !~ end if
-!~ endif
-
-!~ ! -------------------------------------------------------------------
-!~ ! Read surface temperature 
-!~ ! read global tss to diagnose sea-ice or land-sea mask
-!~ if ( tsstest ) then
-  !~ call histrd1(iarchi,ier,'tsu',ik,tss,ifull)
-  !~ zss(:) = zss_a(:) ! use saved zss arrays
-!~ end if ! (tsstest) ..else..
 
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
@@ -628,7 +606,7 @@ end if
 ! winds
 ! read for nested=0 or nested=1.and.nud_uv/=0
 if ( nested==0 .or. ( nested==1.and.nud_uv/=0 ) ) then
-  call gethistuv4a('u','v',u,v,3,4)
+  !~ call gethistuv4a('u','v',u,v,3,4)
 else
   u(1:ifull,:) = 0.
   v(1:ifull,:) = 0.
