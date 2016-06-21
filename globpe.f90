@@ -45,7 +45,7 @@ use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
 use infile                                 ! Input file routines
 use latlong_m                              ! Lat/lon coordinates
-use liqwpar_m                              ! Cloud water mixing ratios
+!~ use liqwpar_m                              ! Cloud water mixing ratios
 use map_m                                  ! Grid map arrays
 use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
    ,minwater,zomode,zoseaice,factchseaice
