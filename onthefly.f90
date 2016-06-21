@@ -576,13 +576,6 @@ if ( newfile ) then
     end if
   end if
   
-  !~ ! read host ocean bathymetry data
-  !~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-    !~ if ( .not.allocated(ocndep_l) ) allocate(ocndep_l(ifull))
-    !~ call gethist1('ocndepth',ocndep_l)
-  !~ end if
-  !~ if ( myid==0 ) write(6,*) "Finished reading fixed fields"
-  
 else
   ! use saved metadata  
   tsstest = (iers(2)==0) .and. (iers(3)==0) .and. iotest
@@ -621,49 +614,49 @@ if ( nested==0 .or. ( nested==1 .and. nud_test/=0 ) ) then
   end if
 endif
 
-! -------------------------------------------------------------------
-! Read surface temperature 
-! read global tss to diagnose sea-ice or land-sea mask
-if ( tsstest ) then
-  call histrd1(iarchi,ier,'tsu',ik,tss,ifull)
-  zss(:) = zss_a(:) ! use saved zss arrays
-else
-  if ( fnresid==1 ) then
-    call histrd1(iarchi,ier,'tsu',ik,tss_a,6*ik*ik,nogather=.false.)
-  else
-    call histrd1(iarchi,ier,'tsu',ik,tss_a,6*ik*ik,nogather=.true.)
-  end if
+!~ ! -------------------------------------------------------------------
+!~ ! Read surface temperature 
+!~ ! read global tss to diagnose sea-ice or land-sea mask
+!~ if ( tsstest ) then
+  !~ call histrd1(iarchi,ier,'tsu',ik,tss,ifull)
+  !~ zss(:) = zss_a(:) ! use saved zss arrays
+!~ else
+  !~ if ( fnresid==1 ) then
+    !~ call histrd1(iarchi,ier,'tsu',ik,tss_a,6*ik*ik,nogather=.false.)
+  !~ else
+    !~ call histrd1(iarchi,ier,'tsu',ik,tss_a,6*ik*ik,nogather=.true.)
+  !~ end if
       
-  ! set up land-sea mask from either soilt, tss or zss
-  if ( newfile .and. fwsize>0 ) then
-    if ( nemi==3 ) then 
-      land_a(:) = isoilm_a(:)>0
-      numneg = count( .not.land_a(:) )
-      if ( any(isoilm_a(:)<0) ) nemi = 2
-    end if ! (nemi==3)
-    if ( nemi==2 ) then
-      numneg = 0
-      do iq = 1,fwsize
-        if ( tss_a(iq)>0. ) then ! over land
-          land_a(iq) = .true.
-        else                     ! over sea
-          land_a(iq) = .false.
-          numneg = numneg + 1
-        endif               ! (tss(iq)>0) .. else ..
-      enddo
-      if ( numneg==0 ) nemi = 1  ! should be using zss in that case
-    endif !  (nemi==2)
-    tss_a(:) = abs(tss_a(:))
-    if ( nemi==1 ) then
-      land_a(:) = zss_a(:)>0.
-      numneg = count(.not.land_a)
-    endif ! (nemi==1)
-    if ( myid==0 ) then
-      write(6,*)'Land-sea mask using nemi = ',nemi
-    end if
-    sea_a(:) = .not.land_a(:)
-  end if ! (newfile.and.fwsize>0)
-end if ! (tsstest) ..else..
+  !~ ! set up land-sea mask from either soilt, tss or zss
+  !~ if ( newfile .and. fwsize>0 ) then
+    !~ if ( nemi==3 ) then 
+      !~ land_a(:) = isoilm_a(:)>0
+      !~ numneg = count( .not.land_a(:) )
+      !~ if ( any(isoilm_a(:)<0) ) nemi = 2
+    !~ end if ! (nemi==3)
+    !~ if ( nemi==2 ) then
+      !~ numneg = 0
+      !~ do iq = 1,fwsize
+        !~ if ( tss_a(iq)>0. ) then ! over land
+          !~ land_a(iq) = .true.
+        !~ else                     ! over sea
+          !~ land_a(iq) = .false.
+          !~ numneg = numneg + 1
+        !~ endif               ! (tss(iq)>0) .. else ..
+      !~ enddo
+      !~ if ( numneg==0 ) nemi = 1  ! should be using zss in that case
+    !~ endif !  (nemi==2)
+    !~ tss_a(:) = abs(tss_a(:))
+    !~ if ( nemi==1 ) then
+      !~ land_a(:) = zss_a(:)>0.
+      !~ numneg = count(.not.land_a)
+    !~ endif ! (nemi==1)
+    !~ if ( myid==0 ) then
+      !~ write(6,*)'Land-sea mask using nemi = ',nemi
+    !~ end if
+    !~ sea_a(:) = .not.land_a(:)
+  !~ end if ! (newfile.and.fwsize>0)
+!~ end if ! (tsstest) ..else..
 
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
