@@ -613,24 +613,24 @@ v(1:ifull,:) = 0.
 qg(1:ifull,:) = qgmin
 
 
-!------------------------------------------------------------
-! re-grid surface pressure by mapping to MSLP, interpolating and then map to surface pressure
-! requires psl_a, zss, zss_a, t and t_a_lev
-if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
-  if ( .not.iotest ) then
-    if ( fwsize>0 ) then
-      ! ucc holds pmsl_a
-      call mslpx(ucc,psl_a,zss_a,t_a_lev,sigin(levkin))  ! needs pmsl (preferred)
-    end if
-    if ( fnresid==1 ) then
-      call doints1_gather(ucc,pmsl)
-    else
-      call doints1_nogather(ucc,pmsl)
-    end if
-    ! invert pmsl to get psl
-    call to_pslx(pmsl,psl,zss,t(:,levk),levk)  ! on target grid
-  end if ! .not.iotest
-end if
+!~ !------------------------------------------------------------
+!~ ! re-grid surface pressure by mapping to MSLP, interpolating and then map to surface pressure
+!~ ! requires psl_a, zss, zss_a, t and t_a_lev
+!~ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
+  !~ if ( .not.iotest ) then
+    !~ if ( fwsize>0 ) then
+      !~ ! ucc holds pmsl_a
+      !~ call mslpx(ucc,psl_a,zss_a,t_a_lev,sigin(levkin))  ! needs pmsl (preferred)
+    !~ end if
+    !~ if ( fnresid==1 ) then
+      !~ call doints1_gather(ucc,pmsl)
+    !~ else
+      !~ call doints1_nogather(ucc,pmsl)
+    !~ end if
+    !~ ! invert pmsl to get psl
+    !~ call to_pslx(pmsl,psl,zss,t(:,levk),levk)  ! on target grid
+  !~ end if ! .not.iotest
+!~ end if
 
 
 !**************************************************************
