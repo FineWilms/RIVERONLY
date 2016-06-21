@@ -576,12 +576,12 @@ if ( newfile ) then
     end if
   end if
   
-  ! read host ocean bathymetry data
-  if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-    if ( .not.allocated(ocndep_l) ) allocate(ocndep_l(ifull))
-    call gethist1('ocndepth',ocndep_l)
-  end if
-  if ( myid==0 ) write(6,*) "Finished reading fixed fields"
+  !~ ! read host ocean bathymetry data
+  !~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
+    !~ if ( .not.allocated(ocndep_l) ) allocate(ocndep_l(ifull))
+    !~ call gethist1('ocndepth',ocndep_l)
+  !~ end if
+  !~ if ( myid==0 ) write(6,*) "Finished reading fixed fields"
   
 else
   ! use saved metadata  
@@ -664,51 +664,6 @@ else
     sea_a(:) = .not.land_a(:)
   end if ! (newfile.and.fwsize>0)
 end if ! (tsstest) ..else..
-
-      
-!~ !--------------------------------------------------------------
-!~ ! Read ocean data for nudging (sea-ice is read below)
-!~ ! read when nested=0 or nested==1.and.nud/=0 or nested=2
-!~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  !~ ! fixed ocean depth
-  !~ ocndwn(:,1) = ocndep_l
-  !~ ! ocean potential temperature
-  !~ ! ocean temperature and soil temperature use the same arrays
-  !~ ! as no fractional land or sea cover is allowed in CCAM
-  !~ if ( ( nested/=1 .or. nud_sst/=0 ) .and. ok>0 ) then
-    !~ call fillhist4o('tgg',mlodwn(:,:,1),land_a,ocndwn(:,1))
-    !~ if ( all(mlodwn(:,:,1)==0.) ) mlodwn(:,:,1) = 293. - wrtemp
-    !~ if ( any(mlodwn(:,:,1)>100.) ) then
-      !~ if ( myid==0 ) then
-        !~ write(6,*) "Adjust input ocean data for high precision"
-      !~ end if
-      !~ where (mlodwn(:,:,1)>100.)
-        !~ mlodwn(:,:,1) = mlodwn(:,:,1) - wrtemp ! backwards compatibility
-      !~ end where
-    !~ else
-      !~ if ( myid==0 ) then
-        !~ write(6,*) "High precision ocean data detected"
-      !~ end if
-    !~ end if
-  !~ else
-    !~ mlodwn(:,:,1) = 293. - wrtemp
-  !~ end if ! (nestesd/=1.or.nud_sst/=0) ..else..
-  !~ ! ocean salinity
-  !~ if ( ( nested/=1 .or. nud_sss/=0 ) .and. ok>0 ) then
-    !~ call fillhist4o('sal',mlodwn(:,:,2),land_a,ocndwn(:,1))
-    !~ mlodwn(:,:,2) = max( mlodwn(:,:,2), 0. )
-  !~ else
-    !~ mlodwn(:,:,2) = 34.72   
-  !~ end if ! (nestesd/=1.or.nud_sss/=0) ..else..
-    !~ mlodwn(:,:,3:4) = 0.               
-  !~ ! water surface height
-  !~ if ( nested/=1 .or. nud_sfh/=0 ) then
-    !~ call fillhist1('ocheight',ocndwn(:,2),land_a)
-  !~ else
-    !~ ocndwn(:,2) = 0.
-  !~ end if ! (nested/=1.or.nud_sfh/=0) ..else..
-!~ end if
-!~ !--------------------------------------------------------------
 
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
@@ -953,22 +908,6 @@ if ( nested/=1 ) then
     call fillhist1('roadsna',atebdwn(:,28),sea_a,filllimit=399.)
     if ( all(atebdwn(:,28)==0.) ) atebdwn(:,28)=0.85
   end if
-
-  !~ !------------------------------------------------------------------
-  !~ ! TKE-eps data
-  !~ if ( nvmix==6 .and. nested==0 ) then
-    !~ call gethist4a('tke',tke,5)
-    !~ if ( all(tke(1:ifull,:)==0.) ) tke(1:ifull,:)=1.5E-4
-    !~ call gethist4a('eps',eps,5)
-    !~ if  (all(eps(1:ifull,:)==0.) ) eps(1:ifull,:)=1.E-7
-  !~ end if
-
-  !~ !------------------------------------------------------------------
-  !~ ! Aerosol data ( non-nudged or diagnostic )
-  !~ if ( abs(iaero)>=2 ) then
-    !~ so4t(:)=0.
-  !~ end if
-  
 
   ! -----------------------------------------------------------------
   ! soil ice and snow data
