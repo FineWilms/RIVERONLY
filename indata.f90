@@ -61,7 +61,7 @@ use river                                        ! River routing
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
-use timeseries, only : init_ts                   ! Tracer time series
+!~ use timeseries, only : init_ts                   ! Tracer time series
 use vecs_m                                       ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                                     ! Map to cartesian coordinates
 use vegpar_m                                     ! Vegetation arrays

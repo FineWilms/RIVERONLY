@@ -62,7 +62,7 @@ use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
 !~ use tbar2d_m, only : tbar2d_init           ! Atmosphere dynamics reference temperature
-use timeseries, only : write_ts            ! Tracer time series
+!~ use timeseries, only : write_ts            ! Tracer time series
 use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
