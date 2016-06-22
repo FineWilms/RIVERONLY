@@ -70,7 +70,7 @@ contains
 ! Main interface for input data that reads grid metadata
     
 subroutine onthefly(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice,snowd,qfg, &
-                    qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,ocndwn)
+                    qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
 
 !~ use aerosolldr       ! LDR prognostic aerosols
 use cc_mpi           ! CC MPI routines
@@ -99,7 +99,7 @@ real, dimension(ifull,wlev,4), intent(out) :: mlodwn
 !~ real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
-real, dimension(ifull,2), intent(out) :: ocndwn
+!~ real, dimension(ifull,2), intent(out) :: ocndwn
 real, dimension(:,:), intent(out) :: t, u, v, qg, qfg, qlg, qrg, qsng, qgrg
 real, dimension(ifull), intent(out) :: psl, zss, tss, fracice, snowd
 real, dimension(ifull), intent(out) :: sicedep, ssdnn, snage
@@ -263,8 +263,7 @@ end if
 fwsize = pil*pjl*pnpan*mynproc 
 
 call onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
-                   snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,   &
-                   ocndwn)
+                   snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
 
 if ( myid==0 ) write(6,*) "Leaving onthefly"
 
@@ -282,8 +281,7 @@ return
 ! read by many processes and shared by RMA.  In the case of
 ! restart files, then there is no need for message passing.
 subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
-                         snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,   &
-                         ocndwn)
+                         snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
       
 !~ use aerosolldr, only : ssn,naero               ! LDR aerosol scheme
 use ateb, only : atebdwn                       ! Urban
@@ -348,7 +346,7 @@ real(kind=8), dimension(:,:), allocatable, save :: xx4, yy4
 real(kind=8), dimension(dk*dk*6):: z_a, x_a, y_a
 real, dimension(ifull,wlev,4), intent(out) :: mlodwn
 !~ real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
-real, dimension(ifull,2), intent(out) :: ocndwn
+!~ real, dimension(ifull,2), intent(out) :: ocndwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
 real, dimension(:,:), intent(out) :: t, u, v, qg, qfg, qlg, qrg, qsng, qgrg

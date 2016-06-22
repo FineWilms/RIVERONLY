@@ -56,7 +56,7 @@ use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
 use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
-use mlo                                          ! Ocean physics and prognostic arrays
+!~ use mlo                                          ! Ocean physics and prognostic arrays
 !~ use mlodynamics                                  ! Ocean dynamics
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m, only : lrestart                    ! Non-hydrostatic atmosphere arrays
@@ -116,7 +116,7 @@ real, dimension(ifull) :: zss, aa, zsmask
 real, dimension(ifull) :: dep, depth, rlai
 real, dimension(ifull,5) :: duma
 real, dimension(ifull,2) :: ocndwn
-real, dimension(ifull,wlev,4) :: mlodwn
+!~ real, dimension(ifull,wlev,4) :: mlodwn
 !~ real, dimension(ifull,kl,naero) :: xtgdwn
 real, dimension(ifull,kl,9) :: dumb
 real, dimension(:,:), allocatable :: glob2d
@@ -598,10 +598,10 @@ if (nmlo/=0.and.abs(nmlo)<=9) then
   call surfread(dep,'depth',filename=bathfile)
   where (land)
     dep=0.
-  elsewhere
-    dep=max(dep,2.*minwater)
+  !~ elsewhere
+    !~ dep=max(dep,2.*minwater)
   end where
-  call mloinit(ifull,dep,0)
+  !~ call mloinit(ifull,dep,0)
   !~ call mlodyninit
 end if
 if ( abs(nmlo)>=2 .or. nriver==1 ) then
@@ -678,7 +678,7 @@ if ( io_in<4 ) then
   if (abs(io_in)==1) then
     call onthefly(0,kdate,ktime,psl,zss,tss,sicedep,fracice,t,u,v, &
                   qg,tgg,wb,wbice,snowd,qfg,qlg,qrg,qsng,qgrg,     &
-                  tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn,      &
+                  tggsn,smass,ssdn,ssdnn,snage,isflag,      &
                   ocndwn)
   endif   ! (abs(io_in)==1)
   call histclose
@@ -1788,70 +1788,70 @@ if (nsib==6.or.nsib==7) then
 end if
 
 
-!-----------------------------------------------------------------
-! UPDATE MIXED LAYER OCEAN DATA (nmlo)
-if (nmlo/=0.and.abs(nmlo)<=9) then
-  if (any(ocndwn(:,1)>0.5)) then
-    if (myid==0) write(6,*) 'Importing MLO data'
-  else
-    if (myid==0) write(6,*) 'Using MLO defaults'
-    ocndwn(:,2)=0.
-    do k=1,wlev
-      call mloexpdep(0,depth,k,0)
-      ! This polynomial fit is from MOM3, based on Levitus
-      where (depth<2000.)
-        mlodwn(:,k,1)=18.4231944        &
-          -0.43030662E-1*depth(:)       &
-          +0.607121504E-4*depth(:)**2   &
-          -0.523806281E-7*depth(:)**3   &
-          +0.272989082E-10*depth(:)**4  &
-          -0.833224666E-14*depth(:)**5  &
-          +0.136974583E-17*depth(:)**6  &
-          -0.935923382E-22*depth(:)**7
-        mlodwn(:,k,1)=mlodwn(:,k,1)*(tss-273.16)/18.4231944+273.16-wrtemp
-      elsewhere
-        mlodwn(:,k,1)=275.16-wrtemp
-      end where
-      mlodwn(:,k,2)=34.72
-      mlodwn(:,k,3:4)=0.
-    end do
-    micdwn(:,1)=tss
-    micdwn(:,2)=tss
-    micdwn(:,3)=tss
-    micdwn(:,4)=tss
-    micdwn(:,5:6)=0.
-    where (fracice>0.)
-      micdwn(:,1)=min(tss,271.)
-      micdwn(:,2)=min(tss,271.)
-      micdwn(:,3)=min(tss,271.)
-      micdwn(:,4)=min(tss,271.)
-      micdwn(:,5)=1.
-      micdwn(:,6)=2.
-    end where
-    micdwn(:,7:10)=0.
-    micdwn(:,11)=10.
-    where (.not.land)
-      fracice=micdwn(:,5)
-      sicedep=micdwn(:,6)
-      snowd=micdwn(:,7)*1000.
-    end where          
-  end if
-  !mlodwn(1:ifull,1:wlev,1)=max(mlodwn(1:ifull,1:wlev,1),271.-wrtemp)
-  mlodwn(1:ifull,1:wlev,2)=max(mlodwn(1:ifull,1:wlev,2),0.)
-  micdwn(1:ifull,1:4)=min(max(micdwn(1:ifull,1:4),0.),300.)
-  micdwn(1:ifull,11)=max(micdwn(1:ifull,11),0.)
-  call mloload(mlodwn,ocndwn(:,2),micdwn,0)
-  deallocate(micdwn)
-  do k=1,ms
-    call mloexport(0,tgg(:,k),k,0)
-    where ( tgg(:,k)<100. )
-      tgg(:,k) = tgg(:,k) + wrtemp
-    end where    
-  end do
-  do k=1,3
-    call mloexpice(tggsn(:,k),k,0)
-  end do 
-end if
+!~ !-----------------------------------------------------------------
+!~ ! UPDATE MIXED LAYER OCEAN DATA (nmlo)
+!~ if (nmlo/=0.and.abs(nmlo)<=9) then
+  !~ if (any(ocndwn(:,1)>0.5)) then
+    !~ if (myid==0) write(6,*) 'Importing MLO data'
+  !~ else
+    !~ if (myid==0) write(6,*) 'Using MLO defaults'
+    !~ ocndwn(:,2)=0.
+    !~ do k=1,wlev
+      !~ call mloexpdep(0,depth,k,0)
+      !~ ! This polynomial fit is from MOM3, based on Levitus
+      !~ where (depth<2000.)
+        !~ mlodwn(:,k,1)=18.4231944        &
+          !~ -0.43030662E-1*depth(:)       &
+          !~ +0.607121504E-4*depth(:)**2   &
+          !~ -0.523806281E-7*depth(:)**3   &
+          !~ +0.272989082E-10*depth(:)**4  &
+          !~ -0.833224666E-14*depth(:)**5  &
+          !~ +0.136974583E-17*depth(:)**6  &
+          !~ -0.935923382E-22*depth(:)**7
+        !~ mlodwn(:,k,1)=mlodwn(:,k,1)*(tss-273.16)/18.4231944+273.16-wrtemp
+      !~ elsewhere
+        !~ mlodwn(:,k,1)=275.16-wrtemp
+      !~ end where
+      !~ mlodwn(:,k,2)=34.72
+      !~ mlodwn(:,k,3:4)=0.
+    !~ end do
+    !~ micdwn(:,1)=tss
+    !~ micdwn(:,2)=tss
+    !~ micdwn(:,3)=tss
+    !~ micdwn(:,4)=tss
+    !~ micdwn(:,5:6)=0.
+    !~ where (fracice>0.)
+      !~ micdwn(:,1)=min(tss,271.)
+      !~ micdwn(:,2)=min(tss,271.)
+      !~ micdwn(:,3)=min(tss,271.)
+      !~ micdwn(:,4)=min(tss,271.)
+      !~ micdwn(:,5)=1.
+      !~ micdwn(:,6)=2.
+    !~ end where
+    !~ micdwn(:,7:10)=0.
+    !~ micdwn(:,11)=10.
+    !~ where (.not.land)
+      !~ fracice=micdwn(:,5)
+      !~ sicedep=micdwn(:,6)
+      !~ snowd=micdwn(:,7)*1000.
+    !~ end where          
+  !~ end if
+  !~ !mlodwn(1:ifull,1:wlev,1)=max(mlodwn(1:ifull,1:wlev,1),271.-wrtemp)
+  !~ mlodwn(1:ifull,1:wlev,2)=max(mlodwn(1:ifull,1:wlev,2),0.)
+  !~ micdwn(1:ifull,1:4)=min(max(micdwn(1:ifull,1:4),0.),300.)
+  !~ micdwn(1:ifull,11)=max(micdwn(1:ifull,11),0.)
+  !~ call mloload(mlodwn,ocndwn(:,2),micdwn,0)
+  !~ deallocate(micdwn)
+  !~ do k=1,ms
+    !~ call mloexport(0,tgg(:,k),k,0)
+    !~ where ( tgg(:,k)<100. )
+      !~ tgg(:,k) = tgg(:,k) + wrtemp
+    !~ end where    
+  !~ end do
+  !~ do k=1,3
+    !~ call mloexpice(tggsn(:,k),k,0)
+  !~ end do 
+!~ end if
 
 
 !~ !-----------------------------------------------------------------
