@@ -139,9 +139,6 @@ fm=0.          ! dummy value
 !      *****  check next comment
 !       sflux called at beginning of time loop, hence savu, savv
 
-srcp = sig(1)**(rdry/cp)
-ga(:) = 0.              !  for ocean points in ga_ave diagnostic
-theta(:) = t(1:ifull,1)/srcp
 rho(:) = ps(1:ifull)/(rdry*tss(:))
 uav(:) = av_vmod*u(1:ifull,1) + (1.-av_vmod)*savu(:,1)   
 vav(:) = av_vmod*v(1:ifull,1) + (1.-av_vmod)*savv(:,1)  
