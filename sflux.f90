@@ -108,16 +108,6 @@ real, parameter :: fmroot=.57735     ! was .4 till 7 Feb 1996
 !     dfgdt is dfgdt (was csen in surfupa/b)
 !     degdt is degdt (was ceva in surfupa/b)
 
-if (.not.allocated(plens).and.nplens/=0) then
-  allocate(plens(ifull))
-  plens=0.
-end if
-if (.not.allocated(taftfh).and.(nsib==3.or.nsib==5)) then
-  allocate(taftfh(ifull))
-  allocate(taftfhg(ifull))
-  taftfh(:)=.05        ! just a diag default for sea points
-  taftfhg(:)=7.e-4     ! just a diag default for sea points
-end if
       
 ri_max=(1./fmroot -1.)/bprm    ! i.e. .14641
 zologbgin=log(zmin/zobgin)     ! pre-calculated for all except snow points
