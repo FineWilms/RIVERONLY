@@ -43,7 +43,7 @@ use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
-use prec_m                         ! Precipitation
+!~ use prec_m                         ! Precipitation
 use river                          ! River routing
 use savuvt_m                       ! Saved dynamic arrays
 use screen_m                       ! Screen level diagnostics
@@ -343,7 +343,7 @@ end if                                                                          
 call END_LOG(sfluxurban_end)                                                                     ! urban
 ! ----------------------------------------------------------------------
 ! ----------------------------------------------------------------------
-evap(:)=evap(:)+dt*eg(:)/hl !time integ value in mm (wrong for snow)
+!~ evap(:)=evap(:)+dt*eg(:)/hl !time integ value in mm (wrong for snow)
 
 ! Update runoff for river routing
 if ( abs(nmlo)>=2 .or. nriver==1 ) then

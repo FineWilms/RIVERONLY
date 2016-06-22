@@ -54,7 +54,7 @@ use outcdf                                 ! Output file routines
 use parmhdff_m                             ! Horizontal diffusion parameters
 use pbl_m                                  ! Boundary layer arrays
 use permsurf_m, only : permsurf_init       ! Fixed surface arrays
-use prec_m                                 ! Precipitation
+!~ use prec_m                                 ! Precipitation
 use river                                  ! River routing
 use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
@@ -123,7 +123,7 @@ real, dimension(:), allocatable, save :: spare1, spare2
 real, dimension(:), allocatable, save :: spmean
 real, dimension(9) :: temparray, gtemparray
 real clhav, cllav, clmav, cltav, dsx, dtds, es
-real gke, hourst, hrs_dt, evapavge, precavge, preccavge, psavge
+real gke, hourst, hrs_dt, evapavge
 real pslavge, pwater, rel_lat, rel_long, spavge, pwatr
 real qtot, aa, bb, cc, bb_2, cc_2, rat
 real targetlev
@@ -531,7 +531,7 @@ call nsibd_init(ifull,iextra,kl,nsib)
 !~ call parmhdff_init(ifull,iextra,kl)
 call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
-call prec_init(ifull,iextra,kl)
+!~ call prec_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
 call sbar_init(ifull,iextra,kl)
