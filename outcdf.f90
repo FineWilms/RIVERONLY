@@ -402,7 +402,7 @@ end subroutine cdfout
 subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
-use ateb, only : atebsave                        ! Urban
+!~ use ateb, only : atebsave                        ! Urban
 use cable_ccam, only : savetile, savetiledef     ! CABLE interface
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
@@ -465,7 +465,7 @@ real, dimension(ifull) :: qtot, tv
 real, dimension(ifull,kl) :: tmpry,rhoa
 !~ real, dimension(ifull,wlev,4) :: mlodwn
 real, dimension(ifull,11) :: micdwn
-real, dimension(ifull,28) :: atebdwn
+!~ real, dimension(ifull,28) :: atebdwn
 character(len=50) expdesc
 character(len=50) lname
 character(len=21) mnam,nnam

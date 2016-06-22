@@ -288,7 +288,7 @@ return
 subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
                          snowd,tggsn,smass,ssdn,ssdnn,snage,isflag)
       
-use ateb, only : atebdwn                       ! Urban
+!~ use ateb, only : atebdwn                       ! Urban
 use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
 use carbpools_m                                ! Carbon pools

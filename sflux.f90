@@ -29,7 +29,7 @@
 subroutine sflux(nalpha)
       
 use arrays_m                       ! Atmosphere dyamics prognostic arrays
-use ateb                           ! Urban
+!~ use ateb                           ! Urban
 use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
