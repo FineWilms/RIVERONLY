@@ -58,15 +58,11 @@ use river                                  ! River routing
 use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
 use sbar_m                                 ! Saved dynamic arrays
-!~ use screen_m                               ! Screen level diagnostics
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
-use tbar2d_m, only : tbar2d_init           ! Atmosphere dynamics reference temperature
+!~ use tbar2d_m, only : tbar2d_init           ! Atmosphere dynamics reference temperature
 use timeseries, only : write_ts            ! Tracer time series
-!~ use tkeeps                                 ! TKE-EPS boundary layer
-!~ use unn_m                                  ! Saved dynamic arrays
-!~ use uvbar_m                                ! Saved dynamic arrays
 use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
@@ -514,7 +510,7 @@ call sbar_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
-call tbar2d_init(ifull,iextra,kl)
+!~ call tbar2d_init(ifull,iextra,kl)
 !~ call unn_init(ifull,iextra,kl)
 !~ call uvbar_init(ifull,iextra,kl)
 call vecs_init(ifull,iextra,kl)

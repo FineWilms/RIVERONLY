@@ -402,7 +402,6 @@ end subroutine cdfout
 subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
-!~ use ateb, only : atebsave                        ! Urban
 use cable_ccam, only : savetile, savetiledef     ! CABLE interface
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
@@ -411,14 +410,11 @@ use cc_mpi                                       ! CC MPI routines
 use cfrac_m                                      ! Cloud fraction
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
-!~ use gdrag_m                                      ! Gravity wave drag
 use histave_m                                    ! Time average arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
 use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
-!~ use mlo, only : wlev,mlosave,mlodiag, &          ! Ocean physics and prognostic arrays
-                !~ mloexpdep,wrtemp
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
@@ -428,11 +424,9 @@ use raddiag_m                                    ! Radiation diagnostic
 use river                                        ! River routing
 use savuvt_m                                     ! Saved dynamic arrays
 use savuv1_m                                     ! Saved dynamic arrays
-!~ use screen_m                                     ! Screen level diagnostics
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
-!~ use tkeeps, only : tke,eps,zidry                 ! TKE-EPS boundary layer
 use vegpar_m                                     ! Vegetation arrays
 use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays
@@ -463,9 +457,7 @@ real, dimension(ifull) :: aa
 real, dimension(ifull) :: ocndep,ocnheight
 real, dimension(ifull) :: qtot, tv
 real, dimension(ifull,kl) :: tmpry,rhoa
-!~ real, dimension(ifull,wlev,4) :: mlodwn
 real, dimension(ifull,11) :: micdwn
-!~ real, dimension(ifull,28) :: atebdwn
 character(len=50) expdesc
 character(len=50) lname
 character(len=21) mnam,nnam

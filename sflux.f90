@@ -29,21 +29,18 @@
 subroutine sflux(nalpha)
       
 use arrays_m                       ! Atmosphere dyamics prognostic arrays
-!~ use ateb                           ! Urban
 use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
 use extraout_m                     ! Additional diagnostics
 use gdrag_m                        ! Gravity wave drag
 use map_m                          ! Grid map arrays
-!~ use mlo                            ! Ocean physics and prognostic arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
 use river                          ! River routing
 use savuvt_m                       ! Saved dynamic arrays
-!~ use screen_m                       ! Screen level diagnostics
 use sigs_m                         ! Atmosphere sigma levels
 use soil_m                         ! Soil and surface data
 use soilsnow_m                     ! Soil, snow and surface data

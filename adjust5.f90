@@ -39,7 +39,7 @@ use nlin_m                 ! Atmosphere non-linear dynamics
 use pbl_m                  ! Boundary layer arrays
 use sigs_m                 ! Atmosphere sigma levels
 use staguvmod              ! Reversible grid staggering
-use tbar2d_m               ! Atmosphere dynamics reference temperature
+!~ use tbar2d_m               ! Atmosphere dynamics reference temperature
 use tracers_m              ! Tracer data
 use vadv                   ! Vertical advection
 use vecsuv_m               ! Map to cartesian coordinates
