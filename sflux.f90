@@ -43,7 +43,7 @@ use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
 use river                          ! River routing
 use savuvt_m                       ! Saved dynamic arrays
-use screen_m                       ! Screen level diagnostics
+!~ use screen_m                       ! Screen level diagnostics
 use sigs_m                         ! Atmosphere sigma levels
 use soil_m                         ! Soil and surface data
 use soilsnow_m                     ! Soil, snow and surface data

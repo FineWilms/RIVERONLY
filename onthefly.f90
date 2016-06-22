@@ -302,7 +302,7 @@ use nsibd_m, only : isoilm                     ! Land-surface arrays
 use river                                      ! River routing
 use savuvt_m                                   ! Saved dynamic arrays
 use savuv1_m                                   ! Saved dynamic arrays
-use screen_m                                   ! Screen level diagnostics
+!~ use screen_m                                   ! Screen level diagnostics
 use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
 !~ use tkeeps, only : tke,eps,zidry               ! TKE-EPS boundary layer
