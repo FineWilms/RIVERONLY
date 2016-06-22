@@ -152,7 +152,7 @@ use mlo, only : mindep              & ! Ocean physics and prognostic arrays
     ,minwater,mxd,zomode,zoseaice   &
     ,factchseaice
 use parmhdff_m                        ! Horizontal diffusion parameters
-use tkeeps                            ! TKE-EPS boundary layer
+!~ use tkeeps                            ! TKE-EPS boundary layer
 
 implicit none
 
@@ -432,7 +432,7 @@ use screen_m                                     ! Screen level diagnostics
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
-use tkeeps, only : tke,eps,zidry                 ! TKE-EPS boundary layer
+!~ use tkeeps, only : tke,eps,zidry                 ! TKE-EPS boundary layer
 use vegpar_m                                     ! Vegetation arrays
 use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays

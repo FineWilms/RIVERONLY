@@ -64,7 +64,7 @@ use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
 use tbar2d_m, only : tbar2d_init           ! Atmosphere dynamics reference temperature
 use timeseries, only : write_ts            ! Tracer time series
-use tkeeps                                 ! TKE-EPS boundary layer
+!~ use tkeeps                                 ! TKE-EPS boundary layer
 use unn_m                                  ! Saved dynamic arrays
 use uvbar_m                                ! Saved dynamic arrays
 use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
@@ -171,10 +171,10 @@ namelist/kuonml/alflnd,alfsea,cldh_lnd,cldm_lnd,cldl_lnd,         &
     nstab_cld,nuvconv,rhcv,rhmois,rhsat,sigcb,sigcll,sig_ct,      &
     sigkscb,sigksct,tied_con,tied_over,tied_rh,comm,acon,bcon,    &
     rcm,rcrit_l,rcrit_s,ncloud
-! boundary layer turbulence namelist
-namelist/turbnml/be,cm0,ce0,ce1,ce2,ce3,cq,ent0,dtrn0,dtrc0,m0,   &
-    b1,b2,buoymeth,icm1,maxdts,mintke,mineps,minl,maxl,stabmeth,  &
-    tke_umin
+!~ ! boundary layer turbulence namelist
+!~ namelist/turbnml/be,cm0,ce0,ce1,ce2,ce3,cq,ent0,dtrn0,dtrc0,m0,   &
+    !~ b1,b2,buoymeth,icm1,maxdts,mintke,mineps,minl,maxl,stabmeth,  &
+    !~ tke_umin
 
 data nversion/0/
 data comment/' '/,comm/' '/,irest/1/,jalbfix/1/,nalpha/1/
@@ -257,7 +257,7 @@ end if
 if ( abs(nmlo)>=2 ) nriver=1
 read(99, datafile)
 ! try reading boundary layer turbulence namelist
-read(99, turbnml, iostat=ierr)
+!~ read(99, turbnml, iostat=ierr)
 if ( ierr /= 0 ) rewind(99)       ! rewind namelist if turbnml is not found
 nagg = 10!max( 10, naero )           ! maximum size of aggregation
 nlx        = 0
@@ -425,7 +425,7 @@ if ( kblock<0 ) then
   kblock = max(kl, ol) ! must occur before indata
 end if
 
-tke_umin = vmodmin
+!~ tke_umin = vmodmin
 
 !--------------------------------------------------------------
 ! INITIALISE ifull_g ALLOCATABLE ARRAYS
@@ -539,9 +539,9 @@ call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)
 call work3f_init(ifull,iextra,kl)
 call xarrs_init(ifull,iextra,kl)
-if ( nvmix==6 ) then
-  call tkeinit(ifull,iextra,kl,0)
-end if
+!~ if ( nvmix==6 ) then
+  !~ call tkeinit(ifull,iextra,kl,0)
+!~ end if
 
 ! Remaining arrays are allocated in indata.f90, since their
 ! definition requires additional input data (e.g, land-surface)

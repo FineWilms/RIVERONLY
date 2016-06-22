@@ -305,7 +305,7 @@ use savuv1_m                                   ! Saved dynamic arrays
 use screen_m                                   ! Screen level diagnostics
 use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
-use tkeeps, only : tke,eps,zidry               ! TKE-EPS boundary layer
+!~ use tkeeps, only : tke,eps,zidry               ! TKE-EPS boundary layer
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
 use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
