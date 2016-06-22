@@ -37,7 +37,6 @@ use carbpools_m, only : carbpools_init   & ! Carbon pools
     ,fpn,frs,frp
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
-!~ use epst_m                                 ! Off-centre terms
 use extraout_m                             ! Additional diagnostics
 use gdrag_m, only : gdrag_init             ! Gravity wave drag
 use histave_m                              ! Time average arrays
@@ -45,10 +44,7 @@ use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
 use infile                                 ! Input file routines
 use latlong_m                              ! Lat/lon coordinates
-!~ use liqwpar_m                              ! Cloud water mixing ratios
 use map_m                                  ! Grid map arrays
-!~ use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
-   !~ ,minwater,zomode,zoseaice,factchseaice
 use morepbl_m                              ! Additional boundary layer diagnostics
 use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
    ,lrestart

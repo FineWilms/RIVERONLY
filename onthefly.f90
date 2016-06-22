@@ -68,9 +68,12 @@ contains
 
 ! *****************************************************************************
 ! Main interface for input data that reads grid metadata
-    
-subroutine onthefly(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice,snowd,qfg, &
-                    qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
+
+  
+
+
+subroutine onthefly(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice,snowd, &
+                    tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
 
 !~ use aerosolldr       ! LDR prognostic aerosols
 use cc_mpi           ! CC MPI routines
@@ -100,7 +103,7 @@ real, dimension(ifull,wlev,4), intent(out) :: mlodwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
 !~ real, dimension(ifull,2), intent(out) :: ocndwn
-real, dimension(:,:), intent(out) :: t, u, v, qg, qfg, qlg, qrg, qsng, qgrg
+real, dimension(:,:), intent(out) :: t, u, v, qg
 real, dimension(ifull), intent(out) :: psl, zss, tss, fracice, snowd
 real, dimension(ifull), intent(out) :: sicedep, ssdnn, snage
 real, dimension(nrhead) :: ahead
@@ -263,7 +266,7 @@ end if
 fwsize = pil*pjl*pnpan*mynproc 
 
 call onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
-                   snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
+                   snowd,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
 
 if ( myid==0 ) write(6,*) "Leaving onthefly"
 
@@ -280,24 +283,21 @@ return
 ! scattered across processes, or multiple input files that are
 ! read by many processes and shared by RMA.  In the case of
 ! restart files, then there is no need for message passing.
+
+
 subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
-                         snowd,qfg,qlg,qrg,qsng,qgrg,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
+                         snowd,tggsn,smass,ssdn,ssdnn,snage,isflag,mlodwn)
       
-!~ use aerosolldr, only : ssn,naero               ! LDR aerosol scheme
 use ateb, only : atebdwn                       ! Urban
 use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
 use carbpools_m                                ! Carbon pools
 use cc_mpi                                     ! CC MPI routines
-!~ use cfrac_m                                    ! Cloud fraction
-!~ use cloudmod                                   ! Prognostic strat cloud
 use extraout_m                                 ! Additional diagnostics      
 use infile                                     ! Input file routines
 use latlong_m                                  ! Lat/lon coordinates
 use mlo, only : wlev,micdwn,mloregrid,wrtemp   ! Ocean physics and prognostic arrays
-!~ use mlodynamics                                ! Ocean dynamics
 use morepbl_m                                  ! Additional boundary layer diagnostics
-!~ use nharrs_m, only : phi_nh,lrestart           ! Non-hydrostatic atmosphere arrays
 use nsibd_m, only : isoilm                     ! Land-surface arrays
 use river                                      ! River routing
 use savuvt_m                                   ! Saved dynamic arrays
@@ -306,7 +306,6 @@ use screen_m                                   ! Screen level diagnostics
 use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
 use tkeeps, only : tke,eps,zidry               ! TKE-EPS boundary layer
-!~ use tracers_m                                  ! Tracer data
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
 use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
@@ -349,7 +348,7 @@ real, dimension(ifull,wlev,4), intent(out) :: mlodwn
 !~ real, dimension(ifull,2), intent(out) :: ocndwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
-real, dimension(:,:), intent(out) :: t, u, v, qg, qfg, qlg, qrg, qsng, qgrg
+real, dimension(:,:), intent(out) :: t, u, v, qg
 real, dimension(ifull), intent(out) :: psl, zss, tss, fracice
 real, dimension(ifull), intent(out) :: snowd, sicedep, ssdnn, snage
 real, dimension(ifull) :: dum6, tss_l, tss_s, pmsl

@@ -39,25 +39,18 @@ contains
     
 subroutine indataf(hourst,jalbfix,lapsbot,isoth,nsig,io_nest)
      
-!~ use aerointerface                                ! Aerosol interface
-!~ use aerosolldr, only : xtg,naero                 ! LDR prognostic aerosols
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
-!~ use ateb                                         ! Urban
 use bigxy4_m                                     ! Grid interpolation
 use cable_ccam, only : loadcbmparm,loadtile      ! CABLE interface
 use cc_mpi                                       ! CC MPI routines
-!~ use daviesnudge                                  ! Far-field nudging
 use diag_m                                       ! Diagnostic routines
 use epst_m                                       ! Off-centre terms
 use extraout_m                                   ! Additional diagnostics
-!~ use gdrag_m                                      ! Gravity wave drag
 use indices_m                                    ! Grid index arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
-use liqwpar_m                                    ! Cloud water mixing ratios
+!~ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
-!~ use mlo                                          ! Ocean physics and prognostic arrays
-!~ use mlodynamics                                  ! Ocean dynamics
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m, only : lrestart                    ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
@@ -69,8 +62,6 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use timeseries, only : init_ts                   ! Tracer time series
-!~ use tracermodule, only : readtracerflux          ! Tracer routines
-!~ use tracers_m                                    ! Tracer data
 use vecs_m                                       ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                                     ! Map to cartesian coordinates
 use vegpar_m                                     ! Vegetation arrays
@@ -116,8 +107,6 @@ real, dimension(ifull) :: zss, aa, zsmask
 real, dimension(ifull) :: dep, depth, rlai
 real, dimension(ifull,5) :: duma
 real, dimension(ifull,2) :: ocndwn
-!~ real, dimension(ifull,wlev,4) :: mlodwn
-!~ real, dimension(ifull,kl,naero) :: xtgdwn
 real, dimension(ifull,kl,9) :: dumb
 real, dimension(:,:), allocatable :: glob2d
 real, dimension(:), allocatable :: davt_g
@@ -361,43 +350,6 @@ if ( io_in<=4 .and. nhstest>=0 ) then
   end if
   zs(1:ifull)     = duma(:,1)
   zsmask(1:ifull) = duma(:,2)
-  !~ he(1:ifull)     = duma(:,3)
-  !~ if ( mydiag ) write(6,*) 'he read in from topofile',he(idjd)
-
-  ! special options for orography         
-  !~ if ( nspecial==2 ) then  ! to flood Madagascar, or similar 
-    !~ do iq=1,ifull
-      !~ if(rlatt(iq)*180./pi>-28.and.rlatt(iq)*180./pi<-11.and. &
-         !~ rlongg(iq)*180./pi>42.and.rlongg(iq)*180./pi<51.)then
-        !~ if(zs(iq)>0.)then   
-          !~ write(6,*) 'zeroing iq,zs ',iq,zs(iq)
-          !~ zs(iq)=-.6   ! usual sea points come in as -1.  
-          !~ zsmask(iq)=0.
-        !~ endif  ! (zs(iq)>0.)
-      !~ endif    ! (rlatt(iq)*180./pi  ....)
-    !~ enddo
-  !~ endif       ! (nspecial==2)
-  !~ if(nspecial==31)then
-    !~ do iq=1,ifull
-      !~ if(rlongg(iq)*180./pi>60.and.rlongg(iq)*180./pi<240..and.  &
-         !~ rlatt(iq)*180./pi>20.and.rlatt(iq)*180./pi<60.)         &
-         !~ zs(iq)=.8*zs(iq)
-    !~ enddo
-  !~ endif
-  !~ if(nspecial==32)then
-    !~ do iq=1,ifull
-      !~ if(rlongg(iq)*180./pi>60.and.rlongg(iq)*180./pi<240..and.  &
-         !~ rlatt(iq)*180./pi>20.and.rlatt(iq)*180./pi<60.)         &
-         !~ zs(iq)=.5*zs(iq)
-    !~ enddo
-  !~ endif
-  !~ if(nspecial==33)then
-    !~ do iq=1,ifull
-      !~ if(rlongg(iq)*180./pi>60.and.rlongg(iq)*180./pi<240..and.  &
-         !~ rlatt(iq)*180./pi>20.and.rlatt(iq)*180./pi<60.)         &
-         !~ zs(iq)=.2*zs(iq)
-    !~ enddo
-  !~ endif
 
   land(1:ifull)=zsmask(1:ifull)>=0.5
  
@@ -519,46 +471,6 @@ if (nsib>=1) then
 end if   ! nsib>=1
 
 
-!~ !-----------------------------------------------------------------
-!~ ! INITIALISE URBAN SCHEME (nurban)
-!~ ! nurban=0 no urban
-!~ ! nurban=1 urban (save in restart file)
-!~ ! nurban=-1 urban (save in history and restart files)
-!~ if (nurban/=0) then
-  !~ if (myid==0) write(6,*) 'Initialising ateb urban scheme'
-  !~ if (lncveg==1) then
-    !~ call surfread(sigmu,'urban',netcdfid=ncidveg)
-  !~ else
-    !~ call surfread(sigmu,'urban',filename=urbanfile)
-    !~ sigmu=sigmu*0.01
-  !~ end if
-  !~ where (.not.land(1:ifull).or.sigmu<0.01)
-    !~ sigmu(:)=0.
-  !~ end where
-  !~ call atebinit(ifull,sigmu(:),0)
-!~ else
-  !~ sigmu(:)=0.
-  !~ call atebdisable(0) ! disable urban
-!~ end if
-
-!~ if (myid==0.and.lncveg==1) then
-  !~ call ccnf_close(ncidveg)
-!~ end if
-
-
-!~ ! fixes for Dean's land-use for CTM
-!~ if ( nsib==5 ) then
-  !~ where ( sigmu(:)>0.5.and.rlatt(:)*180./pi>-45.and.rlatt(:)*180./pi<-10..and. &
-          !~ rlongg(:)*180./pi>112..and.rlongg(:)*180./pi<154.4 )
-    !~ ivegt(:) = 31 ! urban
-  !~ end where
-  !~ where ( isoilm_in(:)==-1.and.rlatt(:)*180./pi>-45.and.rlatt(:)*180./pi<-10..and. &
-          !~ rlongg(:)*180./pi>112..and.rlongg(:)*180./pi<154.4 )
-    !~ ivegt(:) = 29 ! lake
-  !~ end where
-!~ end if
-
-
 !**************************************************************
 !**************************************************************
 ! No changes to land, isoilm or ivegt arrays after this point
@@ -598,43 +510,12 @@ if (nmlo/=0.and.abs(nmlo)<=9) then
   call surfread(dep,'depth',filename=bathfile)
   where (land)
     dep=0.
-  !~ elsewhere
-    !~ dep=max(dep,2.*minwater)
   end where
-  !~ call mloinit(ifull,dep,0)
-  !~ call mlodyninit
 end if
 if ( abs(nmlo)>=2 .or. nriver==1 ) then
   if (myid==0) write(6,*) 'Initialising river routing'
   call rvrinit
 end if
-
-
-!-----------------------------------------------------------------
-! INITIALISE PROGNOSTIC AEROSOLS (iaero)
-! iaero=1 prescribed aerosol direct effect
-! iaero=2 LDR prognostic aerosol (direct only with nrad=4, direct+indirect with nrad=5)
-!~ select case(abs(iaero))
-  !~ case(1)
-    !~ if(myid==0)write(6,*)'so4total data read from file ',so4tfile
-    !~ call readreal(so4tfile,so4t,ifull)
-  !~ case(2)
-    !~ call load_aerosolldr(so4tfile,oxidantfile,kdate)
-!~ end select
-
-  
-!~ !--------------------------------------------------------------
-!~ ! INITIALISE TRACERS (ngas)
-!~ if ( myid==0 ) then
-  !~ write(6,*)'nllp,ngas,ntrac,ilt,jlt,klt ',nllp,ngas,ntrac,ilt,jlt,klt
-!~ end if
-!~ if ( ngas>0 ) then
-  !~ if ( myid==0 ) write(6,*)'Initialising tracers'
-  ! tracer initialisation (if start of run)
-  !~ call init_ts(ngas,dt)
-  !~ call readtracerflux(kdate)
-!~ endif   
-  
 
 !--------------------------------------------------------------
 ! DEFINE FIXED SURFACE ARRAYS
@@ -676,10 +557,8 @@ if ( io_in<4 ) then
   ktime_sav=ktime_s
   zss=zs(1:ifull)
   if (abs(io_in)==1) then
-    call onthefly(0,kdate,ktime,psl,zss,tss,sicedep,fracice,t,u,v, &
-                  qg,tgg,wb,wbice,snowd,qfg,qlg,qrg,qsng,qgrg,     &
-                  tggsn,smass,ssdn,ssdnn,snage,isflag,      &
-                  ocndwn)
+     call         onthefly(0,kdate,ktime,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice,snowd, &
+				tggsn,smass,ssdn,ssdnn,snage,isflag, ocndwn)
   endif   ! (abs(io_in)==1)
   call histclose
   if(mydiag)then
@@ -764,311 +643,6 @@ else
 
 endif   ! (io_in<4)
 
-
-!~ !-----------------------------------------------------------------
-!~ ! SPECIAL OPTIONS FOR INITIAL CONDITIONS (nspecial, io_in and nhstest)
-!~ if(nspecial>100)then ! increase ps globally by nspecial Pa
-  !~ ps(1:ifull)=ps(1:ifull)+nspecial
-  !~ psl(:)=log(1.e-5*ps(:))
-!~ endif  ! (nspecial>100)       
-
-!~ if (nsib==3) then
-  !~ ! put in Antarctica ice-shelf fixes 5/3/07
-  !~ do iq=1,ifull
-    !~ if(zs(iq)<=0.)then
-      !~ rlongd=rlongg(iq)*180./pi
-      !~ rlatd=rlatt(iq)*180./pi
-      !~ if((rlongd>165..and.rlongd<195..and.rlatd<-77.2-(rlongd-165.)/30.).or.     & ! Ross shelf
-         !~ (rlongd>300..and.rlongd<330..and.rlatd<-75.2-(rlongd-300.)*2.8/30.).or. & ! Ronne shelf
-         !~ (rlongd>68..and.rlongd<75..and.rlatd<-64.-(rlongd-60.)*5.8/15.))then      ! Amery shelf
-           !~ sicedep(iq)=0.
-           !~ snowd(iq)=max(snowd(iq),100.)  ! max from Dec 07
-           !~ if(mydiag)write(6,*)'setting sea to ice sheet for iq = ',iq
-      !~ endif
-    !~ endif  ! (zs(iq)<=0.)
-  !~ enddo
-!~ endif
-
-!~ if(io_in>=5)then
-  !~ if (nsib/=0) then
-    !~ stop 'ERROR: io_in>=5 requiers nsib=0'
-  !~ end if
-  !~ ! for rotated coordinate version, see jmcg's notes
-  !~ coslong=cos(rlong0*pi/180.)
-  !~ sinlong=sin(rlong0*pi/180.)
-  !~ coslat=cos(rlat0*pi/180.)
-  !~ sinlat=sin(rlat0*pi/180.)
-  !~ polenx=-coslat
-  !~ poleny=0.
-  !~ polenz=sinlat
-  !~ write(6,*) 'polenx,poleny,polenz ',polenx,poleny,polenz
-  !~ cent=.5*(il_g+1)  ! True center of face
-  !~ do k=1,kl
-    !~ do iq=1,ifull
-      !~ t(iq,k)=tbarr(k)
-      !~ qg(iq,k)=qgin(k)
-      !~ psl(iq)=.01
-    !~ enddo               ! iq loop
-    !~ do j=1,jpan
-      !~ do i=1,ipan
-        !~ ! Need to add offsets to get proper face indices
-        !~ do n=1,npan
-          !~ rad=sqrt((i+ioff-cent)**2+(j+joff-cent)**2)
-          !~ radu=sqrt((i+ioff+.5-cent)**2+(j+joff-cent)**2)
-          !~ radv=sqrt((i+ioff-cent)**2+(j+joff+.5-cent)**2)
-          !~ iq=indp(i,j,n)
-          !~ u(iq,k)=uin*max(1.-radu/(.5*il_g),0.)
-          !~ v(iq,k)=vin*max(1.-radv/(.5*il_g),0.)
-          !~ if(io_in>=7.and.k==kl)then
-            !~ ps(iq)=1.e5*(1.-log(1. + thlapse*zs(iq)/(grav*tsea))  *grav/(cp*thlapse)) **(cp/rdry)
-            !~ psl(iq)= log(1.e-5*ps(iq))
-          !~ endif
-        !~ enddo         ! n loop
-      !~ enddo           ! i loop
-    !~ enddo             ! j loop
-  !~ enddo               ! k loop
-!~ endif                 ! io_in>=5
-
-!~ if(io_in==8)then
-  !~ ! assign u and v from zonal and meridional uin and vin (no schmidt here)
-  !~ ! with zero at poles
-  !~ do iq=1,ifull
-    !~ psl(iq)=.01
-    !~ uzon=uin * abs(cos(rlatt(iq)))
-    !~ vmer=vin * abs(cos(rlatt(iq)))
-    !~ ! den=sqrt( max(x(iq)**2 + y(iq)**2,1.e-7) )  ! allow for poles
-    !~ ! costh=(-y(iq)*ax(iq) + x(iq)*ay(iq))/den
-    !~ ! sinth=az(iq)/den
-    !~ ! set up unit zonal vector components
-    !~ zonx=real(            -polenz*y(iq))
-    !~ zony=real(polenz*x(iq)-polenx*z(iq))
-    !~ zonz=real(polenx*y(iq)             )
-    !~ den=sqrt( max(zonx**2 + zony**2 + zonz**2,1.e-7) ) ! allow for poles
-    !~ costh= (zonx*ax(iq)+zony*ay(iq)+zonz*az(iq))/den
-    !~ sinth=-(zonx*bx(iq)+zony*by(iq)+zonz*bz(iq))/den
-    !~ do k=1,kl
-      !~ ! calculate u and v relative to the cc grid,
-      !~ u(iq,k)= costh*uzon+sinth*vmer
-      !~ v(iq,k)=-sinth*uzon+costh*vmer
-    !~ enddo  ! k loop
-  !~ enddo      ! iq loop
-  !~ ! special option to display panels
-  !~ if(uin<0.)then
-    !~ do n=1,npan
-      !~ do j=1,jpan
-        !~ do i=1,ipan
-          !~ iq=indp(i,j,n)
-          !~ u(iq,:) = n - noff
-          !~ t(iq,:) = 0.0001 + n - noff
-        !~ enddo
-      !~ enddo
-    !~ enddo
-  !~ endif
-!~ endif
-
-!~ ! for the held-suarez hs test (also aquaplanet initial)
-!~ if (io_in==10) then
-  !~ vin=0.
-  !~ do k=1,kl
-    !~ do iq=1,ifull
-      !~ ! set up unit zonal vector components
-      !~ zonx=real(            -polenz*y(iq))
-      !~ zony=real(polenz*x(iq)-polenx*z(iq))
-      !~ zonz=real(polenx*y(iq)             )
-      !~ den=sqrt( max(zonx**2 + zony**2 + zonz**2,1.e-7) ) ! allow for poles
-      !~ costh= (zonx*ax(iq)+zony*ay(iq)+zonz*az(iq))/den
-      !~ sinth=-(zonx*bx(iq)+zony*by(iq)+zonz*bz(iq))/den
-      !~ ! set the temperature to the equilibrium zonal mean
-      !~ t(iq,k) = max ( 200., (315. - delty*sin(rlatt(iq))**2 - deltheta*log(sig(k))*cos(rlatt(iq))**2)*sig(k)**rkappa )
-      !~ ! set zonal wind to an approximate equilibrium
-      !~ uin = 125. * sin(2.*rlatt(iq))**2 * sig(k)*(1.-sig(k))/(1. + 10.*(sig(k)-0.25)**2 )
-      !~ u(iq,k)= costh*uin+sinth*vin
-      !~ v(iq,k)=-sinth*uin+costh*vin
-      !~ if(iq==idjd.and.k==nlv.and.mydiag)then
-        !~ write(6,*)'indata setting u,v for h-s'
-        !~ write(6,*)'iq,k,ax,ay,az',iq,k,ax(iq),ay(iq),az(iq)
-        !~ write(6,*)'costh,sinth,x,y,z',costh,sinth,x(iq),y(iq),z(iq)
-        !~ write(6,*)'uin,vin,u,v',uin,vin,u(iq,k),v(iq,k)
-      !~ endif
-      !~ qg(iq,k) = 0.
-      !~ ps(iq) = 1.e5
-      !~ psl(iq) = .01
-      !~ zs(iq) = 0.
-    !~ enddo               ! iq loop
-  !~ enddo ! k loop
-!~ endif   ! (io_in==10) held-suarez test (also aquaplanet initial)
-
-!~ if(io_in==11)then
-  !~ ! advection test, once around globe per 10 days
-  !~ ! only non-rotated set up so far
-  !~ vmer=0.
-  !~ ! assign u and v from zonal and meridional winds
-  !~ do iq=1,ifull
-    !~ den=real(sqrt( max(x(iq)**2 + y(iq)**2,1.e-7_8) )) ! allow for poles
-    !~ costh=real(-y(iq)*ax(iq) + x(iq)*ay(iq))/den
-    !~ sinth=az(iq)/den
-    !~ uzon=2.*pi*rearth/(10.*86400) * abs(cos(rlatt(iq)))
-    !~ psl(iq)=.01
-    !~ ps(iq)=1.e5*exp(psl(iq))
-    !~ f(iq)=0.
-    !~ fu(iq)=0.
-    !~ fv(iq)=0.
-    !~ do k=1,kl
-      !~ ! calculate u and v relative to the cc grid,
-      !~ ! using components of gaussian grid u and v with theta
-      !~ u(iq,k)= costh*uzon+sinth*vmer
-      !~ v(iq,k)=-sinth*uzon+costh*vmer
-      !~ t(iq,k)=tbarr(k)
-      !~ qg(iq,k)=1.e-6
-      !~ if(rlongg(iq)>0.and.rlongg(iq)<10.*pi/180.) qg(iq,k)=10.e-3
-    !~ enddo  ! k loop
-  !~ enddo      ! iq loop
-!~ endif  ! io_in==11
-
-!~ if(io_in==27)then
-  !~ ! cold bubble test 
-  !~ ! constants: 
-  !~ Tbubb=300. ! potential temperature
-  !~ tss(:)=Tbubb
-  !~ do k=1,kl
-    !~ ! Height of sigma-levels at t=0
-    !~ zbub(k)=(cp*Tbubb/grav)*(1.-sig(k)**(rdry/cp)) !Hydrostatic lapse rate
-    !~ ! phi(k)=g*zbub(k)  !geopotential
-  !~ enddo
-  !~ ! u and v on the cc grid,
-  !~ u(:,:)=0.
-  !~ v(:,:)=0.
-  !~ ps(:) = 1.e5        !initial surface pressure
-  !~ psl(:) = .01        !initial lnps
-  !~ zs(:)=0.            !zero topography 
-  !~ qg(:,:)=1.e-6       !Moisture? Dry atmosphere for bubble  
-  !~ f(:)=0.
-  !~ fu(:)=0.
-  !~ fv(:)=0.
-  !~ do k=1,kl
-    !~ ! Height of sigma-levels at t=0
-    !~ t(:,k)=Tbubb-zbub(k)*grav/cp  !environmental temperature
-    !~ if(sig(k)<.4)t(:,k)=t(:,k-1)
-  !~ enddo
-  !~ ! Inserting the bubble
-  !~ ! radius of bubble in the horizontal:
-  !~ xt=4000.
-  !~ yt=4000.
-  !~ zt=2000.
-  !~ ic=il_g/2    ! Indices on the global grid
-  !~ jc=3*il_g/2
-  !~ emcent=em_g(3*il_g*il_g/2)
-  !~ if(myid==0) write(6,*) 'emcent, ds/emcent ',emcent,ds/emcent
-  !~ xc=ic*ds/emcent
-  !~ yc=jc*ds/emcent
-  !~ zc=3000. !center in the vertical
-  !~ do n=1,npan
-    !~ do j=1,jpan
-      !~ do i=1,ipan
-        !~ iq=indp(i,j,n)          ! Index on this processor
-        !~ iqg=indg(i,j,n)         ! Global index
-        !~ jg = 1 + (iqg-1)/il_g   ! Global indices
-        !~ ig = iqg - (jg-1)*il_g
-        !~ xbub=ig*ds/emcent  !gridpoint horizontal distance
-        !~ ybub=jg*ds/emcent  !gridpoint horizontal distance
-        !~ do k=1,kl
-          !~ dist=sqrt(((xbub-xc)/xt)**2+((ybub-yc)/yt)**2+((zbub(k)-zc)/zt)**2)
-          !~ if(dist<=1)then
-            !~ t(iq,k)=t(iq,k)-15.*((cos(dist*pi/2.))**2)
-          !~ endif
-        !~ enddo
-      !~ enddo
-    !~ enddo
-  !~ enddo
-  !~ call printa('t   ',t,0,nlv,ia,ib,ja,jb,200.,1.)
-!~ endif  ! io_in==27, cold bubble test
-
-!~ if(io_in>=4)then   ! i.e. for special test runs without infile
-  !~ ! set default tgg etc to level 2 temperatures, if not read in above
-  !~ do iq=1,ifull
-    !~ tgg(iq,ms) =t(iq,2)   ! just for io_in>=4
-    !~ tgg(iq,2) =t(iq,2)    ! just for io_in>=4
-    !~ tss(iq)=t(iq,2)
-    !~ if(.not.land(iq))then
-      !~ tss(iq)=tsea
-    !~ endif
-  !~ enddo   ! iq loop
-!~ endif
-
-!~ ! aquaplanet (APE) test
-!~ WRITE(6,*) 'nhstest = ', nhstest
-!~ if(nhstest<0)then  
-  !~ fracice(:)=0.
-  !~ sicedep(:)=0.
-  !~ snowd(:)=0.
-  !~ tss(:)=273.16
-  !~ do iq=1,ifull
-    !~ if((nhstest==-1.or.nhstest<=-6).and.abs(rlatt(iq))<pi/3.) tss(iq)=273.16 +27.*(1.-sin(1.5*rlatt(iq))**2)   ! Expt 1 control
-    !~ if(nhstest==-2.and.abs(rlatt(iq))<pi/3.) tss(iq)=273.16 +27.*(1.-3.*abs(rlatt(iq))/pi)                     ! Expt 2 peaked
-    !~ if(nhstest==-3.and.abs(rlatt(iq))<pi/3.) tss(iq)=273.16 +27.*(1.-sin(1.5*rlatt(iq))**4)                    ! Expt 3 flat
-    !~ if(nhstest==-4.and.abs(rlatt(iq))<pi/3.) tss(iq)=273.16 +13.5*(1.-sin(1.5*rlatt(iq))**2)                 & ! Expt 4 qobs
-                                                            !~ +13.5*(1.-sin(1.5*rlatt(iq))**4)                   ! Expt 4 control5n
-    !~ if(nhstest==-5.and.rlatt(iq)>pi/36..and.rlatt(iq)<pi/3.)                                                 &
-                                                   !~ tss(iq)=273.16 +27.*(1.-sin((rlatt(iq)-pi/36.)*90./55.)**2) ! Expt 5
-    !~ if(nhstest==-5.and.rlatt(iq)>-pi/3..and.rlatt(iq)<=pi/36.)                                               &
-                                                   !~ tss(iq)=273.16 +27.*(1.-sin((rlatt(iq)-pi/36.)*90./65.)**2) ! Expt 5
-    !~ if(nhstest==-6.and.abs(rlatt(iq))<pi/12.)then                                                              ! Expt6 1keq
-      !~ if(rlongg(iq)<pi/6..or.rlongg(iq)>11.*pi/6.) tss(iq)=tss(iq)+1.*(cos(3.*rlongg(iq))*cos(6.*rlatt(iq)))**2 
-    !~ endif  ! (nhstest==-6....)                      
-    !~ if(nhstest==-7.and.abs(rlatt(iq))<pi/12.)then                                                              ! Expt7 3keq
-      !~ if(rlongg(iq)<pi/6..or.rlongg(iq)>11.*pi/6.) tss(iq)=tss(iq)+3.*(cos(3.*rlongg(iq))*cos(6.*rlatt(iq)))**2  
-    !~ endif  ! (nhstest==-7....)
-    !~ if(nhstest==-8.and.abs(rlatt(iq))<pi/6.) tss(iq)=tss(iq)+3.*cos(rlongg(iq))*cos(3.*rlatt(iq))**2           ! Expt 8  3kw1
-  !~ enddo   ! iq loop
-  !~ do k=1,ms
-    !~ tgg(:,k)=tss(:)
-    !~ wb(:,k)=0.
-  !~ enddo
-  !~ if(io_in>4)then    ! not reading initial input file
-    !~ do k=1,kl
-      !~ do iq=1,ifull
-        !~ qg(iq,k)=.01*(1.-abs(rlatt(iq))*2./pi)**3*sig(k)**3  ! Nov 2004
-      !~ enddo
-    !~ enddo
-  !~ endif  ! (io_in>4)
-  !~ if(nhstest==-13)then ! a jlm test
-    !~ f(:)=0.
-    !~ u(:,:)=0.
-    !~ v(:,:)=0.
-    !~ t(:,:)=300.
-    !~ do iq=1,ifull
-      !~ if(rlatt(iq)*180./pi>10.and.rlatt(iq)*180./pi<13.)t(iq,1)=305.
-    !~ end do
-  !~ endif
-  !~ if(io_in==5)then ! for chess-board colouring of grid, via tss
-                   !~ ! but get some blurring from cc2hist interps
-    !~ qg(:,:)=0.
-    !~ ps(:)=1.e5
-    !~ psl(:)=.01
-    !~ zs(:)=0.
-    !~ uin=300.
-    !~ if(nhstest==-2)uin=300.5
-    !~ vin=1.
-    !~ vin=3.
-    !~ if(nhstest==-3)vin=0. ! just for 6 colours of panels
-    !~ if(myid==0)then
-      !~ allocate(davt_g(ifull_g))
-      !~ do n=0,5
-        !~ do j=1,il_g
-          !~ do i=1,il_g
-            !~ davt_g(indglobal(i,j,n))=uin+mod(n,3)+vin*mod(mod(i,2)+mod(j,2),2)
-          !~ enddo ! i loop
-        !~ enddo  ! j loop
-      !~ enddo   ! n loop
-      !~ call ccmpi_distribute(tss,davt_g)
-      !~ deallocate(davt_g)
-    !~ else
-      !~ call ccmpi_distribute(tss)
-    !~ endif ! myid==0
-  !~ endif   ! io_in==5
-!~ endif    ! (nhstest<0)
-
-
 !--------------------------------------------------------------
 ! DEFINE SURFACE DATA PRESETS (nrungcm)
 
@@ -1146,64 +720,6 @@ if ( .not.lrestart ) then
       end if
     end if
   endif       !  ((nrungcm==-1.or.nrungcm==-2.or.nrungcm==-5)
-
-  !~ ! Soil recycling input
-  !~ if( nrungcm<=-3 .and. nrungcm>=-5 ) then
-    !~ call histopen(ncid,surf_00,ier)
-    !~ if ( ier==0 ) then
-      !~ ! NETCDF file format
-      !~ ! clobber ifile surface data with surfin surface data
-      !~ kdate_s = kdate_sav
-      !~ ktime_s = ktime_sav
-      !~ if ( myid==0 ) then
-        !~ write(6,*) 'Replacing surface data with input from ',trim(surf_00)
-      !~ end if
-      !~ call onthefly(2,kdate,ktime,duma(:,1),duma(:,2),duma(:,3),duma(:,4),    &
-                    !~ duma(:,5),dumb(:,:,1),dumb(:,:,2),dumb(:,:,3),            &
-                    !~ dumb(:,:,4),tgg,wb,wbice,snowd,dumb(:,:,5),dumb(:,:,6),   &
-                    !~ dumb(:,:,7),dumb(:,:,8),dumb(:,:,9),tggsn,smass,ssdn,     &
-                    !~ ssdnn,snage,isflag,mlodwn,ocndwn)
-      !~ call histclose
-      !~ if ( kdate/=kdate_sav .or. ktime/=ktime_sav ) then
-        !~ if ( myid==0 ) then
-          !~ write(6,*) 'WARN: Could not locate correct date/time'
-          !~ write(6,*) '      Using infile surface data instead'
-        !~ end if
-        !~ kdate = kdate_sav
-        !~ ktime = ktime_sav
-      !~ endif
-    !~ else
-      !~ ! ASCII file format
-      !~ ! for sequence of runs starting with values saved from last run
-      !~ if(ktime==1200)then
-        !~ co2in=co2_12      ! 'co2.12'
-        !~ radonin=radon_12  ! 'radon.12'
-        !~ surfin=surf_12    ! 'surf.12'
-      !~ else
-        !~ co2in=co2_00      !  'co2.00'
-        !~ radonin=radon_00  ! 'radon.00'
-        !~ surfin=surf_00    ! 'surf.00'
-      !~ endif
-      !~ if ( myid == 0 ) then
-        !~ write(6,*) 'reading previously saved wb,tgg,tss (land),snowd,sice from ',surfin
-        !~ open(87,file=surfin,form='formatted',status='old')
-        !~ read(87,'(a80)') header
-        !~ write(6,*)'header: ',header
-      !~ end if
-      !~ if(nrungcm==-5)then
-        !~ call readglobvar(87, tgg, fmt="*") ! this acts as dummy read 
-      !~ else
-        !~ call readglobvar(87, wb, fmt="*")
-      !~ endif
-      !~ call readglobvar(87, tgg, fmt="*")
-      !~ call readglobvar(87, aa, fmt="*")    ! only use land values of tss
-      !~ call readglobvar(87, snowd, fmt="*")
-      !~ if ( myid == 0 ) close(87)
-      !~ where (land(1:ifull))
-        !~ tss(1:ifull)=aa(1:ifull)
-      !~ end where
-    !~ end if  ! ier==0
-  !~ endif    !  (nrungcm<=-3.and.nrungcm>=-5)
 
   if(nrungcm==4)then !  wb fix for ncep input 
     ! this is related to eak's temporary fix for soil moisture
@@ -1340,41 +856,6 @@ if ( .not.lrestart ) then
 end if ! ( .not.lrestart )
 
 
-!~ !--------------------------------------------------------------
-!~ ! SPECIAL OPTIONS FOR TEMPERATURES (nspecial)
-
-!~ if(nspecial==34)then      ! test for Andy Pitman & Faye
-  !~ tgg(1:ifull,6)=tgg(1:ifull,6)+.1
-!~ endif
-!~ ! for CAI experiment
-!~ if (nspecial==42) then
-  !~ call caispecial
-!~ endif 
-!~ if (nspecial==43) then
-  !~ call caispecial
-  !~ do iq=1,ifull
-    !~ rlongd=rlongg(iq)*180./pi
-    !~ rlatd=rlatt(iq)*180./pi
-    !~ if (rlatd.ge.-6..and.rlatd.le.6.) then
-      !~ if (rlongd.ge.180..and.rlongd.le.290.) then
-        !~ if (.not.land(iq)) then
-          !~ tgg(iq,1)=293.16
-          !~ tss(iq)=293.16
-        !~ end if
-      !~ end if
-    !~ end if
-  !~ end do
-!~ end if
-
-
-!~ !--------------------------------------------------------------
-!~ ! SET-UP AMIP SSTs (namip)
-!~ if ( namip/=0 ) then
-  !~ if ( myid==0 ) then
-    !~ write(6,*) 'calling amipsst at beginning of run'
-  !~ end if
-  !~ call amipsst
-!~ endif   ! namip/=0
 
 
 !--------------------------------------------------------------
@@ -1386,30 +867,6 @@ do iq=1,ifull
     wb(iq,:)=0.   ! default over ocean (for plotting)
   endif    !  (.not.land(iq))
 enddo     ! iq loop
-      
-!~ ! sea-ice fixes
-!~ do iq=1,ifull
-  !~ if(fracice(iq)<.02) then
-    !~ fracice(iq)=0.
-    !~ sicedep(iq)=0.
-  !~ end if
-  !~ if(land(iq))then
-    !~ sicedep(iq)=0.
-    !~ fracice(iq)=0.
-  !~ else
-    !~ if(fracice(iq)>0..and.sicedep(iq)==0.)then
-      !~ ! assign to 2. in NH and 1. in SH (according to spo)
-      !~ ! do this here and in nestin because of onthefly
-      !~ if(rlatt(iq)>0.)then
-        !~ sicedep(iq)=2.
-      !~ else
-        !~ sicedep(iq)=1.
-      !~ endif ! (rlatt(iq)>0.)
-    !~ elseif(fracice(iq)==0..and.sicedep(iq)>0.)then  ! e.g. from Mk3  
-      !~ fracice(iq)=1.
-    !~ endif  ! (fracice(iq)>0..and.sicedep(iq)==0.) .. elseif ..
-  !~ endif    ! (land(iq))
-!~ enddo     ! iq loop
 
 ! snow and ice fixes
 snalb=.8
@@ -1566,26 +1023,6 @@ if ( mydiag ) then
   write(6,*)'with zs: ',zs(idjd),zs(ie(idjd)),zs(iw(idjd)),zs(in(idjd)),zs(is(idjd))
 end if
 
-!~ ! off-centre terms
-!~ if(abs(epsp)>1.)then   ! e.g. 20. gives epsmax=.2 for del_orog=600 m
-  !~ epsmax=abs(epsp)/100.
-  !~ do iq=1,ifull      ! sliding epsf to epsmax
-    !~ zsdiff=max(abs(zs(ie(iq))-zs(iq)),abs(zs(iw(iq))-zs(iq)),abs(zs(in(iq))-zs(iq)),abs(zs(is(iq))-zs(iq)) )
-    !~ epst(iq)=max(epsf,min(epsmax*zsdiff/(600.*grav),epsmax))
-  !~ enddo
-  !~ epsf=0.
-!~ else
-  !~ epst(1:ifull)=abs(epsp)
-!~ endif  ! (abs(epsp)>1.)
-!~ if(abs(epsp)>99.)then  ! e.g. 200. to give epsmax=.2 for orog=600 m
-  !~ epsmax=abs(epsp)/1000.
-  !~ do iq=1,ifull
-    !~ zsdiff=max(zs(iq)-zs(ie(iq)),zs(iq)-zs(iw(iq)),zs(iq)-zs(in(iq)),zs(iq)-zs(is(iq)),0. )
-    !~ epst(iq)=min(epsmax*zsdiff/(600.*grav),epsmax) ! sliding 0. to epsmax
-  !~ enddo
-!~ endif  ! (abs(epsp)>99.)
-!~ if(epsp>1..and.epsp<2.)epst(:)=epsp-1.
-
 ! saved albedo
 albvissav(:)=albvisnir(:,1) ! VIS
 albnirsav(:)=albvisnir(:,2) ! NIR
@@ -1594,190 +1031,10 @@ albnirsav(:)=albvisnir(:,2) ! NIR
 ps(1:ifull)=1.e5*exp(psl(1:ifull))
 
 !--------------------------------------------------------------
-! UPDATE DAVIES NUDGING ARRAYS (nbd and nud_hrs)
-! Must occur after defining initial atmosphere fields
-!~ if(nbd/=0.and.nud_hrs/=0)then
-  !~ call davset   ! as entry in subr. davies, sets psls,qgg,tt,uu,vv
-  !~ if ( myid==0 ) then
-    !~ allocate(davt_g(ifull_g))
-    ! Set up the weights using global array and indexing
-    ! This needs the global function indglobal for calculating the 1D index
-    !~ davt_g(:) = 0.
-    !~ if(nbd==1)then
-      !~ davt_g(:) = 1./nud_hrs !  e.g. 1/48
-    !~ endif                !  (nbd>0)
-    !~ if(nbd==-1)then    ! linearly increasing nudging, just on panel 4
-      !~ centi=.5*(il_g+1)
-      !~ do j=1,il_g
-        !~ do i=1,il_g
-          !~ dist=max(abs(i-centi),abs(j-centi)) ! dist from centre of panel
-          !~ distx=dist/(.5*il_g) ! between 0. and 1.
-          !~ davt_g(indglobal(j,i,4))=(1.-distx)/abs(nud_hrs) !  e.g. 1/24
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-    !~ endif                !  (nbd==-1) 
-    !~ if(nbd==-2)then    ! quadr. increasing nudging, just on panel 4
-      !~ centi=.5*(il_g+1)
-      !~ do j=1,il_g  
-        !~ do i=1,il_g
-          !~ dist=max(abs(i-centi),abs(j-centi)) ! dist from centre of panel
-          !~ distx=dist/(.5*il_g) ! between 0. and 1.
-          !~ davt_g(indglobal(j,i,4))=(1.-distx**2)/abs(nud_hrs) !  e.g. 1/24
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-    !~ endif                !  (nbd==-2) 
-    !~ if(abs(nbd)==3)then !usual far-field with no nudging on panel 1
-      !~ do n=0,5
-        !~ do j=il_g/2+1,il_g
-          !~ ! linearly between 0 (at il/2) and 1/abs(nud_hrs) (at il+1)
-          !~ rhs=(j-il_g/2)/((il_g/2+1.)*nud_hrs)
-          !~ do i=1,il_g
-            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          !~ enddo          ! i loop
-        !~ enddo            ! j loop
-      !~ enddo              ! n loop
-      !~ do j=1,il_g          ! full nudging on furthest panel
-        !~ do i=1,il_g
-          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-    !~ endif                !  (nbd==-3) 
-    !~ if(abs(nbd)==4)then    ! another special form with no nudging on panel 1
-      !~ do n=0,5
-        !~ do j=1,il_g
-          !~ ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il+.5)
-          !~ rhs=(j-.5)/(il_g*nud_hrs)
-          !~ do i=1,il_g
-            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          !~ enddo          ! i loop
-        !~ enddo            ! j loop
-      !~ enddo              ! n loop
-      !~ do j=1,il_g        ! full nudging on furthest panel
-        !~ do i=1,il_g
-          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-    !~ endif                !  (nbd==-4) 
-    !~ if(abs(nbd)==5)then    ! another special form with some nudging on panel 1
-      !~ do n=0,5
-        !~ do j=il_g/2+1,il_g
-          !~ ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il+.5)
-          !~ rhs=(.5*il_g+j-.5)/(1.5*il_g*nud_hrs)
-          !~ do i=1,il_g
-            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          !~ enddo          ! i loop
-        !~ enddo            ! j loop
-      !~ enddo              ! n loop
-      !~ ril2=il_g/2
-      !~ do j=1,jl
-        !~ do i=1,il
-          !~ rhs=max(abs(i-.5-ril2),abs(j-.5-ril2))/(1.5*il_g*nud_hrs)
-          !~ davt_g(indglobal(i,il_g+1-j,1))=rhs  ! panel 1
-        !~ enddo
-      !~ enddo
-      !~ do j=1,il_g        ! full nudging on furthest panel
-        !~ do i=1,il_g
-          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-    !~ endif                !  (nbd==-5)
-    !~ if(abs(nbd)==6)then ! more like 1-way nesting
-      !~ do j=1,il_g   ! full nudging on all further panels; 6 rows on 1
-        !~ do i=1,il_g
-          !~ davt_g(indglobal(j,i,0))=1./nud_hrs !  e.g. 1/48
-          !~ davt_g(indglobal(j,i,2))=1./nud_hrs !  e.g. 1/48
-          !~ davt_g(indglobal(j,i,3))=1./nud_hrs !  e.g. 1/48
-          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-          !~ davt_g(indglobal(j,i,5))=1./nud_hrs !  e.g. 1/48
-          !~ davt_g(indglobal(j,i,1))=0.
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-      !~ do j=0,5
-        !~ ! linearly between 0 and 1/abs(nud_hrs) over 6 rows
-        !~ rhs=(6-j)/(6.*nud_hrs)
-        !~ do i=1+j,il_g-j
-          !~ davt_g(indglobal(i,j+1,1))=rhs
-          !~ davt_g(indglobal(i,il_g-j,1))=rhs
-          !~ davt_g(indglobal(j+1,i,1))=rhs
-          !~ davt_g(indglobal(il_g-j,i,1))=rhs
-        !~ enddo         ! i loop
-      !~ enddo           ! j loop
-    !~ endif             !  (nbd==-6)
-    !~ if(abs(nbd)==7)then    ! another special form with no nudging on panel 1
-      !~ do n=0,5
-        !~ do j=1,il_g
-          !~ ! linearly between 0 (at j=.5) and 1/nud_hrs (at j=il/2)
-          !~ rhs=min((j-.5)/(.5*il_g*nud_hrs),1./nud_hrs)
-          !~ do i=1,il_g
-            !~ if(n==0)davt_g(indglobal(i,il_g+1-j,n))=rhs
-            !~ if(n==2)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==3)davt_g(indglobal(j,i,n))=rhs
-            !~ if(n==5)davt_g(indglobal(i,il_g+1-j,n))=rhs
-          !~ enddo          ! i loop
-        !~ enddo            ! j loop
-      !~ enddo              ! n loop
-      !~ do j=1,il_g        ! full nudging on furthest panel
-        !~ do i=1,il_g
-          !~ davt_g(indglobal(j,i,4))=1./nud_hrs !  e.g. 1/48
-        !~ enddo            ! i loop
-      !~ enddo              ! j loop
-    !~ endif                !  (nbd==-7)  
-    !~ call ccmpi_distribute(davt,davt_g)
-    !~ deallocate(davt_g)
-  !~ else
-    !~ call ccmpi_distribute(davt)
-  !~ end if ! myid==0
-  ! davu calc moved below next bounds call
-  !~ if(nproc==1)then
-    !~ write(6,*)'davt for i=il/2'
-    !~ write(6,'(20f6.3)') (davt(iq),iq=il/2,ifull,il)
-  !~ endif
-  !~ if(diag)call printa('davt',davt,0,0,ia,ib,ja,jb,0.,real(nud_hrs))     
-!~ endif                    ! (nbd.ne.0.and.nud_hrs.ne.0)
-
-!~ if(nbd>=3)then   ! separate (global) davu from (f-f) davt
-  !~ davu(:) = 1./nudu_hrs    !  e.g. 1/48
-  !~ write(6,*) 'all davu set to ',1./nudu_hrs 
-!~ elseif (nbd.ne.0) then
-  !~ davu(:) = davt(:)
-!~ endif
-
-
-!--------------------------------------------------------------
 ! UPDATE GRAVITY WAVE DRAG DATA (lgwd)
 gwdfac=.01*lgwd       ! most runs used .02 up to fri  10-10-1997
 hefact=.1*abs(ngwd)   ! hal used hefact=1. (equiv to ngwd=10)
 if(myid==0)write(6,*)'hefact,helim,gwdfac: ',hefact,helim,gwdfac
-!~ helo(:)=0.
-!~ if(lgwd>0)then
-  !~ do iq=1,ifull
-    !~ if(land(iq))then
-      !~ if(he(iq)==0.)write(6,*)'zero he over land for iq = ',iq
-      !~ aa(iq)=min(gwdfac*max(he(iq),.01),.8*zmin)   ! already in meters
-      ! replace he by square of corresponding af value
-      !~ helo(iq)=( .4/log(zmin/aa(iq)) )**2
-    !~ endif
-  !~ enddo   ! iq loop
-  !~ if(mydiag)write(6,*)'for lgwd>0, typical zo#: ', diagvals(aa)
-!~ end if ! lgwd>0
-!~ if (ngwd/=0) then
-!****    limit launching height : Palmer et al use limit on variance of
-!****    (400 m)**2. we use launching height = std dev. we limit
-!****    launching height to  2*400=800 m. this may be a bit severe.
-!****    according to Palmer this prevents 2-grid noise at steep edge of
-!****    himalayas etc.
-  !~ he(1:ifull)=min(hefact*he(1:ifull),helim)
-!~ endif     ! (ngwd.ne.0)
-
 
 !--------------------------------------------------------------
 ! UPDATE BIOSPHERE DATA (nsib)
@@ -1787,118 +1044,6 @@ if (nsib==6.or.nsib==7) then
   call loadtile
 end if
 
-
-!~ !-----------------------------------------------------------------
-!~ ! UPDATE MIXED LAYER OCEAN DATA (nmlo)
-!~ if (nmlo/=0.and.abs(nmlo)<=9) then
-  !~ if (any(ocndwn(:,1)>0.5)) then
-    !~ if (myid==0) write(6,*) 'Importing MLO data'
-  !~ else
-    !~ if (myid==0) write(6,*) 'Using MLO defaults'
-    !~ ocndwn(:,2)=0.
-    !~ do k=1,wlev
-      !~ call mloexpdep(0,depth,k,0)
-      !~ ! This polynomial fit is from MOM3, based on Levitus
-      !~ where (depth<2000.)
-        !~ mlodwn(:,k,1)=18.4231944        &
-          !~ -0.43030662E-1*depth(:)       &
-          !~ +0.607121504E-4*depth(:)**2   &
-          !~ -0.523806281E-7*depth(:)**3   &
-          !~ +0.272989082E-10*depth(:)**4  &
-          !~ -0.833224666E-14*depth(:)**5  &
-          !~ +0.136974583E-17*depth(:)**6  &
-          !~ -0.935923382E-22*depth(:)**7
-        !~ mlodwn(:,k,1)=mlodwn(:,k,1)*(tss-273.16)/18.4231944+273.16-wrtemp
-      !~ elsewhere
-        !~ mlodwn(:,k,1)=275.16-wrtemp
-      !~ end where
-      !~ mlodwn(:,k,2)=34.72
-      !~ mlodwn(:,k,3:4)=0.
-    !~ end do
-    !~ micdwn(:,1)=tss
-    !~ micdwn(:,2)=tss
-    !~ micdwn(:,3)=tss
-    !~ micdwn(:,4)=tss
-    !~ micdwn(:,5:6)=0.
-    !~ where (fracice>0.)
-      !~ micdwn(:,1)=min(tss,271.)
-      !~ micdwn(:,2)=min(tss,271.)
-      !~ micdwn(:,3)=min(tss,271.)
-      !~ micdwn(:,4)=min(tss,271.)
-      !~ micdwn(:,5)=1.
-      !~ micdwn(:,6)=2.
-    !~ end where
-    !~ micdwn(:,7:10)=0.
-    !~ micdwn(:,11)=10.
-    !~ where (.not.land)
-      !~ fracice=micdwn(:,5)
-      !~ sicedep=micdwn(:,6)
-      !~ snowd=micdwn(:,7)*1000.
-    !~ end where          
-  !~ end if
-  !~ !mlodwn(1:ifull,1:wlev,1)=max(mlodwn(1:ifull,1:wlev,1),271.-wrtemp)
-  !~ mlodwn(1:ifull,1:wlev,2)=max(mlodwn(1:ifull,1:wlev,2),0.)
-  !~ micdwn(1:ifull,1:4)=min(max(micdwn(1:ifull,1:4),0.),300.)
-  !~ micdwn(1:ifull,11)=max(micdwn(1:ifull,11),0.)
-  !~ call mloload(mlodwn,ocndwn(:,2),micdwn,0)
-  !~ deallocate(micdwn)
-  !~ do k=1,ms
-    !~ call mloexport(0,tgg(:,k),k,0)
-    !~ where ( tgg(:,k)<100. )
-      !~ tgg(:,k) = tgg(:,k) + wrtemp
-    !~ end where    
-  !~ end do
-  !~ do k=1,3
-    !~ call mloexpice(tggsn(:,k),k,0)
-  !~ end do 
-!~ end if
-
-
-!~ !-----------------------------------------------------------------
-!~ ! UPDATE URBAN DATA (nurban)
-!~ if (nurban/=0) then
-  !~ if (myid==0) write(6,*) 'Importing ateb urban data'
-  !~ where(atebdwn(:,1)>=399.) ! must be the same as spval in onthefly.f
-    !~ atebdwn(:,1)=tss                ! roof temp 1
-    !~ atebdwn(:,2)=0.5*(tss+291.16)   ! roof temp 2
-    !~ atebdwn(:,3)=0.5*(tss+291.16)   ! roof temp 3
-    !~ atebdwn(:,4)=291.16             ! roof temp 4
-    !~ atebdwn(:,5)=tss                ! walleast temp 1
-    !~ atebdwn(:,6)=0.5*(tss+291.16)   ! walleast temp 2
-    !~ atebdwn(:,7)=0.5*(tss+291.16)   ! walleast temp 3
-    !~ atebdwn(:,8)=291.16             ! walleast temp 4
-    !~ atebdwn(:,9)=tss                ! wallwest temp 1
-    !~ atebdwn(:,10)=0.5*(tss+291.16)  ! wallwest temp 2
-    !~ atebdwn(:,11)=0.5*(tss+291.16)  ! wallwest temp 3
-    !~ atebdwn(:,12)=291.16            ! wallwest temp 4
-    !~ atebdwn(:,13)=tss               ! road temp 1
-    !~ atebdwn(:,14)=tss               ! road temp 2
-    !~ atebdwn(:,15)=tss               ! road temp 3
-    !~ atebdwn(:,16)=tss               ! road temp 4
-    !~ atebdwn(:,17)=0.5*0.26+0.5*0.18 ! Soil water road
-    !~ atebdwn(:,18)=0.18              ! Green roof water
-    !~ atebdwn(:,19)=0.   ! roof water
-    !~ atebdwn(:,20)=0.   ! road water
-    !~ atebdwn(:,21)=0.   ! canyon leaf water
-    !~ atebdwn(:,22)=0.   ! roof leaf water
-    !~ atebdwn(:,23)=0.   ! roof snow
-    !~ atebdwn(:,24)=0.   ! road snow
-    !~ atebdwn(:,25)=100. ! roof snow density
-    !~ atebdwn(:,26)=100. ! road snow density
-    !~ atebdwn(:,27)=0.85 ! roof snow albedo
-    !~ atebdwn(:,28)=0.85 ! road snow albedo
-  !~ end where
-  !~ call atebload(atebdwn,0)
-  !~ deallocate(atebdwn)
-!~ end if
-
-
-!~ !-----------------------------------------------------------------
-!~ ! UPDATE AEROSOL DATA (iaero)
-!~ if ( abs(iaero)>=2 ) then
-  !~ xtg(1:ifull,:,:)=xtgdwn(:,:,:)
-!~ end if
-      
 
 !--------------------------------------------------------------     
 ! WRITE FORT.22 FILE FOR GRID INFO
@@ -2001,12 +1146,7 @@ if(nstn>0)then
       iq = istn(nn) + (jstn(nn)-1)*ipan
       iveg=ivegt(iq)
       isoil = isoilm(iq)
-      wet3=(wb(iq,3)-swilt(isoil))/(sfc(isoil)-swilt(isoil))
-      !~ write(6,98)iunp(nn),istn(nn),jstn(nn),iq,slon(nn),slat(nn),   &
-                 !~ land(iq),rlongg(iq)*180/pi,rlatt(iq)*180/pi,       &
-                 !~ isoilm(iq),ivegt(iq),zs(iq)/grav,albvisnir(iq,1),  &
-                 !~ wb(iq,3),wet3,vlai(iq),zolnd(iq),he(iq),           &
-                 !~ myid             
+      wet3=(wb(iq,3)-swilt(isoil))/(sfc(isoil)-swilt(isoil))    
     end if               ! mystn
 98  format(i3,i4,i5,i6,2f7.2 ,l3,2f7.2, i3,i6,f7.1,f5.2,4f5.2,f7.1,i4)
     ! Put a barrier here to force stations to be printed in the right order
@@ -2083,102 +1223,6 @@ integer, parameter :: isoildflt = 0
 ! used to better initialise lakes and salt emissions for
 ! aerosols
 
-!------------------------------------------------------------------------
-! READ BIOSPHERE FILES
-! if cable, then the albedo is soil albedo only (converted to net albedo
-! when cable is initialised)
-!~ if ( nsib <= 3 ) then
-  !~ if ( myid == 0 ) then
-    !~ write(6,*) "Start reading of nsib<=3 surface datafiles"
-    !~ allocate( iduma(ifull_g,2), duma(ifull_g,3) )
-    !~ write(6,*) "Reading albedo data"
-    !~ call readreal(albfile,duma(:,1),ifull_g)
-    !~ write(6,*) "Reading RSmin data"
-    !~ call readreal(rsmfile,duma(:,2),ifull_g)  ! not used these days
-    !~ write(6,*) "Reading roughness data"
-    !~ call readreal(zofile,duma(:,3),ifull_g)
-    !~ write(6,*) "Reading veg data"
-    !~ call readint(vegfile,iduma(:,1),ifull_g)
-    !~ write(6,*) "Reading soil data"
-    !~ call readint(soilfile,iduma(:,2),ifull_g)
-    !~ call ccmpi_distribute(idumb(:,1:2),iduma(:,1:2))
-    !~ call ccmpi_distribute(dumb(:,1:3),duma(:,1:3))
-    !~ deallocate( iduma, duma )
-  !~ else
-    !~ call ccmpi_distribute(idumb(:,1:2))
-    !~ call ccmpi_distribute(dumb(:,1:3))
-  !~ end if
-  !~ albvisnir(:,1) = 0.01*dumb(:,1)
-  !~ albvisnir(:,2) = 0.01*dumb(:,1) ! note VIS alb = NIR alb
-  !~ rsmin = dumb(:,2)
-  !~ zolnd = 0.01*dumb(:,3)
-  !~ ivegt = idumb(:,1)
-  !~ isoilm = idumb(:,2)
-  !~ isoilm_in = isoilm
-!~ else if ( nsib == 5 ) then
-  !~ if ( myid == 0 ) then
-    !~ write(6,*) "Start reading of nsib=5 (MODIS) surface datafiles"  
-    !~ allocate( duma(ifull_g,7) )
-    !~ if ( lncveg == 1 ) then
-      !~ call ccnf_get_attg(ncidveg,'sibvegversion',sibvegver,ierr=iernc)
-      !~ if ( iernc /= 0 ) then
-        !~ write(6,*) "Missing version of nsib=5 land-use data"
-        !~ write(6,*) "Regenerate land-use data with up-to-date version of sibveg"
-        !~ write(6,*) "or choose different land-surface option with nsib"
-        !~ call ccmpi_abort(-1)
-      !~ end if
-      !~ if ( sibvegver /= sibvegversion ) then
-        !~ write(6,*) "Wrong version of nsib=5 land-use data"
-        !~ write(6,*) "Expecting ",sibvegversion
-        !~ write(6,*) "Found     ",sibvegver
-        !~ call ccmpi_abort(-1)
-      !~ end if
-      !~ write(6,*) "Reading albedo data"
-      !~ call surfread(duma(:,1),'albvis',  netcdfid=ncidveg)
-      !~ call surfread(duma(:,2),'albnir',  netcdfid=ncidveg)
-      !~ write(6,*) "Reading RSmin data"
-      !~ call surfread(duma(:,3),'rsmin',   netcdfid=ncidveg)
-      !~ write(6,*) "Reading roughness data"
-      !~ call surfread(duma(:,4),'rough',   netcdfid=ncidveg)
-      !~ write(6,*) "Reading LAI data"
-      !~ call surfread(duma(:,5),'lai',     netcdfid=ncidveg)
-      !~ write(6,*) "Reading soil data"
-      !~ call surfread(duma(:,6),'soil',    netcdfid=ncidveg)      
-      !~ write(6,*) "Reading veg data"
-      !~ call surfread(duma(:,7),'landtype',netcdfid=ncidveg)      
-    !~ else
-      !~ write(6,*) "Cannot open vegfile as a netcdf file ",vegfile
-      !~ write(6,*) "Assuming ASCII file format"
-      !~ write(6,*) "Reading albedo data"
-      !~ call surfread(duma(:,1),'albvis',filename=albfile)
-      !~ call surfread(duma(:,2),'albnir',filename=albnirfile)
-      !~ write(6,*) "Reading RSmin data"
-      !~ call surfread(duma(:,3),'rsmin', filename=rsmfile)
-      !~ write(6,*) "Reading roughness data"
-      !~ call surfread(duma(:,4),'rough', filename=zofile)
-      !~ write(6,*) "Reading LAI data"
-      !~ call surfread(duma(:,5),'lai',   filename=laifile)
-      !~ write(6,*) "Reading soil data"
-      !~ call surfread(duma(:,6),'soilt', filename=soilfile)
-      !~ duma(:,7) = 1. ! vegt
-      !~ duma(:,1) = 0.01*duma(:,1)
-      !~ duma(:,2) = 0.01*duma(:,2)
-      !~ duma(:,4) = 0.01*duma(:,4)
-      !~ duma(:,5) = 0.01*duma(:,5)
-    !~ end if
-    !~ call ccmpi_distribute(dumb(:,1:7),duma(:,1:7))
-    !~ deallocate( duma )
-  !~ else
-    !~ call ccmpi_distribute(dumb(:,1:7))
-  !~ end if
-  !~ albvisnir(:,1) = dumb(:,1)
-  !~ albvisnir(:,2) = dumb(:,2)
-  !~ rsmin = dumb(:,3)
-  !~ zolnd = dumb(:,4)
-  !~ vlai = dumb(:,5)
-  !~ ivegt = nint(dumb(:,7))
-  !~ isoilm_in = nint(dumb(:,6))
-  !~ isoilm = max( isoilm_in, 0 )
 if ( nsib >= 6 ) then
   if ( myid == 0 ) then
     write(6,*) "Start reading of nsib>=6 (CABLE) surface datafiles"
@@ -2775,6 +1819,4 @@ coexp  = usuh / (vonk*ccw*(1.0 - dh))
 return ! ruff
 end subroutine cruf2
 !=======================================================================
-
-
 end module indata
