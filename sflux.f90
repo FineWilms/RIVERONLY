@@ -35,15 +35,12 @@ use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
 use extraout_m                     ! Additional diagnostics
 use gdrag_m                        ! Gravity wave drag
-!~ use liqwpar_m                      ! Cloud water mixing ratios
 use map_m                          ! Grid map arrays
 use mlo                            ! Ocean physics and prognostic arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
-!~ use nharrs_m                       ! Non-hydrostatic atmosphere arrays
 use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
-!~ use prec_m                         ! Precipitation
 use river                          ! River routing
 use savuvt_m                       ! Saved dynamic arrays
 use screen_m                       ! Screen level diagnostics
@@ -160,92 +157,8 @@ if (nmlo==0) then                                                               
       watbdy(1:ifull) = 0. ! water enters ocean and is removed from rivers                       ! river
     end where                                                                                    ! river
   end if                                                                                         ! river
-  
-elseif (abs(nmlo)>=1.and.abs(nmlo)<=9) then                                                      ! MLO
-                                                                                                 ! MLO
-  if (nmaxpr==1) then                                                                            ! MLO
-    if (myid==0) then                                                                            ! MLO
-      write(6,*) "Before MLO mixing"                                                             ! MLO
-    end if                                                                                       ! MLO
-    call ccmpi_barrier(comm_world)                                                               ! MLO
-  end if                                                                                         ! MLO
-  if (abs(nmlo)==1) then                                                                         ! MLO
-    ! Single column                                                                              ! MLO
-    ! set free surface to zero when water is not conserved                                       ! MLO
-    neta=0.                                                                                      ! MLO
-    call mloimport(4,neta,0,0)                                                                   ! MLO
-  end if                                                                                         ! MLO
-
-  ! pan evaporation diagnostic                                                                   ! MLO
-
-  do ip=1,ipland                                                                                 ! MLO
-    iq=iperm(ip)                                                                                 ! MLO
-    ri(iq)=min(grav*zmin*(1.-tpan(iq)*srcp/t(iq,1))/vmag(iq)**2,ri_max)                          ! MLO
-    if(ri(iq)>0.)then                                                                            ! MLO
-      fh(iq)=vmod(iq)/(1.+bprm*ri(iq))**2                                                        ! MLO
-    else                                                                                         ! MLO
-      root=sqrt(-ri(iq)*zmin/panzo)                                                              ! MLO
-      denha=1.+chs*2.*bprm*sqrt(panzo*ztv)*chnsea*root                                           ! MLO
-      fh(iq)=vmod(iq)-vmod(iq)*2.*bprm *ri(iq)/denha                                             ! MLO
-    endif                                                                                        ! MLO
-    epan(iq)=rho(iq)*chnsea*hl*fh(iq)*(qsttg(iq)-qg(iq,1))                                       ! MLO
-  end do                                                                                         ! MLO
-                                                                                                 ! MLO
-  ! inflow and outflow model for rivers                                                          ! MLO
-  if ( abs(nmlo)>=2 ) then                                                                       ! MLO
-    if ( .not.allocated(outflowmask) ) then                                                      ! MLO
-      allocate( outflowmask(1:ifull) )                                                           ! MLO
-      call riveroutflowmask(outflowmask)                                                         ! MLO
-    end if                                                                                       ! MLO
-    neta(1:ifull) = 0.                                                                           ! MLO
-    call mloexport(4,neta,0,0)                                                                   ! MLO
-    oldneta(1:ifull) = neta(1:ifull)                                                             ! MLO
-    where ( outflowmask(1:ifull) )                                                               ! MLO
-      neta(1:ifull) = min( neta(1:ifull), max( 0.001*watbdy(1:ifull), 0. ) )                     ! MLO
-    end where                                                                                    ! MLO
-    where ( .not.land(1:ifull) )                                                                 ! MLO
-      dumw(1:ifull) = 1000.*(neta(1:ifull)-oldneta(1:ifull))/dt + watbdy(1:ifull)/dt             ! MLO
-    elsewhere                                                                                    ! MLO
-      dumw(1:ifull) = 0.                                                                         ! MLO
-    end where                                                                                    ! MLO
-    watbdy(1:ifull) = watbdy(1:ifull) - dt*dumw(1:ifull)                                         ! MLO
-  else                                                                                           ! MLO
-    dumw(1:ifull) = 0.                                                                           ! MLO
-  end if                                                                                         ! MLO
-
-  ! stuff to keep tpan over land working                                                         ! MLO
-  rid=min(grav*zmin*(1.-tpan*srcp/t(1:ifull,1))/vmag**2,ri_max)                                  ! MLO
-  where (rid>0.)                                                                                 ! MLO
-    fhd=vmod/(1.+bprm*rid)**2                                                                    ! MLO
-  elsewhere                                                                                      ! MLO
-    fhd=vmod-vmod*2.*bprm*rid/(1.+chs*2.*bprm*sqrt(panzo*ztv)*chnsea*sqrt(-rid*zmin/panzo))      ! MLO
-  end where                                                                                      ! MLO
-                                                                                                 ! MLO
-  where ( .not.land(1:ifull) )                                                                   ! MLO
-    snowd=snowd*1000.                                                                            ! MLO
-    ga=0.                                                                                        ! MLO
-    ustar=sqrt(sqrt(taux*taux+tauy*tauy)/rho)                                                    ! MLO
-    tpan=tgg(:,1)                                                                                ! MLO
-    factch=sqrt(zo/zoh)                                                                          ! MLO
-    sno=sno+conds                                                                                ! MLO
-    grpl=grpl+condg                                                                              ! MLO
-    ! This cduv accounts for a moving surface                                                    ! MLO
-    cduv=sqrt(ustar*ustar*cduv) ! cduv=cd*vmod                                                   ! MLO
-    cdtq=cdtq*vmod                                                                               ! MLO
-  elsewhere                                                                                      ! MLO
-    fg=rho*chnsea*cp*fhd*(tpan-theta)                                                            ! MLO
-    ga=sgsave-rgsave-5.67e-8*tpan**4-panfg*fg                                                    ! MLO
-    tpan=tpan+ga*dt/(4186.*.254*1000.)                                                           ! MLO
-  endwhere                                                                                       ! MLO
- 
-  if (nmaxpr==1) then                                                                            ! MLO
-    if (myid==0) then                                                                            ! MLO
-      write(6,*) "After MLO mixing"                                                              ! MLO
-    end if                                                                                       ! MLO
-    call ccmpi_barrier(comm_world)                                                               ! MLO
-  end if                                                                                         ! MLO
-end if                                                                                           ! PCOM
-call END_LOG(sfluxwater_end)                                                                     ! PCOM
+end if                                                                                           
+call END_LOG(sfluxwater_end)                                                                     
 !--------------------------------------------------------------      
 call START_LOG(sfluxland_begin)    
 
@@ -262,7 +175,6 @@ select case(nsib)                                                               
     ! update remaining diagnostic arrays                                                         ! cable
     where ( land(1:ifull) )                                                                      ! cable
       factch(1:ifull) = sqrt(zo(1:ifull)/zoh(1:ifull))                                           ! cable 
-      !~ qsttg(1:ifull) = qsat(ps(1:ifull),tss(1:ifull))                                            ! cable
       taux(1:ifull) = rho(1:ifull)*cduv(1:ifull)*u(1:ifull,1)                                    ! cable
       tauy(1:ifull) = rho(1:ifull)*cduv(1:ifull)*v(1:ifull,1)                                    ! cable
       sno(1:ifull) = sno(1:ifull) + conds(1:ifull)                                               ! cable
