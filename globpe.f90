@@ -162,16 +162,6 @@ namelist/datafile/ifile,ofile,albfile,co2emfile,eigenv,hfile,     &
     soil2file,radonemfile,co2_00,radon_00,surf_00,co2_12,         &
     radon_12,surf_12,laifile,albnirfile,urbanfile,bathfile,       &
     vegprev,vegnext,cnsdir,salfile,oxidantfile,casafile,phenfile
-!~ ! convection and cloud microphysics namelist
-!~ namelist/kuonml/alflnd,alfsea,cldh_lnd,cldm_lnd,cldl_lnd,         &
-    !~ cldh_sea,cldm_sea,cldl_sea,convfact,convtime,shaltime,        &
-    !~ detrain,detrainx,dsig2,dsig4,entrain,fldown,iterconv,ksc,     &
-    !~ kscmom,kscsea,ldr,mbase,mdelay,methdetr,methprec,nbase,       &
-    !~ nclddia,ncvcloud,ncvmix,nevapcc,nevapls,nkuo,nrhcrit,         &
-    !~ nstab_cld,nuvconv,rhcv,rhmois,rhsat,sigcb,sigcll,sig_ct,      &
-    !~ sigkscb,sigksct,tied_con,tied_over,tied_rh,comm,acon,bcon,    &
-    !~ rcm,rcrit_l,rcrit_s,ncloud
-
 
 data nversion/0/
 data comment/' '/,comm/' '/,irest/1/,jalbfix/1/,nalpha/1/
@@ -248,13 +238,11 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
 else
   ol = 0
 end if
-!~ wlev     = ol
-!~ mindep   = max( 0., mindep )
-!~ minwater = max( 0., minwater )
+
 if ( abs(nmlo)>=2 ) nriver=1
 read(99, datafile)
 ! try reading boundary layer turbulence namelist
-!~ read(99, turbnml, iostat=ierr)
+
 if ( ierr /= 0 ) rewind(99)       ! rewind namelist if turbnml is not found
 nagg = 10!max( 10, naero )           ! maximum size of aggregation
 nlx        = 0
@@ -601,7 +589,7 @@ end if
 ! SETUP DIAGNOSTIC ARRAYS
 runoff(:)      = 0.
 wb_ave(:,:)    = 0.
-!~ koundiag       = 0
+
 !--------------------------------------------------------------
 ! OPEN OUTPUT FILES AND SAVE INITAL CONDITIONS
 if ( nwt > 0 ) then
