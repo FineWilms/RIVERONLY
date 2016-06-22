@@ -36,7 +36,7 @@ use diag_m                         ! Diagnostic routines
 use extraout_m                     ! Additional diagnostics
 use gdrag_m                        ! Gravity wave drag
 use map_m                          ! Grid map arrays
-use mlo                            ! Ocean physics and prognostic arrays
+!~ use mlo                            ! Ocean physics and prognostic arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays

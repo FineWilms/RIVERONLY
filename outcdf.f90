@@ -148,9 +148,9 @@ use cable_ccam, only : proglai        ! CABLE
 use cc_mpi                            ! CC MPI routines
 use infile                            ! Input file routines
 use liqwpar_m                         ! Cloud water mixing ratios
-use mlo, only : mindep              & ! Ocean physics and prognostic arrays
-    ,minwater,mxd,zomode,zoseaice   &
-    ,factchseaice
+!~ use mlo, only : mindep              & ! Ocean physics and prognostic arrays
+    !~ ,minwater,mxd,zomode,zoseaice   &
+    !~ ,factchseaice
 use parmhdff_m                        ! Horizontal diffusion parameters
 !~ use tkeeps                            ! TKE-EPS boundary layer
 
@@ -417,8 +417,8 @@ use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
 use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
-use mlo, only : wlev,mlosave,mlodiag, &          ! Ocean physics and prognostic arrays
-                mloexpdep,wrtemp
+!~ use mlo, only : wlev,mlosave,mlodiag, &          ! Ocean physics and prognostic arrays
+                !~ mloexpdep,wrtemp
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
@@ -428,7 +428,7 @@ use raddiag_m                                    ! Radiation diagnostic
 use river                                        ! River routing
 use savuvt_m                                     ! Saved dynamic arrays
 use savuv1_m                                     ! Saved dynamic arrays
-use screen_m                                     ! Screen level diagnostics
+!~ use screen_m                                     ! Screen level diagnostics
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
@@ -463,7 +463,7 @@ real, dimension(ifull) :: aa
 real, dimension(ifull) :: ocndep,ocnheight
 real, dimension(ifull) :: qtot, tv
 real, dimension(ifull,kl) :: tmpry,rhoa
-real, dimension(ifull,wlev,4) :: mlodwn
+!~ real, dimension(ifull,wlev,4) :: mlodwn
 real, dimension(ifull,11) :: micdwn
 real, dimension(ifull,28) :: atebdwn
 character(len=50) expdesc

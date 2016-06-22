@@ -558,7 +558,7 @@ if ( io_in<4 ) then
   zss=zs(1:ifull)
   if (abs(io_in)==1) then
      call         onthefly(0,kdate,ktime,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice,snowd, &
-				tggsn,smass,ssdn,ssdnn,snage,isflag, ocndwn)
+				tggsn,smass,ssdn,ssdnn,snage,isflag)
   endif   ! (abs(io_in)==1)
   call histclose
   if(mydiag)then
