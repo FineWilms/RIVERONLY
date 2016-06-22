@@ -162,19 +162,16 @@ namelist/datafile/ifile,ofile,albfile,co2emfile,eigenv,hfile,     &
     soil2file,radonemfile,co2_00,radon_00,surf_00,co2_12,         &
     radon_12,surf_12,laifile,albnirfile,urbanfile,bathfile,       &
     vegprev,vegnext,cnsdir,salfile,oxidantfile,casafile,phenfile
-! convection and cloud microphysics namelist
-namelist/kuonml/alflnd,alfsea,cldh_lnd,cldm_lnd,cldl_lnd,         &
-    cldh_sea,cldm_sea,cldl_sea,convfact,convtime,shaltime,        &
-    detrain,detrainx,dsig2,dsig4,entrain,fldown,iterconv,ksc,     &
-    kscmom,kscsea,ldr,mbase,mdelay,methdetr,methprec,nbase,       &
-    nclddia,ncvcloud,ncvmix,nevapcc,nevapls,nkuo,nrhcrit,         &
-    nstab_cld,nuvconv,rhcv,rhmois,rhsat,sigcb,sigcll,sig_ct,      &
-    sigkscb,sigksct,tied_con,tied_over,tied_rh,comm,acon,bcon,    &
-    rcm,rcrit_l,rcrit_s,ncloud
-!~ ! boundary layer turbulence namelist
-!~ namelist/turbnml/be,cm0,ce0,ce1,ce2,ce3,cq,ent0,dtrn0,dtrc0,m0,   &
-    !~ b1,b2,buoymeth,icm1,maxdts,mintke,mineps,minl,maxl,stabmeth,  &
-    !~ tke_umin
+!~ ! convection and cloud microphysics namelist
+!~ namelist/kuonml/alflnd,alfsea,cldh_lnd,cldm_lnd,cldl_lnd,         &
+    !~ cldh_sea,cldm_sea,cldl_sea,convfact,convtime,shaltime,        &
+    !~ detrain,detrainx,dsig2,dsig4,entrain,fldown,iterconv,ksc,     &
+    !~ kscmom,kscsea,ldr,mbase,mdelay,methdetr,methprec,nbase,       &
+    !~ nclddia,ncvcloud,ncvmix,nevapcc,nevapls,nkuo,nrhcrit,         &
+    !~ nstab_cld,nuvconv,rhcv,rhmois,rhsat,sigcb,sigcll,sig_ct,      &
+    !~ sigkscb,sigksct,tied_con,tied_over,tied_rh,comm,acon,bcon,    &
+    !~ rcm,rcrit_l,rcrit_s,ncloud
+
 
 data nversion/0/
 data comment/' '/,comm/' '/,irest/1/,jalbfix/1/,nalpha/1/
@@ -850,11 +847,11 @@ data rcrit_l/.75/,rcrit_s/.85/
 ! Radiation options
 data nrad/4/
 data nmr/0/,bpyear/0./
-! Cloud options
-data ldr/1/,nclddia/1/,nstab_cld/0/,nrhcrit/10/,sigcll/.95/ 
-data cldh_lnd/95./,cldm_lnd/85./,cldl_lnd/75./
-data cldh_sea/95./,cldm_sea/90./,cldl_sea/80./
-data ncloud/0/
+!~ ! Cloud options
+!~ data ldr/1/,nclddia/1/,nstab_cld/0/,nrhcrit/10/,sigcll/.95/ 
+!~ data cldh_lnd/95./,cldm_lnd/85./,cldl_lnd/75./
+!~ data cldh_sea/95./,cldm_sea/90./,cldl_sea/80./
+!~ data ncloud/0/
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
 data nrungcm/-1/,nsib/3/,nsigmf/1/
