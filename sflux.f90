@@ -142,9 +142,6 @@ fm=0.          ! dummy value
 !      *****  check next comment
 !       sflux called at beginning of time loop, hence savu, savv
 
-!~ tv(:) = t(1:ifull,1)*(1.+0.61*qg(1:ifull,1)-qlg(1:ifull,1)-qfg(1:ifull,1) &
-                     !~ -qrg(1:ifull,1)-qsng(1:ifull,1)-qgrg(1:ifull,1))
-!~ azmin(:) = (bet(1)*tv(:)+phi_nh(:,1))/grav
 srcp = sig(1)**(rdry/cp)
 ga(:) = 0.              !  for ocean points in ga_ave diagnostic
 theta(:) = t(1:ifull,1)/srcp
@@ -285,66 +282,6 @@ select case(nsib)                                                               
 end select                                                                                       ! land
 call END_LOG(sfluxland_end)                                                                      ! land
 !----------------------------------------------------------
-call START_LOG(sfluxurban_begin)                                                                 ! urban
-if (nmaxpr==1) then                                                                              ! urban
-  if (myid==0) then                                                                              ! urban
-    write(6,*) "Before urban"                                                                    ! urban
-  end if                                                                                         ! urban
-  call ccmpi_barrier(comm_world)                                                                 ! urban
-end if                                                                                           ! urban
-if (nurban/=0) then                                                                              ! urban
-  ! calculate zonal and meridonal winds                                                          ! urban
-  zonx=real(                       -sin(rlat0*pi/180.)*y(:))                                     ! urban
-  zony=real(sin(rlat0*pi/180.)*x(:)+cos(rlat0*pi/180.)*z(:))                                     ! urban
-  zonz=real(-cos(rlat0*pi/180.)*y(:)                       )                                     ! urban
-  costh= (zonx*ax(1:ifull)+zony*ay(1:ifull)+zonz*az(1:ifull)) &                                  ! urban
-        /sqrt( max(zonx**2+zony**2+zonz**2,1.e-7) )                                              ! urban
-  sinth=-(zonx*bx(1:ifull)+zony*by(1:ifull)+zonz*bz(1:ifull)) &                                  ! urban
-        /sqrt( max(zonx**2+zony**2+zonz**2,1.e-7) )                                              ! urban
-  uzon= costh*uav-sinth*vav ! zonal wind                                                         ! urban
-  vmer= sinth*uav+costh*vav ! meridonal wind                                                     ! urban
-  newrunoff=runoff-oldrunoff ! new runoff since entering sflux                                   ! urban
-  ! since ateb will blend non-urban and urban runoff, it is                                      ! urban
-  ! easier to remove the new runoff and add it again after the                                   ! urban
-  ! urban scheme has been updated                                                                ! urban
-  ! call aTEB                                                                                    ! urban
-  dumsg=sgsave/(1.-swrsave*albvisnir(:,1)-(1.-swrsave)*albvisnir(:,2))                           ! urban
-  dumrg=-rgsave                                                                                  ! urban
-  dumx=condx/dt                                                                                  ! urban
-  dums=(conds+condg)/dt                                                                          ! urban
-  call atebcalc(fg,eg,tss,wetfac,newrunoff,dt,azmin,dumsg,dumrg,dumx,dums,rho,t(1:ifull,1), &    ! urban
-                qg(1:ifull,1),ps(1:ifull),uzon,vmer,vmodmin,0)                                   ! urban
-  runoff=oldrunoff+newrunoff ! add new runoff after including urban                              ! urban
-  ! here we blend zo with the urban part                                                         ! urban
-  call atebzo(zo,zoh,zoq,0)                                                                      ! urban
-  factch=sqrt(zo/zoh)                                                                            ! urban
-  ! calculate ustar                                                                              ! urban
-  cduv=cduv/vmag                                                                                 ! urban
-  cdtq=cdtq/vmag                                                                                 ! urban
-  call atebcd(cduv,cdtq,0)                                                                       ! urban
-  cduv=cduv*vmag                                                                                 ! urban
-  cdtq=cdtq*vmag                                                                                 ! urban
-  ustar=sqrt(vmod*cduv)                                                                          ! urban
-  ! calculate screen level diagnostics                                                           ! urban
-  !call atebscrnout(tscrn,qgscrn,uscrn,u10,0)                                                    ! urban
-  where ( land(1:ifull) )                                                                        ! urban
-    !~ qsttg(1:ifull) = qsat(ps(1:ifull),tss(1:ifull))                                              ! urban
-    rnet(1:ifull) = sgsave(1:ifull) - rgsave(1:ifull) - stefbo*tss(1:ifull)**4                   ! urban
-    taux(1:ifull) = rho(1:ifull)*cduv(1:ifull)*u(1:ifull,1)                                      ! urban
-    tauy(1:ifull) = rho(1:ifull)*cduv(1:ifull)*v(1:ifull,1)                                      ! urban
-  end where                                                                                      ! urban
-end if                                                                                           ! urban
-if (nmaxpr==1) then                                                                              ! urban
-  if (myid==0) then                                                                              ! urban
-    write(6,*) "After urban"                                                                     ! urban
-  end if                                                                                         ! urban
-  call ccmpi_barrier(comm_world)                                                                 ! urban
-end if                                                                                           ! urban
-call END_LOG(sfluxurban_end)                                                                     ! urban
-! ----------------------------------------------------------------------
-! ----------------------------------------------------------------------
-!~ evap(:)=evap(:)+dt*eg(:)/hl !time integ value in mm (wrong for snow)
-
 ! Update runoff for river routing
 if ( abs(nmlo)>=2 .or. nriver==1 ) then
   newrunoff=runoff-oldrunoff
