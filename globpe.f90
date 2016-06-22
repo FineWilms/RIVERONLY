@@ -47,8 +47,8 @@ use infile                                 ! Input file routines
 use latlong_m                              ! Lat/lon coordinates
 !~ use liqwpar_m                              ! Cloud water mixing ratios
 use map_m                                  ! Grid map arrays
-use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
-   ,minwater,zomode,zoseaice,factchseaice
+!~ use mlo, only : mlodiag,wlev,mxd,mindep  & ! Ocean physics and prognostic arrays
+   !~ ,minwater,zomode,zoseaice,factchseaice
 use morepbl_m                              ! Additional boundary layer diagnostics
 use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
    ,lrestart
@@ -156,8 +156,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nhorps,nperavg,ia,ib, &
     nlocal,nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,nmr,ktopdav,     &
     nud_sst,nud_sss,mfix_tr,mfix_aero,kbotmlo,ktopmlo,mloalpha,   &
-    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth,nmlo,ol,mxd,mindep,    &
-    minwater,zomode,zoseaice,factchseaice, &
+    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth,nmlo,ol, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
@@ -257,9 +256,9 @@ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
 else
   ol = 0
 end if
-wlev     = ol
-mindep   = max( 0., mindep )
-minwater = max( 0., minwater )
+!~ wlev     = ol
+!~ mindep   = max( 0., mindep )
+!~ minwater = max( 0., minwater )
 if ( abs(nmlo)>=2 ) nriver=1
 read(99, datafile)
 ! try reading boundary layer turbulence namelist
