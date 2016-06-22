@@ -161,7 +161,7 @@ select case(nsib)                                                               
     call sib4                                                                                    ! cable
     ! update remaining diagnostic arrays                                                         ! cable
     where ( land(1:ifull) )                                                                      ! cable
-      factch(1:ifull) = sqrt(zo(1:ifull)/zoh(1:ifull))                                           ! cable 
+      !~ factch(1:ifull) = sqrt(zo(1:ifull)/zoh(1:ifull))                                           ! cable 
       taux(1:ifull) = rho(1:ifull)*cduv(1:ifull)*u(1:ifull,1)                                    ! cable
       tauy(1:ifull) = rho(1:ifull)*cduv(1:ifull)*v(1:ifull,1)                                    ! cable
       sno(1:ifull) = sno(1:ifull) + conds(1:ifull)                                               ! cable

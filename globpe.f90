@@ -54,7 +54,6 @@ use outcdf                                 ! Output file routines
 use parmhdff_m                             ! Horizontal diffusion parameters
 use pbl_m                                  ! Boundary layer arrays
 use permsurf_m, only : permsurf_init       ! Fixed surface arrays
-!~ use prec_m                                 ! Precipitation
 use river                                  ! River routing
 use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
@@ -517,21 +516,12 @@ end if
 ! INITIALISE LOCAL ARRAYS
 call arrays_init(ifull,iextra,kl)
 call carbpools_init(ifull,iextra,kl,nsib,ccycle)
-!~ call cfrac_init(ifull,iextra,kl)
-!~ call dpsdt_init(ifull,iextra,kl)
-!~ call epst_init(ifull,iextra,kl)
 call extraout_init(ifull,iextra,kl,nextout)
-!~ call gdrag_init(ifull,iextra,kl)
 call histave_init(ifull,iextra,kl,ms)
-!~ call liqwpar_init(ifull,iextra,kl)
 call morepbl_init(ifull,iextra,kl)
-!~ call nharrs_init(ifull,iextra,kl)
-!~ call nlin_init(ifull,iextra,kl)
 call nsibd_init(ifull,iextra,kl,nsib)
-!~ call parmhdff_init(ifull,iextra,kl)
 call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
-!~ call prec_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
 call sbar_init(ifull,iextra,kl)
