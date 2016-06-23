@@ -413,13 +413,13 @@ use extraout_m                                   ! Additional diagnostics
 use histave_m                                    ! Time average arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
-use liqwpar_m                                    ! Cloud water mixing ratios
+!~ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use pbl_m                                        ! Boundary layer arrays
-use prec_m                                       ! Precipitation
+!~ use prec_m                                       ! Precipitation
 use raddiag_m                                    ! Radiation diagnostic
 use river                                        ! River routing
 use savuvt_m                                     ! Saved dynamic arrays
@@ -428,7 +428,7 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use vegpar_m                                     ! Vegetation arrays
-use vvel_m                                       ! Additional vertical velocity
+!~ use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays
 !~ use xarrs_m, only : pslx                         ! Saved dynamic arrays
 
