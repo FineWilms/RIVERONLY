@@ -538,17 +538,17 @@ if( myid==0 .or. local ) then
     call ccnf_def_var(idnc,'sigma','float',1,idim(3:3),idv)
     call ccnf_put_att(idnc,idv,'positive',lname)
 
-    lname = 'atm stag direction'
-    call ccnf_def_var(idnc,'nstag','int',1,idim(4:4),idv)
-    call ccnf_put_att(idnc,idv,'long_name',lname)
+    !~ lname = 'atm stag direction'
+    !~ call ccnf_def_var(idnc,'nstag','int',1,idim(4:4),idv)
+    !~ call ccnf_put_att(idnc,idv,'long_name',lname)
 
-    lname = 'atm unstag direction'
-    call ccnf_def_var(idnc,'nstagu','int',1,idim(4:4),idv)
-    call ccnf_put_att(idnc,idv,'long_name',lname)
+    !~ lname = 'atm unstag direction'
+    !~ call ccnf_def_var(idnc,'nstagu','int',1,idim(4:4),idv)
+    !~ call ccnf_put_att(idnc,idv,'long_name',lname)
 
-    lname = 'atm stag offset'
-    call ccnf_def_var(idnc,'nstagoff','int',1,idim(4:4),idv)
-    call ccnf_put_att(idnc,idv,'long_name',lname)
+    !~ lname = 'atm stag offset'
+    !~ call ccnf_def_var(idnc,'nstagoff','int',1,idim(4:4),idv)
+    !~ call ccnf_put_att(idnc,idv,'long_name',lname)
 
     !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
       !~ lname = 'ocn stag offset'
@@ -651,11 +651,11 @@ if( myid==0 .or. local ) then
   call ccnf_put_vara(idnc,'ktau',iarch,ktau)
   call ccnf_put_vara(idnc,'kdate',iarch,kdate)
   call ccnf_put_vara(idnc,'ktime',iarch,ktime)
-  call ccnf_put_vara(idnc,'nstag',iarch,nstag)
-  call ccnf_put_vara(idnc,'nstagu',iarch,nstagu)
-  idum=mod(ktau-nstagoff,max(abs(nstagin),1))
-  idum=idum-max(abs(nstagin),1) ! should be -ve
-  call ccnf_put_vara(idnc,'nstagoff',iarch,idum)
+  !~ call ccnf_put_vara(idnc,'nstag',iarch,nstag)
+  !~ call ccnf_put_vara(idnc,'nstagu',iarch,nstagu)
+  !~ idum=mod(ktau-nstagoff,max(abs(nstagin),1))
+  !~ idum=idum-max(abs(nstagin),1) ! should be -ve
+  !~ call ccnf_put_vara(idnc,'nstagoff',iarch,idum)
   if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
     call ccnf_put_vara(idnc,'nstagoffmlo',iarch,idum)
   end if
