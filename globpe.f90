@@ -798,7 +798,6 @@ data nud_aero/0/
 data nud_sst/0/,nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/,kbotmlo/-1000/,ktopmlo/1/
 data sigramplow/0./,sigramphigh/0./
-      
 ! Dynamics options A & B      
 data mex/30/,mfix/3/,mfix_qg/1/,mup/1/,nh/0/
 data nritch_t/300/,epsp/-15./,epsu/0./,epsf/0./,epsh/0.1/
@@ -815,27 +814,9 @@ data nstag/-10/,nstagu/-1/,nstagoff/0/
 data nvmix/3/,nlocal/6/,ncvmix/0/,lgwd/0/,ngwd/-5/
 data helim/800./,fc2/1./,sigbot_gwd/0./,alphaj/1.e-6/
 data cgmap_offset/0./,cgmap_scale/1./
-!~ ! Cumulus convection options
-!~ data nkuo/23/,sigcb/1./,sig_ct/1./,rhcv/0./,rhmois/.1/,rhsat/1./
-!~ data convfact/1.02/,convtime/.33/,shaltime/0./
-!~ data alflnd/1.1/,alfsea/1.1/,fldown/.6/,iterconv/3/,ncvcloud/0/
-!~ data nevapcc/0/,nevapls/-4/,nuvconv/0/
-!~ data mbase/101/,mdelay/-1/,methprec/8/,nbase/-4/,detrain/.15/
-!~ data entrain/.05/,methdetr/2/,detrainx/0./,dsig2/.15/,dsig4/.4/
-! Shallow convection options
-!~ data ksc/-95/,kscsea/0/,kscmom/1/,sigkscb/.95/,sigksct/.8/
-!~ data tied_con/2./,tied_over/0./,tied_rh/.75/
 ! Other moist physics options
-data acon/.2/,bcon/.07/,qgmin/1.e-6/,rcm/.92e-5/
-data rcrit_l/.75/,rcrit_s/.85/ 
-! Radiation options
-!~ data nrad/4/
-!~ data nmr/0/,bpyear/0./
-!~ ! Cloud options
-!~ data ldr/1/,nclddia/1/,nstab_cld/0/,nrhcrit/10/,sigcll/.95/ 
-!~ data cldh_lnd/95./,cldm_lnd/85./,cldl_lnd/75./
-!~ data cldh_sea/95./,cldm_sea/90./,cldl_sea/80./
-!~ data ncloud/0/
+!~ data acon/.2/,bcon/.07/,qgmin/1.e-6/,rcm/.92e-5/
+!~ data rcrit_l/.75/,rcrit_s/.85/ 
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
 data nrungcm/-1/,nsib/3/,nsigmf/1/
@@ -844,11 +825,6 @@ data vmodmin/.2/,zobgin/.02/,charnock/.018/,chn10/.00125/
 data newztsea/1/,newtop/1/                
 data snmin/.11/  ! 1000. for 1-layer; ~.11 to turn on 3-layer snow
 data nurban/0/,ccycle/0/
-! Special and test options
-!~ data namip/0/,amipo3/.false./,nhstest/0/,nsemble/0/,nspecial/0/
-!~ data panfg/4./,panzo/.001/,nplens/0/,rlatdx/0./,rlatdn/0./
-!~ data rlongdn/0./,rlongdx/0./
-!~ data rescrn/0/,knh/-1/
 ! I/O options
 data m_fly/4/,io_in/1/,io_out/1/,io_rest/1/
 data nperavg/-99/,nwt/-99/,tblock/1/,tbave/1/
@@ -856,10 +832,10 @@ data nextout/3/,localhist/.false./
 data nstn/0/  
 data slat/nstnmax*-89./,slon/nstnmax*0./,iunp/nstnmax*6/
 data zstn/nstnmax*0./,name_stn/nstnmax*'   '/ 
-! Ocean options
-data nmlo/0/nriver/0/
-! Aerosol options
-data iaero/0/      
+!~ ! Ocean options
+!~ data nmlo/0/nriver/0/
+!~ ! Aerosol options
+!~ data iaero/0/      
 
 ! initialize file names to something
 data albfile/' '/,icefile/' '/,maskfile/' '/
