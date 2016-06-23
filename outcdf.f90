@@ -685,12 +685,12 @@ call histwrt3(aa,'runoff',idnc,iarch,local,lwrite)
 
 
 ! MLO ---------------------------------------------------------      
-if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  ocnheight = min(max(ocnheight,-130.),130.)
-  where (.not.land(1:ifull))
-    snowd   = micdwn(:,7)*1000.
-  end where
-end if
+!~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
+  !~ ocnheight = min(max(ocnheight,-130.),130.)
+  !~ where (.not.land(1:ifull))
+    !~ snowd   = micdwn(:,7)*1000.
+  !~ end where
+!~ end if
 
 if ( nmlo<=-2 .or. (nmlo>=2.and.itype==-1) .or. nriver==1 ) then
   call histwrt3(watbdy(1:ifull),'swater',idnc,iarch,local,.true.)
