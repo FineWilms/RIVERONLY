@@ -66,7 +66,7 @@ use soilsnow_m                             ! Soil, snow and surface data
 use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
-use vvel_m                                 ! Additional vertical velocity
+!~ use vvel_m                                 ! Additional vertical velocity
 use work2_m                                ! Diagnostic arrays
 use work3_m                                ! Mk3 land-surface diagnostic arrays
 use work3f_m                               ! Grid work arrays
@@ -515,7 +515,7 @@ call soilsnow_init(ifull,iextra,kl,ms,nsib)
 !~ call uvbar_init(ifull,iextra,kl)
 call vecs_init(ifull,iextra,kl)
 call vegpar_init(ifull,iextra,kl)
-call vvel_init(ifull,iextra,kl)
+!~ call vvel_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)
 call work3f_init(ifull,iextra,kl)
