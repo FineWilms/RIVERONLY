@@ -54,7 +54,7 @@ include 'parm.h'
 
 integer iout,nwrite,nstagin
 integer, intent(in) :: jalbfix,nalpha,mins_rad
-character(len=160) :: co2out,radonout,surfout
+character(len=160) :: surfout
 character(len=20) :: qgout
 character(len=8) :: rundate
 
@@ -70,27 +70,27 @@ if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
 !        usually after first 24 hours, save soil variables for next run
     if ( ktau==nwrite ) then  ! 24 hour write
       if ( ktime==1200 ) then
-        co2out=co2_12     ! 'co2.1200'
-        radonout=radon_12 ! 'radon.1200'
+        !~ co2out=co2_12     ! 'co2.1200'
+        !~ radonout=radon_12 ! 'radon.1200'
         surfout=surf_12   ! 'current.1200'
-        qgout='qg_12'
+        !~ qgout='qg_12'
       else
-        co2out=co2_00     !  'co2.0000'
-        radonout=radon_00 ! 'radon.0000'
+        !~ co2out=co2_00     !  'co2.0000'
+        !~ radonout=radon_00 ! 'radon.0000'
         surfout=surf_00   ! 'current.0000'
-        qgout='qg_00'
+        !~ qgout='qg_00'
       endif
     else                    ! 12 hour write
       if(ktime==1200)then
-        co2out=co2_00     !  'co2.0000'
-        radonout=radon_00 ! 'radon.0000'
+        !~ co2out=co2_00     !  'co2.0000'
+        !~ radonout=radon_00 ! 'radon.0000'
         surfout=surf_00   ! 'current.0000'
-        qgout='qg_00'
+        !~ qgout='qg_00'
       else
-        co2out=co2_12     ! 'co2.1200'
-        radonout=radon_12 ! 'radon.1200'
+        !~ co2out=co2_12     ! 'co2.1200'
+        !~ radonout=radon_12 ! 'radon.1200'
         surfout=surf_12   ! 'current.1200'
-        qgout='qg_12'
+        !~ qgout='qg_12'
       endif
     endif               ! (ktau.eq.nwrite)
     if ( myid == 0 ) then
@@ -119,17 +119,17 @@ if ( iout==19 ) then
     case(1)  ! for netCDF 
       if ( myid==0 ) write(6,*) "restart write of data to netCDF"
       call cdfout(rundate,-1,nstagin,jalbfix,nalpha,mins_rad)
-    case(3)
-      write(6,*) "Error, restart binary output not supported"
-      call ccmpi_abort(-1)
+    !~ case(3)
+      !~ write(6,*) "Error, restart binary output not supported"
+      !~ call ccmpi_abort(-1)
   end select
 else
   select case(io_out)
     case(1)
       call cdfout(rundate,1,nstagin,jalbfix,nalpha,mins_rad)
-    case(3)
-      write(6,*) "Error, history binary output not supported"
-      call ccmpi_abort(-1)
+    !~ case(3)
+      !~ write(6,*) "Error, history binary output not supported"
+      !~ call ccmpi_abort(-1)
   end select
 end if
 
@@ -147,12 +147,7 @@ subroutine cdfout(rundate,itype,nstagin,jalbfix,nalpha,mins_rad)
 use cable_ccam, only : proglai        ! CABLE
 use cc_mpi                            ! CC MPI routines
 use infile                            ! Input file routines
-use liqwpar_m                         ! Cloud water mixing ratios
-!~ use mlo, only : mindep              & ! Ocean physics and prognostic arrays
-    !~ ,minwater,mxd,zomode,zoseaice   &
-    !~ ,factchseaice
-!~ use parmhdff_m                        ! Horizontal diffusion parameters
-!~ use tkeeps                            ! TKE-EPS boundary layer
+!~ use liqwpar_m                         ! Cloud water mixing ratios
 
 implicit none
 
@@ -555,19 +550,17 @@ if( myid==0 .or. local ) then
     call ccnf_def_var(idnc,'nstagoff','int',1,idim(4:4),idv)
     call ccnf_put_att(idnc,idv,'long_name',lname)
 
-    if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-      lname = 'ocn stag offset'
-      call ccnf_def_var(idnc,'nstagoffmlo','int',1,idim(4:4),idv)
-      call ccnf_put_att(idnc,idv,'long_name',lname)     
-    end if
+    !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
+      !~ lname = 'ocn stag offset'
+      !~ call ccnf_def_var(idnc,'nstagoffmlo','int',1,idim(4:4),idv)
+      !~ call ccnf_put_att(idnc,idv,'long_name',lname)     
+    !~ end if
 
     if ( myid==0 ) write(6,*) 'define attributes of variables'
 
 !   For time invariant surface fields
     lname = 'Surface geopotential'
     call attrib(idnc,idim(1:2),2,'zht',lname,'m2/s2',-1000.,90.e3,0,-1)
-    !~ lname = 'Std Dev of surface height'
-    !~ call attrib(idnc,idim(1:2),2,'he',lname,'m',0.,90.e3,0,-1)
     lname = 'Map factor'
     call attrib(idnc,idim(1:2),2,'map',lname,'none',.001,1500.,0,itype)
 
@@ -679,7 +672,6 @@ endif ! myid == 0 .or. local
 
 if ( ktau==0 .or. itype==-1 ) then  ! also for restart file
   call histwrt3(zs,'zht',idnc,iarch,local,.true.)
-  !~ call histwrt3(he,'he',idnc,iarch,local,.true.)
   call histwrt3(em,'map',idnc,iarch,local,.true.)
 endif ! (ktau==0.or.itype==-1) 
 
