@@ -309,7 +309,7 @@ use soil_m                                     ! Soil and surface data
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
 use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
-use xarrs_m, only : pslx                       ! Saved dynamic arrays
+!~ use xarrs_m, only : pslx                       ! Saved dynamic arrays
 use workglob_m                                 ! Additional grid interpolation
 use work2_m                                    ! Diagnostic arrays
 

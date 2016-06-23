@@ -430,7 +430,7 @@ use soilsnow_m                                   ! Soil, snow and surface data
 use vegpar_m                                     ! Vegetation arrays
 use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays
-use xarrs_m, only : pslx                         ! Saved dynamic arrays
+!~ use xarrs_m, only : pslx                         ! Saved dynamic arrays
 
 implicit none
 

@@ -61,18 +61,15 @@ use sbar_m                                 ! Saved dynamic arrays
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
-!~ use tbar2d_m, only : tbar2d_init           ! Atmosphere dynamics reference temperature
-!~ use timeseries, only : write_ts            ! Tracer time series
 use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
-!~ use vvel_m                                 ! Additional vertical velocity
 use work2_m                                ! Diagnostic arrays
 use work3_m                                ! Mk3 land-surface diagnostic arrays
 use work3f_m                               ! Grid work arrays
 use work3sav_m                             ! Water and tracer saved arrays
 use workglob_m                             ! Additional grid interpolation
-use xarrs_m                                ! Saved dynamic arrays
+!~ use xarrs_m                                ! Saved dynamic arrays
 use xyzinfo_m                              ! Grid coordinate arrays
 
 implicit none
@@ -514,10 +511,7 @@ call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)
 call work3f_init(ifull,iextra,kl)
-call xarrs_init(ifull,iextra,kl)
-!~ if ( nvmix==6 ) then
-  !~ call tkeinit(ifull,iextra,kl,0)
-!~ end if
+!~ call xarrs_init(ifull,iextra,kl)
 
 ! Remaining arrays are allocated in indata.f90, since their
 ! definition requires additional input data (e.g, land-surface)
@@ -680,7 +674,6 @@ do kktau = 1,ntau   ! ****** start of main time loop
 
 
   if ( ktau==ntau .or. mod(ktau,nperavg)==0 ) then
-    !~ cape_ave(1:ifull)   = cape_ave(1:ifull)/min(ntau,nperavg)
     do k=1,ms
       wb_ave(1:ifull,k) = wb_ave(1:ifull,k)/min(ntau,nperavg)
     end do
@@ -705,7 +698,6 @@ do kktau = 1,ntau   ! ****** start of main time loop
  
   if ( mod(ktau,nperavg) == 0 ) then   
     wb_ave(:,:)    = 0.
-    !~ koundiag       = 0
     runoff(:)      = 0.  ! converted to mm/day in outcdf
   endif  ! (mod(ktau,nperavg)==0)
 
