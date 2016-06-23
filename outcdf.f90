@@ -151,7 +151,7 @@ use liqwpar_m                         ! Cloud water mixing ratios
 !~ use mlo, only : mindep              & ! Ocean physics and prognostic arrays
     !~ ,minwater,mxd,zomode,zoseaice   &
     !~ ,factchseaice
-use parmhdff_m                        ! Horizontal diffusion parameters
+!~ use parmhdff_m                        ! Horizontal diffusion parameters
 !~ use tkeeps                            ! TKE-EPS boundary layer
 
 implicit none
@@ -317,9 +317,9 @@ if ( myid==0 .or. localhist ) then
     nahead(13) = 0         ! nmi
     nahead(14) = nint(dt)  ! needed by cc2hist
     nahead(15) = 0         ! not needed now 
-    nahead(16) = nhor
+    !~ nahead(16) = nhor
     nahead(17) = nkuo
-    nahead(18) = khdif
+    !~ nahead(18) = khdif
     nahead(19) = kl        ! needed by cc2hist (was kwt)
     nahead(20) = 0  !iaa
     nahead(21) = 0  !jaa
@@ -328,12 +328,12 @@ if ( myid==0 .or. localhist ) then
     nahead(24) = 0  !lbd
     nahead(25) = nrun
     nahead(26) = 0
-    nahead(27) = khor
+    !~ nahead(27) = khor
     nahead(28) = ksc
     nahead(29) = kountr
     nahead(30) = 1 ! ndiur
     nahead(31) = 0  ! spare
-    nahead(32) = nhorps
+    !~ nahead(32) = nhorps
     nahead(33) = nsoil
     nahead(34) = ms        ! needed by cc2hist
     nahead(35) = ntsur

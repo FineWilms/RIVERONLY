@@ -51,7 +51,7 @@ use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
 use nlin_m                                 ! Atmosphere non-linear dynamics
 use nsibd_m                                ! Land-surface arrays
 use outcdf                                 ! Output file routines
-use parmhdff_m                             ! Horizontal diffusion parameters
+!~ use parmhdff_m                             ! Horizontal diffusion parameters
 use pbl_m                                  ! Boundary layer arrays
 use permsurf_m, only : permsurf_init       ! Fixed surface arrays
 use river                                  ! River routing
@@ -129,9 +129,9 @@ logical odcalc
 ! version namelist
 namelist/defaults/nversion
 ! main namelist
-namelist/cardin/comment,dt,ntau,nwt,npa,npb,nhorps,nperavg,ia,ib, &
-    ja,jb,id,jd,iaero,khdif,khor,nhorjlm,mex,mbd,nbd,             &
-    mbd_maxscale,ndi,ndi2,nhor,nlv,nmaxpr,nrad,ntaft,ntsea,ntsur, &
+namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
+    ja,jb,id,jd,iaero,mex,mbd,nbd,             &
+    mbd_maxscale,ndi,ndi2,nlv,nmaxpr,nrad,ntaft,ntsea,ntsur, &
     nvmix,restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
     ngwd,rhsat,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
     irest,nrun,nstn,rel_lat,rel_long,nrungcm,nsib,istn,jstn,iunp, &
@@ -200,11 +200,11 @@ rel_lat  = 0.
 rel_long = 0.
 ktau     = 0
 ol       = 20   ! default ocean levels
-nhor     = -157
-nhorps   = -1
-khor     = -8
-khdif    = 2
-nhorjlm  = 1
+!~ nhor     = -157
+!~ nhorps   = -1
+!~ khor     = -8
+!~ khdif    = 2
+!~ nhorjlm  = 1
 
 ! All processors read the namelist, so no MPI comms are needed
 open(99,file="input",form="formatted",status="old")
