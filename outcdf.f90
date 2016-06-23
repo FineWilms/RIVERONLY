@@ -43,7 +43,6 @@ use arrays_m
 use cc_mpi
 use pbl_m
 use soilsnow_m ! tgg,wb,snowd
-!~ use tracers_m
       
 implicit none
       
@@ -70,27 +69,15 @@ if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
 !        usually after first 24 hours, save soil variables for next run
     if ( ktau==nwrite ) then  ! 24 hour write
       if ( ktime==1200 ) then
-        !~ co2out=co2_12     ! 'co2.1200'
-        !~ radonout=radon_12 ! 'radon.1200'
         surfout=surf_12   ! 'current.1200'
-        !~ qgout='qg_12'
       else
-        !~ co2out=co2_00     !  'co2.0000'
-        !~ radonout=radon_00 ! 'radon.0000'
         surfout=surf_00   ! 'current.0000'
-        !~ qgout='qg_00'
       endif
     else                    ! 12 hour write
-      if(ktime==1200)then
-        !~ co2out=co2_00     !  'co2.0000'
-        !~ radonout=radon_00 ! 'radon.0000'
+      if(ktime==1200) then
         surfout=surf_00   ! 'current.0000'
-        !~ qgout='qg_00'
       else
-        !~ co2out=co2_12     ! 'co2.1200'
-        !~ radonout=radon_12 ! 'radon.1200'
         surfout=surf_12   ! 'current.1200'
-        !~ qgout='qg_12'
       endif
     endif               ! (ktau.eq.nwrite)
     if ( myid == 0 ) then
@@ -119,17 +106,13 @@ if ( iout==19 ) then
     case(1)  ! for netCDF 
       if ( myid==0 ) write(6,*) "restart write of data to netCDF"
       call cdfout(rundate,-1,nstagin,jalbfix,nalpha,mins_rad)
-    !~ case(3)
-      !~ write(6,*) "Error, restart binary output not supported"
-      !~ call ccmpi_abort(-1)
+
   end select
 else
   select case(io_out)
     case(1)
       call cdfout(rundate,1,nstagin,jalbfix,nalpha,mins_rad)
-    !~ case(3)
-      !~ write(6,*) "Error, history binary output not supported"
-      !~ call ccmpi_abort(-1)
+
   end select
 end if
 
@@ -147,8 +130,6 @@ subroutine cdfout(rundate,itype,nstagin,jalbfix,nalpha,mins_rad)
 use cable_ccam, only : proglai        ! CABLE
 use cc_mpi                            ! CC MPI routines
 use infile                            ! Input file routines
-!~ use liqwpar_m                         ! Cloud water mixing ratios
-
 implicit none
 
 include 'newmpar.h'                   ! Grid parameters
@@ -312,9 +293,9 @@ if ( myid==0 .or. localhist ) then
     nahead(13) = 0         ! nmi
     nahead(14) = nint(dt)  ! needed by cc2hist
     nahead(15) = 0         ! not needed now 
-    !~ nahead(16) = nhor
+
     nahead(17) = nkuo
-    !~ nahead(18) = khdif
+
     nahead(19) = kl        ! needed by cc2hist (was kwt)
     nahead(20) = 0  !iaa
     nahead(21) = 0  !jaa
@@ -323,12 +304,12 @@ if ( myid==0 .or. localhist ) then
     nahead(24) = 0  !lbd
     nahead(25) = nrun
     nahead(26) = 0
-    !~ nahead(27) = khor
+
     nahead(28) = ksc
     nahead(29) = kountr
     nahead(30) = 1 ! ndiur
     nahead(31) = 0  ! spare
-    !~ nahead(32) = nhorps
+
     nahead(33) = nsoil
     nahead(34) = ms        ! needed by cc2hist
     nahead(35) = ntsur
@@ -402,20 +383,18 @@ use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
 use carbpools_m                                  ! Carbon pools
 use cc_mpi                                       ! CC MPI routines
-use cfrac_m                                      ! Cloud fraction
+!~ use cfrac_m                                      ! Cloud fraction
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
 use histave_m                                    ! Time average arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
-!~ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use morepbl_m                                    ! Additional boundary layer diagnostics
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use pbl_m                                        ! Boundary layer arrays
-!~ use prec_m                                       ! Precipitation
-use raddiag_m                                    ! Radiation diagnostic
+!~ use raddiag_m                                    ! Radiation diagnostic
 use river                                        ! River routing
 use savuvt_m                                     ! Saved dynamic arrays
 use savuv1_m                                     ! Saved dynamic arrays
@@ -423,9 +402,8 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use vegpar_m                                     ! Vegetation arrays
-!~ use vvel_m                                       ! Additional vertical velocity
 use work2_m                                      ! Diagnostic arrays
-!~ use xarrs_m, only : pslx                         ! Saved dynamic arrays
+
 
 implicit none
 
@@ -538,24 +516,6 @@ if( myid==0 .or. local ) then
     call ccnf_def_var(idnc,'sigma','float',1,idim(3:3),idv)
     call ccnf_put_att(idnc,idv,'positive',lname)
 
-    !~ lname = 'atm stag direction'
-    !~ call ccnf_def_var(idnc,'nstag','int',1,idim(4:4),idv)
-    !~ call ccnf_put_att(idnc,idv,'long_name',lname)
-
-    !~ lname = 'atm unstag direction'
-    !~ call ccnf_def_var(idnc,'nstagu','int',1,idim(4:4),idv)
-    !~ call ccnf_put_att(idnc,idv,'long_name',lname)
-
-    !~ lname = 'atm stag offset'
-    !~ call ccnf_def_var(idnc,'nstagoff','int',1,idim(4:4),idv)
-    !~ call ccnf_put_att(idnc,idv,'long_name',lname)
-
-    !~ if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-      !~ lname = 'ocn stag offset'
-      !~ call ccnf_def_var(idnc,'nstagoffmlo','int',1,idim(4:4),idv)
-      !~ call ccnf_put_att(idnc,idv,'long_name',lname)     
-    !~ end if
-
     if ( myid==0 ) write(6,*) 'define attributes of variables'
 
 !   For time invariant surface fields
@@ -651,14 +611,6 @@ if( myid==0 .or. local ) then
   call ccnf_put_vara(idnc,'ktau',iarch,ktau)
   call ccnf_put_vara(idnc,'kdate',iarch,kdate)
   call ccnf_put_vara(idnc,'ktime',iarch,ktime)
-  !~ call ccnf_put_vara(idnc,'nstag',iarch,nstag)
-  !~ call ccnf_put_vara(idnc,'nstagu',iarch,nstagu)
-  !~ idum=mod(ktau-nstagoff,max(abs(nstagin),1))
-  !~ idum=idum-max(abs(nstagin),1) ! should be -ve
-  !~ call ccnf_put_vara(idnc,'nstagoff',iarch,idum)
-  if ( (nmlo<0.and.nmlo>=-9) .or. (nmlo>0.and.nmlo<=9.and.itype==-1) ) then
-    call ccnf_put_vara(idnc,'nstagoffmlo',iarch,idum)
-  end if
   if ( myid==0 ) then
     write(6,*) 'kdate,ktime,ktau=',kdate,ktime,ktau
     write(6,*) 'timer,timeg=',timer,timeg
@@ -685,12 +637,6 @@ call histwrt3(aa,'runoff',idnc,iarch,local,lwrite)
 
 
 ! MLO ---------------------------------------------------------      
-!~ if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  !~ ocnheight = min(max(ocnheight,-130.),130.)
-  !~ where (.not.land(1:ifull))
-    !~ snowd   = micdwn(:,7)*1000.
-  !~ end where
-!~ end if
 
 if ( nmlo<=-2 .or. (nmlo>=2.and.itype==-1) .or. nriver==1 ) then
   call histwrt3(watbdy(1:ifull),'swater',idnc,iarch,local,.true.)
