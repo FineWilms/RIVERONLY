@@ -506,16 +506,11 @@ call permsurf_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
 call sbar_init(ifull,iextra,kl)
-!~ call screen_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
-!~ call tbar2d_init(ifull,iextra,kl)
-!~ call unn_init(ifull,iextra,kl)
-!~ call uvbar_init(ifull,iextra,kl)
 call vecs_init(ifull,iextra,kl)
 call vegpar_init(ifull,iextra,kl)
-!~ call vvel_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)
 call work3f_init(ifull,iextra,kl)
@@ -547,22 +542,22 @@ if ( myid == 0 ) then
 end if
 call indataf(hourst,jalbfix,lapsbot,isoth,nsig,io_nest)
 
-if ( mins_rad<0 ) then
-  ! automatic estimate for mins_rad
-  secs_rad = min(nint((schmidt*112.*90./real(il_g))*8.*60.), 3600)
-  secs_rad = min(secs_rad, nint(real(nwt)*dt))
-  secs_rad = max(secs_rad, 1)
-  kountr   = nint(real(secs_rad)/dt)
-  secs_rad = nint(real(kountr)*dt)
-  do while ( mod(3600, secs_rad)/=0 .and. kountr>1 )
-    kountr = kountr - 1
-    secs_rad = nint(real(kountr)*dt)
-  end do
-else
-  ! user specified mins_rad
-  kountr   = nint(real(mins_rad)*60./dt)  ! set default radiation to ~mins_rad m
-  secs_rad = nint(real(kountr)*dt)        ! redefine to actual value
-end if
+!~ if ( mins_rad<0 ) then
+  !~ ! automatic estimate for mins_rad
+  !~ secs_rad = min(nint((schmidt*112.*90./real(il_g))*8.*60.), 3600)
+  !~ secs_rad = min(secs_rad, nint(real(nwt)*dt))
+  !~ secs_rad = max(secs_rad, 1)
+  !~ kountr   = nint(real(secs_rad)/dt)
+  !~ secs_rad = nint(real(kountr)*dt)
+  !~ do while ( mod(3600, secs_rad)/=0 .and. kountr>1 )
+    !~ kountr = kountr - 1
+    !~ secs_rad = nint(real(kountr)*dt)
+  !~ end do
+!~ else
+  !~ ! user specified mins_rad
+  !~ kountr   = nint(real(mins_rad)*60./dt)  ! set default radiation to ~mins_rad m
+  !~ secs_rad = nint(real(kountr)*dt)        ! redefine to actual value
+!~ end if
 
 !--------------------------------------------------------------
 ! NRUN COUNTER
@@ -808,15 +803,10 @@ data helmmeth/0/,mfix_tr/0/,mfix_aero/0/
 data nt_adv/7/,mh_bs/4/
 ! Horiz wind staggering options
 data nstag/-10/,nstagu/-1/,nstagoff/0/
-! Horizontal mixing options (now in globpe)
-! data khdif/2/,khor/-8/,nhor/-157/,nhorps/-1/,nhorjlm/1/
 ! Vertical mixing options
 data nvmix/3/,nlocal/6/,ncvmix/0/,lgwd/0/,ngwd/-5/
 data helim/800./,fc2/1./,sigbot_gwd/0./,alphaj/1.e-6/
 data cgmap_offset/0./,cgmap_scale/1./
-! Other moist physics options
-!~ data acon/.2/,bcon/.07/,qgmin/1.e-6/,rcm/.92e-5/
-!~ data rcrit_l/.75/,rcrit_s/.85/ 
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
 data nrungcm/-1/,nsib/3/,nsigmf/1/
@@ -832,11 +822,7 @@ data nextout/3/,localhist/.false./
 data nstn/0/  
 data slat/nstnmax*-89./,slon/nstnmax*0./,iunp/nstnmax*6/
 data zstn/nstnmax*0./,name_stn/nstnmax*'   '/ 
-!~ ! Ocean options
-!~ data nmlo/0/nriver/0/
-!~ ! Aerosol options
-!~ data iaero/0/      
-
+ 
 ! initialize file names to something
 data albfile/' '/,icefile/' '/,maskfile/' '/
 data snowfile/' '/,sstfile/' '/,topofile/' '/,zofile/' '/
