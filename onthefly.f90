@@ -291,7 +291,7 @@ subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,
 !~ use ateb, only : atebdwn                       ! Urban
 use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
-use carbpools_m                                ! Carbon pools
+!~ use carbpools_m                                ! Carbon pools
 use cc_mpi                                     ! CC MPI routines
 use extraout_m                                 ! Additional diagnostics      
 use infile                                     ! Input file routines
