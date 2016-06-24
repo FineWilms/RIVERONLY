@@ -51,7 +51,6 @@ use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
 use nlin_m                                 ! Atmosphere non-linear dynamics
 use nsibd_m                                ! Land-surface arrays
 use outcdf                                 ! Output file routines
-!~ use parmhdff_m                             ! Horizontal diffusion parameters
 use pbl_m                                  ! Boundary layer arrays
 use permsurf_m, only : permsurf_init       ! Fixed surface arrays
 use river                                  ! River routing
@@ -69,7 +68,6 @@ use work3_m                                ! Mk3 land-surface diagnostic arrays
 use work3f_m                               ! Grid work arrays
 use work3sav_m                             ! Water and tracer saved arrays
 use workglob_m                             ! Additional grid interpolation
-!~ use xarrs_m                                ! Saved dynamic arrays
 use xyzinfo_m                              ! Grid coordinate arrays
 
 implicit none

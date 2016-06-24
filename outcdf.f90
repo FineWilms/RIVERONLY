@@ -383,7 +383,6 @@ use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
 use carbpools_m                                  ! Carbon pools
 use cc_mpi                                       ! CC MPI routines
-!~ use cfrac_m                                      ! Cloud fraction
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
 use histave_m                                    ! Time average arrays
@@ -394,7 +393,6 @@ use morepbl_m                                    ! Additional boundary layer dia
 use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use pbl_m                                        ! Boundary layer arrays
-!~ use raddiag_m                                    ! Radiation diagnostic
 use river                                        ! River routing
 use savuvt_m                                     ! Saved dynamic arrays
 use savuv1_m                                     ! Saved dynamic arrays
