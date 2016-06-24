@@ -48,7 +48,7 @@ use map_m                                  ! Grid map arrays
 use morepbl_m                              ! Additional boundary layer diagnostics
 use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
    ,lrestart
-use nlin_m                                 ! Atmosphere non-linear dynamics
+!~ use nlin_m                                 ! Atmosphere non-linear dynamics
 use nsibd_m                                ! Land-surface arrays
 use outcdf                                 ! Output file routines
 use pbl_m                                  ! Boundary layer arrays
@@ -502,7 +502,6 @@ call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)
 call work3f_init(ifull,iextra,kl)
-!~ call xarrs_init(ifull,iextra,kl)
 
 ! Remaining arrays are allocated in indata.f90, since their
 ! definition requires additional input data (e.g, land-surface)
@@ -526,23 +525,6 @@ if ( myid == 0 ) then
   write(6,*) "Calling indata"
 end if
 call indataf(hourst,jalbfix,lapsbot,isoth,nsig,io_nest)
-
-!~ if ( mins_rad<0 ) then
-  !~ ! automatic estimate for mins_rad
-  !~ secs_rad = min(nint((schmidt*112.*90./real(il_g))*8.*60.), 3600)
-  !~ secs_rad = min(secs_rad, nint(real(nwt)*dt))
-  !~ secs_rad = max(secs_rad, 1)
-  !~ kountr   = nint(real(secs_rad)/dt)
-  !~ secs_rad = nint(real(kountr)*dt)
-  !~ do while ( mod(3600, secs_rad)/=0 .and. kountr>1 )
-    !~ kountr = kountr - 1
-    !~ secs_rad = nint(real(kountr)*dt)
-  !~ end do
-!~ else
-  !~ ! user specified mins_rad
-  !~ kountr   = nint(real(mins_rad)*60./dt)  ! set default radiation to ~mins_rad m
-  !~ secs_rad = nint(real(kountr)*dt)        ! redefine to actual value
-!~ end if
 
 !--------------------------------------------------------------
 ! NRUN COUNTER
