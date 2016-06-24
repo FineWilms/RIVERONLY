@@ -390,7 +390,7 @@ use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
 use map_m                                        ! Grid map arrays
 use morepbl_m                                    ! Additional boundary layer diagnostics
-use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
+!~ use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use pbl_m                                        ! Boundary layer arrays
 use river                                        ! River routing

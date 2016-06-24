@@ -52,7 +52,7 @@ use latlong_m                                    ! Lat/lon coordinates
 !~ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use morepbl_m                                    ! Additional boundary layer diagnostics
-use nharrs_m, only : lrestart                    ! Non-hydrostatic atmosphere arrays
+!~ use nharrs_m, only : lrestart                    ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use onthefly_m                                   ! Input interpolation routines
 use pbl_m                                        ! Boundary layer arrays
@@ -600,7 +600,7 @@ if ( io_in<4 ) then
   if ( mydiag ) then
     write(6,*)'newtop, zsold, zs,tss_in,land ',newtop,zss(idjd),zs(idjd),tss(idjd),land(idjd)
   end if
-  if (newtop>=1.and..not.lrestart) then    
+  if (newtop>=1.) then    
     if (nproc==1) then
       pslavge=sum(psl(1:ifull)*wts(1:ifull))
       write (6,"(' initial pslavge ',f10.6)") pslavge
@@ -659,7 +659,7 @@ endif   ! (io_in<4)
 
 ! preset soil data
 WRITe(6,*) 'NRUNGCM = ',nrungcm
-if ( .not.lrestart ) then
+!~ if ( .not.lrestart ) then
   if((nrungcm.le.-1.and.nrungcm.ge.-2).or.nrungcm==-6.or.nrungcm>5)then
     ! presetting wb when no soil moisture available initially
     iyr=kdate/10000
@@ -853,7 +853,7 @@ if ( .not.lrestart ) then
     enddo      !  ip=1,ipland
     if(mydiag) write(6,*)'after nrungcm=2 fix-up wb(1-ms): ',wb(idjd,:)
   endif          !  (nrungcm==2)
-end if ! ( .not.lrestart )
+!~ end if ! ( .not.lrestart )
 
 
 

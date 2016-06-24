@@ -46,9 +46,8 @@ use infile                                 ! Input file routines
 use latlong_m                              ! Lat/lon coordinates
 use map_m                                  ! Grid map arrays
 use morepbl_m                              ! Additional boundary layer diagnostics
-use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
-   ,lrestart
-!~ use nlin_m                                 ! Atmosphere non-linear dynamics
+!~ use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
+   !~ ,lrestart
 use nsibd_m                                ! Land-surface arrays
 use outcdf                                 ! Output file routines
 use pbl_m                                  ! Boundary layer arrays
@@ -568,7 +567,7 @@ if ( myid == 0 ) then
   write(6,*) "nper3hr,nper6hr .. ",nper3hr(:)
 end if
 mspeca = 1
-if ( mex/=1 .and. .not.lrestart ) then
+if ( mex/=1) then
   mspeca = 2
   dt     = dtin*.5
 endif
