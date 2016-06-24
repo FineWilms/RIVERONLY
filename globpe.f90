@@ -176,7 +176,6 @@ if ( kind(iq)/=4 .or. kind(es)/=4 ) then
 end if
 #endif
 
-
 !--------------------------------------------------------------
 ! INITALISE MPI ROUTINES
 call ccmpi_init
@@ -188,7 +187,6 @@ call log_off()
 call log_setup()
 call START_LOG(model_begin)
 
-
 !--------------------------------------------------------------
 ! READ NAMELISTS AND SET PARAMETER DEFAULTS
 ia       = -1   ! diagnostic index
@@ -198,11 +196,6 @@ rel_lat  = 0.
 rel_long = 0.
 ktau     = 0
 ol       = 20   ! default ocean levels
-!~ nhor     = -157
-!~ nhorps   = -1
-!~ khor     = -8
-!~ khdif    = 2
-!~ nhorjlm  = 1
 
 ! All processors read the namelist, so no MPI comms are needed
 open(99,file="input",form="formatted",status="old")
