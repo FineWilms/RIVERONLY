@@ -62,7 +62,7 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 !~ use timeseries, only : init_ts                   ! Tracer time series
-use vecs_m                                       ! Eigenvectors for atmosphere dynamics
+!~ use vecs_m                                       ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                                     ! Map to cartesian coordinates
 use vegpar_m                                     ! Vegetation arrays
 use xyzinfo_m                                    ! Grid coordinate arrays
@@ -192,17 +192,15 @@ ktime=ktime_s
 !--------------------------------------------------------------
 ! READ AND PROCESS ATMOSPHERE SIGMA LEVELS
 if (myid==0) then
-  read(28,*)(dumc(k),k=1,kl),(dumc(2*kl+k),k=1,kl),    &
-        (bam(k),k=1,kl),((emat(k,l),k=1,kl),l=1,kl),   &
-        ((einv(k,l),k=1,kl),l=1,kl),(qvec(k),k=1,kl),  &
-        ((tmat(k,l),k=1,kl),l=1,kl)
+  read(28,*)(dumc(k),k=1,kl),(dumc(2*kl+k),k=1,kl)
+ 
   write(6,*) 'kl,lapsbot,sig from eigenv file: ',kl,lapsbot,dumc(1:kl)
   ! File has an sigmh(kl+1) which is not required. Causes bounds violation
   ! to read this.
   read(28,*)(dumc(kl+k),k=1,kl)
   close(28) 
   write(6,*) 'tbar: ',dumc(2*kl+1:3*kl)
-  write(6,*) 'bam:  ',bam
+  !~ write(6,*) 'bam:  ',bam
        
   ! test netcdf for CABLE input
   if (nsib>=6) then

@@ -46,8 +46,6 @@ use infile                                 ! Input file routines
 use latlong_m                              ! Lat/lon coordinates
 use map_m                                  ! Grid map arrays
 use morepbl_m                              ! Additional boundary layer diagnostics
-!~ use nharrs_m, only : nharrs_init         & ! Non-hydrostatic atmosphere arrays
-   !~ ,lrestart
 use nsibd_m                                ! Land-surface arrays
 use outcdf                                 ! Output file routines
 use pbl_m                                  ! Boundary layer arrays
@@ -59,7 +57,7 @@ use sbar_m                                 ! Saved dynamic arrays
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
-use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
+!~ use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
 use work2_m                                ! Diagnostic arrays
@@ -278,6 +276,7 @@ temparray(4) = real(il_g)
 ! READ EIGENV FILE TO DEFINE VERTICAL LEVELS
 if ( myid == 0 ) then
   ! Remanded of file is read in indata.f
+  WRITE(6,*) "EIGENV file is ", eigenv
   open(28,file=eigenv,status='old',form='formatted',iostat=ierr)
   if ( ierr /= 0 ) then
     write(6,*) "Error opening eigenv file ",trim(eigenv)
@@ -496,7 +495,7 @@ call sbar_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
-call vecs_init(ifull,iextra,kl)
+!~ call vecs_init(ifull,iextra,kl)
 call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)
