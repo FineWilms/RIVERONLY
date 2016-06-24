@@ -33,8 +33,8 @@ program globpe
 
 use arrays_m                               ! Atmosphere dyamics prognostic arrays
 use bigxy4_m                               ! Grid interpolation
-use carbpools_m, only : carbpools_init   & ! Carbon pools
-    ,fpn,frs,frp
+!~ use carbpools_m, only : carbpools_init   & ! Carbon pools
+    !~ ,fpn,frs,frp
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
 use extraout_m                             ! Additional diagnostics
@@ -57,7 +57,6 @@ use sbar_m                                 ! Saved dynamic arrays
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
-!~ use vecs_m, only : vecs_init               ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
 use work2_m                                ! Diagnostic arrays
@@ -482,7 +481,7 @@ end if
 !--------------------------------------------------------------
 ! INITIALISE LOCAL ARRAYS
 call arrays_init(ifull,iextra,kl)
-call carbpools_init(ifull,iextra,kl,nsib,ccycle)
+!~ call carbpools_init(ifull,iextra,kl,nsib,ccycle)
 call extraout_init(ifull,iextra,kl,nextout)
 call histave_init(ifull,iextra,kl,ms)
 call morepbl_init(ifull,iextra,kl)
@@ -495,7 +494,6 @@ call sbar_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
-!~ call vecs_init(ifull,iextra,kl)
 call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 call work3_init(ifull,iextra,kl,nsib)

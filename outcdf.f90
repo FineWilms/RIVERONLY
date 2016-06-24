@@ -381,7 +381,7 @@ use arrays_m                                     ! Atmosphere dyamics prognostic
 use cable_ccam, only : savetile, savetiledef     ! CABLE interface
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
-use carbpools_m                                  ! Carbon pools
+!~ use carbpools_m                                  ! Carbon pools
 use cc_mpi                                       ! CC MPI routines
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics

@@ -337,7 +337,7 @@ subroutine writetimeseries(ktau,ntau,jyear,mins)
 !  rml 10/11/05: added pressure, surface flux and pblh for TC
 !
 use arrays_m    ! temp, q, ps
-use carbpools_m ! cbm co2 fluxes
+!~ use carbpools_m ! cbm co2 fluxes
 use cable_def_types_mod, only : ncs, ncp ! Used in carbpool.h
 use cc_mpi, only : ccmpi_abort
 use extraout_m  ! cloud arrays
@@ -445,10 +445,10 @@ if (mod(ktau,ntsfreq).eq.0) then
     case ('tgg5')    ; temparr=tgg(:,5)
     case ('tgg6')    ; temparr=tgg(:,6)
     case ('rlai')    ; temparr=vlai
-    case ('pfnee')   ; temparr=fnee
-    case ('pfpn')    ; temparr=fpn
-    case ('pfrp')    ; temparr=frp
-    case ('pfrs')    ; temparr=frs
+    !~ case ('pfnee')   ; temparr=fnee
+    !~ case ('pfpn')    ; temparr=fpn
+    !~ case ('pfrp')    ; temparr=frp
+    !~ case ('pfrs')    ; temparr=frs
     case ('pblh')    ; temparr=pblh
     case ('flux')  
       !~ allocate(cts(ngrdpts1,ntrac))
