@@ -33,7 +33,6 @@ use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
 use extraout_m                     ! Additional diagnostics
-!~ use gdrag_m                        ! Gravity wave drag
 use map_m                          ! Grid map arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays

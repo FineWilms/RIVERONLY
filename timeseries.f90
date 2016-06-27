@@ -343,7 +343,7 @@ use cc_mpi, only : ccmpi_abort
 use extraout_m  ! cloud arrays
 use infile
 use morepbl_m   ! rnet,eg,fg
-use nharrs_m
+!~ use nharrs_m
 use pbl_m       ! tss
 use prec_m      ! precip
 use sigs_m      ! sigma levels for pressure
@@ -402,7 +402,7 @@ if (mod(ktau,ntsfreq).eq.0) then
       do k=2,kl                                                   
         temparr2(:,k) = temparr2(:,k-1) + (bet(k)*t(1:ifull,k)+betm(k)*t(1:ifull,k-1))/grav               
       enddo                                                       
-      temparr2(:,:) = temparr2(:,:) + phi_nh(:,:)/grav ! Non-hydrostatic
+      !~ temparr2(:,:) = temparr2(:,:) + phi_nh(:,:)/grav ! Non-hydrostatic
     case ('qg') ; temparr2=qg(1:ifull,:)
     case ('sdotm') ; temparr2=sdot(:,1:kl)
     case ('sdotp') ; temparr2=sdot(:,2:kl+1)
