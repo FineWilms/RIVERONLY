@@ -162,7 +162,7 @@ use arrays_m
 use cc_mpi
 use infile
 use latlong_m
-use liqwpar_m
+!~ use liqwpar_m
 use soil_m
 use soilsnow_m
 use work2_m, only : wetfac

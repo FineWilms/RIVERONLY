@@ -51,7 +51,7 @@ use permsurf_m, only : permsurf_init       ! Fixed surface arrays
 use river                                  ! River routing
 use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
-use sbar_m                                 ! Saved dynamic arrays
+!~ use sbar_m                                 ! Saved dynamic arrays
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
@@ -485,7 +485,7 @@ call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
-call sbar_init(ifull,iextra,kl)
+!~ call sbar_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
