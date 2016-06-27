@@ -36,7 +36,6 @@ use bigxy4_m                               ! Grid interpolation
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
 use extraout_m                             ! Additional diagnostics
-!~ use gdrag_m, only : gdrag_init             ! Gravity wave drag
 use histave_m                              ! Time average arrays
 use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
@@ -51,7 +50,6 @@ use permsurf_m, only : permsurf_init       ! Fixed surface arrays
 use river                                  ! River routing
 use savuvt_m                               ! Saved dynamic arrays
 use savuv1_m                               ! Saved dynamic arrays
-!~ use sbar_m                                 ! Saved dynamic arrays
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
@@ -485,14 +483,11 @@ call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
-!~ call sbar_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
 call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
-!~ call work3_init(ifull,iextra,kl,nsib)
-!~ call work3f_init(ifull,iextra,kl)
 
 ! Remaining arrays are allocated in indata.f90, since their
 ! definition requires additional input data (e.g, land-surface)

@@ -44,15 +44,13 @@ use bigxy4_m                                     ! Grid interpolation
 use cable_ccam, only : loadcbmparm,loadtile      ! CABLE interface
 use cc_mpi                                       ! CC MPI routines
 use diag_m                                       ! Diagnostic routines
-use epst_m                                       ! Off-centre terms
+!~ use epst_m                                       ! Off-centre terms
 use extraout_m                                   ! Additional diagnostics
 use indices_m                                    ! Grid index arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
-!~ use liqwpar_m                                    ! Cloud water mixing ratios
 use map_m                                        ! Grid map arrays
 use morepbl_m                                    ! Additional boundary layer diagnostics
-!~ use nharrs_m, only : lrestart                    ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use onthefly_m                                   ! Input interpolation routines
 use pbl_m                                        ! Boundary layer arrays
@@ -61,8 +59,6 @@ use river                                        ! River routing
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
-!~ use timeseries, only : init_ts                   ! Tracer time series
-!~ use vecs_m                                       ! Eigenvectors for atmosphere dynamics
 use vecsuv_m                                     ! Map to cartesian coordinates
 use vegpar_m                                     ! Vegetation arrays
 use xyzinfo_m                                    ! Grid coordinate arrays
@@ -288,25 +284,7 @@ if ( myid==0 ) then
   write(6,*) 'bet  ',bet
   write(6,*) 'betm ',betm
 end if
-!if (nh/=0) then
-! Non-hydrostatic case
-!~ if ( nh==2 .and. lapsbot/=3 ) stop 'nh=2 needs lapsbot=3'
-!~ if ( abs(epsp)<=1. ) then
-  !~ ! exact treatment when epsp is constant
-  !~ call eig(sig,sigmh,tbar,lapsbot,isoth,dt,epsp,epsh,nsig,bet,betm,nh)
-!~ else
-  !~ call eig(sig,sigmh,tbar,lapsbot,isoth,dt,0.,0.,nsig,bet,betm,nh)
-!~ end if
-!else
-!  ! MJT notes - The hydrostatic case could have called
-!  ! eig and avoided a ccmpi_bcast.  However, since eig
-!  ! does not always exactly reproduce the input file 
-!  ! emat, einv and bam, then we keep the bcast for 
-!  ! backwards compatibility
-!  call ccmpi_bcast(bam,0,comm_world)
-!  call ccmpi_bcast(emat,0,comm_world)
-!  call ccmpi_bcast(einv,0,comm_world)
-!endif  ! (nh/=0)
+
 
 
 ! zmin here is approx height of the lowest level in the model
