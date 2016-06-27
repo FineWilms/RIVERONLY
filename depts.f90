@@ -27,7 +27,6 @@ use indices_m
 use map_m
 use uvbar_m
 use vecsuv_m
-!~ use work3f_m
 use xyzinfo_m
 
 implicit none
