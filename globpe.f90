@@ -136,7 +136,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
-namelist/datafile/ifile,ofile,albfile,co2emfile,eigenv,hfile,     &
+namelist/datafile/ifile,ofile,eigenv,hfile,     &
     icefile,mesonest,nmifile,o3file,radfile,restfile,rsmfile,     &
     scamfile,scrnfile,snowfile,so4tfile,soilfile,sstfile,surfile, &
     tmaxfile,tminfile,topofile,trcfil,vegfile,zofile,smoistfile,  &

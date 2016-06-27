@@ -1213,7 +1213,7 @@ if ( nsib >= 6 ) then
       write(6,*) "Cannot open vegfile as a netcdf file ",vegfile
       write(6,*) "Assuming ASCII file format"
       call surfread(duma(:,3),'soilt', filename=soilfile)
-      call surfread(duma(:,1),'albvis',filename=albfile)
+      !~ call surfread(duma(:,1),'albvis',filename=albfile)
       call surfread(duma(:,2),'albnir',filename=albnirfile)
       duma(:,1:2) = 0.01*duma(:,1:2)
     end if
