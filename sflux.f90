@@ -33,7 +33,7 @@ use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
 use extraout_m                     ! Additional diagnostics
-use gdrag_m                        ! Gravity wave drag
+!~ use gdrag_m                        ! Gravity wave drag
 use map_m                          ! Grid map arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays
@@ -47,7 +47,6 @@ use soilsnow_m                     ! Soil, snow and surface data
 use vecsuv_m                       ! Map to cartesian coordinates
 use vvel_m                         ! Additional vertical velocity
 use work2_m                        ! Diagnostic arrays
-!~ use work3_m                        ! Mk3 land-surface diagnostic arrays
 use xyzinfo_m                      ! Grid coordinate arrays
       
 implicit none

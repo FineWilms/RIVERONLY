@@ -36,7 +36,7 @@ use bigxy4_m                               ! Grid interpolation
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
 use extraout_m                             ! Additional diagnostics
-use gdrag_m, only : gdrag_init             ! Gravity wave drag
+!~ use gdrag_m, only : gdrag_init             ! Gravity wave drag
 use histave_m                              ! Time average arrays
 use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
@@ -59,8 +59,6 @@ use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
 use work2_m                                ! Diagnostic arrays
 use work3_m                                ! Mk3 land-surface diagnostic arrays
-!~ use work3f_m                               ! Grid work arrays
-!~ use work3sav_m                             ! Water and tracer saved arrays
 use workglob_m                             ! Additional grid interpolation
 use xyzinfo_m                              ! Grid coordinate arrays
 
