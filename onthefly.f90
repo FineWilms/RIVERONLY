@@ -98,11 +98,8 @@ integer mtimer, ierx, idvkd, idvkt, idvmt
 integer, dimension(nihead) :: nahead
 integer, dimension(ifull), intent(out) :: isflag
 real timer
-!~ real, dimension(ifull,wlev,4), intent(out) :: mlodwn
-!~ real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
-!~ real, dimension(ifull,2), intent(out) :: ocndwn
 real, dimension(:,:), intent(out) :: t, u, v, qg
 real, dimension(ifull), intent(out) :: psl, zss, tss, fracice, snowd
 real, dimension(ifull), intent(out) :: sicedep, ssdnn, snage
@@ -287,29 +284,23 @@ return
 
 subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,v,qg,tgg,wb,wbice, &
                          snowd,tggsn,smass,ssdn,ssdnn,snage,isflag)
-      
-!~ use ateb, only : atebdwn                       ! Urban
+
 use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use casadimension, only : mplant,mlitter,msoil ! CASA dimensions
-!~ use carbpools_m                                ! Carbon pools
 use cc_mpi                                     ! CC MPI routines
 use extraout_m                                 ! Additional diagnostics      
 use infile                                     ! Input file routines
 use latlong_m                                  ! Lat/lon coordinates
-!~ use mlo, only : wlev,micdwn,mloregrid,wrtemp   ! Ocean physics and prognostic arrays
 use morepbl_m                                  ! Additional boundary layer diagnostics
 use nsibd_m, only : isoilm                     ! Land-surface arrays
 use river                                      ! River routing
 use savuvt_m                                   ! Saved dynamic arrays
 use savuv1_m                                   ! Saved dynamic arrays
-!~ use screen_m                                   ! Screen level diagnostics
 use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
-!~ use tkeeps, only : tke,eps,zidry               ! TKE-EPS boundary layer
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
 use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
-!~ use xarrs_m, only : pslx                       ! Saved dynamic arrays
 use workglob_m                                 ! Additional grid interpolation
 use work2_m                                    ! Diagnostic arrays
 
@@ -343,9 +334,6 @@ real(kind=8), dimension(:,:), pointer :: xx4, yy4
 real(kind=8), dimension(:,:), allocatable, save :: xx4, yy4
 #endif
 real(kind=8), dimension(dk*dk*6):: z_a, x_a, y_a
-!~ real, dimension(ifull,wlev,4), intent(out) :: mlodwn
-!~ real, dimension(ifull,kl,naero), intent(out) :: xtgdwn
-!~ real, dimension(ifull,2), intent(out) :: ocndwn
 real, dimension(ifull,ms), intent(out) :: wb, wbice, tgg
 real, dimension(ifull,3), intent(out) :: tggsn, smass, ssdn
 real, dimension(:,:), intent(out) :: t, u, v, qg

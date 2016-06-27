@@ -72,11 +72,6 @@ mstart=24*60*(ndoy(jmonth)+jday-1) + 60*jhour + jmin ! mins from start of year
 !     mtimer contains number of minutes since the start of the run.
 mins = mtimer + mstart
 
-!   rml 25/08/03 write tracer data to timeseries file
-!~ if (sitefile.ne.'') call writetimeseries(ktau,ntau,jyear,mins)
-!     rml 26/11/03 write mobile tracer data to file
-!~ if (shipfile.ne.'') call writeshipts(ktau,ntau,dt)
-
 return
 
 end subroutine write_ts
@@ -92,7 +87,6 @@ subroutine readsitelist(ntrac)
 use cc_mpi, only : myid, indv_mpi, fproc, ipan, ccmpi_abort
 use infile
 !     rml 19/09/07 add tracname so that can be written to ts output file
-!~ use tracermodule, only : sitefile,tracname
 use vecsuv_m
 use xyzinfo_m
 implicit none
@@ -124,10 +118,7 @@ integer iq
 windconv = .false.
 
 !     read file of site locations for timeseries output
-!~ open(88,file=sitefile,form='formatted', status='unknown')
-!~ read(88,*) head
-!     number of gridpoints and output frequency (number of timesteps)
-!~ read(88,*) ngrdpts1,ntsfreq
+
 allocate(templist(ngrdpts1,3))
 if ( nproc > 1 ) then
   allocate(surforder(ngrdpts1) )
@@ -140,52 +131,14 @@ kount500=0
 ! Perhaps need to have an additional netcdf variable for ip, so
 ! that the original order can be reconstructed from the multiple files.
 k = 0
-!~ do ip=1,ngrdpts1
-  !~ read(88,*) i,i1,ig,jg,tmpval
-  !~ ! Convert to local indices. Same code used in indata for stations.
-  !~ ! Should be generalised to a routine?
-  !~ nface=(jg-1)/il_g
-!~ !       Note that the second argument to fproc is the j index on the
-!~ !       face, not the global j index,   
-  !~ if ( fproc(ig,jg - nface*il_g,nface) == myid ) then
-     !~ ! Point is in my region
-     !~ iqg = ig + (jg-1)*il_g
-     !~ ! Local indices on this processor
-     !~ call indv_mpi(iqg,ii,jj,n)
-     !~ k = k + 1
-     !~ istn = ii
-     !~ jstn = jj+(n-1)*ipan
-     !~ templist(k,:) = (/ istn, jstn, tmpval /)
-!~ !          check if any profiles requested
-     !~ if (templist(k,3).eq.99) kountprof=kountprof+1
-     !~ if (templist(k,3).eq.98) kount500=kount500+1
-     !~ ! Define order variable to allow merging the separate processor files
-     !~ if ( nproc > 1 ) surforder(k) = ip
-  !~ end if
-!~ enddo
+
 
 ngrdpts1 = k ! Reset to the actual number I have
 
 !     Read in any additional variables to output besides tracer
 n2d=0
 n3d=0
-!~ read(88,*,end=880) head
-!~ read(88,*) n3d
-!~ allocate(varname3(n3d))
-!~ windconv = .false.
-!~ do n=1,n3d
-  !~ read(88,*) varname3(n)
-!~ !       rml 19/09/07 check if wind conversion required
-  !~ if (trim(varname3(n)).eq.'u'.or.trim(varname3(n)).eq.'v') windconv=.true.
-!~ enddo
-!~ read(88,*) head
-!~ read(88,*) n2d
-!~ allocate(varname2(n2d))
-!~ do n=1,n2d
-  !~ read(88,*) varname2(n)
-!~ enddo
-!~ 880  continue
-!~ close(88)
+
 
 !     rml 19/09/07 fill arrays needed for wind conversion
 if (windconv) then
@@ -308,8 +261,8 @@ if (ngrdpts>0) then
 !     leave define mode
   call ccnf_enddef(tsid(1))
 !
-!     rml 19/09/07 write tracer name array
-  !~ call ccnf_put_vara(tsid(1),tracnamid,tracname)
+
+
 
 !     write grid point arrays
   call ccnf_put_vara(tsid(1),gridid,listijk)
@@ -337,20 +290,16 @@ subroutine writetimeseries(ktau,ntau,jyear,mins)
 !  rml 10/11/05: added pressure, surface flux and pblh for TC
 !
 use arrays_m    ! temp, q, ps
-!~ use carbpools_m ! cbm co2 fluxes
 use cable_def_types_mod, only : ncs, ncp ! Used in carbpool.h
 use cc_mpi, only : ccmpi_abort
 use extraout_m  ! cloud arrays
 use infile
 use morepbl_m   ! rnet,eg,fg
-!~ use nharrs_m
 use pbl_m       ! tss
 use prec_m      ! precip
 use sigs_m      ! sigma levels for pressure
 use soil_m      ! albedo
 use soilsnow_m  ! soil temp (tgg)
-!~ use tracermodule, only : co2em
-!~ use tracers_m   ! ntrac and tr array
 use vegpar_m    ! rlai
 use vvel_m      ! vertical velocity
 implicit none
@@ -373,11 +322,9 @@ if (ngrdpts.eq.0) return
 if (mod(ktau,ntsfreq).eq.0) then
   tstime = real(jyear,8) + real(mins,8)/real(365.*24.*60.,8)
   call ccnf_put_vara(tsid(1),tsid(2),indextime,tstime)
-  !~ allocate(cts(ngrdpts,ntrac))
   do n=1,ngrdpts
     iq = listijk(n,1) + (listijk(n,2)-1)*il
 ! rml 23/2/10 add in background that removed at start of run
-    !~ cts(n,:)=tr(iq,listijk(n,3),:)
   enddo
   start(1)=1; start(2)=1; start(3)=indextime
   ncount(1)=ngrdpts; ncount(3)=1
@@ -402,7 +349,6 @@ if (mod(ktau,ntsfreq).eq.0) then
       do k=2,kl                                                   
         temparr2(:,k) = temparr2(:,k-1) + (bet(k)*t(1:ifull,k)+betm(k)*t(1:ifull,k-1))/grav               
       enddo                                                       
-      !~ temparr2(:,:) = temparr2(:,:) + phi_nh(:,:)/grav ! Non-hydrostatic
     case ('qg') ; temparr2=qg(1:ifull,:)
     case ('sdotm') ; temparr2=sdot(:,1:kl)
     case ('sdotp') ; temparr2=sdot(:,2:kl+1)
@@ -445,19 +391,13 @@ if (mod(ktau,ntsfreq).eq.0) then
     case ('tgg5')    ; temparr=tgg(:,5)
     case ('tgg6')    ; temparr=tgg(:,6)
     case ('rlai')    ; temparr=vlai
-    !~ case ('pfnee')   ; temparr=fnee
-    !~ case ('pfpn')    ; temparr=fpn
-    !~ case ('pfrp')    ; temparr=frp
-    !~ case ('pfrs')    ; temparr=frs
     case ('pblh')    ; temparr=pblh
     case ('flux')  
-      !~ allocate(cts(ngrdpts1,ntrac))
       kount=0
       do n=1,ngrdpts
         if (writesurf(n)) then
            kount=kount+1
            iq = listijk(n,1) + (listijk(n,2)-1)*il
-           !~ cts(kount,:)=co2em(iq,:)
         endif
       enddo 
       start(1)=1; start(2)=1; start(3)=indextime
@@ -493,170 +433,5 @@ if (ktau.eq.ntau) call ccnf_close(tsid(1))
 
 return
 end subroutine writetimeseries
-! *********************************************************************
-subroutine readshiplist(ntrac,dt)
-!
-!     rml 25/11/03 subroutine to read file containing times and locations
-!     of ship (or other mobile obs).  Also opens netcdf file for output.
-!
-use cc_mpi
-use infile
-!~ use tracermodule, only : shipfile
-implicit none
-integer ntrac,i,i2,ierr
-integer dtlsdim,nvaldim,outshipid(3),dims(2),tracdim
-real dt
-character(len=80) outfile2
-character(len=8) chtemp
-include 'newmpar.h'
-include 'dates.h'
-logical tst
-
-if ( nproc > 1 ) then
-   write(6,*) "Error, parallel version of shiplist not yet working"
-   call ccmpi_abort(-1)
-end if
-!     open file with ship locations
-!~ call ccnf_open(shipfile,inshipid(1),ierr)
-call ncmsg("readshiplist",ierr)
-call ccnf_inq_dimlen(inshipid(1),'npts',nshippts)
-!     read times for ship samples
-allocate(shipdate(nshippts),shiptime(nshippts))
-call ccnf_get_vara(inshipid(1),'date',shipdate)
-call ccnf_get_vara(inshipid(1),'time',shiptime)
-call ccnf_inq_varid(inshipid(1),'loc',inshipid(2),tst)
-if (tst) then
-  write(6,*) "ERROR: Cannot locate loc"
-  call ccmpi_abort(-1)
-end if
-call ccnf_inq_varid(inshipid(1),'lev',inshipid(4),tst)
-if (tst) then
-  write(6,*) "ERROR: Cannot locate lev"
-  call ccmpi_abort(-1)
-end if
-call ccnf_inq_varid(inshipid(1),'ship',inshipid(3),tst)
-if (tst) then
-  write(6,*) "ERROR: Cannot locate ship"
-   call ccmpi_abort(-1)
-end if
-
-!     locate sample time just smaller than current time
-do i=1,nshippts
-  if (shipdate(i)<kdate) then
-    indship=i
-  endif
-enddo
-i2=indship
-do i=i2+1,nshippts
-  if (shipdate(i).eq.kdate.and.shiptime(i).lt.ktime+nint(dt)/120) then !half interval to next ktime
-    indship=i
-  endif
-enddo
-
-!     open netcdf file for output  
-write(chtemp,'(i8)') kdate
-outfile2 = 'ship.'//chtemp(1:4)//'.'//chtemp(5:6)//'.nc'
-call ccnf_create(outfile2,outshipid(1))
-call ccnf_nofill(outshipid(1))
-call ccnf_def_dim(outshipid(1),'nshiptrac',ntrac,tracdim)
-!    rml 18/12/03 increased dimension to include level for aircraft output
-call ccnf_def_dim(outshipid(1),'date_time_loc_ship',5,dtlsdim)
-call ccnf_def_dimu(outshipid(1),'nval',nvaldim)
-dims(1)=dtlsdim; dims(2)=nvaldim
-call ccnf_def_var(outshipid(1),'shipinfo','int',2,dims,outshipid(2))
-dims(1)=tracdim; dims(2)=nvaldim
-call ccnf_def_var(outshipid(1),'tsship','float',2,dims,outshipid(3))
-call ccnf_enddef(outshipid(1))
-
-nshipout=0
-return
-end subroutine readshiplist
-! ********************************************************************
-subroutine writeshipts(ktau,ntau,dt)
-!
-!     rml 25/11/03 subroutine to write mobile timeseries e.g. ship
-!
-use infile
-!~ use tracers_m
-implicit none
-integer ktau,ntau,iloc,ilev,iship
-integer jdate1,jdate2,jtime1,jtime2,mon
-real dt
-integer start(2),kount(2),info(5)
-logical moredat,found
-integer monlen(12)
-data monlen/31,28,31,30,31,30,31,31,30,31,30,31/
-      
-include 'newmpar.h'    ! dimensions for tr array
-include 'dates.h'
-!
-!     if reached end of data leave subroutine
-if (indship+1.gt.nshippts) return
-
-#ifdef outsync
-  call ccnf_sync(outshipid(1))
-#endif
-
-!     assume always running in one month blocks so don't worry about
-!     having to increment across months
-
-mon=(kdate-10000*(kdate/10000))/100
-if (mtimer.eq.monlen(mon)*60*24) then
-!       end of month case
-  jdate2 = kdate + 100
-  jdate1 = kdate + monlen(mon)-1
-else
-  jdate2 = kdate + mtimer/1440
-  jdate1 = jdate2-1
-endif
-jtime1 = mod(mtimer-nint(dt)/120,1440)
-jtime1 = 100*(jtime1/60) + mod(jtime1,60)
-jtime2 = mod(mtimer+nint(dt)/120,1440)
-jtime2 = 100*(jtime2/60) + mod(jtime2,60)
-!     check if sample time in current timestep (from jtime to jtime+dt)
-!     assume ktime+dt will never force increment to kdate
-moredat=.true.
-do while (moredat)
-  found=.false.
-  if (jtime1.lt.jtime2) then
-    if (shipdate(indship+1).eq.jdate2.and.shiptime(indship+1).ge.jtime1.and.shiptime(indship+1).lt.jtime2) found=.true.
-  else
-!         end of day case
-    if ((shipdate(indship+1).eq.jdate1.and.shiptime(indship+1).ge.jtime1).or.(shipdate(indship+1).eq.jdate2.and. &
-         shiptime(indship+1).lt.jtime2)) found=.true.
-  endif
-  if (found) then
-    nshipout = nshipout+1
-!         keep real sample time rather than model time for easier
-!         match to data
-    info(1) = shipdate(indship+1)
-    info(2) = shiptime(indship+1)
-    call ccnf_get_vara(inshipid(1),inshipid(2),indship+1,iloc)
-    info(3) = iloc
-!    rml 18/12/03 addition of level info to do aircraft output
-    call ccnf_get_vara(inshipid(1),inshipid(4),indship+1,ilev)
-    info(4) = ilev
-    call ccnf_get_vara(inshipid(1),inshipid(3),indship+1,iship)
-    info(5) = iship
-    start(1)=1; start(2)=nshipout
-    kount(1)=5; kount(2)=1
-    call ccnf_put_vara(outshipid(1),outshipid(2),start,kount,info)
-    start(1)=1; start(2)=nshipout
-    !~ kount(1)=ntrac 
-    kount(2)=1
-    !~ call ccnf_put_vara(outshipid(1),outshipid(3),start,kount,tr(iloc,ilev,:))
-
-    indship=indship+1
-  else
-    moredat=.false.
-  endif
-enddo
-if (ktau.eq.ntau) then
-  call ccnf_close(inshipid(1))
-  call ccnf_close(outshipid(1))
-endif
- 
-return
-end subroutine writeshipts
 
 end module timeseries
