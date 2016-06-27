@@ -1131,19 +1131,19 @@ if(nstn>0)then
 endif     !  (nstn>0)
 
     
-!--------------------------------------------------------------
-! OPEN MESONEST FILE
-if ( mbd/=0 .or. nbd/=0 ) then
-  if ( myid == 0 ) then
-    write(6,*) "Opening mesonest file"
-  end if
-  io_in = io_nest                  ! Needs to be seen by all processors
-  call histopen(ncid,mesonest,ier) ! open parallel mesonest files
-  call ncmsg("mesonest",ier)       ! report error messages
-  if ( myid == 0 ) then
-    write(6,*) "ncid,mesonest ",ncid,trim(mesonest)
-  end if
-end if    ! (mbd/=0.or.nbd/=0)       
+!~ !--------------------------------------------------------------
+!~ ! OPEN MESONEST FILE
+!~ if ( mbd/=0 .or. nbd/=0 ) then
+  !~ if ( myid == 0 ) then
+    !~ write(6,*) "Opening mesonest file"
+  !~ end if
+  !~ io_in = io_nest                  ! Needs to be seen by all processors
+  !~ call histopen(ncid,mesonest,ier) ! open parallel mesonest files
+  !~ call ncmsg("mesonest",ier)       ! report error messages
+  !~ if ( myid == 0 ) then
+    !~ write(6,*) "ncid,mesonest ",ncid,trim(mesonest)
+  !~ end if
+!~ end if    ! (mbd/=0.or.nbd/=0)       
 
 
 call END_LOG(indata_end)
@@ -1163,7 +1163,6 @@ use nsibd_m                  ! Land-surface arrays
 use pbl_m                    ! Boundary layer arrays
 use soil_m                   ! Soil and surface data
 use soilsnow_m               ! Soil, snow and surface data
-!~ use tracers_m                ! Tracer data
 use vegpar_m                 ! Vegetation arrays
 
 implicit none
