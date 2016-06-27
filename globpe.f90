@@ -33,8 +33,6 @@ program globpe
 
 use arrays_m                               ! Atmosphere dyamics prognostic arrays
 use bigxy4_m                               ! Grid interpolation
-!~ use carbpools_m, only : carbpools_init   & ! Carbon pools
-    !~ ,fpn,frs,frp
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
 use extraout_m                             ! Additional diagnostics
@@ -61,8 +59,8 @@ use vecsuv_m                               ! Map to cartesian coordinates
 use vegpar_m                               ! Vegetation arrays
 use work2_m                                ! Diagnostic arrays
 use work3_m                                ! Mk3 land-surface diagnostic arrays
-use work3f_m                               ! Grid work arrays
-use work3sav_m                             ! Water and tracer saved arrays
+!~ use work3f_m                               ! Grid work arrays
+!~ use work3sav_m                             ! Water and tracer saved arrays
 use workglob_m                             ! Additional grid interpolation
 use xyzinfo_m                              ! Grid coordinate arrays
 
@@ -481,7 +479,6 @@ end if
 !--------------------------------------------------------------
 ! INITIALISE LOCAL ARRAYS
 call arrays_init(ifull,iextra,kl)
-!~ call carbpools_init(ifull,iextra,kl,nsib,ccycle)
 call extraout_init(ifull,iextra,kl,nextout)
 call histave_init(ifull,iextra,kl,ms)
 call morepbl_init(ifull,iextra,kl)
@@ -496,8 +493,8 @@ call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
 call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
-call work3_init(ifull,iextra,kl,nsib)
-call work3f_init(ifull,iextra,kl)
+!~ call work3_init(ifull,iextra,kl,nsib)
+!~ call work3f_init(ifull,iextra,kl)
 
 ! Remaining arrays are allocated in indata.f90, since their
 ! definition requires additional input data (e.g, land-surface)

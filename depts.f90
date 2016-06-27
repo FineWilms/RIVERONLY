@@ -27,7 +27,7 @@ use indices_m
 use map_m
 use uvbar_m
 use vecsuv_m
-use work3f_m
+!~ use work3f_m
 use xyzinfo_m
 
 implicit none
@@ -482,7 +482,7 @@ subroutine toij5(k,x3d,y3d,z3d)
 
 use bigxy4_m ! common/bigxy4/xx4(iquad,iquad),yy4(iquad,iquad)
 use cc_mpi
-use work3f_m
+!~ use work3f_m
 use xyzinfo_m
 
 implicit none

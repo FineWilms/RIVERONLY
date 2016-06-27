@@ -47,7 +47,7 @@ use soilsnow_m                     ! Soil, snow and surface data
 use vecsuv_m                       ! Map to cartesian coordinates
 use vvel_m                         ! Additional vertical velocity
 use work2_m                        ! Diagnostic arrays
-use work3_m                        ! Mk3 land-surface diagnostic arrays
+!~ use work3_m                        ! Mk3 land-surface diagnostic arrays
 use xyzinfo_m                      ! Grid coordinate arrays
       
 implicit none

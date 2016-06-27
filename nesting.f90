@@ -522,13 +522,13 @@ use aerosolldr                   ! Aerosol interface
 use arrays_m                     ! Atmosphere dyamics prognostic arrays
 use cc_mpi                       ! CC MPI routines
 !~ use daviesnudge                  ! Far-field nudging
-use liqwpar_m                    ! Cloud water mixing ratios
-use nharrs_m                     ! Non-hydrostatic atmosphere arrays
+!~ use liqwpar_m                    ! Cloud water mixing ratios
+!~ use nharrs_m                     ! Non-hydrostatic atmosphere arrays
 use savuvt_m                     ! Saved dynamic arrays
 use savuv1_m                     ! Saved dynamic arrays
 use sigs_m                       ! Atmosphere sigma levels
 use vecsuv_m                     ! Map to cartesian coordinates
-use work3sav_m                   ! Water and tracer saved arrays
+!~ use work3sav_m                   ! Water and tracer saved arrays
 use xyzinfo_m, only : x,y,z      ! Grid coordinate arrays
       
 implicit none
