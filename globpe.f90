@@ -67,7 +67,7 @@ include 'const_phys.h'                     ! Physical constants
 include 'darcdf.h'                         ! Netcdf data
 include 'dates.h'                          ! Date data
 include 'filnames.h'                       ! Filenames
-include 'kuocom.h'                         ! Convection parameters
+!~ include 'kuocom.h'                         ! Convection parameters
 include 'parm.h'                           ! Model configuration
 include 'parmdyn.h'                        ! Dynamics parameters
 include 'parmgeom.h'                       ! Coordinate data
@@ -121,7 +121,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     ja,jb,id,jd,iaero,mex,mbd,nbd,             &
     mbd_maxscale,ndi,ndi2,nlv,nmaxpr,nrad,ntaft,ntsea,ntsur, &
     nvmix,restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
-    ngwd,rhsat,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
+    ngwd,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
     irest,nrun,nstn,rel_lat,rel_long,nrungcm,nsib,istn,jstn,iunp, &
     slat,slon,zstn,name_stn,mh_bs,nritch_t,nt_adv,mfix,mfix_qg,   &
     namip,amipo3,nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
@@ -349,8 +349,8 @@ end if
 ! some default values for unspecified parameters
 if ( ia<0 ) ia = il/2
 if ( ib<0 ) ib = ia + 3
-if ( ldr==0 ) mbase = 0
-dsig4 = max(dsig2+.01, dsig4)
+!~ if ( ldr==0 ) mbase = 0
+!~ dsig4 = max(dsig2+.01, dsig4)
 if( mbd/=0 .and. nbd/=0 ) then
   write(6,*) 'setting nbd=0 because mbd/=0'
   nbd = 0
@@ -718,7 +718,7 @@ implicit none
 include 'newmpar.h'          ! Grid parameters
 include 'dates.h'            ! Date data
 include 'filnames.h'         ! Filenames
-include 'kuocom.h'           ! Convection parameters
+!~ include 'kuocom.h'           ! Convection parameters
 include 'parm.h'             ! Model configuration
 include 'parmdyn.h'          ! Dynamics parmaters
 include 'parmgeom.h'         ! Coordinate data
@@ -755,7 +755,7 @@ data nt_adv/7/,mh_bs/4/
 ! Horiz wind staggering options
 data nstag/-10/,nstagu/-1/,nstagoff/0/
 ! Vertical mixing options
-data nvmix/3/,nlocal/6/,ncvmix/0/,lgwd/0/,ngwd/-5/
+data nvmix/3/,nlocal/6/,lgwd/0/,ngwd/-5/
 data helim/800./,fc2/1./,sigbot_gwd/0./,alphaj/1.e-6/
 data cgmap_offset/0./,cgmap_scale/1./
 ! Soil, canopy, PBL options

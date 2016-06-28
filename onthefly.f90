@@ -309,7 +309,7 @@ implicit none
 include 'newmpar.h'                            ! Grid parameters
 include 'const_phys.h'                         ! Physical constants
 include 'darcdf.h'                             ! Netcdf data
-include 'kuocom.h'                             ! Convection parameters
+!~ include 'kuocom.h'                             ! Convection parameters
 include 'parm.h'                               ! Model configuration
 include 'parmdyn.h'                            ! Dynamics parmaters
 include 'parmgeom.h'                           ! Coordinate data
