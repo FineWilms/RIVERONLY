@@ -2309,151 +2309,151 @@ inflow(1:ifull) = inflow(1:ifull) + delflow(1:ifull)
 return
 end subroutine cableinflow
 
-! *************************************************************************************
-! Transfer grid information from CABLE internally, read N&P input from
-! integral NETCDF file
-subroutine casa_readpoint(casafile)
+!~ ! *************************************************************************************
+!~ ! Transfer grid information from CABLE internally, read N&P input from
+!~ ! integral NETCDF file
+!~ subroutine casa_readpoint(casafile)
 
-use cc_mpi
-use infile
+!~ use cc_mpi
+!~ use infile
 
-implicit none
+!~ implicit none
 
-include 'newmpar.h'
-include 'parmgeom.h'
+!~ include 'newmpar.h'
+!~ include 'parmgeom.h'
 
-integer ncstatus, ncid, varid, tilg
-integer n
-integer, dimension(2) :: spos, npos
-real tlat, tlon, tschmidt
-real, dimension(:,:), allocatable :: dumg
-real, dimension(ifull,5) :: duma
-character(len=*), intent(in) :: casafile
-logical tst
+!~ integer ncstatus, ncid, varid, tilg
+!~ integer n
+!~ integer, dimension(2) :: spos, npos
+!~ real tlat, tlon, tschmidt
+!~ real, dimension(:,:), allocatable :: dumg
+!~ real, dimension(ifull,5) :: duma
+!~ character(len=*), intent(in) :: casafile
+!~ logical tst
 
-if ( myid == 0 ) then
-  allocate( dumg(ifull_g,5) )
-  write(6,*) "Reading ",trim(casafile)
-  call ccnf_open(casafile,ncid,ncstatus)
-  call ncmsg('CASA_readpoint',ncstatus)
-  ! check dimensions and location
-  call ccnf_get_attg(ncid,'lat0',tlat)
-  call ccnf_get_attg(ncid,'lon0',tlon)
-  call ccnf_get_attg(ncid,'schmidt0',tschmidt)
-  if ( rlong0/=tlon .or. rlat0/=tlat .or. schmidt/=tschmidt ) then
-    write(6,*) "ERROR: Grid mismatch for ",trim(casafile)
-    write(6,*) "rlong0,rlat0,schmidt ",rlong0,rlat0,schmidt
-    write(6,*) "tlon,tlat,tschmidt   ",tlon,tlat,tschmidt
-    call ccmpi_abort(-1)
-  end if
-  call ccnf_inq_dimlen(ncid,'longitude',tilg)
-  if ( tilg /= il_g ) then
-    write (6,*) "ERROR: Grid mismatch for ",trim(casafile)
-    write (6,*) "il_g,tilg ",il_g,tilg
-    call ccmpi_abort(-1)
-  end if
-  ! load casa fields
-  spos(1:2) = 1
-  npos(1) = il_g
-  npos(2) = il_g*6
-  write(6,*) "Loading soil order"
-  call ccnf_inq_varid(ncid,'sorder',varid,tst)
-  call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,1))
-  write(6,*) "Loading N deposition rate"
-  call ccnf_inq_varid(ncid,'ndep',varid,tst)
-  call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,2))
-  write(6,*) "Loading N fixation rate"
-  call ccnf_inq_varid(ncid,'nfix',varid,tst)
-  call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,3))
-  write(6,*) "Loading P dust deposition"
-  call ccnf_inq_varid(ncid,'pdust',varid,tst)
-  call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,4))
-  write(6,*) "Loading P weathering rate"
-  call ccnf_inq_varid(ncid,'pweather',varid,tst)
-  call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,5))
-  call ccnf_close(ncid)
-  call ccmpi_distribute(duma,dumg)
-  deallocate(dumg)
-else
-  call ccmpi_distribute(duma)
-end if
-do n = 1,maxnb
-  casamet%isorder(pind(n,1):pind(n,2))  = nint(pack(duma(:,1),tmap(:,n)))
-  casaflux%Nmindep(pind(n,1):pind(n,2)) = pack(duma(:,2),tmap(:,n))/365.*1.E-3
-  casaflux%Nminfix(pind(n,1):pind(n,2)) = pack(duma(:,3),tmap(:,n))/365.
-  casaflux%Pdep(pind(n,1):pind(n,2))    = pack(duma(:,4),tmap(:,n))/365.
-  casaflux%Pwea(pind(n,1):pind(n,2))    = pack(duma(:,5),tmap(:,n))/365.
-end do
+!~ if ( myid == 0 ) then
+  !~ allocate( dumg(ifull_g,5) )
+  !~ write(6,*) "Reading ",trim(casafile)
+  !~ call ccnf_open(casafile,ncid,ncstatus)
+  !~ call ncmsg('CASA_readpoint',ncstatus)
+  !~ ! check dimensions and location
+  !~ call ccnf_get_attg(ncid,'lat0',tlat)
+  !~ call ccnf_get_attg(ncid,'lon0',tlon)
+  !~ call ccnf_get_attg(ncid,'schmidt0',tschmidt)
+  !~ if ( rlong0/=tlon .or. rlat0/=tlat .or. schmidt/=tschmidt ) then
+    !~ write(6,*) "ERROR: Grid mismatch for ",trim(casafile)
+    !~ write(6,*) "rlong0,rlat0,schmidt ",rlong0,rlat0,schmidt
+    !~ write(6,*) "tlon,tlat,tschmidt   ",tlon,tlat,tschmidt
+    !~ call ccmpi_abort(-1)
+  !~ end if
+  !~ call ccnf_inq_dimlen(ncid,'longitude',tilg)
+  !~ if ( tilg /= il_g ) then
+    !~ write (6,*) "ERROR: Grid mismatch for ",trim(casafile)
+    !~ write (6,*) "il_g,tilg ",il_g,tilg
+    !~ call ccmpi_abort(-1)
+  !~ end if
+  !~ ! load casa fields
+  !~ spos(1:2) = 1
+  !~ npos(1) = il_g
+  !~ npos(2) = il_g*6
+  !~ write(6,*) "Loading soil order"
+  !~ call ccnf_inq_varid(ncid,'sorder',varid,tst)
+  !~ call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,1))
+  !~ write(6,*) "Loading N deposition rate"
+  !~ call ccnf_inq_varid(ncid,'ndep',varid,tst)
+  !~ call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,2))
+  !~ write(6,*) "Loading N fixation rate"
+  !~ call ccnf_inq_varid(ncid,'nfix',varid,tst)
+  !~ call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,3))
+  !~ write(6,*) "Loading P dust deposition"
+  !~ call ccnf_inq_varid(ncid,'pdust',varid,tst)
+  !~ call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,4))
+  !~ write(6,*) "Loading P weathering rate"
+  !~ call ccnf_inq_varid(ncid,'pweather',varid,tst)
+  !~ call ccnf_get_vara(ncid,varid,spos,npos,dumg(:,5))
+  !~ call ccnf_close(ncid)
+  !~ call ccmpi_distribute(duma,dumg)
+  !~ deallocate(dumg)
+!~ else
+  !~ call ccmpi_distribute(duma)
+!~ end if
+!~ do n = 1,maxnb
+  !~ casamet%isorder(pind(n,1):pind(n,2))  = nint(pack(duma(:,1),tmap(:,n)))
+  !~ casaflux%Nmindep(pind(n,1):pind(n,2)) = pack(duma(:,2),tmap(:,n))/365.*1.E-3
+  !~ casaflux%Nminfix(pind(n,1):pind(n,2)) = pack(duma(:,3),tmap(:,n))/365.
+  !~ casaflux%Pdep(pind(n,1):pind(n,2))    = pack(duma(:,4),tmap(:,n))/365.
+  !~ casaflux%Pwea(pind(n,1):pind(n,2))    = pack(duma(:,5),tmap(:,n))/365.
+!~ end do
 
-where ( veg%iveg==9 .or. veg%iveg==10 ) ! crops
-  ! P fertilizer =13 Mt P globally in 1994
-  casaflux%Pdep = casaflux%Pdep + 0.7/365.
-  ! N fertilizer =86 Mt N globally in 1994
-  casaflux%Nminfix = casaflux%Nminfix + 4.3/365.
-end where
+!~ where ( veg%iveg==9 .or. veg%iveg==10 ) ! crops
+  !~ ! P fertilizer =13 Mt P globally in 1994
+  !~ casaflux%Pdep = casaflux%Pdep + 0.7/365.
+  !~ ! N fertilizer =86 Mt N globally in 1994
+  !~ casaflux%Nminfix = casaflux%Nminfix + 4.3/365.
+!~ end where
 
-if ( any(casamet%isorder<1.or.casamet%isorder>12) ) then
-  write(6,*) "ERROR: Invalid isorder in ",trim(casafile)
-  call ccmpi_abort(-1)
-end if
+!~ if ( any(casamet%isorder<1.or.casamet%isorder>12) ) then
+  !~ write(6,*) "ERROR: Invalid isorder in ",trim(casafile)
+  !~ call ccmpi_abort(-1)
+!~ end if
 
-end subroutine casa_readpoint
+!~ end subroutine casa_readpoint
 
-! *************************************************************************************  
-! This subroutine reads the MODIS derived leaf phenology data
-subroutine casa_readphen(fphen)
+!~ ! *************************************************************************************  
+!~ ! This subroutine reads the MODIS derived leaf phenology data
+!~ subroutine casa_readphen(fphen)
 
-use cc_mpi
+!~ use cc_mpi
 
-implicit none
+!~ implicit none
 
-include 'newmpar.h'
+!~ include 'newmpar.h'
 
-integer, parameter :: nphen = 8 ! was 10(IGBP). changed by Q.Zhang @01/12/2011
-integer np, ilat, ivp
-integer, dimension(271,mxvt) :: greenup, fall, phendoy1
-integer, dimension(nphen) :: greenupx, fallx, xphendoy1
-integer, dimension(nphen) :: ivtx
-real :: xlat
-character(len=*), intent(in) :: fphen
+!~ integer, parameter :: nphen = 8 ! was 10(IGBP). changed by Q.Zhang @01/12/2011
+!~ integer np, ilat, ivp
+!~ integer, dimension(271,mxvt) :: greenup, fall, phendoy1
+!~ integer, dimension(nphen) :: greenupx, fallx, xphendoy1
+!~ integer, dimension(nphen) :: ivtx
+!~ real :: xlat
+!~ character(len=*), intent(in) :: fphen
 
-! initilize for evergreen PFTs
-greenup  = -50
-fall     = 367
-phendoy1 = 2
+!~ ! initilize for evergreen PFTs
+!~ greenup  = -50
+!~ fall     = 367
+!~ phendoy1 = 2
 
-if ( myid == 0 ) then
-  write(6,*) "Reading CASA leaf phenology data"
-  open(87,file=fphen,status='old')
-  read(87,*)
-  read(87,*) ivtx
-  do ilat = 271,1,-1
-    read(87,*) xlat,greenupx,fallx,xphendoy1 
-    greenup(ilat,ivtx(:))  = greenupx(:)
-    fall(ilat,ivtx(:))     = fallx(:)
-    phendoy1(ilat,ivtx(:)) = xphendoy1(:)
-  end do
-  close(87)
-end if
-call ccmpi_bcast(greenup,0,comm_world)
-call ccmpi_bcast(fall,0,comm_world)
-call ccmpi_bcast(phendoy1,0,comm_world)
+!~ if ( myid == 0 ) then
+  !~ write(6,*) "Reading CASA leaf phenology data"
+  !~ open(87,file=fphen,status='old')
+  !~ read(87,*)
+  !~ read(87,*) ivtx
+  !~ do ilat = 271,1,-1
+    !~ read(87,*) xlat,greenupx,fallx,xphendoy1 
+    !~ greenup(ilat,ivtx(:))  = greenupx(:)
+    !~ fall(ilat,ivtx(:))     = fallx(:)
+    !~ phendoy1(ilat,ivtx(:)) = xphendoy1(:)
+  !~ end do
+  !~ close(87)
+!~ end if
+!~ call ccmpi_bcast(greenup,0,comm_world)
+!~ call ccmpi_bcast(fall,0,comm_world)
+!~ call ccmpi_bcast(phendoy1,0,comm_world)
 
-do np = 1,mp
-  ilat = nint((rad%latitude(np)+55.25)*2.) + 1
-  ilat = min( 271, max( 1, ilat ) )
-  ivp = veg%iveg(np)
-  phen%phase(np)      = phendoy1(ilat,ivp)
-  phen%doyphase(np,1) = greenup(ilat,ivp)          ! DOY for greenup
-  phen%doyphase(np,2) = phen%doyphase(np,1) + 14   ! DOY for steady LAI
-  phen%doyphase(np,3) = fall(ilat,ivp)             ! DOY for leaf senescence
-  phen%doyphase(np,4) = phen%doyphase(np,3) + 14   ! DOY for minimal LAI season
-  if ( phen%doyphase(np,2) > 365 ) phen%doyphase(np,2) = phen%doyphase(np,2) - 365
-  if ( phen%doyphase(np,4) > 365 ) phen%doyphase(np,4) = phen%doyphase(np,4) - 365
-end do
+!~ do np = 1,mp
+  !~ ilat = nint((rad%latitude(np)+55.25)*2.) + 1
+  !~ ilat = min( 271, max( 1, ilat ) )
+  !~ ivp = veg%iveg(np)
+  !~ phen%phase(np)      = phendoy1(ilat,ivp)
+  !~ phen%doyphase(np,1) = greenup(ilat,ivp)          ! DOY for greenup
+  !~ phen%doyphase(np,2) = phen%doyphase(np,1) + 14   ! DOY for steady LAI
+  !~ phen%doyphase(np,3) = fall(ilat,ivp)             ! DOY for leaf senescence
+  !~ phen%doyphase(np,4) = phen%doyphase(np,3) + 14   ! DOY for minimal LAI season
+  !~ if ( phen%doyphase(np,2) > 365 ) phen%doyphase(np,2) = phen%doyphase(np,2) - 365
+  !~ if ( phen%doyphase(np,4) > 365 ) phen%doyphase(np,4) = phen%doyphase(np,4) - 365
+!~ end do
 
-return
-end subroutine casa_readphen
+!~ return
+!~ end subroutine casa_readphen
 
 end module cable_ccam
 
