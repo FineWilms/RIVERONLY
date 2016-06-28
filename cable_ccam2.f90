@@ -831,38 +831,38 @@ if (mp>0) then
   bgc%ratecp(:) = ratecp(:)
   bgc%ratecs(:) = ratecs(:)
 
-  ! store bare soil albedo and define snow free albedo
-  do n=1,maxnb
-    soil%albsoil(pind(n,1):pind(n,2),1)=pack(albvisnir(:,1),tmap(:,n))
-    soil%albsoil(pind(n,1):pind(n,2),2)=pack(albvisnir(:,2),tmap(:,n))
-  end do
-  soil%albsoil(:,3)=0.05
+  !~ ! store bare soil albedo and define snow free albedo
+  !~ do n=1,maxnb
+    !~ soil%albsoil(pind(n,1):pind(n,2),1)=pack(albvisnir(:,1),tmap(:,n))
+    !~ soil%albsoil(pind(n,1):pind(n,2),2)=pack(albvisnir(:,2),tmap(:,n))
+  !~ end do
+  !~ soil%albsoil(:,3)=0.05
     
-  where (land)
-    albsoil(:)=0.5*sum(albvisnir,2)
-  end where
-  where (albsoil<=0.14.and.land)
+  !~ where (land)
+    !~ albsoil(:)=0.5*sum(albvisnir,2)
+  !~ end where
+  !~ where (albsoil<=0.14.and.land)
     !sfact=0.5 for alb <= 0.14
-    albsoilsn(:,1)=(1.00/1.50)*albsoil(:)
-    albsoilsn(:,2)=(2.00/1.50)*albsoil(:)
-  elsewhere ((albsoil(:)<=0.2).and.land)
+    !~ albsoilsn(:,1)=(1.00/1.50)*albsoil(:)
+    !~ albsoilsn(:,2)=(2.00/1.50)*albsoil(:)
+  !~ elsewhere ((albsoil(:)<=0.2).and.land)
     !sfact=0.62 for 0.14 < alb <= 0.20
-    albsoilsn(:,1)=(1.24/1.62)*albsoil(:)
-    albsoilsn(:,2)=(2.00/1.62)*albsoil(:)
-  elsewhere (land)
+    !~ albsoilsn(:,1)=(1.24/1.62)*albsoil(:)
+    !~ albsoilsn(:,2)=(2.00/1.62)*albsoil(:)
+  !~ elsewhere (land)
     !sfact=0.68 for 0.2 < alb
-    albsoilsn(:,1)=(1.36/1.68)*albsoil(:)
-    albsoilsn(:,2)=(2.00/1.68)*albsoil(:)
-  end where
+    !~ albsoilsn(:,1)=(1.36/1.68)*albsoil(:)
+    !~ albsoilsn(:,2)=(2.00/1.68)*albsoil(:)
+  !~ end where
   ! MJT suggestion to get an approx inital albedo (before cable is called)
-  where (land)
-    albvisnir(:,1)=albsoilsn(:,1)*(1.-sigmf)+0.03*sigmf
-    albvisnir(:,2)=albsoilsn(:,2)*(1.-sigmf)+0.20*sigmf
-  end where
-  albvisdir=albvisnir(:,1) ! To be updated by CABLE
-  albvisdif=albvisnir(:,1) ! To be updated by CABLE
-  albnirdir=albvisnir(:,2) ! To be updated by CABLE
-  albnirdif=albvisnir(:,2) ! To be updated by CABLE
+  !~ where (land)
+    !~ albvisnir(:,1)=albsoilsn(:,1)*(1.-sigmf)+0.03*sigmf
+    !~ albvisnir(:,2)=albsoilsn(:,2)*(1.-sigmf)+0.20*sigmf
+  !~ end where
+  !~ albvisdir=albvisnir(:,1) ! To be updated by CABLE
+  !~ albvisdif=albvisnir(:,1) ! To be updated by CABLE
+  !~ albnirdir=albvisnir(:,2) ! To be updated by CABLE
+  !~ albnirdif=albvisnir(:,2) ! To be updated by CABLE
 
   do n=1,maxnb
     ! MJT patch
@@ -870,25 +870,25 @@ if (mp>0) then
     soil%albsoil(pind(n,1):pind(n,2),2)   =pack(albsoil,       tmap(:,n))
     ssnow%albsoilsn(pind(n,1):pind(n,2),1)=pack(albsoilsn(:,1),tmap(:,n)) ! overwritten by CABLE
     ssnow%albsoilsn(pind(n,1):pind(n,2),2)=pack(albsoilsn(:,2),tmap(:,n)) ! overwritten by CABLE
-    rad%albedo_T(pind(n,1):pind(n,2))     =pack(albsoil,       tmap(:,n))
-    rad%trad(pind(n,1):pind(n,2))         =pack(tss,           tmap(:,n))
-    rad%latitude(pind(n,1):pind(n,2))     =pack(rlatt,         tmap(:,n))*180./pi
-    rad%longitude(pind(n,1):pind(n,2))    =pack(rlongg,        tmap(:,n))*180./pi
+    !~ rad%albedo_T(pind(n,1):pind(n,2))     =pack(albsoil,       tmap(:,n))
+    !~ rad%trad(pind(n,1):pind(n,2))         =pack(tss,           tmap(:,n))
+    !~ rad%latitude(pind(n,1):pind(n,2))     =pack(rlatt,         tmap(:,n))*180./pi
+    !~ rad%longitude(pind(n,1):pind(n,2))    =pack(rlongg,        tmap(:,n))*180./pi
   end do
     
   ssnow%albsoilsn(:,3)=0.05    
   ssnow%t_snwlr=0.05
   ssnow%pudsmx=0.
 
-  canopy%oldcansto=0.  
-  canopy%ghflux=0.
-  canopy%sghflux=0.
-  canopy%ga=0.
-  canopy%dgdtg=0.
-  canopy%fhs_cor=0.
-  canopy%fes_cor=0.
-  canopy%ga=0.
-  canopy%us=0.01
+  !~ canopy%oldcansto=0.  
+  !~ canopy%ghflux=0.
+  !~ canopy%sghflux=0.
+  !~ canopy%ga=0.
+  !~ canopy%dgdtg=0.
+  !~ canopy%fhs_cor=0.
+  !~ canopy%fes_cor=0.
+  !~ canopy%ga=0.
+  !~ canopy%us=0.01
   ssnow%wb_lake=0. ! not used when mlo.f90 is active
   ssnow%fland=1.
   ssnow%ifland=soil%isoilm
