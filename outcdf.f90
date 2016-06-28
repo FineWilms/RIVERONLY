@@ -378,7 +378,7 @@ end subroutine cdfout
 subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
-use cable_ccam, only : savetile, savetiledef     ! CABLE interface
+!~ use cable_ccam, only : savetile, savetiledef     ! CABLE interface
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
 !~ use carbpools_m                                  ! Carbon pools
