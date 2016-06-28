@@ -60,7 +60,7 @@ zenith.o cc_mpi.o diag_m.o sumdd_m.o \
 utilities.o onthefly.o timeseries.o \
 stacklimit.o \
 xyzinfo_m.o vecsuv_m.o map_m.o latlong_m.o indices_m.o bigxy4_m.o \
-arrays_m.o cldcom_m.o \
+arrays_m.o \
 dpsdt_m.o extraout_m.o histave_m.o kdacom_m.o \
 morepbl_m.o \
 nsibd_m.o parmhdff_m.o pbl_m.o permsurf_m.o prec_m.o \
