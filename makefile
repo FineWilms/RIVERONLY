@@ -27,53 +27,38 @@ INT8FLAG = -fdefault-int-8
 DEBUGFLAG = -g -Wall -Wextra -fbounds-check -fbacktrace
 endif
 
-# Options for building with VAMPIRTrace
-ifeq ($(VT),yes)
-FC = vtfort -vt:fc mpif90 -vt:inst manual
-FFLAGS += -Dvampir -DVTRACE
-else
-FFLAGS += -Dsimple_timer
-endif
+#~ # Options for building with VAMPIRTrace
+#~ ifeq ($(VT),yes)
+#~ FC = vtfort -vt:fc mpif90 -vt:inst manual
+#~ FFLAGS += -Dvampir -DVTRACE
+#~ else
+#~ FFLAGS += -Dsimple_timer
+#~ endif
 
 #Decomposition method
 ifeq ($(DECOMP),uniform)
 FFLAGS += -Duniform_decomp
 endif
 
-# Testing - I/O and fpmodel
-ifeq ($(TEST),yes)
-FFLAGS += -Doutsync $(DEBUGFLAG)
-endif
+#~ # Testing - I/O and fpmodel
+#~ ifeq ($(TEST),yes)
+#~ FFLAGS += -Doutsync $(DEBUGFLAG)
+#~ endif
 
-# Build with 64 ints/reals
-ifeq ($(I8R8),yes)
-FFLAGS += $(REAL8FLAG) $(INT8FLAG) -Di8r8
-endif
+#~ # Build with 64 ints/reals
+#~ ifeq ($(I8R8),yes)
+#~ FFLAGS += $(REAL8FLAG) $(INT8FLAG) -Di8r8
+#~ endif
 
 OBJS = gettin.o \
-globpe.o  indata.o infile.o ints.o \
-jimcc.o \
-outcdf.o setxyz.o sflux.o \
-soilsnow.o \
-latltoij.o \
-zenith.o cc_mpi.o diag_m.o sumdd_m.o \
-utilities.o onthefly.o timeseries.o \
-stacklimit.o \
-xyzinfo_m.o vecsuv_m.o map_m.o latlong_m.o indices_m.o bigxy4_m.o \
-arrays_m.o \
-dpsdt_m.o extraout_m.o histave_m.o kdacom_m.o \
-morepbl_m.o \
-nsibd_m.o parmhdff_m.o pbl_m.o permsurf_m.o prec_m.o \
-savuvt_m.o savuv1_m.o sigs_m.o \
-soil_m.o soilsnow_m.o swocom_m.o tabcom_m.o \
-tbar2d_m.o tfcom_m.o unn_m.o uvbar_m.o vegpar_m.o vvel_m.o \
-workglob_m.o work2_m.o work3_m.o work3b_m.o \
-xarrs_m.o \
-cable_ccam2.o cable_common.o \
-cable_data.o cable_define_types.o cable_roughness.o cable_soilsnow.o \
-casa_cnp.o casa_variable.o \
-river.o \
-netcdf_m.o mpif_m.o
+globpe.o  indata.o infile.o ints.o jimcc.o outcdf.o setxyz.o sflux.o soilsnow.o latltoij.o \
+zenith.o cc_mpi.o diag_m.o sumdd_m.o utilities.o onthefly.o timeseries.o stacklimit.o \
+xyzinfo_m.o vecsuv_m.o map_m.o latlong_m.o indices_m.o bigxy4_m.o arrays_m.o \
+dpsdt_m.o extraout_m.o histave_m.o morepbl_m.o nsibd_m.o parmhdff_m.o pbl_m.o \
+permsurf_m.o prec_m.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o tabcom_m.o \
+tfcom_m.o uvbar_m.o vegpar_m.o vvel_m.o workglob_m.o work2_m.o work3_m.o work3b_m.o \
+xarrs_m.o cable_ccam2.o cable_common.o cable_data.o cable_define_types.o cable_roughness.o \
+cable_soilsnow.o casa_cnp.o casa_variable.o river.o netcdf_m.o mpif_m.o
 
 globpea: $(OBJS)
 	$(FC) -o globpea $(FFLAGS) $(OBJS) $(LIBS)
@@ -116,7 +101,7 @@ casa_variable.o : cable_define_types.o
 cc_mpi.o : arrays_m.o indices_m.o latlong_m.o map_m.o mpif_m.o sigs_m.o sumdd_m.o vecsuv_m.o xyzinfo_m.o newmpar.h parm.h 
 diag_m.o : cc_mpi.o sigs_m.o sumdd_m.o xyzinfo_m.o newmpar.h parm.h
 gettin.o : arrays_m.o savuvt_m.o newmpar.h 
-globpe.o : arrays_m.o bigxy4_m.o cable_ccam2.o cc_mpi.o diag_m.o dpsdt_m.o extraout_m.o histave_m.o indata.o indices_m.o infile.o latlong_m.o map_m.o morepbl_m.o nsibd_m.o outcdf.o parmhdff_m.o pbl_m.o permsurf_m.o prec_m.o river.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o tbar2d_m.o timeseries.o unn_m.o uvbar_m.o vecsuv_m.o vegpar_m.o vvel_m.o workglob_m.o work2_m.o work3_m.o xarrs_m.o xyzinfo_m.o const_phys.h darcdf.h dates.h filnames.h kuocom.h newmpar.h parm.h parmdyn.h parmgeom.h parmhor.h parmsurf.h soilv.h stime.h trcom2.h version.h
+globpe.o : arrays_m.o bigxy4_m.o cable_ccam2.o cc_mpi.o diag_m.o dpsdt_m.o extraout_m.o histave_m.o indata.o indices_m.o infile.o latlong_m.o map_m.o morepbl_m.o nsibd_m.o outcdf.o parmhdff_m.o pbl_m.o permsurf_m.o prec_m.o river.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o timeseries.o uvbar_m.o vecsuv_m.o vegpar_m.o vvel_m.o workglob_m.o work2_m.o work3_m.o xarrs_m.o xyzinfo_m.o const_phys.h darcdf.h dates.h filnames.h kuocom.h newmpar.h parm.h parmdyn.h parmgeom.h parmhor.h parmsurf.h soilv.h stime.h trcom2.h version.h
 indata.o : arrays_m.o bigxy4_m.o cable_ccam2.o cc_mpi.o diag_m.o extraout_m.o indices_m.o infile.o latlong_m.o map_m.o morepbl_m.o nsibd_m.o onthefly.o pbl_m.o permsurf_m.o river.o sigs_m.o soil_m.o soilsnow_m.o timeseries.o vecsuv_m.o vegpar_m.o xyzinfo_m.o const_phys.h darcdf.h dates.h filnames.h newmpar.h parm.h parmdyn.h parmgeom.h soilv.h stime.h trcom2.h
 indices_m.o : newmpar.h
 infile.o : cc_mpi.o netcdf_m.o dates.h newmpar.h parm.h parmgeom.h
