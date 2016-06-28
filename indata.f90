@@ -75,7 +75,7 @@ include 'parmdyn.h'                              ! Dynamics parmaters
 include 'parmgeom.h'                             ! Coordinate data
 include 'soilv.h'                                ! Soil parameters
 include 'stime.h'                                ! File date data
-include 'trcom2.h'                               ! Station data
+!~ include 'trcom2.h'                               ! Station data
 
 integer, parameter :: jlmsigmf=1  ! 1 for jlm fixes to dean's data
 integer, parameter :: nfixwb=2    ! 0, 1 or 2; wb fixes with nrungcm=1
@@ -1060,75 +1060,75 @@ endif  ! (nproc==1)
 
 
 !--------------------------------------------------------------
-! INITIALISE STATION OUTPUT (nstn)
-if(nstn>0)then
-  if (myid==0) then
-    write(6,*) 'land stations'
-    write(*,"(a)") ' lu istn jstn  iq   slon   slat land rlong  rlat' &
-                // ' isoil iveg zs(m) alb  wb3  wet3 vlai  zo   he'
-  end if
-  call ccmpi_barrier(comm_world)
-  do nn=1,nstn
-    call latltoij(slon(nn),slat(nn),rlong0,rlat0,schmidt,ri,rj,nface,xx4,yy4,il_g)
-    ! These are global indices
-    ig=nint(ri)
-    jg=nint(rj) + nface*il_g
-    mystn(nn) = fproc(ig,nint(rj),nface) == myid
-    if ( mystn(nn) ) then
-      iqg = ig + (jg-1)*il_g
-      deli = nint(ri) - ri
-      delj = nint(rj) - rj
-      ! Local indices on this processor
-      call indv_mpi(iqg,ii,jj,n)
-      iq = ii + (jj-1)*ipan + (n-1)*ipan*jpan
-      if(.not.land(iq))then
-        ! simple search for neighbouring land point 
-        ! N.B. does not search over panel/processor bndries
-        ! N.B. if no land points, just returns closest point
-        isav = ii
-        jsav = jj
-        dist=100.
-        if ( isav < ipan ) then
-          distnew = (deli+1)**2 + delj**2 
-          if(land(iq+1).and.distnew<dist)then
-            ii=isav+1
-            dist=distnew
-          endif
-        end if
-        if ( isav > 1 ) then
-          distnew = (deli-1)**2 + delj**2 
-          if(land(iq-1).and.distnew<dist)then
-            ii=isav-1
-            dist=distnew
-          endif
-        end if
-        if ( jsav < jpan ) then
-          distnew = deli**2 + (delj+1)**2 
-          if(land(iq+ipan).and.distnew<dist)then
-            jj=jsav+1
-            dist=distnew
-          endif
-        end if
-        if ( jsav >= 1 ) then
-          distnew = deli**2 +(delj-1)**2 
-          if(land(iq-ipan).and.distnew<dist)then
-            jj=jsav-1
-            dist=distnew
-          endif
-        end if
-      endif              ! (.not.land(iq))
-      istn(nn) = ii
-      jstn(nn) = jj+(n-1)*jpan
-      iq = istn(nn) + (jstn(nn)-1)*ipan
-      iveg=ivegt(iq)
-      isoil = isoilm(iq)
-      wet3=(wb(iq,3)-swilt(isoil))/(sfc(isoil)-swilt(isoil))    
-    end if               ! mystn
-98  format(i3,i4,i5,i6,2f7.2 ,l3,2f7.2, i3,i6,f7.1,f5.2,4f5.2,f7.1,i4)
-    ! Put a barrier here to force stations to be printed in the right order
-    call ccmpi_barrier(comm_world)
-  enddo  ! nn=1,nstn
-endif     !  (nstn>0)
+!~ ! INITIALISE STATION OUTPUT (nstn)
+!~ if(nstn>0)then
+  !~ if (myid==0) then
+    !~ write(6,*) 'land stations'
+    !~ write(*,"(a)") ' lu istn jstn  iq   slon   slat land rlong  rlat' &
+                !~ // ' isoil iveg zs(m) alb  wb3  wet3 vlai  zo   he'
+  !~ end if
+  !~ call ccmpi_barrier(comm_world)
+  !~ do nn=1,nstn
+    !~ call latltoij(slon(nn),slat(nn),rlong0,rlat0,schmidt,ri,rj,nface,xx4,yy4,il_g)
+    !~ ! These are global indices
+    !~ ig=nint(ri)
+    !~ jg=nint(rj) + nface*il_g
+    !~ mystn(nn) = fproc(ig,nint(rj),nface) == myid
+    !~ if ( mystn(nn) ) then
+      !~ iqg = ig + (jg-1)*il_g
+      !~ deli = nint(ri) - ri
+      !~ delj = nint(rj) - rj
+      !~ ! Local indices on this processor
+      !~ call indv_mpi(iqg,ii,jj,n)
+      !~ iq = ii + (jj-1)*ipan + (n-1)*ipan*jpan
+      !~ if(.not.land(iq))then
+        !~ ! simple search for neighbouring land point 
+        !~ ! N.B. does not search over panel/processor bndries
+        !~ ! N.B. if no land points, just returns closest point
+        !~ isav = ii
+        !~ jsav = jj
+        !~ dist=100.
+        !~ if ( isav < ipan ) then
+          !~ distnew = (deli+1)**2 + delj**2 
+          !~ if(land(iq+1).and.distnew<dist)then
+            !~ ii=isav+1
+            !~ dist=distnew
+          !~ endif
+        !~ end if
+        !~ if ( isav > 1 ) then
+          !~ distnew = (deli-1)**2 + delj**2 
+          !~ if(land(iq-1).and.distnew<dist)then
+            !~ ii=isav-1
+            !~ dist=distnew
+          !~ endif
+        !~ end if
+        !~ if ( jsav < jpan ) then
+          !~ distnew = deli**2 + (delj+1)**2 
+          !~ if(land(iq+ipan).and.distnew<dist)then
+            !~ jj=jsav+1
+            !~ dist=distnew
+          !~ endif
+        !~ end if
+        !~ if ( jsav >= 1 ) then
+          !~ distnew = deli**2 +(delj-1)**2 
+          !~ if(land(iq-ipan).and.distnew<dist)then
+            !~ jj=jsav-1
+            !~ dist=distnew
+          !~ endif
+        !~ end if
+      !~ endif              ! (.not.land(iq))
+      !~ istn(nn) = ii
+      !~ jstn(nn) = jj+(n-1)*jpan
+      !~ iq = istn(nn) + (jstn(nn)-1)*ipan
+      !~ iveg=ivegt(iq)
+      !~ isoil = isoilm(iq)
+      !~ wet3=(wb(iq,3)-swilt(isoil))/(sfc(isoil)-swilt(isoil))    
+    !~ end if               ! mystn
+!~ 98  format(i3,i4,i5,i6,2f7.2 ,l3,2f7.2, i3,i6,f7.1,f5.2,4f5.2,f7.1,i4)
+    !~ ! Put a barrier here to force stations to be printed in the right order
+    !~ call ccmpi_barrier(comm_world)
+  !~ enddo  ! nn=1,nstn
+!~ endif     !  (nstn>0)
 
     
 !~ !--------------------------------------------------------------

@@ -75,7 +75,7 @@ include 'parmhor.h'                        ! Horizontal advection parameters
 include 'parmsurf.h'                       ! Surface parameters
 include 'soilv.h'                          ! Soil parameters
 include 'stime.h'                          ! File date data
-include 'trcom2.h'                         ! Station data
+!~ include 'trcom2.h'                         ! Station data
 include 'version.h'                        ! Model version data
 
 #ifdef vampir
@@ -122,8 +122,8 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     mbd_maxscale,ndi,ndi2,nlv,nmaxpr,nrad,ntaft,ntsea,ntsur, &
     nvmix,restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
     ngwd,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
-    irest,nrun,nstn,rel_lat,rel_long,nrungcm,nsib,istn,jstn,iunp, &
-    slat,slon,zstn,name_stn,mh_bs,nritch_t,nt_adv,mfix,mfix_qg,   &
+    irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
+    mh_bs,nritch_t,nt_adv,mfix,mfix_qg,   &
     namip,amipo3,nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
     epsp,epsu,epsf,epsh,av_vmod,charnock,chn10,snmin,tss_sh,      &
@@ -660,16 +660,16 @@ do kktau = 1,ntau   ! ****** start of main time loop
     runoff(:)      = 0.  ! converted to mm/day in outcdf
   endif  ! (mod(ktau,nperavg)==0)
 
-  if ( mod(ktau,nperday) == 0 ) then   ! re-set at the end of each 24 hours
-    if ( ntau<10*nperday .and. nstn>0 ) then     ! print stn info
-      do nn = 1,nstn
-        if ( .not.mystn(nn) ) cycle
-        i = istn(nn)
-        j = jstn(nn)
-        iq = i+(j-1)*il
-      end do
-    end if  ! (ntau<10*nperday)
-  endif   ! (mod(ktau,nperday)==0)
+  !~ if ( mod(ktau,nperday) == 0 ) then   ! re-set at the end of each 24 hours
+    !~ if ( ntau<10*nperday .and. nstn>0 ) then     ! print stn info
+      !~ do nn = 1,nstn
+        !~ if ( .not.mystn(nn) ) cycle
+        !~ i = istn(nn)
+        !~ j = jstn(nn)
+        !~ iq = i+(j-1)*il
+      !~ end do
+    !~ end if  ! (ntau<10*nperday)
+  !~ endif   ! (mod(ktau,nperday)==0)
   
 #ifdef vampir
   ! Flush vampir trace information to disk to save memory.
@@ -726,7 +726,7 @@ include 'parmhor.h'          ! Horizontal advection parameters
 include 'parmsurf.h'         ! Surface parameters
 include 'soilv.h'            ! Soil parameters
 include 'stime.h'            ! File date data
-include 'trcom2.h'           ! Station data
+!~ include 'trcom2.h'           ! Station data
 
 integer leap
 common/leap_yr/leap          ! Leap year (1 to allow leap years)
@@ -770,9 +770,9 @@ data nurban/0/,ccycle/0/
 data m_fly/4/,io_in/1/,io_out/1/,io_rest/1/
 data nperavg/-99/,nwt/-99/,tblock/1/,tbave/1/
 data nextout/3/,localhist/.false./
-data nstn/0/  
-data slat/nstnmax*-89./,slon/nstnmax*0./,iunp/nstnmax*6/
-data zstn/nstnmax*0./,name_stn/nstnmax*'   '/ 
+!~ data nstn/0/  
+!~ data slat/nstnmax*-89./,slon/nstnmax*0./,iunp/nstnmax*6/
+!~ data zstn/nstnmax*0./,name_stn/nstnmax*'   '/ 
  
 ! initialize file names to something
 data albfile/' '/,icefile/' '/,maskfile/' '/
