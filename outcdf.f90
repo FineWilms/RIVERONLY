@@ -135,7 +135,7 @@ implicit none
 include 'newmpar.h'                   ! Grid parameters
 include 'dates.h'                     ! Date data
 include 'filnames.h'                  ! Filenames
-include 'kuocom.h'                    ! Convection parameters
+!~ include 'kuocom.h'                    ! Convection parameters
 include 'parm.h'                      ! Model configuration
 include 'parmdyn.h'                   ! Dynamics parameters
 include 'parmgeom.h'                  ! Coordinate data
@@ -294,7 +294,7 @@ if ( myid==0 .or. localhist ) then
     nahead(14) = nint(dt)  ! needed by cc2hist
     nahead(15) = 0         ! not needed now 
 
-    nahead(17) = nkuo
+    !~ nahead(17) = nkuo
 
     nahead(19) = kl        ! needed by cc2hist (was kwt)
     nahead(20) = 0  !iaa
@@ -305,7 +305,7 @@ if ( myid==0 .or. localhist ) then
     nahead(25) = nrun
     nahead(26) = 0
 
-    nahead(28) = ksc
+    !~ nahead(28) = ksc
     nahead(29) = kountr
     nahead(30) = 1 ! ndiur
     nahead(31) = 0  ! spare
@@ -314,21 +314,21 @@ if ( myid==0 .or. localhist ) then
     nahead(34) = ms        ! needed by cc2hist
     nahead(35) = ntsur
     nahead(36) = nrad
-    nahead(37) = kuocb
+    !~ nahead(37) = kuocb
     nahead(38) = nvmix
     nahead(40) = 0    
     nahead(41) = nextout
 
     nahead(44) = nsib
     nahead(45) = nrungcm
-    nahead(46) = ncvmix
+    !~ nahead(46) = ncvmix
     nahead(47) = ngwd
     nahead(48) = lgwd
     nahead(49) = mup
     nahead(50) = nritch_t
-    nahead(51) = ldr
-    nahead(52) = nevapls
-    nahead(53) = nevapcc
+    !~ nahead(51) = ldr
+    !~ nahead(52) = nevapls
+    !~ nahead(53) = nevapcc
     nahead(54) = nt_adv
     ahead(1) = ds
     ahead(2) = 0.  !difknbd
@@ -409,7 +409,7 @@ include 'newmpar.h'                              ! Grid parameters
 include 'const_phys.h'                           ! Physical constants
 include 'dates.h'                                ! Date data
 include 'filnames.h'                             ! Filenames
-include 'kuocom.h'                               ! Convection parameters
+!~ include 'kuocom.h'                               ! Convection parameters
 include 'parm.h'                                 ! Model configuration
 include 'parmdyn.h'                              ! Dynamics parameters
 include 'soilv.h'                                ! Soil parameters
