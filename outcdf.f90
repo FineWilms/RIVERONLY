@@ -368,7 +368,7 @@ subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use cc_mpi                                       ! CC MPI routines
-use dpsdt_m                                      ! Vertical velocity
+!~ use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
 use histave_m                                    ! Time average arrays
 use infile                                       ! Input file routines
