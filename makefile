@@ -51,11 +51,11 @@ FFLAGS += $(REAL8FLAG) $(INT8FLAG) -Di8r8
 endif
 
 OBJS = gettin.o \
-globpe.o  indata.o infile.o ints.o jimcc.o outcdf.o setxyz.o sflux.o soilsnow.o latltoij.o \
+globpe.o  indata.o infile.o jimcc.o outcdf.o setxyz.o sflux.o soilsnow.o latltoij.o \
 zenith.o cc_mpi.o diag_m.o sumdd_m.o utilities.o onthefly.o stacklimit.o \
 xyzinfo_m.o vecsuv_m.o map_m.o latlong_m.o indices_m.o bigxy4_m.o arrays_m.o \
 extraout_m.o histave_m.o morepbl_m.o nsibd_m.o parmhdff_m.o pbl_m.o \
-permsurf_m.o prec_m.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o tabcom_m.o \
+permsurf_m.o prec_m.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o \
 workglob_m.o work2_m.o work3_m.o work3b_m.o \
 cable_ccam2.o cable_common.o cable_data.o cable_define_types.o cable_roughness.o \
 cable_soilsnow.o river.o netcdf_m.o mpif_m.o
@@ -103,7 +103,6 @@ globpe.o : arrays_m.o bigxy4_m.o cable_ccam2.o cc_mpi.o diag_m.o extraout_m.o hi
 indata.o : arrays_m.o bigxy4_m.o cable_ccam2.o cc_mpi.o diag_m.o extraout_m.o indices_m.o infile.o latlong_m.o map_m.o morepbl_m.o nsibd_m.o onthefly.o pbl_m.o permsurf_m.o river.o sigs_m.o soil_m.o soilsnow_m.o vecsuv_m.o xyzinfo_m.o const_phys.h darcdf.h dates.h filnames.h newmpar.h parm.h parmdyn.h parmgeom.h soilv.h stime.h
 indices_m.o : newmpar.h
 infile.o : cc_mpi.o netcdf_m.o dates.h newmpar.h parm.h parmgeom.h
-ints.o : cc_mpi.o indices_m.o newmpar.h parm.h parmhor.h
 latltoij.o : utilities.o const_phys.h newmpar.h parm.h parmdyn.h
 onthefly.o : cc_mpi.o cable_define_types.o diag_m.o extraout_m.o infile.o latlong_m.o morepbl_m.o nsibd_m.o river.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o utilities.o vecsuv_m.o workglob_m.o work2_m.o const_phys.h darcdf.h kuocom.h newmpar.h parm.h parmdyn.h parmgeom.h soilv.h stime.h
 outcdf.o : arrays_m.o cable_ccam2.o cable_define_types.o cc_mpi.o extraout_m.o histave_m.o infile.o latlong_m.o map_m.o morepbl_m.o nsibd_m.o parmhdff_m.o pbl_m.o prec_m.o river.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o work2_m.o const_phys.h dates.h filnames.h kuocom.h newmpar.h parm.h parmdyn.h parmgeom.h parmhor.h parmsurf.h soilv.h version.h
