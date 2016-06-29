@@ -356,8 +356,6 @@ albvisdif=0.08
 albnirdir=0.08
 albnirdif=0.08
 zolnd=0.
-!~ cplant=0.
-!~ csoil=0.
 pind=ifull+1
 mvtype=mxvt
 mstype=mxst
@@ -805,11 +803,6 @@ if (mp>0) then
   
   ! Calculate LAI and veg fraction diagnostics
   call getzinp(fjd,jyear,jmonth,jday,jhour,jmin,mins)
-  !~ call setlai(sigmf,jyear,jmonth,jday,jhour,jmin)
-  !~ vlai=0.
-  !~ do n=1,maxnb
-    !~ vlai=vlai+unpack(sv(pind(n,1):pind(n,2))*veg%vlai(pind(n,1):pind(n,2)),tmap(:,n),0.)
-  !~ end do
   
   ! Load CABLE soil data
   soil%bch     = bch(soil%isoilm)
@@ -831,64 +824,18 @@ if (mp>0) then
   bgc%ratecp(:) = ratecp(:)
   bgc%ratecs(:) = ratecs(:)
 
-  !~ ! store bare soil albedo and define snow free albedo
-  !~ do n=1,maxnb
-    !~ soil%albsoil(pind(n,1):pind(n,2),1)=pack(albvisnir(:,1),tmap(:,n))
-    !~ soil%albsoil(pind(n,1):pind(n,2),2)=pack(albvisnir(:,2),tmap(:,n))
-  !~ end do
-  !~ soil%albsoil(:,3)=0.05
-    
-  !~ where (land)
-    !~ albsoil(:)=0.5*sum(albvisnir,2)
-  !~ end where
-  !~ where (albsoil<=0.14.and.land)
-    !sfact=0.5 for alb <= 0.14
-    !~ albsoilsn(:,1)=(1.00/1.50)*albsoil(:)
-    !~ albsoilsn(:,2)=(2.00/1.50)*albsoil(:)
-  !~ elsewhere ((albsoil(:)<=0.2).and.land)
-    !sfact=0.62 for 0.14 < alb <= 0.20
-    !~ albsoilsn(:,1)=(1.24/1.62)*albsoil(:)
-    !~ albsoilsn(:,2)=(2.00/1.62)*albsoil(:)
-  !~ elsewhere (land)
-    !sfact=0.68 for 0.2 < alb
-    !~ albsoilsn(:,1)=(1.36/1.68)*albsoil(:)
-    !~ albsoilsn(:,2)=(2.00/1.68)*albsoil(:)
-  !~ end where
-  ! MJT suggestion to get an approx inital albedo (before cable is called)
-  !~ where (land)
-    !~ albvisnir(:,1)=albsoilsn(:,1)*(1.-sigmf)+0.03*sigmf
-    !~ albvisnir(:,2)=albsoilsn(:,2)*(1.-sigmf)+0.20*sigmf
-  !~ end where
-  !~ albvisdir=albvisnir(:,1) ! To be updated by CABLE
-  !~ albvisdif=albvisnir(:,1) ! To be updated by CABLE
-  !~ albnirdir=albvisnir(:,2) ! To be updated by CABLE
-  !~ albnirdif=albvisnir(:,2) ! To be updated by CABLE
-
   do n=1,maxnb
     ! MJT patch
     soil%albsoil(pind(n,1):pind(n,2),1)   =pack(albsoil,       tmap(:,n))
     soil%albsoil(pind(n,1):pind(n,2),2)   =pack(albsoil,       tmap(:,n))
     ssnow%albsoilsn(pind(n,1):pind(n,2),1)=pack(albsoilsn(:,1),tmap(:,n)) ! overwritten by CABLE
     ssnow%albsoilsn(pind(n,1):pind(n,2),2)=pack(albsoilsn(:,2),tmap(:,n)) ! overwritten by CABLE
-    !~ rad%albedo_T(pind(n,1):pind(n,2))     =pack(albsoil,       tmap(:,n))
-    !~ rad%trad(pind(n,1):pind(n,2))         =pack(tss,           tmap(:,n))
-    !~ rad%latitude(pind(n,1):pind(n,2))     =pack(rlatt,         tmap(:,n))*180./pi
-    !~ rad%longitude(pind(n,1):pind(n,2))    =pack(rlongg,        tmap(:,n))*180./pi
   end do
     
   ssnow%albsoilsn(:,3)=0.05    
   ssnow%t_snwlr=0.05
   ssnow%pudsmx=0.
 
-  !~ canopy%oldcansto=0.  
-  !~ canopy%ghflux=0.
-  !~ canopy%sghflux=0.
-  !~ canopy%ga=0.
-  !~ canopy%dgdtg=0.
-  !~ canopy%fhs_cor=0.
-  !~ canopy%fes_cor=0.
-  !~ canopy%ga=0.
-  !~ canopy%us=0.01
   ssnow%wb_lake=0. ! not used when mlo.f90 is active
   ssnow%fland=1.
   ssnow%ifland=soil%isoilm
@@ -1218,59 +1165,6 @@ if ( mp > 0 ) then
         + real(ssnow%wbice(:,k))*2.100e3*1000.*0.9,soil%css*soil%rhosoil)*soil%zse(k) &
         + (1.-ssnow%isflag)*2090.0*ssnow%snowd
   end do
-
-  if ( icycle == 0 ) then
-    bgc%cplant = max(bgc%cplant,0.)
-    bgc%csoil = max(bgc%csoil,0.)
-  else
-    casapool%cplant     = max(0._r_2,casapool%cplant)
-    casapool%clitter    = max(0._r_2,casapool%clitter)
-    casapool%csoil      = max(0._r_2,casapool%csoil)
-    casabal%cplantlast(1:mp,1:mplant)   = casapool%cplant(1:mp,1:mplant)
-    casabal%clitterlast(1:mp,1:mlitter) = casapool%clitter(1:mp,1:mlitter)
-    casabal%csoillast(1:mp,1:msoil)     = casapool%csoil(1:mp,1:msoil)
-    casabal%clabilelast = casapool%clabile
-    casabal%sumcbal     = 0.
-    casabal%FCgppyear   = 0.
-    casabal%FCrpyear    = 0.
-    casabal%FCnppyear   = 0.
-    casabal%FCrsyear    = 0.
-    casabal%FCneeyear   = 0.
-    casapool%nplant     = max(1.e-6_r_2,casapool%nplant)
-    casapool%nlitter    = max(1.e-6_r_2,casapool%nlitter)
-    casapool%nsoil      = max(1.e-6_r_2,casapool%nsoil)
-    casapool%nsoilmin   = max(1.e-6_r_2,casapool%nsoilmin)
-    casabal%nplantlast(1:mp,1:mplant)   = casapool%nplant(1:mp,1:mplant)
-    casabal%nlitterlast(1:mp,1:mlitter) = casapool%nlitter(1:mp,1:mlitter)
-    casabal%nsoillast(1:mp,1:msoil)     = casapool%nsoil(1:mp,1:msoil)      
-    casabal%nsoilminlast= casapool%nsoilmin
-    casabal%sumnbal     = 0.
-    casabal%FNdepyear   = 0.
-    casabal%FNfixyear   = 0.
-    casabal%FNsnetyear  = 0.
-    casabal%FNupyear    = 0.
-    casabal%FNleachyear = 0.
-    casabal%FNlossyear  = 0.
-    casapool%pplant     = max(1.0e-7_r_2,casapool%pplant)
-    casapool%plitter    = max(1.0e-7_r_2,casapool%plitter)
-    casapool%psoil      = max(1.0e-7_r_2,casapool%psoil)
-    casapool%Psoillab   = max(1.0e-7_r_2,casapool%psoillab)
-    casapool%psoilsorb  = max(1.0e-7_r_2,casapool%psoilsorb)
-    casapool%psoilocc   = max(1.0e-7_r_2,casapool%psoilocc)
-    casabal%pplantlast(1:mp,1:mplant)   = casapool%pplant(1:mp,1:mplant)
-    casabal%plitterlast(1:mp,1:mlitter) = casapool%plitter(1:mp,1:mlitter)
-    casabal%psoillast(1:mp,1:msoil)     = casapool%psoil(1:mp,1:msoil)       
-    casabal%psoillablast= casapool%psoillab
-    casabal%psoilsorblast=casapool%psoilsorb
-    casabal%psoilocclast= casapool%psoilocc
-    casabal%sumpbal     = 0.
-    casabal%FPweayear   = 0.
-    casabal%FPdustyear  = 0.
-    casabal%FPsnetyear  = 0.
-    casabal%FPupyear    = 0.
-    casabal%FPleachyear = 0.
-    casabal%FPlossyear  = 0.
-  end if
 end if
   
 return
