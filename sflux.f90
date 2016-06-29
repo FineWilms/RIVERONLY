@@ -44,7 +44,7 @@ use sigs_m                         ! Atmosphere sigma levels
 use soil_m                         ! Soil and surface data
 use soilsnow_m                     ! Soil, snow and surface data
 use vecsuv_m                       ! Map to cartesian coordinates
-use vvel_m                         ! Additional vertical velocity
+!~ use vvel_m                         ! Additional vertical velocity
 use work2_m                        ! Diagnostic arrays
 use xyzinfo_m                      ! Grid coordinate arrays
       

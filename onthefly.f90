@@ -299,7 +299,7 @@ use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
-use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
+!~ use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
 use workglob_m                                 ! Additional grid interpolation
 use work2_m                                    ! Diagnostic arrays
 
@@ -308,7 +308,6 @@ implicit none
 include 'newmpar.h'                            ! Grid parameters
 include 'const_phys.h'                         ! Physical constants
 include 'darcdf.h'                             ! Netcdf data
-!~ include 'kuocom.h'                             ! Convection parameters
 include 'parm.h'                               ! Model configuration
 include 'parmdyn.h'                            ! Dynamics parmaters
 include 'parmgeom.h'                           ! Coordinate data
