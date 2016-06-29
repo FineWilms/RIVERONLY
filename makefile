@@ -56,7 +56,7 @@ zenith.o cc_mpi.o diag_m.o sumdd_m.o utilities.o onthefly.o stacklimit.o \
 xyzinfo_m.o vecsuv_m.o map_m.o latlong_m.o indices_m.o bigxy4_m.o arrays_m.o \
 extraout_m.o histave_m.o morepbl_m.o nsibd_m.o parmhdff_m.o pbl_m.o \
 permsurf_m.o prec_m.o savuvt_m.o savuv1_m.o sigs_m.o soil_m.o soilsnow_m.o tabcom_m.o \
-tfcom_m.o uvbar_m.o vvel_m.o workglob_m.o work2_m.o work3_m.o work3b_m.o \
+uvbar_m.o vvel_m.o workglob_m.o work2_m.o work3_m.o work3b_m.o \
 xarrs_m.o cable_ccam2.o cable_common.o cable_data.o cable_define_types.o cable_roughness.o \
 cable_soilsnow.o river.o netcdf_m.o mpif_m.o
 
