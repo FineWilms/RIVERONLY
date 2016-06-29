@@ -66,11 +66,9 @@ include 'const_phys.h'                     ! Physical constants
 include 'darcdf.h'                         ! Netcdf data
 include 'dates.h'                          ! Date data
 include 'filnames.h'                       ! Filenames
-!~ include 'kuocom.h'                         ! Convection parameters
 include 'parm.h'                           ! Model configuration
 include 'parmdyn.h'                        ! Dynamics parameters
 include 'parmgeom.h'                       ! Coordinate data
-include 'parmhor.h'                        ! Horizontal advection parameters
 include 'parmsurf.h'                       ! Surface parameters
 include 'soilv.h'                          ! Soil parameters
 include 'stime.h'                          ! File date data
@@ -121,7 +119,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     nvmix,restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
     ngwd,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
-    mh_bs,nritch_t,nt_adv,mfix,mfix_qg,   &
+    nritch_t,mfix,mfix_qg,   &
     namip,amipo3,nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
     epsp,epsu,epsf,epsh,av_vmod,charnock,chn10,snmin,tss_sh,      &
@@ -700,7 +698,6 @@ include 'filnames.h'         ! Filenames
 include 'parm.h'             ! Model configuration
 include 'parmdyn.h'          ! Dynamics parmaters
 include 'parmgeom.h'         ! Coordinate data
-include 'parmhor.h'          ! Horizontal advection parameters
 include 'parmsurf.h'         ! Surface parameters
 include 'soilv.h'            ! Soil parameters
 include 'stime.h'            ! File date data
@@ -727,8 +724,7 @@ data nritch_t/300/,epsp/-15./,epsu/0./,epsf/0./,epsh/0.1/
 data precon/-2900/,restol/4.e-7/
 data schmidt/1./,rlong0/0./,rlat0/90./,nrun/0/
 data helmmeth/0/,mfix_tr/0/,mfix_aero/0/
-! Horiz advection options
-data nt_adv/7/,mh_bs/4/
+
 ! Horiz wind staggering options
 data nstag/-10/,nstagu/-1/,nstagoff/0/
 ! Vertical mixing options

@@ -135,11 +135,9 @@ implicit none
 include 'newmpar.h'                   ! Grid parameters
 include 'dates.h'                     ! Date data
 include 'filnames.h'                  ! Filenames
-!~ include 'kuocom.h'                    ! Convection parameters
 include 'parm.h'                      ! Model configuration
 include 'parmdyn.h'                   ! Dynamics parameters
 include 'parmgeom.h'                  ! Coordinate data
-include 'parmhor.h'                   ! Horizontal advection parameters
 include 'parmsurf.h'                  ! Surface parameters
 
 integer ixp,iyp,idlev,idnt,idms,idoc
@@ -317,7 +315,6 @@ if ( myid==0 .or. localhist ) then
     nahead(48) = lgwd
     nahead(49) = mup
     nahead(50) = nritch_t
-    nahead(54) = nt_adv
     ahead(1) = ds
     ahead(2) = 0.  !difknbd
     ahead(3) = 0.  ! was rhkuo for kuo scheme
@@ -368,7 +365,6 @@ subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
 use cc_mpi                                       ! CC MPI routines
-!~ use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
 use histave_m                                    ! Time average arrays
 use infile                                       ! Input file routines
