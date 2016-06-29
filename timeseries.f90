@@ -300,7 +300,7 @@ use prec_m      ! precip
 use sigs_m      ! sigma levels for pressure
 use soil_m      ! albedo
 use soilsnow_m  ! soil temp (tgg)
-use vegpar_m    ! rlai
+!~ use vegpar_m    ! rlai
 use vvel_m      ! vertical velocity
 implicit none
 real, dimension(:,:), allocatable, save :: cts
@@ -390,7 +390,7 @@ if (mod(ktau,ntsfreq).eq.0) then
     case ('tgg4')    ; temparr=tgg(:,4)
     case ('tgg5')    ; temparr=tgg(:,5)
     case ('tgg6')    ; temparr=tgg(:,6)
-    case ('rlai')    ; temparr=vlai
+    !~ case ('rlai')    ; temparr=vlai
     case ('pblh')    ; temparr=pblh
     case ('flux')  
       kount=0

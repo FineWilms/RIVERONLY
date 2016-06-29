@@ -243,7 +243,7 @@ use pbl_m
 use sigs_m
 use soil_m
 use soilsnow_m
-use vegpar_m
+!~ use vegpar_m
   
 implicit none
   
@@ -806,10 +806,10 @@ if (mp>0) then
   ! Calculate LAI and veg fraction diagnostics
   call getzinp(fjd,jyear,jmonth,jday,jhour,jmin,mins)
   !~ call setlai(sigmf,jyear,jmonth,jday,jhour,jmin)
-  vlai=0.
-  do n=1,maxnb
-    vlai=vlai+unpack(sv(pind(n,1):pind(n,2))*veg%vlai(pind(n,1):pind(n,2)),tmap(:,n),0.)
-  end do
+  !~ vlai=0.
+  !~ do n=1,maxnb
+    !~ vlai=vlai+unpack(sv(pind(n,1):pind(n,2))*veg%vlai(pind(n,1):pind(n,2)),tmap(:,n),0.)
+  !~ end do
   
   ! Load CABLE soil data
   soil%bch     = bch(soil%isoilm)
@@ -1123,7 +1123,7 @@ use cc_mpi
 use infile
 use soil_m
 use soilsnow_m
-use vegpar_m
+!~ use vegpar_m
   
 implicit none
 

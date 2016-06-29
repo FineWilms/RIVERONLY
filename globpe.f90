@@ -54,7 +54,7 @@ use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
 use vecsuv_m                               ! Map to cartesian coordinates
-use vegpar_m                               ! Vegetation arrays
+!~ use vegpar_m                               ! Vegetation arrays
 use work2_m                                ! Diagnostic arrays
 use work3_m                                ! Mk3 land-surface diagnostic arrays
 use workglob_m                             ! Additional grid interpolation
@@ -486,7 +486,7 @@ call savuv1_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
-call vegpar_init(ifull,iextra,kl)
+!~ call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 
 ! Remaining arrays are allocated in indata.f90, since their

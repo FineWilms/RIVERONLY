@@ -399,7 +399,7 @@ use savuv1_m                                     ! Saved dynamic arrays
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
-use vegpar_m                                     ! Vegetation arrays
+!~ use vegpar_m                                     ! Vegetation arrays
 use work2_m                                      ! Diagnostic arrays
 
 
