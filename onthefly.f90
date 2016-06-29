@@ -287,7 +287,7 @@ subroutine onthefly_work(nested,kdate_r,ktime_r,psl,zss,tss,sicedep,fracice,t,u,
 
 use cable_def_types_mod, only : ncs, ncp       ! CABLE dimensions
 use cc_mpi                                     ! CC MPI routines
-use extraout_m                                 ! Additional diagnostics      
+!~ use extraout_m                                 ! Additional diagnostics      
 use infile                                     ! Input file routines
 use latlong_m                                  ! Lat/lon coordinates
 use morepbl_m                                  ! Additional boundary layer diagnostics
@@ -710,7 +710,7 @@ if ( nested/=1 ) then
   ! -----------------------------------------------------------------
   ! Misc fields
   ! sgsave is needed for convection
-  call gethist1('sgsave',sgsave)
+  !~ call gethist1('sgsave',sgsave)
         
 endif    ! (nested/=1)
 

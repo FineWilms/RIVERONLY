@@ -44,7 +44,7 @@ use bigxy4_m                                     ! Grid interpolation
 use cable_ccam, only : loadcbmparm,loadtile      ! CABLE interface
 use cc_mpi                                       ! CC MPI routines
 use diag_m                                       ! Diagnostic routines
-use extraout_m                                   ! Additional diagnostics
+!~ use extraout_m                                   ! Additional diagnostics
 use indices_m                                    ! Grid index arrays
 use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
@@ -168,7 +168,7 @@ eg(:)=0.
 fg(:)=0.
 cduv(:)=0.
 cdtq(:)=0.
-swrsave(:)=0.5
+!~ swrsave(:)=0.5
 hourst=0.
 albvissav(:)=-1.
 albvisnir(:,:)=0.3

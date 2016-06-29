@@ -35,7 +35,7 @@ use arrays_m                               ! Atmosphere dyamics prognostic array
 use bigxy4_m                               ! Grid interpolation
 use cc_mpi                                 ! CC MPI routines
 use diag_m                                 ! Diagnostic routines
-use extraout_m                             ! Additional diagnostics
+!~ use extraout_m                             ! Additional diagnostics
 use histave_m                              ! Time average arrays
 use indata                                 ! Data initialisation
 use indices_m                              ! Grid index arrays
@@ -469,7 +469,7 @@ end if
 !--------------------------------------------------------------
 ! INITIALISE LOCAL ARRAYS
 call arrays_init(ifull,iextra,kl)
-call extraout_init(ifull,iextra,kl,nextout)
+!~ call extraout_init(ifull,iextra,kl,nextout)
 call histave_init(ifull,iextra,kl,ms)
 call morepbl_init(ifull,iextra,kl)
 call nsibd_init(ifull,iextra,kl,nsib)

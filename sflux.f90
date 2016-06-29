@@ -32,7 +32,7 @@ use arrays_m                       ! Atmosphere dyamics prognostic arrays
 use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
-use extraout_m                     ! Additional diagnostics
+!~ use extraout_m                     ! Additional diagnostics
 use map_m                          ! Grid map arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays
@@ -112,8 +112,8 @@ chnsea=(vkar/log(z1onzt))**2   ! should give .00085 for csiro9
 oldrunoff(:)=runoff(:)
 zo=999.        ! dummy value
 factch=999.    ! dummy value
-taux=0.        ! dummy value
-tauy=0.        ! dummy value
+!~ taux=0.        ! dummy value
+!~ tauy=0.        ! dummy value
 gamm=3.471e+05 ! dummy value
 root=0.        ! dummy value
 denha=0.       ! dummy value
