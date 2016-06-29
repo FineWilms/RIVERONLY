@@ -44,7 +44,6 @@ use bigxy4_m                                     ! Grid interpolation
 use cable_ccam, only : loadcbmparm,loadtile      ! CABLE interface
 use cc_mpi                                       ! CC MPI routines
 use diag_m                                       ! Diagnostic routines
-!~ use epst_m                                       ! Off-centre terms
 use extraout_m                                   ! Additional diagnostics
 use indices_m                                    ! Grid index arrays
 use infile                                       ! Input file routines
@@ -60,7 +59,6 @@ use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
 use vecsuv_m                                     ! Map to cartesian coordinates
-!~ use vegpar_m                                     ! Vegetation arrays
 use xyzinfo_m                                    ! Grid coordinate arrays
       
 implicit none
@@ -75,7 +73,6 @@ include 'parmdyn.h'                              ! Dynamics parmaters
 include 'parmgeom.h'                             ! Coordinate data
 include 'soilv.h'                                ! Soil parameters
 include 'stime.h'                                ! File date data
-!~ include 'trcom2.h'                               ! Station data
 
 integer, parameter :: jlmsigmf=1  ! 1 for jlm fixes to dean's data
 integer, parameter :: nfixwb=2    ! 0, 1 or 2; wb fixes with nrungcm=1

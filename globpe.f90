@@ -54,7 +54,6 @@ use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
 use vecsuv_m                               ! Map to cartesian coordinates
-!~ use vegpar_m                               ! Vegetation arrays
 use work2_m                                ! Diagnostic arrays
 use work3_m                                ! Mk3 land-surface diagnostic arrays
 use workglob_m                             ! Additional grid interpolation
@@ -75,7 +74,6 @@ include 'parmhor.h'                        ! Horizontal advection parameters
 include 'parmsurf.h'                       ! Surface parameters
 include 'soilv.h'                          ! Soil parameters
 include 'stime.h'                          ! File date data
-!~ include 'trcom2.h'                         ! Station data
 include 'version.h'                        ! Model version data
 
 #ifdef vampir
@@ -349,8 +347,6 @@ end if
 ! some default values for unspecified parameters
 if ( ia<0 ) ia = il/2
 if ( ib<0 ) ib = ia + 3
-!~ if ( ldr==0 ) mbase = 0
-!~ dsig4 = max(dsig2+.01, dsig4)
 if( mbd/=0 .and. nbd/=0 ) then
   write(6,*) 'setting nbd=0 because mbd/=0'
   nbd = 0
@@ -486,7 +482,6 @@ call savuv1_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,iaero,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
-!~ call vegpar_init(ifull,iextra,kl)
 call work2_init(ifull,iextra,kl,nsib)
 
 ! Remaining arrays are allocated in indata.f90, since their
@@ -660,17 +655,6 @@ do kktau = 1,ntau   ! ****** start of main time loop
     runoff(:)      = 0.  ! converted to mm/day in outcdf
   endif  ! (mod(ktau,nperavg)==0)
 
-  !~ if ( mod(ktau,nperday) == 0 ) then   ! re-set at the end of each 24 hours
-    !~ if ( ntau<10*nperday .and. nstn>0 ) then     ! print stn info
-      !~ do nn = 1,nstn
-        !~ if ( .not.mystn(nn) ) cycle
-        !~ i = istn(nn)
-        !~ j = jstn(nn)
-        !~ iq = i+(j-1)*il
-      !~ end do
-    !~ end if  ! (ntau<10*nperday)
-  !~ endif   ! (mod(ktau,nperday)==0)
-  
 #ifdef vampir
   ! Flush vampir trace information to disk to save memory.
   VT_BUFFER_FLUSH()
@@ -693,11 +677,6 @@ if ( myid == 0 ) then
 end if
 call END_LOG(model_end)
 
-!~ ! close mesonest files
-!~ if ( mbd/=0 .or. nbd/=0 ) then
-  !~ call histclose
-!~ end if
-
 #ifdef simple_timer
 ! report subroutine timings
 call simple_timer_finalize
@@ -718,7 +697,6 @@ implicit none
 include 'newmpar.h'          ! Grid parameters
 include 'dates.h'            ! Date data
 include 'filnames.h'         ! Filenames
-!~ include 'kuocom.h'           ! Convection parameters
 include 'parm.h'             ! Model configuration
 include 'parmdyn.h'          ! Dynamics parmaters
 include 'parmgeom.h'         ! Coordinate data
@@ -726,7 +704,6 @@ include 'parmhor.h'          ! Horizontal advection parameters
 include 'parmsurf.h'         ! Surface parameters
 include 'soilv.h'            ! Soil parameters
 include 'stime.h'            ! File date data
-!~ include 'trcom2.h'           ! Station data
 
 integer leap
 common/leap_yr/leap          ! Leap year (1 to allow leap years)
@@ -770,10 +747,7 @@ data nurban/0/,ccycle/0/
 data m_fly/4/,io_in/1/,io_out/1/,io_rest/1/
 data nperavg/-99/,nwt/-99/,tblock/1/,tbave/1/
 data nextout/3/,localhist/.false./
-!~ data nstn/0/  
-!~ data slat/nstnmax*-89./,slon/nstnmax*0./,iunp/nstnmax*6/
-!~ data zstn/nstnmax*0./,name_stn/nstnmax*'   '/ 
- 
+
 ! initialize file names to something
 data albfile/' '/,icefile/' '/,maskfile/' '/
 data snowfile/' '/,sstfile/' '/,topofile/' '/,zofile/' '/

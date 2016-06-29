@@ -293,9 +293,6 @@ if ( myid==0 .or. localhist ) then
     nahead(13) = 0         ! nmi
     nahead(14) = nint(dt)  ! needed by cc2hist
     nahead(15) = 0         ! not needed now 
-
-    !~ nahead(17) = nkuo
-
     nahead(19) = kl        ! needed by cc2hist (was kwt)
     nahead(20) = 0  !iaa
     nahead(21) = 0  !jaa
@@ -304,31 +301,22 @@ if ( myid==0 .or. localhist ) then
     nahead(24) = 0  !lbd
     nahead(25) = nrun
     nahead(26) = 0
-
-    !~ nahead(28) = ksc
     nahead(29) = kountr
     nahead(30) = 1 ! ndiur
     nahead(31) = 0  ! spare
-
     nahead(33) = nsoil
     nahead(34) = ms        ! needed by cc2hist
     nahead(35) = ntsur
     nahead(36) = nrad
-    !~ nahead(37) = kuocb
     nahead(38) = nvmix
     nahead(40) = 0    
     nahead(41) = nextout
-
     nahead(44) = nsib
     nahead(45) = nrungcm
-    !~ nahead(46) = ncvmix
     nahead(47) = ngwd
     nahead(48) = lgwd
     nahead(49) = mup
     nahead(50) = nritch_t
-    !~ nahead(51) = ldr
-    !~ nahead(52) = nevapls
-    !~ nahead(53) = nevapcc
     nahead(54) = nt_adv
     ahead(1) = ds
     ahead(2) = 0.  !difknbd
@@ -378,10 +366,7 @@ end subroutine cdfout
 subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
 
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
-!~ use cable_ccam, only : savetile, savetiledef     ! CABLE interface
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
-use casadimension, only : mplant, mlitter, msoil ! CASA dimensions
-!~ use carbpools_m                                  ! Carbon pools
 use cc_mpi                                       ! CC MPI routines
 use dpsdt_m                                      ! Vertical velocity
 use extraout_m                                   ! Additional diagnostics
@@ -390,7 +375,6 @@ use infile                                       ! Input file routines
 use latlong_m                                    ! Lat/lon coordinates
 use map_m                                        ! Grid map arrays
 use morepbl_m                                    ! Additional boundary layer diagnostics
-!~ use nharrs_m                                     ! Non-hydrostatic atmosphere arrays
 use nsibd_m                                      ! Land-surface arrays
 use pbl_m                                        ! Boundary layer arrays
 use river                                        ! River routing
@@ -399,7 +383,6 @@ use savuv1_m                                     ! Saved dynamic arrays
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
-!~ use vegpar_m                                     ! Vegetation arrays
 use work2_m                                      ! Diagnostic arrays
 
 
@@ -409,7 +392,6 @@ include 'newmpar.h'                              ! Grid parameters
 include 'const_phys.h'                           ! Physical constants
 include 'dates.h'                                ! Date data
 include 'filnames.h'                             ! Filenames
-!~ include 'kuocom.h'                               ! Convection parameters
 include 'parm.h'                                 ! Model configuration
 include 'parmdyn.h'                              ! Dynamics parameters
 include 'soilv.h'                                ! Soil parameters

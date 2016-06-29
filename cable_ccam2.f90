@@ -109,10 +109,6 @@ use cable_data_module
 use cable_def_types_mod, cbm_ms => ms
 use cable_roughness_module
 use cable_soil_snow_module
-use casa_cnp_module
-use casadimension
-use casaparm, xroot => froot
-use casavariable
 
 implicit none
 
@@ -140,12 +136,6 @@ type (soil_snow_type), save      :: ssnow
 type (sum_flux_type), save       :: sum_flux
 type (veg_parameter_type), save  :: veg
 type (canopy_type), save         :: canopy
-type (casa_balance), save        :: casabal
-type (casa_biome), save          :: casabiome
-type (casa_flux), save           :: casaflux
-type (casa_met), save            :: casamet
-type (casa_pool), save           :: casapool
-type (phen_variable), save       :: phen
 type (physical_constants), save  :: c
 
 contains
@@ -234,7 +224,6 @@ end subroutine sib4
 ! *************************************************************************************
 subroutine loadcbmparm(fveg,fvegprev,fvegnext,fphen,casafile)
 
-!~ use carbpools_m
 use cc_mpi
 use infile
 use latlong_m
@@ -243,8 +232,7 @@ use pbl_m
 use sigs_m
 use soil_m
 use soilsnow_m
-!~ use vegpar_m
-  
+
 implicit none
   
 include 'newmpar.h'
@@ -263,13 +251,10 @@ real, dimension(ifull,mxvt,0:2) :: newlai
 real, dimension(mxvt,ms) :: froot2
 real, dimension(mxvt,ncp) :: tcplant
 real, dimension(mxvt,ncs) :: tcsoil
-real, dimension(mxvt,mplant) :: ratiocnplant
-real, dimension(mxvt,msoil) :: ratiocnsoil,ratiocnsoilmax,ratiocnsoilmin
 real, dimension(mxvt,2) :: taul,refl  
 real, dimension(ifull,mxvt) :: newgrid
 real, dimension(ifull,5) :: svs,vlin,vlinprev,vlinnext
 real, dimension(ifull,2) :: albsoilsn
-real, dimension(12,msoil) :: rationpsoil
 real, dimension(ncp) :: ratecp
 real, dimension(ncs) :: ratecs
 real, dimension(mxvt) :: canst1,leaf_w,leaf_l,ejmax,hc,rp20
@@ -342,7 +327,6 @@ do n=1,5
   svs(:,n)=svs(:,n)/sum(svs,2)
 end do
 
-icycle=ccycle
 cable_user%fwsoil_switch="standard"
 
 if ( myid==0 ) write(6,*) "Define CABLE and CASA CNP arrays"
@@ -645,11 +629,6 @@ end if
 ! Write messages here in case myid==0 has no land-points (mp==0)
 if (myid==0) then
   write(6,*) "Allocating CABLE and CASA CNP arrays"
-  if (icycle==0) then
-    write(6,*) "Using CABLE carbon cycle"
-  else
-    write(6,*) "Using CASA CNP"
-  end if
 end if
 
 if (mp>0) then
