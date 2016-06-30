@@ -22,26 +22,26 @@
 
 !     this is a list of files, read in once at beginning of the run.
       common/filesin/albfile,icefile,maskfile                            &
-     &          ,snowfile,sstfile,topofile,zofile                        &
+     &          ,snowfile,topofile,zofile                        &
      &          ,rsmfile,scamfile,soilfile,vegfile                       &
      &          ,co2emfile,so2depfile,so2emfile,smoistfile,soil2file     &
      &          ,climcdf,monfil,restfile,scrfcdf                         &
      &          ,radonemfile,surfile                                     &
      &          ,co2_00,radon_00,surf_00,co2_12,radon_12,surf_12         &
-     &          ,ifile,ofile,nmifile,so4tfile                            &
+     &          ,ifile,ofile,nmifile                            &
      &          ,eigenv,hfile                    &
      &          ,scrnfile,tmaxfile,tminfile,trcfil                       &
-     &          ,laifile,albnirfile,urbanfile,bathfile,vegprev,vegnext   &
-     &          ,cnsdir,salfile,oxidantfile,phenfile,casafile
+     &          ,laifile,albnirfile,urbanfile,vegprev,vegnext   &
+     &          ,salfile,phenfile,casafile
       character(len=160) albfile,icefile,maskfile                        &
-     &          ,snowfile,sstfile,topofile,zofile                        &
+     &          ,snowfile,topofile,zofile                        &
      &          ,rsmfile,scamfile,soilfile,vegfile                       &
      &          ,co2emfile,so2depfile,so2emfile,smoistfile,soil2file     &
      &          ,climcdf,monfil,restfile,scrfcdf                         &
      &          ,radonemfile,surfile                                     &
      &          ,co2_00,radon_00,surf_00,co2_12,radon_12,surf_12         &
-     &          ,ifile,ofile,nmifile,so4tfile                            &
-     &          ,eigenv,hfile,mesonest                    &
+     &          ,ifile,ofile,nmifile                            &
+     &          ,eigenv,hfile                    &
      &          ,scrnfile,tmaxfile,tminfile,trcfil                       &
-     &          ,laifile,albnirfile,urbanfile,bathfile,vegprev,vegnext   &
-     &          ,cnsdir,salfile,oxidantfile,phenfile,casafile
+     &          ,laifile,albnirfile,urbanfile,vegprev,vegnext   &
+     &          ,salfile,phenfile,casafile

@@ -134,11 +134,11 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
 ! file namelist
 namelist/datafile/ifile,ofile,eigenv,hfile,     &
     icefile,nmifile,restfile,rsmfile,     &
-    scamfile,scrnfile,snowfile,so4tfile,soilfile,sstfile,surfile, &
+    scamfile,scrnfile,snowfile,soilfile,surfile, &
     tmaxfile,tminfile,topofile,trcfil,vegfile,zofile,smoistfile,  &
     soil2file,radonemfile,co2_00,radon_00,surf_00,co2_12,         &
-    radon_12,surf_12,laifile,albnirfile,urbanfile,bathfile,       &
-    vegprev,vegnext,cnsdir,salfile,oxidantfile,casafile,phenfile
+    radon_12,surf_12,laifile,albnirfile,urbanfile,       &
+    vegprev,vegnext,salfile,casafile,phenfile
 
 data nversion/0/
 data comment/' '/,comm/' '/,irest/1/,jalbfix/1/,nalpha/1/
@@ -744,18 +744,18 @@ data nextout/3/,localhist/.false./
 
 ! initialize file names to something
 data albfile/' '/,icefile/' '/,maskfile/' '/
-data snowfile/' '/,sstfile/' '/,topofile/' '/,zofile/' '/
+data snowfile/' '/,topofile/' '/,zofile/' '/
 data rsmfile/' '/,scamfile/' '/,soilfile/' '/,vegfile/' '/
-data co2emfile/' '/,so4tfile/' '/
+data co2emfile/' '/
 data smoistfile/' '/,soil2file/' '/,restfile/' '/
 data radonemfile/' '/,surfile/' '/,surf_00/'s_00a '/
 data surf_12/'s_12a '/,co2_00/' '/,co2_12/' '/,radon_00/' '/
 data radon_12/' '/,ifile/' '/,ofile/' '/,nmifile/' '/
 data eigenv/' '/,hfile/' '/
 data scrnfile/' '/,tmaxfile/' '/,tminfile/' '/,trcfil/' '/
-data laifile/' '/,albnirfile/' '/,urbanfile/' '/,bathfile/' '/
-data vegprev/' '/,vegnext/' '/,cnsdir/' '/,salfile/' '/
-data oxidantfile/' '/,casafile/' '/,phenfile/' '/
+data laifile/' '/,albnirfile/' '/,urbanfile/' '/
+data vegprev/' '/,vegnext/' '/,salfile/' '/
+data casafile/' '/,phenfile/' '/
 ! floating point:
 data timer/0./,mtimer/0/
 
