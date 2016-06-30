@@ -127,8 +127,8 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     nud_q,nud_t,nud_uv,nud_hrs,nudu_hrs,sigramplow,sigramphigh,   &
     nlocal,nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,nmr,ktopdav,     &
-    nud_sst,nud_sss,mfix_tr,mfix_aero,kbotmlo,ktopmlo,mloalpha,   &
-    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth,nmlo,ol, &
+    nud_sss,mfix_tr,mfix_aero,kbotmlo,ktopmlo,mloalpha,   &
+    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, ol, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
@@ -203,13 +203,11 @@ end do
 if ( nwt==-99 )     nwt = nperday      ! set default nwt to 24 hours
 if ( nperavg==-99 ) nperavg = nwt      ! set default nperavg to nwt
 if ( nwrite==0 )    nwrite = nperday   ! only used for outfile IEEE
-if ( nmlo/=0 .and. abs(nmlo)<=9 ) then
-  ol = max( ol, 1 )
-else
-  ol = 0
-end if
 
-if ( abs(nmlo)>=2 ) nriver=1
+  ol = 0
+
+
+nriver=1
 read(99, datafile)
 ! try reading boundary layer turbulence namelist
 
@@ -715,7 +713,7 @@ data mbd/0/,mbd_maxscale/3000/,nbd/0/,nbox/1/,kbotdav/4/,kbotu/0/
 data nud_p/0/,nud_q/0/,nud_t/0/,nud_uv/1/,nud_hrs/24/,nudu_hrs/0/
 data ktopdav/0/,kblock/-1/
 data nud_aero/0/
-data nud_sst/0/,nud_sss/0/,nud_ouv/0/,nud_sfh/0/
+data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/,kbotmlo/-1000/,ktopmlo/1/
 data sigramplow/0./,sigramphigh/0./
 ! Dynamics options A & B      

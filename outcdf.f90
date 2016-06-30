@@ -200,11 +200,9 @@ if ( myid==0 .or. localhist ) then
     endif
     call ccnf_def_dim(idnc,'lev',kl,zdim)
     call ccnf_def_dim(idnc,'zsoil',ms,msdim)
-    if ( abs(nmlo)>0. .and. abs(nmlo)<=9 ) then
-      call ccnf_def_dim(idnc,'olev',ol,ocdim)
-    else
+    
       ocdim=0
-    end if
+    
     call ccnf_def_dimu(idnc,'time',tdim)
     if ( myid==0 ) then
       write(6,*) "xdim,ydim,zdim,tdim"
@@ -240,13 +238,7 @@ if ( myid==0 .or. localhist ) then
     call ccnf_put_att(idnc,idms,'point_spacing','uneven')
     call ccnf_put_att(idnc,idms,'units','m')
     if (myid==0) write(6,*) 'idms=',idms
-        
-    if (abs(nmlo)>0.and.abs(nmlo)<=9) then
-      call ccnf_def_var(idnc,'olev','float',1,dimo(3:3),idoc)
-      call ccnf_put_att(idnc,idoc,'point_spacing','uneven')
-      call ccnf_put_att(idnc,idoc,'units','sigma_level')
-      if (myid==0) write(6,*) 'idoc=',idoc
-    end if
+
 
     call ccnf_def_var(idnc,'time','float',1,dima(4:4),idnt)
     call ccnf_put_att(idnc,idnt,'point_spacing','even')
@@ -507,7 +499,7 @@ if( myid==0 .or. local ) then
     lname = 'Runoff'
     call attrib(idnc,jdim(1:3),3,'runoff',lname,'mm/day',0.,1300.,0,-1) ! -1=long
  
-    if ( nmlo<=-2 .or. (nmlo>=2.and.itype==-1) .or. nriver==1 ) then
+    if (nriver==1 ) then
       lname = 'Surface water depth'
       call attrib(idnc,jdim(1:3),3,'swater',lname,'mm',0.,6.5E3,0,-1) ! -1 = long
     end if
@@ -614,7 +606,7 @@ call histwrt3(aa,'runoff',idnc,iarch,local,lwrite)
 
 ! MLO ---------------------------------------------------------      
 
-if ( nmlo<=-2 .or. (nmlo>=2.and.itype==-1) .or. nriver==1 ) then
+if (nriver==1 ) then
   call histwrt3(watbdy(1:ifull),'swater',idnc,iarch,local,.true.)
 end if
 

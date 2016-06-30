@@ -40,10 +40,10 @@ implicit none
 integer, intent(in) :: ifull,iextra,kl,nsib
 
 allocate(ga(ifull))
-if (nsib==3.or.nsib==5) then
-  allocate(condxpr(ifull),condspr(ifull),fes(ifull))
-  allocate(fwtop(ifull))
-end if
+!~ if (nsib==3.or.nsib==5) then
+  !~ allocate(condxpr(ifull),condspr(ifull),fes(ifull))
+  !~ allocate(fwtop(ifull))
+!~ end if
 
 return
 end subroutine work3_init

@@ -478,14 +478,7 @@ endif      ! (nsib>=1)
 ! nmlo=1 mixed layer ocean (KPP)
 ! nmlo=2 same as 1, but with Smag horz diffusion and river routing
 ! nmlo=3 same as 2, but with horizontal and vertical advection
-if (nmlo/=0.and.abs(nmlo)<=9) then
-  if (myid==0) write(6,*) 'Initialising MLO'
-  call surfread(dep,'depth',filename=bathfile)
-  where (land)
-    dep=0.
-  end where
-end if
-if ( abs(nmlo)>=2 .or. nriver==1 ) then
+if (nriver==1 ) then
   if (myid==0) write(6,*) 'Initialising river routing'
   call rvrinit
 end if
@@ -844,7 +837,7 @@ enddo     ! iq loop
 ! snow and ice fixes
 snalb=.8
 do iq=1,ifull
-  if (nmlo==0.or.abs(nmlo)>9) then
+
     if(.not.land(iq))then
       ! from June '03 tgg1	holds actual sea temp, tss holds net temp 
       tgg(iq,1)=max(271.3,tss(iq)) 
@@ -857,7 +850,7 @@ do iq=1,ifull
       albvisnir(iq,1)=.8*fracice(iq)+.1*(1.-fracice(iq))
       albvisnir(iq,2)=.5*fracice(iq)+.1*(1.-fracice(iq))
     endif   ! (sicedep(iq)>0.)
-  endif    ! (nmlo==0.or.abs(nmlo)>9) 
+
   if(isoilm(iq)==9.and.(nsib==3.or.nsib==5))then
     ! also at beg. of month ensure cold deep temps over permanent ice
     do k=2,ms

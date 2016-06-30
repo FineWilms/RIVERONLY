@@ -687,10 +687,10 @@ if ( nested/=1 ) then
   ! -----------------------------------------------------------------
   ! soil ice and snow data
   call gethist4('wbice',wbice,ms) ! SOIL ICE
-  if ( nmlo==0 .or. abs(nmlo)>9 ) then ! otherwise already read above
+  
     call gethist4('tggsn',tggsn,3)
     if ( all(tggsn==0.) ) tggsn=280.
-  end if
+
   call gethist4('smass',smass,3)
   call gethist4('ssdn',ssdn,3)
   do k=1,3
@@ -720,11 +720,11 @@ endif    ! (nested/=1)
 
 ! -------------------------------------------------------------------
 ! tgg holds file surface temperature when no MLO
-if ( nmlo==0 .or. abs(nmlo)>9 ) then
+
   where ( .not.land )
     tgg(:,1) = tss
   end where
-end if
+
 
 ! -------------------------------------------------------------------
 ! set-up for next read of file
@@ -2142,43 +2142,43 @@ end if ! iotest
 return
 end subroutine fillhist1
 
-! This version reads, fills and interpolates a surface velocity field
-subroutine fillhistuv1o(uname,vname,uarout,varout,mask_a)
+!~ ! This version reads, fills and interpolates a surface velocity field
+!~ subroutine fillhistuv1o(uname,vname,uarout,varout,mask_a)
    
-use cc_mpi             ! CC MPI routines
-use infile             ! Input file routines
+!~ use cc_mpi             ! CC MPI routines
+!~ use infile             ! Input file routines
       
-implicit none
+!~ implicit none
       
-include 'newmpar.h'    ! Grid parameters
-include 'darcdf.h'     ! Netcdf data
+!~ include 'newmpar.h'    ! Grid parameters
+!~ include 'darcdf.h'     ! Netcdf data
       
-integer ier
-real, dimension(:), intent(out) :: uarout, varout
-real, dimension(fwsize) :: ucc, vcc
-logical, dimension(:), intent(in) :: mask_a
-character(len=*), intent(in) :: uname, vname
+!~ integer ier
+!~ real, dimension(:), intent(out) :: uarout, varout
+!~ real, dimension(fwsize) :: ucc, vcc
+!~ logical, dimension(:), intent(in) :: mask_a
+!~ character(len=*), intent(in) :: uname, vname
       
-if ( iotest ) then
-  ! read without interpolation or redistribution
-  call histrd1(iarchi,ier,uname,ik,uarout,ifull)
-  call histrd1(iarchi,ier,vname,ik,varout,ifull)
-else if ( fnresid==1 ) then
-  ! use bcast method for single input file
-  ! requires interpolation and redistribution
-  call histrd1(iarchi,ier,uname,ik,ucc,6*ik*ik,nogather=.false.)
-  call histrd1(iarchi,ier,vname,ik,vcc,6*ik*ik,nogather=.false.)
-  call interpcurrent1(uarout,varout,ucc,vcc,mask_a,nogather=.false.)
-else
-  ! use RMA method for multiple input files
-  ! requires interpolation and redistribution
-  call histrd1(iarchi,ier,uname,ik,ucc,6*ik*ik,nogather=.true.)
-  call histrd1(iarchi,ier,vname,ik,vcc,6*ik*ik,nogather=.true.)
-  call interpcurrent1(uarout,varout,ucc,vcc,mask_a,nogather=.true.)
-end if ! iotest
+!~ if ( iotest ) then
+  !~ ! read without interpolation or redistribution
+  !~ call histrd1(iarchi,ier,uname,ik,uarout,ifull)
+  !~ call histrd1(iarchi,ier,vname,ik,varout,ifull)
+!~ else if ( fnresid==1 ) then
+  !~ ! use bcast method for single input file
+  !~ ! requires interpolation and redistribution
+  !~ call histrd1(iarchi,ier,uname,ik,ucc,6*ik*ik,nogather=.false.)
+  !~ call histrd1(iarchi,ier,vname,ik,vcc,6*ik*ik,nogather=.false.)
+  !~ call interpcurrent1(uarout,varout,ucc,vcc,mask_a,nogather=.false.)
+!~ else
+  !~ ! use RMA method for multiple input files
+  !~ ! requires interpolation and redistribution
+  !~ call histrd1(iarchi,ier,uname,ik,ucc,6*ik*ik,nogather=.true.)
+  !~ call histrd1(iarchi,ier,vname,ik,vcc,6*ik*ik,nogather=.true.)
+  !~ call interpcurrent1(uarout,varout,ucc,vcc,mask_a,nogather=.true.)
+!~ end if ! iotest
       
-return
-end subroutine fillhistuv1o
+!~ return
+!~ end subroutine fillhistuv1o
 
 ! This version reads 3D fields
 subroutine gethist4(vname,varout,kx)
@@ -2216,96 +2216,96 @@ return
 end subroutine gethist4   
 
 ! This version reads and interpolates 3D atmospheric fields
-subroutine gethist4a(vname,varout,vmode,levkin,t_a_lev)
+!~ subroutine gethist4a(vname,varout,vmode,levkin,t_a_lev)
       
-use cc_mpi               ! CC MPI routines
-use infile               ! Input file routines
+!~ use cc_mpi               ! CC MPI routines
+!~ use infile               ! Input file routines
       
-implicit none
+!~ implicit none
       
-include 'newmpar.h'      ! Grid parameters
-include 'darcdf.h'       ! Netcdf data
+!~ include 'newmpar.h'      ! Grid parameters
+!~ include 'darcdf.h'       ! Netcdf data
 
-integer, intent(in) :: vmode
-integer, intent(in), optional :: levkin
-integer ier
-real, dimension(:,:), intent(out) :: varout
-real, dimension(:), intent(out), optional :: t_a_lev
-real, dimension(fwsize,kk) :: ucc
-real, dimension(ifull,kk) :: u_k
-character(len=*), intent(in) :: vname
+!~ integer, intent(in) :: vmode
+!~ integer, intent(in), optional :: levkin
+!~ integer ier
+!~ real, dimension(:,:), intent(out) :: varout
+!~ real, dimension(:), intent(out), optional :: t_a_lev
+!~ real, dimension(fwsize,kk) :: ucc
+!~ real, dimension(ifull,kk) :: u_k
+!~ character(len=*), intent(in) :: vname
 
-if ( iotest ) then
-  ! read without interpolation or redistribution
-  call histrd4(iarchi,ier,vname,ik,kk,u_k,ifull)
-else
-  if ( fnresid==1 ) then
-    ! use bcast method for single input file
-    ! requires interpolation and redistribution
-    call histrd4(iarchi,ier,vname,ik,kk,ucc,6*ik*ik,nogather=.false.)
-    if ( fwsize>0.and.present(levkin).and.present(t_a_lev) ) then
-      t_a_lev(:) = ucc(:,levkin)   ! store for psl calculation
-    end if
-    call doints4_gather(ucc, u_k)
-  else
-    ! use RMA method for multiple input files
-    ! requires interpolation and redistribution
-    call histrd4(iarchi,ier,vname,ik,kk,ucc,6*ik*ik,nogather=.true.)
-    if ( fwsize>0.and.present(levkin).and.present(t_a_lev) ) then
-      t_a_lev(:) = ucc(:,levkin)   ! store for psl calculation  
-    end if
-    call doints4_nogather(ucc, u_k)      
-  end if
-end if ! iotest
+!~ if ( iotest ) then
+  !~ ! read without interpolation or redistribution
+  !~ call histrd4(iarchi,ier,vname,ik,kk,u_k,ifull)
+!~ else
+  !~ if ( fnresid==1 ) then
+    !~ ! use bcast method for single input file
+    !~ ! requires interpolation and redistribution
+    !~ call histrd4(iarchi,ier,vname,ik,kk,ucc,6*ik*ik,nogather=.false.)
+    !~ if ( fwsize>0.and.present(levkin).and.present(t_a_lev) ) then
+      !~ t_a_lev(:) = ucc(:,levkin)   ! store for psl calculation
+    !~ end if
+    !~ call doints4_gather(ucc, u_k)
+  !~ else
+    !~ ! use RMA method for multiple input files
+    !~ ! requires interpolation and redistribution
+    !~ call histrd4(iarchi,ier,vname,ik,kk,ucc,6*ik*ik,nogather=.true.)
+    !~ if ( fwsize>0.and.present(levkin).and.present(t_a_lev) ) then
+      !~ t_a_lev(:) = ucc(:,levkin)   ! store for psl calculation  
+    !~ end if
+    !~ call doints4_nogather(ucc, u_k)      
+  !~ end if
+!~ end if ! iotest
 
 ! vertical interpolation
-call vertint(u_k,varout,vmode,kk,sigin)
+!~ call vertint(u_k,varout,vmode,kk,sigin)
       
-return
-end subroutine gethist4a  
+!~ return
+!~ end subroutine gethist4a  
 
-! This version reads and interpolates 3D atmospheric winds
-subroutine gethistuv4a(uname,vname,uarout,varout,umode,vmode)
+!~ ! This version reads and interpolates 3D atmospheric winds
+!~ subroutine gethistuv4a(uname,vname,uarout,varout,umode,vmode)
 
-use cc_mpi             ! CC MPI routines
-use infile             ! Input file routines
+!~ use cc_mpi             ! CC MPI routines
+!~ use infile             ! Input file routines
       
-implicit none
+!~ implicit none
       
-include 'newmpar.h'    ! Grid parameters
-include 'darcdf.h'     ! Netcdf data
+!~ include 'newmpar.h'    ! Grid parameters
+!~ include 'darcdf.h'     ! Netcdf data
 
-integer, intent(in) :: umode, vmode
-integer ier
-real, dimension(:,:), intent(out) :: uarout, varout
-real, dimension(fwsize,kk) :: ucc, vcc
-real, dimension(ifull,kk) :: u_k, v_k
-character(len=*), intent(in) :: uname, vname
+!~ integer, intent(in) :: umode, vmode
+!~ integer ier
+!~ real, dimension(:,:), intent(out) :: uarout, varout
+!~ real, dimension(fwsize,kk) :: ucc, vcc
+!~ real, dimension(ifull,kk) :: u_k, v_k
+!~ character(len=*), intent(in) :: uname, vname
 
-if ( iotest ) then
-  ! read without interpolation or redistribution
-  call histrd4(iarchi,ier,uname,ik,kk,u_k,ifull)
-  call histrd4(iarchi,ier,vname,ik,kk,v_k,ifull)
-else if ( fnresid==1 ) then
-  ! use bcast method for single input file
-  ! requires interpolation and redistribution
-  call histrd4(iarchi,ier,uname,ik,kk,ucc,6*ik*ik,nogather=.false.)
-  call histrd4(iarchi,ier,vname,ik,kk,vcc,6*ik*ik,nogather=.false.)
-  call interpwind4(u_k,v_k,ucc,vcc,nogather=.false.)
-else
-  ! use RMA method for multiple input files
-  ! requires interpolation and redistribution
-  call histrd4(iarchi,ier,uname,ik,kk,ucc,6*ik*ik,nogather=.true.)
-  call histrd4(iarchi,ier,vname,ik,kk,vcc,6*ik*ik,nogather=.true.)
-  call interpwind4(u_k,v_k,ucc,vcc,nogather=.true.)
-end if ! iotest
+!~ if ( iotest ) then
+  !~ ! read without interpolation or redistribution
+  !~ call histrd4(iarchi,ier,uname,ik,kk,u_k,ifull)
+  !~ call histrd4(iarchi,ier,vname,ik,kk,v_k,ifull)
+!~ else if ( fnresid==1 ) then
+  !~ ! use bcast method for single input file
+  !~ ! requires interpolation and redistribution
+  !~ call histrd4(iarchi,ier,uname,ik,kk,ucc,6*ik*ik,nogather=.false.)
+  !~ call histrd4(iarchi,ier,vname,ik,kk,vcc,6*ik*ik,nogather=.false.)
+  !~ call interpwind4(u_k,v_k,ucc,vcc,nogather=.false.)
+!~ else
+  !~ ! use RMA method for multiple input files
+  !~ ! requires interpolation and redistribution
+  !~ call histrd4(iarchi,ier,uname,ik,kk,ucc,6*ik*ik,nogather=.true.)
+  !~ call histrd4(iarchi,ier,vname,ik,kk,vcc,6*ik*ik,nogather=.true.)
+  !~ call interpwind4(u_k,v_k,ucc,vcc,nogather=.true.)
+!~ end if ! iotest
 
-! vertical interpolation
-call vertint(u_k,uarout,umode,kk,sigin)
-call vertint(v_k,varout,vmode,kk,sigin)
+!~ ! vertical interpolation
+!~ call vertint(u_k,uarout,umode,kk,sigin)
+!~ call vertint(v_k,varout,vmode,kk,sigin)
       
-return
-end subroutine gethistuv4a  
+!~ return
+!~ end subroutine gethistuv4a  
 
 ! This version reads, fills a 3D field for the ocean
 subroutine fillhist4(vname,varout,kx,mask_a,filllimit)

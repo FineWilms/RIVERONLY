@@ -46,10 +46,10 @@ allocate(rsmin(ifull),isoilm_in(ifull))
 sigmf=0.
 sigmu=0.
 rsmin=995.
-if (nsib==3.or.nsib==5) then
-  allocate(tgf(ifull))
-  tgf=293.
-end if
+!~ if (nsib==3.or.nsib==5) then
+  !~ allocate(tgf(ifull))
+  !~ tgf=293.
+!~ end if
 
 return
 end subroutine nsibd_init

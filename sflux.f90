@@ -32,7 +32,6 @@ use arrays_m                       ! Atmosphere dyamics prognostic arrays
 use cable_ccam, only : sib4        ! CABLE interface
 use cc_mpi                         ! CC MPI routines
 use diag_m                         ! Diagnostic routines
-!~ use extraout_m                     ! Additional diagnostics
 use map_m                          ! Grid map arrays
 use morepbl_m                      ! Additional boundary layer diagnostics
 use nsibd_m                        ! Land-surface arrays
@@ -44,7 +43,6 @@ use sigs_m                         ! Atmosphere sigma levels
 use soil_m                         ! Soil and surface data
 use soilsnow_m                     ! Soil, snow and surface data
 use vecsuv_m                       ! Map to cartesian coordinates
-!~ use vvel_m                         ! Additional vertical velocity
 use work2_m                        ! Diagnostic arrays
 use xyzinfo_m                      ! Grid coordinate arrays
       
@@ -133,13 +131,13 @@ if ( ntsur/=7 ) vmod(:) = vmag(:)      ! gives usual way
 
 !--------------------------------------------------------------
 call START_LOG(sfluxwater_begin)
-if (nmlo==0) then                                                                                ! sea
+                                                                            ! sea
   if ( nriver==1 ) then                                                                          ! river
     where ( .not.land(1:ifull) )                                                                 ! river
       watbdy(1:ifull) = 0. ! water enters ocean and is removed from rivers                       ! river
     end where                                                                                    ! river
   end if                                                                                         ! river
-end if                                                                                           
+                                                                                        
 call END_LOG(sfluxwater_end)                                                                     
 !--------------------------------------------------------------      
 call START_LOG(sfluxland_begin)    
@@ -174,7 +172,7 @@ end select                                                                      
 call END_LOG(sfluxland_end)                                                                      ! land
 !----------------------------------------------------------
 ! Update runoff for river routing
-if ( abs(nmlo)>=2 .or. nriver==1 ) then
+if ( nriver==1 ) then
   newrunoff=runoff-oldrunoff
   watbdy(1:ifull)=watbdy(1:ifull)+newrunoff ! runoff in mm
 end if
