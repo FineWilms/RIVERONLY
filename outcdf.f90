@@ -297,7 +297,7 @@ if ( myid==0 .or. localhist ) then
     nahead(33) = nsoil
     nahead(34) = ms        ! needed by cc2hist
     nahead(35) = ntsur
-    nahead(36) = nrad
+    !~ nahead(36) = nrad
     nahead(38) = nvmix
     nahead(40) = 0    
     nahead(41) = nextout

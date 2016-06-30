@@ -21,10 +21,10 @@
 
 
       integer meso,ngwd,nrungcm,newtop,                                  &
-     &        kountr,nrad,nvmix,nlocal,                                  &
+     &        kountr,nvmix,nlocal,                                  &
      &        nhstest,namip,nspecial,newrough,newsoilm,nsib,nsoil,       &
      &        ntaft,ntsea,ntsur,ntsur2,lgwd,newztsea,nglacier,mbd,       &
-     &        nbd,kbotdav,kbotu,nbox,nud_p,nud_q,nud_t,nud_uv,nud_hrs,   &
+     &        nbd,kbotdav,kbotu,nbox,nud_hrs,   &
      &        nudu_hrs,ktau,ndi,ndi2,ntau,nperavg,nperday,nmaxpr,nlv,    &
      &        ia,ib,ja,jb,id,jd,idjd,                                    &
      &        io_clim,io_in,io_out,io_rest,io_spec,                      &
@@ -41,7 +41,7 @@
       common/parm1/meso,ngwd,nrungcm,newtop,bpyear,iaero,helim,fc2,      &
      &  sigbot_gwd,alphaj,qgmin     ! min value, esp. for stratosphere [1.e-6]
 
-      common/parmradn/kountr,nrad,amipo3   
+      common/parmradn/kountr,amipo3   
 
       common/parmvmix/nvmix,nlocal,cgmap_offset,cgmap_scale
 
@@ -53,7 +53,7 @@
      &                tss_sh,nglacier,charnock,chn10,zobgin,ntaft,       &
      &                panfg,panzo,nurban,rescrn,ccycle,nriver
 
-      common/parmnudg/nbd,kbotdav,kbotu,nbox,nud_p,nud_q,nud_t,nud_uv,   &
+      common/parmnudg/nbd,kbotdav,kbotu,nbox,   &
      &                nud_hrs,nudu_hrs,mbd,ktopdav,nud_sss,      &
      &                ktopmlo,mloalpha,nud_ouv,nud_sfh,kblock,   &
      &                nud_aero,mbd_maxscale,sigramplow,sigramphigh

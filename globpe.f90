@@ -115,19 +115,19 @@ namelist/defaults/nversion
 ! main namelist
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     ja,jb,id,jd,iaero,mex,mbd,nbd,             &
-    mbd_maxscale,ndi,ndi2,nlv,nmaxpr,nrad,ntaft,ntsea,ntsur, &
+    mbd_maxscale,ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
     nvmix,restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
     ngwd,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
-    nritch_t,mfix,mfix_qg,   &
+    nritch_t,   &
     namip,amipo3,nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
     epsp,epsu,epsf,epsh,av_vmod,charnock,chn10,snmin,tss_sh,      &
-    vmodmin,zobgin,rlong0,rlat0,schmidt,kbotdav,kbotu,nbox,nud_p, &
-    nud_q,nud_t,nud_uv,nud_hrs,nudu_hrs,sigramplow,sigramphigh,   &
+    vmodmin,zobgin,rlong0,rlat0,schmidt,kbotdav,kbotu,nbox, &
+    nud_hrs,nudu_hrs,sigramplow,sigramphigh,   &
     nlocal,nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,ktopdav,     &
-    nud_sss,mfix_tr,mfix_aero,ktopmlo,mloalpha,   &
+    nud_sss,mfix_tr,ktopmlo,mloalpha,   &
     nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
@@ -706,18 +706,18 @@ data ia/1/,ib/3/,id/2/,ja/1/,jb/10/,jd/5/,nlv/1/
 data ndi/1/,ndi2/0/,nmaxpr/99/     
 data kdate_s/-1/,ktime_s/-1/,leap/0/
 data mbd/0/,mbd_maxscale/3000/,nbd/0/,nbox/1/,kbotdav/4/,kbotu/0/
-data nud_p/0/,nud_q/0/,nud_t/0/,nud_uv/1/,nud_hrs/24/,nudu_hrs/0/
+data nud_hrs/24/,nudu_hrs/0/
 data ktopdav/0/,kblock/-1/
 data nud_aero/0/
 data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/,ktopmlo/1/
 data sigramplow/0./,sigramphigh/0./
 ! Dynamics options A & B      
-data mex/30/,mfix/3/,mfix_qg/1/,mup/1/,nh/0/
+data mex/30/,mup/1/,nh/0/
 data nritch_t/300/,epsp/-15./,epsu/0./,epsf/0./,epsh/0.1/
 data precon/-2900/,restol/4.e-7/
 data schmidt/1./,rlong0/0./,rlat0/90./,nrun/0/
-data helmmeth/0/,mfix_tr/0/,mfix_aero/0/
+data helmmeth/0/,mfix_tr/0/
 
 ! Horiz wind staggering options
 data nstag/-10/,nstagu/-1/,nstagoff/0/

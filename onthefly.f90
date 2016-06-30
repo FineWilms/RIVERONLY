@@ -354,12 +354,9 @@ logical, dimension(:), allocatable, save :: land_a, sea_a
 ! land-sea mask method (nemi=3 use soilt, nemi=2 use tgg, nemi=1 use zs)
 nemi = 3
       
-! test if retopo fields are required
-if ( nud_p==0 .and. nud_t==0 .and. nud_q==0 ) then
-  nud_test = 0
-else
-  nud_test = 1
-end if
+!retopo fields
+nud_test = 1
+
       
 ! Determine if interpolation is required
 iotest = 6*ik*ik==ifull_g .and. abs(rlong0x-rlong0)<iotol .and. abs(rlat0x-rlat0)<iotol .and. &
@@ -585,7 +582,7 @@ end if
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
 
 ! winds
-! read for nested=0 or nested=1.and.nud_uv/=0
+! read for nested=0 or nested=1
 u(1:ifull,:) = 0.
 v(1:ifull,:) = 0.
 ! mixing ratio

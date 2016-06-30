@@ -22,25 +22,21 @@
 
 !     dynamics options (globpe, adjust5, nonlin, upglobal)
 
-!     parameter (mfix_qg=1)   ! 1 "mass" fix for qg
-!                               2 "mass" fix for qg and trace gases
-
 !     mfix in namelist:        -1 on pslx in upglobal
 !                               0 off
 !                               1 cunning in adjust5
 !                               2 more-cunning in adjust5
 
-      integer         mex,mfix,mfix_qg,mspec,mup,mfix_tr
-      integer         nh,nritch_t,mfix_aero
+      integer         mex,mspec,mup,mfix_tr
+      integer         nh,nritch_t
       integer         nstag,nstagu,ntbar,precon,helmmeth
       integer         nstagoff
       real            epsp,epsu,epsf,epsh,restol
       
-      common/paramdyn/mex,mfix,mfix_qg,mspec,mup,                        &
+      common/paramdyn/mex,mspec,mup,                        &
      &                nh,nritch_t,                                       &
      &                nstag,nstagu,nstagoff,ntbar,precon,                &
-     &                helmmeth,epsp,epsu,epsf,epsh,restol,mfix_tr,       &
-     &                mfix_aero
+     &                helmmeth,epsp,epsu,epsf,epsh,restol,mfix_tr
 
 !            (ntbar=0)           ! 0 for standard
 !            (ntbar=(kl+1)/2)    ! level# for tbar2d with T set in nonlin
