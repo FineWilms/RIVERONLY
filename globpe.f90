@@ -133,7 +133,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
 namelist/datafile/ifile,ofile,eigenv,hfile,     &
-    icefile,nmifile,o3file,radfile,restfile,rsmfile,     &
+    icefile,nmifile,restfile,rsmfile,     &
     scamfile,scrnfile,snowfile,so4tfile,soilfile,sstfile,surfile, &
     tmaxfile,tminfile,topofile,trcfil,vegfile,zofile,smoistfile,  &
     soil2file,radonemfile,co2_00,radon_00,surf_00,co2_12,         &
@@ -751,7 +751,7 @@ data smoistfile/' '/,soil2file/' '/,restfile/' '/
 data radonemfile/' '/,surfile/' '/,surf_00/'s_00a '/
 data surf_12/'s_12a '/,co2_00/' '/,co2_12/' '/,radon_00/' '/
 data radon_12/' '/,ifile/' '/,ofile/' '/,nmifile/' '/
-data eigenv/' '/,radfile/' '/,o3file/' '/,hfile/' '/
+data eigenv/' '/,hfile/' '/
 data scrnfile/' '/,tmaxfile/' '/,tminfile/' '/,trcfil/' '/
 data laifile/' '/,albnirfile/' '/,urbanfile/' '/,bathfile/' '/
 data vegprev/' '/,vegnext/' '/,cnsdir/' '/,salfile/' '/
