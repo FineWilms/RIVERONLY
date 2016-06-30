@@ -126,9 +126,9 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     vmodmin,zobgin,rlong0,rlat0,schmidt,kbotdav,kbotu,nbox,nud_p, &
     nud_q,nud_t,nud_uv,nud_hrs,nudu_hrs,sigramplow,sigramphigh,   &
     nlocal,nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
-    tblock,tbave,localhist,m_fly,mstn,nqg,nurban,nmr,ktopdav,     &
-    nud_sss,mfix_tr,mfix_aero,kbotmlo,ktopmlo,mloalpha,   &
-    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, ol, &
+    tblock,tbave,localhist,m_fly,mstn,nqg,nurban,ktopdav,     &
+    nud_sss,mfix_tr,mfix_aero,ktopmlo,mloalpha,   &
+    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, &
     knh,ccycle,kblock,nud_aero,helim,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
@@ -181,7 +181,6 @@ ntbar    = -1
 rel_lat  = 0.
 rel_long = 0.
 ktau     = 0
-ol       = 20   ! default ocean levels
 
 ! All processors read the namelist, so no MPI comms are needed
 open(99,file="input",form="formatted",status="old")
@@ -203,9 +202,6 @@ end do
 if ( nwt==-99 )     nwt = nperday      ! set default nwt to 24 hours
 if ( nperavg==-99 ) nperavg = nwt      ! set default nperavg to nwt
 if ( nwrite==0 )    nwrite = nperday   ! only used for outfile IEEE
-
-  ol = 0
-
 
 nriver=1
 read(99, datafile)
@@ -271,7 +267,7 @@ if ( myid == 0 ) then
   end if
   read(28,*)kmax,lapsbot,isoth,nsig
   kl = kmax
-  write(6,*)'kl,ol:              ',kl,ol
+  write(6,*)'kl:              ',kl
   write(6,*)'lapsbot,isoth,nsig: ',lapsbot,isoth,nsig
   temparray(5) = real(kl)
   temparray(6) = real(lapsbot)
@@ -374,7 +370,7 @@ if ( nstagin==5 .or. nstagin<0 ) then
   endif
 endif
 if ( kblock<0 ) then
-  kblock = max(kl, ol) ! must occur before indata
+  kblock = kl  ! must occur before indata
 end if
 
 !~ tke_umin = vmodmin
@@ -714,7 +710,7 @@ data nud_p/0/,nud_q/0/,nud_t/0/,nud_uv/1/,nud_hrs/24/,nudu_hrs/0/
 data ktopdav/0/,kblock/-1/
 data nud_aero/0/
 data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
-data mloalpha/10/,kbotmlo/-1000/,ktopmlo/1/
+data mloalpha/10/,ktopmlo/1/
 data sigramplow/0./,sigramphigh/0./
 ! Dynamics options A & B      
 data mex/30/,mfix/3/,mfix_qg/1/,mup/1/,nh/0/
