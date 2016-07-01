@@ -30,7 +30,7 @@
      &        io_clim,io_in,io_out,io_rest,io_spec,                      &
      &        nwt,nqg,nrun,nextout,nclim,m_fly,nsemble,tblock,tbave,     &
      &        nurban,ktopdav,nud_sss,ktopmlo,   &
-     &        mloalpha,nud_ouv,nud_sfh,kblock,rescrn,knh,ccycle,iaero,   &
+     &        mloalpha,nud_ouv,nud_sfh,kblock,knh,ccycle,iaero,   &
      &        mbd_maxscale,nriver
       real qgmin,                                                        &
      &     aleadfr,av_vmod,vmodmin,snmin,tss_sh,charnock,chn10,zobgin,   &
@@ -51,7 +51,7 @@
       common/parmsfce/newrough,newsoilm,nsib,nsoil,ntsea,ntsur,ntsur2,   &
      &                lgwd,newztsea,aleadfr,av_vmod,vmodmin,snmin,       &
      &                tss_sh,nglacier,charnock,chn10,zobgin,ntaft,       &
-     &                panfg,panzo,nurban,rescrn,ccycle,nriver
+     &                panfg,panzo,nurban,ccycle,nriver
 
       common/parmnudg/kbotdav,kbotu,nbox,   &
      &                nud_hrs,nudu_hrs,mbd,ktopdav,nud_sss,      &

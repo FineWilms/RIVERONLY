@@ -127,7 +127,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,ktopdav,     &
     nud_sss,mfix_tr,ktopmlo,mloalpha,   &
-    nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, &
+    nud_ouv,nud_sfh,bpyear,helmmeth, &
     knh,ccycle,kblock,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
