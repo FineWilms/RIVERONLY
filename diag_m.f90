@@ -21,89 +21,89 @@
     
 module diag_m
    implicit none
-   public :: printa, maxmin, average, diagvals
-   private :: maxmin1, maxmin2, printa1, printa2
+   public :: maxmin, average, diagvals
+   private :: maxmin1, maxmin2
    interface maxmin
       module procedure maxmin1, maxmin2
    end interface
-   interface printa
-      module procedure printa1, printa2
-   end interface
+   !~ interface printa
+      !~ module procedure printa1, printa2
+   !~ end interface
    interface diagvals
       module procedure diagvals_r, diagvals_i, diagvals_l
    end interface
 contains
-   subroutine printa2(name,a,ktau,level,i1,i2,j1,j2,bias,facti)
-      ! printa has to work with arrays dimension both ifull and ifull+iextra
-      ! printb has printj entry, and automatic choice of fact if facti=0.
-      ! Have both 1D and multi-level versions.
-      use cc_mpi
-      include 'newmpar.h'
-      character(len=*), intent(in) :: name
-      real, dimension(:,:), intent(in) :: a
-      integer, intent(in) :: ktau, level, i1, i2, j1, j2
-      real, intent(in) :: bias, facti
+   !~ subroutine printa2(name,a,ktau,level,i1,i2,j1,j2,bias,facti)
+      !~ ! printa has to work with arrays dimension both ifull and ifull+iextra
+      !~ ! printb has printj entry, and automatic choice of fact if facti=0.
+      !~ ! Have both 1D and multi-level versions.
+      !~ use cc_mpi
+      !~ include 'newmpar.h'
+      !~ character(len=*), intent(in) :: name
+      !~ real, dimension(:,:), intent(in) :: a
+      !~ integer, intent(in) :: ktau, level, i1, i2, j1, j2
+      !~ real, intent(in) :: bias, facti
 
-      call printa1(name,a(:,level),ktau,level,i1,i2,j1,j2,bias,facti)
-   end subroutine printa2
+      !~ call printa1(name,a(:,level),ktau,level,i1,i2,j1,j2,bias,facti)
+   !~ end subroutine printa2
 
-   subroutine printa1(name,a,ktau,level,i1,i2,j1,j2,bias,facti)
-      ! printa has to work with arrays dimension both ifull and ifull+iextra
-      ! printb has printj entry, and automatic choice of fact if facti=0.
-      ! Have both 1D and multi-level versions.
-      use cc_mpi
-      include 'newmpar.h'
-      character(len=*), intent(in) :: name
-      real, dimension(:), intent(in) :: a
-      integer, intent(in) :: ktau, level, i1, i2, j1, j2
-      real, intent(in) :: bias, facti
-      integer i, j, ja, jb, n, n2, ilocal, jlocal, nlocal
-      real fact, atmp
+   !~ subroutine printa1(name,a,ktau,level,i1,i2,j1,j2,bias,facti)
+      !~ ! printa has to work with arrays dimension both ifull and ifull+iextra
+      !~ ! printb has printj entry, and automatic choice of fact if facti=0.
+      !~ ! Have both 1D and multi-level versions.
+      !~ use cc_mpi
+      !~ include 'newmpar.h'
+      !~ character(len=*), intent(in) :: name
+      !~ real, dimension(:), intent(in) :: a
+      !~ integer, intent(in) :: ktau, level, i1, i2, j1, j2
+      !~ real, intent(in) :: bias, facti
+      !~ integer i, j, ja, jb, n, n2, ilocal, jlocal
+      !~ real fact, atmp
 
-      ! The indices i1, i2, j1, j2 are global
-      n = (j1-1)/il_g ! Global n
-      j = j1 - n*il_g ! Value on face
-      if ( myid == fproc(i1,j,n) ) then
-         ! Check if whole region is on this processor
-         n2 = (j2-1)/il_g
-         if ( fproc(i2, j2-n2*il_g, n2) /= myid ) then
-           write(0,*)"Warning, printa region covers more than one processor"
-           return    
-         end if
-         ja=j1
-         jb=min(ja+24,j2)
-         fact=facti
-         ! Calculate factor from the middle of the face 
-         ! This will be consistent for 1-6 processors at least
-         nlocal = n + noff
-         if(facti.eq.0.) then
-            atmp = abs(a(indp(ipan/2,jpan/2,nlocal)))
-            if ( atmp > 0 ) then
-               fact = 10./atmp
-            else 
-               fact = 1.0
-            end if
-         end if
-         write(6,9) name,ktau,level,bias,fact
- 9       format(/1x,a4,' ktau =',i7,'  level =',i3,'  addon =',g8.2,   &      
-     & '  has been mult by',1pe8.1)
-         write(6,91) (j,j=j1,j2)
-91       format(4x,25i11)
-         do i=i1,i2
-            write(unit=*,fmt="(i5)", advance="no") i
-            do j=ja,jb
-               n = (j-1)/il_g ! Global n
-               nlocal = n + noff
-               ilocal = i - ioff
-               jlocal = j - n*il_g - joff
-               write(unit=*,fmt="(f11.6)", advance="no")                &
-     &              (a(indp(ilocal,jlocal,nlocal))-bias)*fact
-            end do
-            write(*,*)
-         end do
-      end if
+      !~ ! The indices i1, i2, j1, j2 are global
+      !~ n = (j1-1)/il_g ! Global n
+      !~ j = j1 - n*il_g ! Value on face
+      !~ if ( myid == fproc(i1,j,n) ) then
+         !~ ! Check if whole region is on this processor
+         !~ n2 = (j2-1)/il_g
+         !~ if ( fproc(i2, j2-n2*il_g, n2) /= myid ) then
+           !~ write(0,*)"Warning, printa region covers more than one processor"
+           !~ return    
+         !~ end if
+         !~ ja=j1
+         !~ jb=min(ja+24,j2)
+         !~ fact=facti
+         !~ ! Calculate factor from the middle of the face 
+         !~ ! This will be consistent for 1-6 processors at least
+         !~ nlocal = n + noff
+         !~ if(facti.eq.0.) then
+            !~ atmp = abs(a(indp(ipan/2,jpan/2,nlocal)))
+            !~ if ( atmp > 0 ) then
+               !~ fact = 10./atmp
+            !~ else 
+               !~ fact = 1.0
+            !~ end if
+         !~ end if
+         !~ write(6,9) name,ktau,level,bias,fact
+ !~ 9       format(/1x,a4,' ktau =',i7,'  level =',i3,'  addon =',g8.2,   &      
+     !~ & '  has been mult by',1pe8.1)
+         !~ write(6,91) (j,j=j1,j2)
+!~ 91       format(4x,25i11)
+         !~ do i=i1,i2
+            !~ write(unit=*,fmt="(i5)", advance="no") i
+            !~ do j=ja,jb
+               !~ n = (j-1)/il_g ! Global n
+               !~ nlocal = n + noff
+               !~ ilocal = i - ioff
+               !~ jlocal = j - n*il_g - joff
+               !~ write(unit=*,fmt="(f11.6)", advance="no")                &
+     !~ &              (a(indp(ilocal,jlocal,nlocal))-bias)*fact
+            !~ end do
+            !~ write(*,*)
+         !~ end do
+      !~ end if
 
-   end subroutine printa1
+   !~ end subroutine printa1
 
 ! has more general format & scaling factor  with subroutine average at bottom
    subroutine maxmin2(u,char,ktau,fact,kup)

@@ -115,7 +115,7 @@ namelist/defaults/nversion
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     ja,jb,id,jd,iaero,mex,mbd,nbd,             &
     mbd_maxscale,ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
-    nvmix,restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
+    restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
     ngwd,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
     nritch_t,   &
@@ -124,7 +124,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     epsp,epsu,epsf,epsh,av_vmod,charnock,chn10,snmin,tss_sh,      &
     vmodmin,zobgin,rlong0,rlat0,schmidt,kbotdav,kbotu,nbox, &
     nud_hrs,nudu_hrs,sigramplow,sigramphigh,   &
-    nlocal,nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
+    nbarewet,nsigmf,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,ktopdav,     &
     nud_sss,mfix_tr,ktopmlo,mloalpha,   &
     nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, &
@@ -721,7 +721,7 @@ data helmmeth/0/,mfix_tr/0/
 ! Horiz wind staggering options
 data nstag/-10/,nstagu/-1/,nstagoff/0/
 ! Vertical mixing options
-data nvmix/3/,nlocal/6/,lgwd/0/,ngwd/-5/
+data lgwd/0/,ngwd/-5/
 data helim/800./,fc2/1./,sigbot_gwd/0./,alphaj/1.e-6/
 data cgmap_offset/0./,cgmap_scale/1./
 ! Soil, canopy, PBL options

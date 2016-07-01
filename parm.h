@@ -21,7 +21,7 @@
 
 
       integer meso,ngwd,nrungcm,newtop,                                  &
-     &        kountr,nvmix,nlocal,                                  &
+     &        kountr,                                  &
      &        nhstest,namip,nspecial,newrough,newsoilm,nsib,nsoil,       &
      &        ntaft,ntsea,ntsur,ntsur2,lgwd,newztsea,nglacier,mbd,       &
      &        nbd,kbotdav,kbotu,nbox,nud_hrs,   &
@@ -43,7 +43,7 @@
 
       common/parmradn/kountr,amipo3   
 
-      common/parmvmix/nvmix,nlocal,cgmap_offset,cgmap_scale
+      common/parmvmix/cgmap_offset,cgmap_scale
 
       common/parmtest/nhstest,namip,nsemble,nspecial,rlongdn,rlongdx,    &
      &                rlatdn,rlatdx
