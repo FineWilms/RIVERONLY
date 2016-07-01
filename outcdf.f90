@@ -154,7 +154,6 @@ integer, intent(in) :: jalbfix,nalpha,mins_rad
 integer itype, nstagin
 integer xdim,ydim,zdim,tdim,msdim,ocdim
 integer icy, icm, icd, ich, icmi, ics, idv
-integer namipo3
 integer, save :: idnc=0, iarch=0
 real, dimension(nrhead) :: ahead
 character(len=180) cdffile
@@ -274,7 +273,6 @@ if ( myid==0 .or. localhist ) then
     nahead(4) = 5
     nahead(5) = 0          ! nsd not used now
     nahead(6) = io_in
-    nahead(7) = nbd
     nahead(8) = 0          ! not needed now  
     nahead(9) = mex
     nahead(10) = mup
@@ -297,13 +295,10 @@ if ( myid==0 .or. localhist ) then
     nahead(33) = nsoil
     nahead(34) = ms        ! needed by cc2hist
     nahead(35) = ntsur
-    !~ nahead(36) = nrad
-    !~ nahead(38) = nvmix
     nahead(40) = 0    
     nahead(41) = nextout
     nahead(44) = nsib
     nahead(45) = nrungcm
-    nahead(47) = ngwd
     nahead(48) = lgwd
     nahead(49) = mup
     nahead(50) = nritch_t

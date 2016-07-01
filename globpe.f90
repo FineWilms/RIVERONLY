@@ -113,13 +113,13 @@ logical odcalc
 namelist/defaults/nversion
 ! main namelist
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
-    ja,jb,id,jd,iaero,mex,mbd,nbd,             &
+    ja,jb,id,jd,iaero,mex,mbd,             &
     mbd_maxscale,ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
     restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
-    ngwd,nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
+    nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
     nritch_t,   &
-    namip,amipo3,nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
+    nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
     epsp,epsu,epsf,epsh,av_vmod,charnock,chn10,snmin,tss_sh,      &
     vmodmin,zobgin,rlong0,rlat0,schmidt,kbotdav,kbotu,nbox, &
@@ -128,7 +128,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     tblock,tbave,localhist,m_fly,mstn,nqg,nurban,ktopdav,     &
     nud_sss,mfix_tr,ktopmlo,mloalpha,   &
     nud_ouv,nud_sfh,bpyear,rescrn,helmmeth, &
-    knh,ccycle,kblock,nud_aero,helim,  &
+    knh,ccycle,kblock,  &
     fc2,sigbot_gwd,alphaj,cgmap_offset,cgmap_scale,nriver
 ! file namelist
 namelist/datafile/ifile,ofile,eigenv,hfile,     &
@@ -338,10 +338,10 @@ end if
 ! some default values for unspecified parameters
 if ( ia<0 ) ia = il/2
 if ( ib<0 ) ib = ia + 3
-if( mbd/=0 .and. nbd/=0 ) then
-  write(6,*) 'setting nbd=0 because mbd/=0'
-  nbd = 0
-endif
+!~ if( mbd/=0 .and. nbd/=0 ) then
+  !~ write(6,*) 'setting nbd=0 because mbd/=0'
+  !~ nbd = 0
+!~ endif
 mbd_min = int(20.*112.*90.*schmidt/real(mbd_maxscale))
 if ( mbd<mbd_min .and. mbd/=0 ) then
   if ( myid==0 ) then
@@ -704,10 +704,9 @@ common/nsib/nbarewet,nsigmf  ! Land-surface options
 data ia/1/,ib/3/,id/2/,ja/1/,jb/10/,jd/5/,nlv/1/
 data ndi/1/,ndi2/0/,nmaxpr/99/     
 data kdate_s/-1/,ktime_s/-1/,leap/0/
-data mbd/0/,mbd_maxscale/3000/,nbd/0/,nbox/1/,kbotdav/4/,kbotu/0/
+data mbd/0/,mbd_maxscale/3000/,nbox/1/,kbotdav/4/,kbotu/0/
 data nud_hrs/24/,nudu_hrs/0/
 data ktopdav/0/,kblock/-1/
-data nud_aero/0/
 data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/,ktopmlo/1/
 data sigramplow/0./,sigramphigh/0./
@@ -721,8 +720,8 @@ data helmmeth/0/,mfix_tr/0/
 ! Horiz wind staggering options
 data nstag/-10/,nstagu/-1/,nstagoff/0/
 ! Vertical mixing options
-data lgwd/0/,ngwd/-5/
-data helim/800./,fc2/1./,sigbot_gwd/0./,alphaj/1.e-6/
+data lgwd/0/
+data fc2/1./,sigbot_gwd/0./,alphaj/1.e-6/
 data cgmap_offset/0./,cgmap_scale/1./
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
