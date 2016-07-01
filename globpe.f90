@@ -131,10 +131,10 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     knh,ccycle,kblock,  &
     cgmap_offset,cgmap_scale,nriver
 ! file namelist
-namelist/datafile/ifile,ofile,eigenv,hfile,     &
-    icefile,nmifile,restfile,rsmfile,     &
-    scamfile,scrnfile,snowfile,soilfile,surfile, &
-    tmaxfile,tminfile,topofile,trcfil,vegfile,zofile,smoistfile,  &
+namelist/datafile/ifile,ofile,eigenv,     &
+    restfile,     &
+    snowfile,soilfile,surfile, &
+    topofile,trcfil,vegfile,zofile,smoistfile,  &
     soil2file,radonemfile,co2_00,radon_00,surf_00,co2_12,         &
     radon_12,surf_12,laifile,albnirfile,urbanfile,       &
     vegprev,vegnext,salfile,casafile,phenfile
@@ -735,16 +735,16 @@ data nperavg/-99/,nwt/-99/,tblock/1/,tbave/1/
 data nextout/3/,localhist/.false./
 
 ! initialize file names to something
-data albfile/' '/,icefile/' '/,maskfile/' '/
+data albfile/' '/,maskfile/' '/
 data snowfile/' '/,topofile/' '/,zofile/' '/
-data rsmfile/' '/,scamfile/' '/,soilfile/' '/,vegfile/' '/
+data soilfile/' '/,vegfile/' '/
 data co2emfile/' '/
 data smoistfile/' '/,soil2file/' '/,restfile/' '/
 data radonemfile/' '/,surfile/' '/,surf_00/'s_00a '/
 data surf_12/'s_12a '/,co2_00/' '/,co2_12/' '/,radon_00/' '/
-data radon_12/' '/,ifile/' '/,ofile/' '/,nmifile/' '/
-data eigenv/' '/,hfile/' '/
-data scrnfile/' '/,tmaxfile/' '/,tminfile/' '/,trcfil/' '/
+data radon_12/' '/,ifile/' '/,ofile/' '/
+data eigenv/' '/
+data trcfil/' '/
 data laifile/' '/,albnirfile/' '/,urbanfile/' '/
 data vegprev/' '/,vegnext/' '/,salfile/' '/
 data casafile/' '/,phenfile/' '/
