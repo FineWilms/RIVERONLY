@@ -31,12 +31,12 @@
       integer         nh,nritch_t
       integer         nstag,nstagu,ntbar,precon,helmmeth
       integer         nstagoff
-      real            epsp,epsu,epsf,epsh,restol
+      real              restol
       
       common/paramdyn/mex,mspec,mup,                        &
      &                nh,nritch_t,                                       &
      &                nstag,nstagu,nstagoff,ntbar,precon,                &
-     &                helmmeth,epsp,epsu,epsf,epsh,restol,mfix_tr
+     &                helmmeth,restol,mfix_tr
 
 !            (ntbar=0)           ! 0 for standard
 !            (ntbar=(kl+1)/2)    ! level# for tbar2d with T set in nonlin

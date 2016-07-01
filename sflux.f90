@@ -23,9 +23,7 @@
 ! prescribed SSTs and sea-ice, CABLE interface, urban interface and MLO interface.
 
 ! nsib=7              CABLE land-surface scheme with CCAM diagnostics
-! nmlo=0              Prescriped SSTs and sea-ice with JLM skin enhancement
-! nurban>0            Use urban scheme
-    
+! nmlo=0              Prescriped SSTs and sea-ice with JLM skin enhancement    
 subroutine sflux(nalpha)
       
 use arrays_m                       ! Atmosphere dyamics prognostic arrays

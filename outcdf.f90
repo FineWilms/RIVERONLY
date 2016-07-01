@@ -143,8 +143,8 @@ include 'parmsurf.h'                  ! Surface parameters
 integer ixp,iyp,idlev,idnt,idms,idoc
 integer leap
 common/leap_yr/leap                   ! Leap year (1 to allow leap years)
-integer nbarewet,nsigmf
-common/nsib/nbarewet,nsigmf
+integer nbarewet
+common/nsib/nbarewet
 
 integer, parameter :: nihead=54
 integer, parameter :: nrhead=14
@@ -315,7 +315,6 @@ if ( myid==0 .or. localhist ) then
     ahead(11) = tss_sh
     ahead(12) = vmodmin
     ahead(13) = av_vmod
-    ahead(14) = epsp
     if ( myid==0 ) then
       write(6,'(" nahead=",(20i4))') nahead
       write(6,*) "ahead=",ahead
