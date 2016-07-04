@@ -28,22 +28,18 @@
 !                               2 more-cunning in adjust5
 
       integer         mex,mspec,mup,mfix_tr
-      integer         nh,nritch_t
+      integer         nritch_t
       integer         ntbar,precon,helmmeth
       real              restol
       
       common/paramdyn/mex,mspec,mup,                        &
-     &                nh,nritch_t,                                       &
+     &                nritch_t,                                       &
      &                ntbar,precon,                &
      &                helmmeth,restol,mfix_tr
 
 !            (ntbar=0)           ! 0 for standard
 !            (ntbar=(kl+1)/2)    ! level# for tbar2d with T set in nonlin
 
-!            nvsplit    0  uses tendencies for vadv, radn & vertmix
-!                       1  splits radn, vertmix, gwdrag, conjob (not vadv)
-!                       2  splits radn, vertmix, gwdrag, conjob & vadv
-!                       3  splits just vadv
-!                      -1  splits just vertmix 
+
 !                      N.B. qg always split for vadv
 !                      N.B. always split for vadv called from adjust5

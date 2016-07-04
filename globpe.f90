@@ -87,7 +87,7 @@ integer, dimension(8) :: tvals1, tvals2, nper3hr
 integer, dimension(2) :: shsize
 #endif
 integer ilx, io_nest, iq, irest, isoil
-integer jalbfix, jlx, k, kktau
+integer  jlx, k, kktau
 integer mins_dt, mins_gmt, mspeca, mtimer_in, nalpha
 integer nlx, nmaxprsav, npa, npb, n3hr
 integer nwrite, nwtsav, mins_rad, secs_rad, mtimer_sav
@@ -113,13 +113,13 @@ logical odcalc
 namelist/defaults/nversion
 ! main namelist
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
-    ja,jb,id,jd,iaero,mex,mbd,             &
+    ja,jb,id,jd,mex,mbd,             &
     mbd_maxscale,ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
     restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
-    nextout,jalbfix,nalpha,ntbar,nwrite,  &
+    nextout,nalpha,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
     nritch_t,   &
-    nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
+    nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
     charnock,chn10,snmin,tss_sh,      &
     zobgin,rlong0,rlat0,schmidt,kbotu,nbox, &
@@ -127,7 +127,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     tblock,tbave,localhist,m_fly,mstn,nqg,     &
     nud_sss,mfix_tr,mloalpha,   &
     nud_ouv,nud_sfh,bpyear,helmmeth, &
-    knh,ccycle,kblock,  &
+    ccycle,kblock,  &
     cgmap_offset,cgmap_scale,nriver
 ! file namelist
 namelist/datafile/ifile,ofile,eigenv,     &
@@ -139,7 +139,7 @@ namelist/datafile/ifile,ofile,eigenv,     &
     vegprev,vegnext,salfile,casafile,phenfile
 
 data nversion/0/
-data comment/' '/,comm/' '/,irest/1/,jalbfix/1/,nalpha/1/
+data comment/' '/,comm/' '/,irest/1/,nalpha/1/
 data mins_rad/-1/,nwrite/0/
 data lapsbot/0/,io_nest/1/
       
@@ -454,7 +454,7 @@ call permsurf_init(ifull,iextra,kl)
 call savuvt_init(ifull,iextra,kl)
 call savuv1_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
-call soil_init(ifull,iextra,kl,iaero,nsib)
+call soil_init(ifull,iextra,kl,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
 call work2_init(ifull,iextra,kl,nsib)
 
@@ -479,7 +479,7 @@ end if
 if ( myid == 0 ) then
   write(6,*) "Calling indata"
 end if
-call indataf(hourst,jalbfix,lapsbot,isoth,nsig,io_nest)
+call indataf(hourst,lapsbot,isoth,nsig,io_nest)
 
 !--------------------------------------------------------------
 ! NRUN COUNTER
@@ -510,7 +510,7 @@ if ( nwt > 0 ) then
   if ( myid == 0 ) then
     write(6,*)'calling outfile'
   end if
-  call outfile(20,rundate,nwrite,jalbfix,nalpha,mins_rad)  ! which calls outcdf
+  call outfile(20,rundate,nwrite,nalpha,mins_rad)  ! which calls outcdf
 end if    ! (nwt>0)
 
 
@@ -609,13 +609,13 @@ do kktau = 1,ntau   ! ****** start of main time loop
 
   call log_off()
   if ( ktau==ntau .or. mod(ktau,nwt)==0 ) then
-    call outfile(20,rundate,nwrite,jalbfix,nalpha,mins_rad)  ! which calls outcdf
+    call outfile(20,rundate,nwrite,nalpha,mins_rad)  ! which calls outcdf
 
     if ( ktau==ntau .and. irest==1 ) then
       ! Don't include the time for writing the restart file
       call END_LOG(maincalc_end)
       ! write restart file
-      call outfile(19,rundate,nwrite,jalbfix,nalpha,mins_rad)
+      call outfile(19,rundate,nwrite,nalpha,mins_rad)
       if ( myid == 0 ) then
         write(6,*)'finished writing restart file in outfile'
       end if
@@ -692,7 +692,7 @@ data kblock/-1/
 data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/
 ! Dynamics options A & B      
-data mex/30/,mup/1/,nh/0/
+data mex/30/,mup/1/
 data nritch_t/300/
 data precon/-2900/,restol/4.e-7/
 data schmidt/1./,rlong0/0./,rlat0/90./,nrun/0/

@@ -36,21 +36,15 @@ logical, dimension(:), allocatable, save :: land
 
 contains
 
-subroutine soil_init(ifull,iextra,kl,iaero,nsib)
+subroutine soil_init(ifull,iextra,kl,nsib)
 
 implicit none
 
-integer, intent(in) :: ifull,iextra,kl,iaero,nsib
+integer, intent(in) :: ifull,iextra,kl,nsib
 
 allocate(zolnd(ifull),albvissav(ifull),albnirsav(ifull))
 allocate(albvisdif(ifull),albnirdif(ifull),albvisdir(ifull),albnirdir(ifull))
 allocate(land(ifull))
-if (iaero/=0) then
-  allocate(so4t(ifull))
-end if
-if (nsib==3.or.nsib==5) then
-  allocate(zolog(ifull))
-end if
 zoland=0.16
 
 return

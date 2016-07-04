@@ -30,14 +30,14 @@
      &        io_clim,io_in,io_out,io_rest,io_spec,                      &
      &        nwt,nqg,nrun,nextout,nclim,m_fly,nsemble,tblock,tbave,     &
      &        nud_sss,   &
-     &        mloalpha,nud_ouv,nud_sfh,kblock,knh,ccycle,iaero,   &
+     &        mloalpha,nud_ouv,nud_sfh,kblock,ccycle,   &
      &        mbd_maxscale,nriver
       real qgmin,                                                        &
      &     aleadfr,snmin,tss_sh,charnock,chn10,zobgin,   &
      &     rlongdn,rlongdx,rlatdn,rlatdx,ds,dt,dtin,timea,panfg,panzo,   &
      &     bpyear,cgmap_offset,cgmap_scale
       logical diag,localhist,amipo3
-      common/parm1/meso,nrungcm,newtop,bpyear,iaero,      &
+      common/parm1/meso,nrungcm,newtop,bpyear,      &
      &  qgmin     ! min value, esp. for stratosphere [1.e-6]
 
       common/parmradn/kountr,amipo3   
@@ -58,7 +58,7 @@
      &                mbd_maxscale
 
       common/parmtime/ktau,ntau,nperavg,nperday,ds,dt,dtin,timea,nmaxpr, &
-     &                diag,nlv,ia,ib,ja,jb,id,jd,idjd,ndi,ndi2,knh
+     &                diag,nlv,ia,ib,ja,jb,id,jd,idjd,ndi,ndi2
 
       common/parmio/io_clim,io_in,io_out,io_rest,io_spec,                &  ! type of I/O
      &            nwt,nqg,nrun,nextout,nclim,m_fly,tblock,tbave,         &

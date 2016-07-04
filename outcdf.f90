@@ -37,7 +37,7 @@ character(len=3), dimension(12), parameter :: month = (/'jan','feb','mar','apr',
 
 contains
 
-subroutine outfile(iout,rundate,nwrite,jalbfix,nalpha,mins_rad)
+subroutine outfile(iout,rundate,nwrite,nalpha,mins_rad)
       
 use arrays_m
 use cc_mpi
@@ -52,7 +52,7 @@ include 'filnames.h' ! list of files, read in once only
 include 'parm.h'
 
 integer iout,nwrite
-integer, intent(in) :: jalbfix,nalpha,mins_rad
+integer, intent(in) :: nalpha,mins_rad
 character(len=160) :: surfout
 character(len=20) :: qgout
 character(len=8) :: rundate
@@ -105,13 +105,13 @@ if ( iout==19 ) then
   select case(io_rest)  
     case(1)  ! for netCDF 
       if ( myid==0 ) write(6,*) "restart write of data to netCDF"
-      call cdfout(rundate,-1,jalbfix,nalpha,mins_rad)
+      call cdfout(rundate,-1,nalpha,mins_rad)
 
   end select
 else
   select case(io_out)
     case(1)
-      call cdfout(rundate,1,jalbfix,nalpha,mins_rad)
+      call cdfout(rundate,1,nalpha,mins_rad)
 
   end select
 end if
@@ -124,7 +124,7 @@ end subroutine outfile
     
 !--------------------------------------------------------------
 ! CONFIGURE DIMENSIONS FOR OUTPUT NETCDF FILES
-subroutine cdfout(rundate,itype,jalbfix,nalpha,mins_rad)
+subroutine cdfout(rundate,itype,nalpha,mins_rad)
 
 
 use cable_ccam, only : proglai        ! CABLE
@@ -150,7 +150,7 @@ integer, parameter :: nihead=54
 integer, parameter :: nrhead=14
 integer, dimension(nihead) :: nahead
 integer, dimension(4), save :: dima,dims,dimo
-integer, intent(in) :: jalbfix,nalpha,mins_rad
+integer, intent(in) :: nalpha,mins_rad
 integer itype
 integer xdim,ydim,zdim,tdim,msdim,ocdim
 integer icy, icm, icd, ich, icmi, ics, idv
