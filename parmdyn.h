@@ -29,13 +29,12 @@
 
       integer         mex,mspec,mup,mfix_tr
       integer         nh,nritch_t
-      integer         nstag,nstagu,ntbar,precon,helmmeth
-      integer         nstagoff
+      integer         ntbar,precon,helmmeth
       real              restol
       
       common/paramdyn/mex,mspec,mup,                        &
      &                nh,nritch_t,                                       &
-     &                nstag,nstagu,nstagoff,ntbar,precon,                &
+     &                ntbar,precon,                &
      &                helmmeth,restol,mfix_tr
 
 !            (ntbar=0)           ! 0 for standard

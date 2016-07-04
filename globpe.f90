@@ -90,7 +90,7 @@ integer ilx, io_nest, iq, irest, isoil
 integer jalbfix, jlx, k, kktau
 integer mins_dt, mins_gmt, mspeca, mtimer_in, nalpha
 integer nlx, nmaxprsav, npa, npb, n3hr
-integer nstagin, nstaguin, nwrite, nwtsav, mins_rad, secs_rad, mtimer_sav
+integer nwrite, nwtsav, mins_rad, secs_rad, mtimer_sav
 integer nn, i, j, mstn, ierr, nperhr, nversion
 integer ierr2, kmax, isoth, nsig, lapsbot, mbd_min
 real, dimension(:,:), allocatable, save :: dums, dumliq
@@ -116,7 +116,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     ja,jb,id,jd,iaero,mex,mbd,             &
     mbd_maxscale,ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
     restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
-    nextout,jalbfix,nalpha,nstag,nstagu,ntbar,nwrite,  &
+    nextout,jalbfix,nalpha,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
     nritch_t,   &
     nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
@@ -358,16 +358,6 @@ if ( nudu_hrs==0 ) nudu_hrs = nud_hrs
 !--------------------------------------------------------------
 ! DISPLAY NAMELIST
 
-nstagin  = nstag    ! -ve nstagin gives swapping & its frequency
-nstaguin = nstagu   ! only the sign of nstaguin matters (chooses scheme)
-if ( nstagin==5 .or. nstagin<0 ) then
-  nstag  = 4
-  nstagu = 4
-  if ( nstagin == 5 ) then  ! for backward compatability
-    nstagin  = -1 
-    nstaguin = 5  
-  endif
-endif
 if ( kblock<0 ) then
   kblock = kl  ! must occur before indata
 end if
@@ -527,7 +517,7 @@ if ( nwt > 0 ) then
   if ( myid == 0 ) then
     write(6,*)'calling outfile'
   end if
-  call outfile(20,rundate,nwrite,nstagin,jalbfix,nalpha,mins_rad)  ! which calls outcdf
+  call outfile(20,rundate,nwrite,jalbfix,nalpha,mins_rad)  ! which calls outcdf
 end if    ! (nwt>0)
 
 
@@ -626,13 +616,13 @@ do kktau = 1,ntau   ! ****** start of main time loop
 
   call log_off()
   if ( ktau==ntau .or. mod(ktau,nwt)==0 ) then
-    call outfile(20,rundate,nwrite,nstagin,jalbfix,nalpha,mins_rad)  ! which calls outcdf
+    call outfile(20,rundate,nwrite,jalbfix,nalpha,mins_rad)  ! which calls outcdf
 
     if ( ktau==ntau .and. irest==1 ) then
       ! Don't include the time for writing the restart file
       call END_LOG(maincalc_end)
       ! write restart file
-      call outfile(19,rundate,nwrite,nstagin,jalbfix,nalpha,mins_rad)
+      call outfile(19,rundate,nwrite,jalbfix,nalpha,mins_rad)
       if ( myid == 0 ) then
         write(6,*)'finished writing restart file in outfile'
       end if
@@ -716,8 +706,6 @@ data precon/-2900/,restol/4.e-7/
 data schmidt/1./,rlong0/0./,rlat0/90./,nrun/0/
 data helmmeth/0/,mfix_tr/0/
 
-! Horiz wind staggering options
-data nstag/-10/,nstagu/-1/,nstagoff/0/
 ! Vertical mixing options
 data lgwd/0/
 data cgmap_offset/0./,cgmap_scale/1./

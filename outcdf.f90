@@ -37,7 +37,7 @@ character(len=3), dimension(12), parameter :: month = (/'jan','feb','mar','apr',
 
 contains
 
-subroutine outfile(iout,rundate,nwrite,nstagin,jalbfix,nalpha,mins_rad)
+subroutine outfile(iout,rundate,nwrite,jalbfix,nalpha,mins_rad)
       
 use arrays_m
 use cc_mpi
@@ -51,7 +51,7 @@ include 'dates.h'    ! mtimer
 include 'filnames.h' ! list of files, read in once only
 include 'parm.h'
 
-integer iout,nwrite,nstagin
+integer iout,nwrite
 integer, intent(in) :: jalbfix,nalpha,mins_rad
 character(len=160) :: surfout
 character(len=20) :: qgout
@@ -105,13 +105,13 @@ if ( iout==19 ) then
   select case(io_rest)  
     case(1)  ! for netCDF 
       if ( myid==0 ) write(6,*) "restart write of data to netCDF"
-      call cdfout(rundate,-1,nstagin,jalbfix,nalpha,mins_rad)
+      call cdfout(rundate,-1,jalbfix,nalpha,mins_rad)
 
   end select
 else
   select case(io_out)
     case(1)
-      call cdfout(rundate,1,nstagin,jalbfix,nalpha,mins_rad)
+      call cdfout(rundate,1,jalbfix,nalpha,mins_rad)
 
   end select
 end if
@@ -124,7 +124,7 @@ end subroutine outfile
     
 !--------------------------------------------------------------
 ! CONFIGURE DIMENSIONS FOR OUTPUT NETCDF FILES
-subroutine cdfout(rundate,itype,nstagin,jalbfix,nalpha,mins_rad)
+subroutine cdfout(rundate,itype,jalbfix,nalpha,mins_rad)
 
 
 use cable_ccam, only : proglai        ! CABLE
@@ -151,7 +151,7 @@ integer, parameter :: nrhead=14
 integer, dimension(nihead) :: nahead
 integer, dimension(4), save :: dima,dims,dimo
 integer, intent(in) :: jalbfix,nalpha,mins_rad
-integer itype, nstagin
+integer itype
 integer xdim,ydim,zdim,tdim,msdim,ocdim
 integer icy, icm, icd, ich, icmi, ics, idv
 integer, save :: idnc=0, iarch=0
@@ -332,7 +332,7 @@ if ( myid==0 .or. localhist ) then
 endif ! (myid==0.or.localhist)
       
 ! openhist writes some fields so needs to be called by all processes
-call openhist(iarch,itype,dima,localhist,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
+call openhist(iarch,itype,dima,localhist,idnc,ixp,iyp,idlev,idms,idoc)
 
 if ( myid==0 .or. localhist ) then
   if ( ktau==ntau ) then
@@ -346,7 +346,7 @@ end subroutine cdfout
       
 !--------------------------------------------------------------
 ! CREATE ATTRIBUTES AND WRITE OUTPUT
-subroutine openhist(iarch,itype,idim,local,idnc,nstagin,ixp,iyp,idlev,idms,idoc)
+subroutine openhist(iarch,itype,idim,local,idnc,ixp,iyp,idlev,idms,idoc)
 
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use cable_def_types_mod, only : ncs, ncp         ! CABLE dimensions
@@ -381,7 +381,7 @@ include 'version.h'                              ! Model version data
 integer ixp,iyp,idlev,idms,idoc
 integer i, idkdate, idktau, idktime, idmtimer, idnteg, idnter
 integer idv, iq, j, k, n, igas, idnc
-integer iarch, itype, nstagin, idum
+integer iarch, itype, idum
 integer, dimension(4), intent(in) :: idim
 integer, dimension(3) :: jdim
 real, dimension(ms) :: zsoil
