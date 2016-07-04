@@ -313,8 +313,6 @@ if ( myid==0 .or. localhist ) then
     ahead(9) = 0.  !relaxt
     ahead(10) = 0.  !hourbd
     ahead(11) = tss_sh
-    ahead(12) = vmodmin
-    ahead(13) = av_vmod
     if ( myid==0 ) then
       write(6,'(" nahead=",(20i4))') nahead
       write(6,*) "ahead=",ahead

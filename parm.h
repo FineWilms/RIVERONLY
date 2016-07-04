@@ -24,8 +24,8 @@
      &        kountr,                                  &
      &        nhstest,nspecial,newrough,newsoilm,nsib,nsoil,       &
      &        ntaft,ntsea,ntsur,ntsur2,lgwd,newztsea,nglacier,mbd,       &
-     &        kbotu,nbox,nud_hrs,   &
-     &        nudu_hrs,ktau,ndi,ndi2,ntau,nperavg,nperday,nmaxpr,nlv,    &
+     &        kbotu,nbox,   &
+     &        ktau,ndi,ndi2,ntau,nperavg,nperday,nmaxpr,nlv,    &
      &        ia,ib,ja,jb,id,jd,idjd,                                    &
      &        io_clim,io_in,io_out,io_rest,io_spec,                      &
      &        nwt,nqg,nrun,nextout,nclim,m_fly,nsemble,tblock,tbave,     &
@@ -33,7 +33,7 @@
      &        mloalpha,nud_ouv,nud_sfh,kblock,knh,ccycle,iaero,   &
      &        mbd_maxscale,nriver
       real qgmin,                                                        &
-     &     aleadfr,av_vmod,vmodmin,snmin,tss_sh,charnock,chn10,zobgin,   &
+     &     aleadfr,snmin,tss_sh,charnock,chn10,zobgin,   &
      &     rlongdn,rlongdx,rlatdn,rlatdx,ds,dt,dtin,timea,panfg,panzo,   &
      &     bpyear,cgmap_offset,cgmap_scale
       logical diag,localhist,amipo3
@@ -48,12 +48,12 @@
      &                rlatdn,rlatdx
 
       common/parmsfce/newrough,newsoilm,nsib,nsoil,ntsea,ntsur,ntsur2,   &
-     &                lgwd,newztsea,aleadfr,av_vmod,vmodmin,snmin,       &
+     &                lgwd,newztsea,aleadfr,snmin,       &
      &                tss_sh,nglacier,charnock,chn10,zobgin,ntaft,       &
      &                panfg,panzo,ccycle,nriver
 
       common/parmnudg/kbotu,nbox,   &
-     &                nud_hrs,nudu_hrs,mbd,nud_sss,      &
+     &                mbd,nud_sss,      &
      &                mloalpha,nud_ouv,nud_sfh,kblock,   &
      &                mbd_maxscale
 

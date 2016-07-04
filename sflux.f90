@@ -121,11 +121,6 @@ fm=0.          ! dummy value
 !       sflux called at beginning of time loop, hence savu, savv
 
 rho(:) = ps(1:ifull)/(rdry*tss(:))
-uav(:) = av_vmod*u(1:ifull,1) + (1.-av_vmod)*savu(:,1)   
-vav(:) = av_vmod*v(1:ifull,1) + (1.-av_vmod)*savv(:,1)  
-vmod(:) = sqrt(uav(:)**2+vav(:)**2)  ! i.e. vmod for tss_sh
-vmag(:) = max( vmod(:), vmodmin )    ! vmag used to calculate ri
-if ( ntsur/=7 ) vmod(:) = vmag(:)      ! gives usual way
 
 !--------------------------------------------------------------
 call START_LOG(sfluxwater_begin)

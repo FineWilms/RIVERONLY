@@ -121,9 +121,8 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     nritch_t,   &
     nh,nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
-    av_vmod,charnock,chn10,snmin,tss_sh,      &
-    vmodmin,zobgin,rlong0,rlat0,schmidt,kbotu,nbox, &
-    nud_hrs,nudu_hrs,   &
+    charnock,chn10,snmin,tss_sh,      &
+    zobgin,rlong0,rlat0,schmidt,kbotu,nbox, &
     nbarewet,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,     &
     nud_sss,mfix_tr,mloalpha,   &
@@ -350,9 +349,6 @@ if ( mbd<mbd_min .and. mbd/=0 ) then
   end if
   mbd = mbd_min
 end if
-nud_hrs = abs(nud_hrs)  ! just for people with old -ves in namelist
-if ( nudu_hrs==0 ) nudu_hrs = nud_hrs
-
 ! **** do namelist fixes above this ***
       
 !--------------------------------------------------------------
@@ -361,9 +357,6 @@ if ( nudu_hrs==0 ) nudu_hrs = nud_hrs
 if ( kblock<0 ) then
   kblock = kl  ! must occur before indata
 end if
-
-!~ tke_umin = vmodmin
-
 !--------------------------------------------------------------
 ! INITIALISE ifull_g ALLOCATABLE ARRAYS
 #ifdef usempi3
@@ -695,7 +688,6 @@ data ia/1/,ib/3/,id/2/,ja/1/,jb/10/,jd/5/,nlv/1/
 data ndi/1/,ndi2/0/,nmaxpr/99/     
 data kdate_s/-1/,ktime_s/-1/,leap/0/
 data mbd/0/,mbd_maxscale/3000/,nbox/1/,kbotu/0/
-data nud_hrs/24/,nudu_hrs/0/
 data kblock/-1/
 data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/
@@ -712,8 +704,8 @@ data cgmap_offset/0./,cgmap_scale/1./
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
 data nrungcm/-1/,nsib/3/
-data ntaft/2/,ntsea/6/,ntsur/6/,av_vmod/.7/,tss_sh/1./
-data vmodmin/.2/,zobgin/.02/,charnock/.018/,chn10/.00125/
+data ntaft/2/,ntsea/6/,ntsur/6/,tss_sh/1./
+data zobgin/.02/,charnock/.018/,chn10/.00125/
 data newztsea/1/,newtop/1/                
 data snmin/.11/  ! 1000. for 1-layer; ~.11 to turn on 3-layer snow
 data ccycle/0/

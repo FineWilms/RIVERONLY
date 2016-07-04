@@ -26,12 +26,12 @@ implicit none
 private
 public zoh,zoq,qsttg,wetfac
 public zo,theta
-public vmod,dgdtg
+public dgdtg
 public work2_init,work2_end
 
 real, dimension(:), allocatable, save :: zoh,zoq,qsttg,wetfac
 real, dimension(:), allocatable, save :: zo,theta
-real, dimension(:), allocatable, save :: vmod,dgdtg
+real, dimension(:), allocatable, save :: dgdtg
 
 contains
 
@@ -43,11 +43,9 @@ integer, intent(in) :: ifull,iextra,kl,nsib
 
 allocate(zoh(ifull),zoq(ifull),qsttg(ifull),wetfac(ifull))
 allocate(zo(ifull),theta(ifull))
-allocate(vmod(ifull))
 zo=0.
 zoh=0.
 zoq=0.
-vmod=0.
 qsttg=0.
 wetfac=1.
 if (nsib==3.or.nsib==5) then
@@ -64,7 +62,6 @@ implicit none
 
 deallocate(zoh,zoq,qsttg,wetfac)
 deallocate(zo,theta)
-deallocate(vmod)
 if (allocated(dgdtg)) then
   deallocate(dgdtg)
 end if
