@@ -25,7 +25,7 @@
      &          ,snowfile,topofile                        &
      &          ,soilfile,vegfile                       &
      &          ,soil2file     &
-     &          ,climcdf,monfil,restfile,scrfcdf                         &
+     &          ,restfile                        &
      &          ,surfile                                     &
      &          ,surf_00,surf_12         &
      &          ,ifile,ofile                            &
@@ -36,7 +36,7 @@
      &          ,snowfile,topofile                        &
      &          ,soilfile,vegfile                       &
      &          ,soil2file     &
-     &          ,climcdf,monfil,restfile,scrfcdf                         &
+     &          ,restfile                       &
      &          ,surfile                                     &
      &          ,surf_00,surf_12         &
      &          ,ifile,ofile                            &
