@@ -91,7 +91,7 @@ integer  jlx, k, kktau
 integer mins_dt, mins_gmt, mspeca, mtimer_in, nalpha
 integer nlx, nmaxprsav, npa, npb, n3hr
 integer nwrite, nwtsav, mtimer_sav
-integer nn, i, j, mstn, ierr, nperhr, nversion
+integer nn, i, j, ierr, nperhr, nversion
 integer ierr2, kmax, isoth, nsig, lapsbot
 real, dimension(:,:), allocatable, save :: dums, dumliq
 real, dimension(:), allocatable, save :: spare1, spare2
@@ -123,7 +123,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     chn10,snmin,     &
     zobgin,rlong0,rlat0,schmidt,nbox, &
     nbarewet,qgmin,io_in,io_nest,io_out,io_rest,    &
-    localhist,m_fly,mstn,     &
+    localhist,m_fly,     &
     bpyear, &
     ccycle,kblock,  &
     nriver
