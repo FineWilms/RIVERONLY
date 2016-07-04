@@ -114,19 +114,19 @@ namelist/defaults/nversion
 ! main namelist
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     ja,jb,id,jd,mex,             &
-    ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
-    restol,precon,kdate_s,ktime_s,leap,lgwd,     &
+    ndi,nmaxpr,ntsur, &
+    restol,precon,kdate_s,ktime_s,leap,     &
     nextout,nalpha,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
-    nhstest,nsemble,panfg,panzo,nplens,  &
-    rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
-    charnock,chn10,snmin,     &
-    zobgin,rlong0,rlat0,schmidt,kbotu,nbox, &
+    nhstest,nsemble,nplens,  &
+    rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,     &
+    chn10,snmin,     &
+    zobgin,rlong0,rlat0,schmidt,nbox, &
     nbarewet,qgmin,io_in,io_nest,io_out,io_rest,    &
-    tblock,tbave,localhist,m_fly,mstn,nqg,     &
+    localhist,m_fly,mstn,     &
     bpyear, &
     ccycle,kblock,  &
-    cgmap_offset,cgmap_scale,nriver
+    nriver
 ! file namelist
 namelist/datafile/ifile,ofile,eigenv,     &
     restfile,     &
@@ -670,30 +670,26 @@ integer nbarewet
 common/nsib/nbarewet  ! Land-surface options
 
 ! for cardin
-data ia/1/,ib/3/,id/2/,ja/1/,jb/10/,jd/5/,nlv/1/
-data ndi/1/,ndi2/0/,nmaxpr/99/     
+data ia/1/,ib/3/,id/2/,ja/1/,jb/10/,jd/5/
+data ndi/1/,nmaxpr/99/     
 data kdate_s/-1/,ktime_s/-1/,leap/0/
-data nbox/1/,kbotu/0/
+data nbox/1/
 data kblock/-1/
 ! Dynamics options A & B      
 data mex/30/
 data precon/-2900/,restol/4.e-7/
 data schmidt/1./,rlong0/0./,rlat0/90./,nrun/0/
 
-! Vertical mixing options
-data lgwd/0/
-data cgmap_offset/0./,cgmap_scale/1./
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
 data nrungcm/-1/,nsib/3/
-data ntaft/2/,ntsea/6/,ntsur/6/
-data zobgin/.02/,charnock/.018/,chn10/.00125/
-data newztsea/1/          
+data ntsur/6/
+data zobgin/.02/,chn10/.00125/          
 data snmin/.11/  ! 1000. for 1-layer; ~.11 to turn on 3-layer snow
 data ccycle/0/
 ! I/O options
 data m_fly/4/,io_in/1/,io_out/1/,io_rest/1/
-data nperavg/-99/,nwt/-99/,tblock/1/,tbave/1/
+data nperavg/-99/,nwt/-99/
 data nextout/3/,localhist/.false./
 
 ! initialize file names to something

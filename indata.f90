@@ -108,7 +108,7 @@ real, dimension(1:ms) :: wb_tmpry
 real rlonx,rlatx,alf
 real c, cent
 real coslat, coslong, costh, den, diffb, diffg, dist
-real epsmax, fracs, fracwet, ftsoil, gwdfac
+real epsmax, fracs, fracwet, ftsoil
 real polenx, poleny, polenz, pslavge
 real rad, radu, radv, ri, rj, rlat_d, rlon_d
 real rlatd, rlongd
@@ -930,8 +930,8 @@ ps(1:ifull)=1.e5*exp(psl(1:ifull))
 
 !--------------------------------------------------------------
 ! UPDATE GRAVITY WAVE DRAG DATA (lgwd)
-gwdfac=.01*lgwd       ! most runs used .02 up to fri  10-10-1997
-if(myid==0)write(6,*)'gwdfac: ',gwdfac
+!~ gwdfac=.01*lgwd       ! most runs used .02 up to fri  10-10-1997
+!~ if(myid==0)write(6,*)'gwdfac: ',gwdfac
 
 !--------------------------------------------------------------
 ! UPDATE BIOSPHERE DATA (nsib)

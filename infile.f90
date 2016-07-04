@@ -419,11 +419,11 @@ if( ier==0 .and. mod(ktau,nmaxpr)==0 ) then
   vmax = maxval(globvar)
   vmin = minval(globvar)
   iq = id+(jd-1)*ik
-  if ( iq<=size(globvar,1) .and. nlv<=size(globvar,2) ) then
-    write(6,'(" done histrd4 ",a6,i3,i4,i3,3f12.4)') name,kk,ier,iarchi,vmin,vmax,globvar(id+(jd-1)*ik,nlv)
-  else
-    write(6,'(" done histrd4 ",a6,i3,i4,i3,2f12.4)') name,kk,ier,iarchi,vmin,vmax
-  end if
+  !~ if ( iq<=size(globvar,1) .and. nlv<=size(globvar,2) ) then
+    !~ write(6,'(" done histrd4 ",a6,i3,i4,i3,3f12.4)') name,kk,ier,iarchi,vmin,vmax,globvar(id+(jd-1)*ik,nlv)
+  !~ else
+    !~ write(6,'(" done histrd4 ",a6,i3,i4,i3,2f12.4)') name,kk,ier,iarchi,vmin,vmax
+  !~ end if
 end if
 
 ! Have to return correct value of ier on all processes because it's 
@@ -1547,7 +1547,7 @@ if ( mod(ktau,nmaxpr)==0 ) then
     ! Convert this 1D index to 2D
     imx = 1 + modulo(iq-1,il_g)
     jmx = 1 + (iq-1)/il_g
-    write(6,'(" histwrt4 ",a7,i4,2f12.4,3i4,f12.4)') sname,iarch,varn,varx,imx,jmx,kmx,globvar(id+(jd-1)*il_g,nlv)
+    !~ write(6,'(" histwrt4 ",a7,i4,2f12.4,3i4,f12.4)') sname,iarch,varn,varx,imx,jmx,kmx,globvar(id+(jd-1)*il_g,nlv)
   end if
 end if
 

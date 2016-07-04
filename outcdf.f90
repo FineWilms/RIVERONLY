@@ -288,7 +288,6 @@ if ( myid==0 .or. localhist ) then
     nahead(24) = 0  !lbd
     nahead(25) = nrun
     nahead(26) = 0
-    nahead(29) = kountr
     nahead(30) = 1 ! ndiur
     nahead(31) = 0  ! spare
     nahead(33) = nsoil
@@ -298,7 +297,6 @@ if ( myid==0 .or. localhist ) then
     nahead(41) = nextout
     nahead(44) = nsib
     nahead(45) = nrungcm
-    nahead(48) = lgwd
     ahead(1) = ds
     ahead(2) = 0.  !difknbd
     ahead(3) = 0.  ! was rhkuo for kuo scheme
@@ -392,14 +390,14 @@ character(len=21) mnam,nnam
 character(len=8) vname
 character(len=3) trnum
 logical, intent(in) :: local
-logical lwrite,lave,lrad,lday
+logical lwrite,lave,lday
 logical l3hr
 
 lwrite=ktau>0
 lave=mod(ktau,nperavg)==0.or.ktau==ntau
 lave=lave.and.ktau>0
-lrad=mod(ktau,kountr)==0.or.ktau==ntau
-lrad=lrad.and.ktau>0
+!~ lrad=mod(ktau,kountr)==0.or.ktau==ntau
+!~ lrad=lrad.and.ktau>0
 lday=mod(ktau,nperday)==0
 lday=lday.and.ktau>0
 l3hr=(real(nwt)*dt>10800.)
