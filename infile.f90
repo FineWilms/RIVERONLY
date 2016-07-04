@@ -419,11 +419,6 @@ if( ier==0 .and. mod(ktau,nmaxpr)==0 ) then
   vmax = maxval(globvar)
   vmin = minval(globvar)
   iq = id+(jd-1)*ik
-  !~ if ( iq<=size(globvar,1) .and. nlv<=size(globvar,2) ) then
-    !~ write(6,'(" done histrd4 ",a6,i3,i4,i3,3f12.4)') name,kk,ier,iarchi,vmin,vmax,globvar(id+(jd-1)*ik,nlv)
-  !~ else
-    !~ write(6,'(" done histrd4 ",a6,i3,i4,i3,2f12.4)') name,kk,ier,iarchi,vmin,vmax
-  !~ end if
 end if
 
 ! Have to return correct value of ier on all processes because it's 

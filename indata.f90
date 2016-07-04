@@ -91,7 +91,7 @@ integer nface, nn, nsig, i, j, n
 integer ierr, ic, jc, iqg, ig, jg
 integer isav, jsav, ier, lapsbot
 
-character(len=160) :: co2in,radonin,surfin
+character(len=160) :: surfin
 character(len=80) :: header
 
 real, intent(out) :: hourst
@@ -356,7 +356,7 @@ if (nsib>=1) then
   call rdnsib
   if (nsib==6.or.nsib==7) then
     ! albvisnir at this point holds soil albedo for cable initialisation
-    call loadcbmparm(vegfile,vegprev,vegnext,phenfile,casafile)
+    call loadcbmparm(vegfile,vegprev,vegnext)
     ! albvisnir at this point holds net albedo
   !~ elseif (nsib==3) then
     ! special options for standard land surface scheme
@@ -957,7 +957,7 @@ if(nproc==1)then
   write(22,921)
 921     format('   iq     i    j  rlong    rlat    thet    map'          &
                '   sicedep zs(m) alb   ivegt  tss    t1    tgg2   tgg6'  &
-               '   wb1   wb6   ico2  radon')
+               '   wb1   wb6 ')
   do j=1,jl
     do i=1,il
       iq=i+(j-1)*il
@@ -1046,8 +1046,7 @@ if ( nsib >= 6 ) then
       write(6,*) "Cannot open vegfile as a netcdf file ",vegfile
       write(6,*) "Assuming ASCII file format"
       call surfread(duma(:,3),'soilt', filename=soilfile)
-      !~ call surfread(duma(:,1),'albvis',filename=albfile)
-      call surfread(duma(:,2),'albnir',filename=albnirfile)
+      !~ call surfread(duma(:,2),'albnir',filename=albnirfile)
       duma(:,1:2) = 0.01*duma(:,1:2)
     end if
     call ccmpi_distribute(dumb(:,1:3),duma(:,1:3))

@@ -21,27 +21,25 @@
 
 
 !     this is a list of files, read in once at beginning of the run.
-      common/filesin/albfile,maskfile                            &
-     &          ,snowfile,topofile,zofile                        &
+      common/filesin/maskfile                            &
+     &          ,snowfile,topofile                        &
      &          ,soilfile,vegfile                       &
-     &          ,co2emfile,so2depfile,so2emfile,smoistfile,soil2file     &
+     &          ,soil2file     &
      &          ,climcdf,monfil,restfile,scrfcdf                         &
-     &          ,radonemfile,surfile                                     &
-     &          ,co2_00,radon_00,surf_00,co2_12,radon_12,surf_12         &
+     &          ,surfile                                     &
+     &          ,surf_00,surf_12         &
      &          ,ifile,ofile                            &
      &          ,eigenv                    &
-     &          ,trcfil                       &
-     &          ,laifile,albnirfile,urbanfile,vegprev,vegnext   &
-     &          ,salfile,phenfile,casafile
-      character(len=160) albfile,maskfile                        &
-     &          ,snowfile,topofile,zofile                        &
+     &          ,vegprev,vegnext   
+
+      character(len=160) maskfile                        &
+     &          ,snowfile,topofile                        &
      &          ,soilfile,vegfile                       &
-     &          ,co2emfile,so2depfile,so2emfile,smoistfile,soil2file     &
+     &          ,soil2file     &
      &          ,climcdf,monfil,restfile,scrfcdf                         &
-     &          ,radonemfile,surfile                                     &
-     &          ,co2_00,radon_00,surf_00,co2_12,radon_12,surf_12         &
+     &          ,surfile                                     &
+     &          ,surf_00,surf_12         &
      &          ,ifile,ofile                            &
      &          ,eigenv                    &
-     &          ,trcfil                       &
-     &          ,laifile,albnirfile,urbanfile,vegprev,vegnext   &
-     &          ,salfile,phenfile,casafile
+     &          ,vegprev,vegnext  
+

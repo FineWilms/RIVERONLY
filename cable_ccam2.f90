@@ -222,7 +222,7 @@ end subroutine sib4
 
 
 ! *************************************************************************************
-subroutine loadcbmparm(fveg,fvegprev,fvegnext,fphen,casafile)
+subroutine loadcbmparm(fveg,fvegprev,fvegnext)
 
 use cc_mpi
 use infile
@@ -272,7 +272,7 @@ real, dimension(mxvt) :: nwood,nfroot,nmet,nstr,ncwd,nmic,nslow,npass,xpleaf,xpw
 real, dimension(mxvt) :: xpfroot,xpmet,xpstr,xpcwd,xpmic,xpslow,xppass,clabileage
 real, dimension(ifull) :: albsoil, savannafrac
 real, dimension(12) :: xkmlabp,xpsorbmax,xfPleach
-character(len=*), intent(in) :: fveg,fvegprev,fvegnext,fphen,casafile
+character(len=*), intent(in) :: fveg,fvegprev,fvegnext
 
 WRITE(6,*) 'IN loadcbmparam'
 if ( myid==0 ) write(6,*) "Initialising CABLE"
