@@ -79,7 +79,6 @@ real, dimension(ifull) :: neta, oldneta
 logical, dimension(:), allocatable, save :: outflowmask
 
 integer, parameter :: nblend=0  ! 0 for original non-blended, 1 for blended af
-integer, parameter :: ntss_sh=0 ! 0 for original, 3 for **3, 4 for **4
 integer, parameter :: ntest=0   ! ntest= 0 for diags off; ntest= 1 for diags on
 real, parameter :: bprm=5.,cms=5.,chs=2.6,vkar=.4
 real, parameter :: d3=2.5

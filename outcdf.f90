@@ -37,7 +37,7 @@ character(len=3), dimension(12), parameter :: month = (/'jan','feb','mar','apr',
 
 contains
 
-subroutine outfile(iout,rundate,nwrite,nalpha,mins_rad)
+subroutine outfile(iout,rundate,nwrite,nalpha)
       
 use arrays_m
 use cc_mpi
@@ -52,7 +52,7 @@ include 'filnames.h' ! list of files, read in once only
 include 'parm.h'
 
 integer iout,nwrite
-integer, intent(in) :: nalpha,mins_rad
+integer, intent(in) :: nalpha
 character(len=160) :: surfout
 character(len=20) :: qgout
 character(len=8) :: rundate
@@ -105,13 +105,13 @@ if ( iout==19 ) then
   select case(io_rest)  
     case(1)  ! for netCDF 
       if ( myid==0 ) write(6,*) "restart write of data to netCDF"
-      call cdfout(rundate,-1,nalpha,mins_rad)
+      call cdfout(rundate,-1,nalpha)
 
   end select
 else
   select case(io_out)
     case(1)
-      call cdfout(rundate,1,nalpha,mins_rad)
+      call cdfout(rundate,1,nalpha)
 
   end select
 end if
@@ -124,7 +124,7 @@ end subroutine outfile
     
 !--------------------------------------------------------------
 ! CONFIGURE DIMENSIONS FOR OUTPUT NETCDF FILES
-subroutine cdfout(rundate,itype,nalpha,mins_rad)
+subroutine cdfout(rundate,itype,nalpha)
 
 
 use cable_ccam, only : proglai        ! CABLE
@@ -150,7 +150,7 @@ integer, parameter :: nihead=54
 integer, parameter :: nrhead=14
 integer, dimension(nihead) :: nahead
 integer, dimension(4), save :: dima,dims,dimo
-integer, intent(in) :: nalpha,mins_rad
+integer, intent(in) :: nalpha
 integer itype
 integer xdim,ydim,zdim,tdim,msdim,ocdim
 integer icy, icm, icd, ich, icmi, ics, idv
@@ -275,7 +275,6 @@ if ( myid==0 .or. localhist ) then
     nahead(6) = io_in
     nahead(8) = 0          ! not needed now  
     nahead(9) = mex
-    nahead(10) = mup
     nahead(11) = 2 ! nem
     nahead(12) = mtimer
     nahead(13) = 0         ! nmi
@@ -300,8 +299,6 @@ if ( myid==0 .or. localhist ) then
     nahead(44) = nsib
     nahead(45) = nrungcm
     nahead(48) = lgwd
-    nahead(49) = mup
-    nahead(50) = nritch_t
     ahead(1) = ds
     ahead(2) = 0.  !difknbd
     ahead(3) = 0.  ! was rhkuo for kuo scheme
@@ -312,7 +309,6 @@ if ( myid==0 .or. localhist ) then
     ahead(8) = 0.  !stl2
     ahead(9) = 0.  !relaxt
     ahead(10) = 0.  !hourbd
-    ahead(11) = tss_sh
     if ( myid==0 ) then
       write(6,'(" nahead=",(20i4))') nahead
       write(6,*) "ahead=",ahead

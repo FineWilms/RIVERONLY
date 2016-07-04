@@ -19,27 +19,10 @@
 
 !------------------------------------------------------------------------------
 
-
 !     dynamics options (globpe, adjust5, nonlin, upglobal)
 
-!     mfix in namelist:        -1 on pslx in upglobal
-!                               0 off
-!                               1 cunning in adjust5
-!                               2 more-cunning in adjust5
-
-      integer         mex,mspec,mup,mfix_tr
-      integer         nritch_t
-      integer         ntbar,precon,helmmeth
+      integer         mex,mspec, precon
       real              restol
       
-      common/paramdyn/mex,mspec,mup,                        &
-     &                nritch_t,                                       &
-     &                ntbar,precon,                &
-     &                helmmeth,restol,mfix_tr
-
-!            (ntbar=0)           ! 0 for standard
-!            (ntbar=(kl+1)/2)    ! level# for tbar2d with T set in nonlin
-
-
-!                      N.B. qg always split for vadv
-!                      N.B. always split for vadv called from adjust5
+      common/paramdyn/mex,mspec,precon, &
+     &                restol

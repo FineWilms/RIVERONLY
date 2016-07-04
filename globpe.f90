@@ -90,7 +90,7 @@ integer ilx, io_nest, iq, irest, isoil
 integer  jlx, k, kktau
 integer mins_dt, mins_gmt, mspeca, mtimer_in, nalpha
 integer nlx, nmaxprsav, npa, npb, n3hr
-integer nwrite, nwtsav, mins_rad, secs_rad, mtimer_sav
+integer nwrite, nwtsav, mtimer_sav
 integer nn, i, j, mstn, ierr, nperhr, nversion
 integer ierr2, kmax, isoth, nsig, lapsbot
 real, dimension(:,:), allocatable, save :: dums, dumliq
@@ -115,18 +115,16 @@ namelist/defaults/nversion
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     ja,jb,id,jd,mex,             &
     ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
-    restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
-    nextout,nalpha,ntbar,nwrite,  &
+    restol,precon,kdate_s,ktime_s,leap,lgwd,     &
+    nextout,nalpha,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
-    nritch_t,   &
-    nhstest,nsemble,nspecial,panfg,panzo,nplens,  &
+    nhstest,nsemble,panfg,panzo,nplens,  &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,newztsea,     &
-    charnock,chn10,snmin,tss_sh,      &
+    charnock,chn10,snmin,     &
     zobgin,rlong0,rlat0,schmidt,kbotu,nbox, &
     nbarewet,qgmin,io_in,io_nest,io_out,io_rest,    &
     tblock,tbave,localhist,m_fly,mstn,nqg,     &
-    nud_sss,mfix_tr,mloalpha,   &
-    nud_ouv,nud_sfh,bpyear,helmmeth, &
+    bpyear, &
     ccycle,kblock,  &
     cgmap_offset,cgmap_scale,nriver
 ! file namelist
@@ -140,7 +138,7 @@ namelist/datafile/ifile,ofile,eigenv,     &
 
 data nversion/0/
 data comment/' '/,comm/' '/,irest/1/,nalpha/1/
-data mins_rad/-1/,nwrite/0/
+data nwrite/0/
 data lapsbot/0/,io_nest/1/
       
 #ifndef stacklimit
@@ -175,7 +173,6 @@ call START_LOG(model_begin)
 ! READ NAMELISTS AND SET PARAMETER DEFAULTS
 ia       = -1   ! diagnostic index
 ib       = -1   ! diagnostic index
-ntbar    = -1
 rel_lat  = 0.
 rel_long = 0.
 ktau     = 0
@@ -499,7 +496,7 @@ if ( nwt > 0 ) then
   if ( myid == 0 ) then
     write(6,*)'calling outfile'
   end if
-  call outfile(20,rundate,nwrite,nalpha,mins_rad)  ! which calls outcdf
+  call outfile(20,rundate,nwrite,nalpha)  ! which calls outcdf
 end if    ! (nwt>0)
 
 
@@ -598,13 +595,13 @@ do kktau = 1,ntau   ! ****** start of main time loop
 
   call log_off()
   if ( ktau==ntau .or. mod(ktau,nwt)==0 ) then
-    call outfile(20,rundate,nwrite,nalpha,mins_rad)  ! which calls outcdf
+    call outfile(20,rundate,nwrite,nalpha)  ! which calls outcdf
 
     if ( ktau==ntau .and. irest==1 ) then
       ! Don't include the time for writing the restart file
       call END_LOG(maincalc_end)
       ! write restart file
-      call outfile(19,rundate,nwrite,nalpha,mins_rad)
+      call outfile(19,rundate,nwrite,nalpha)
       if ( myid == 0 ) then
         write(6,*)'finished writing restart file in outfile'
       end if
@@ -678,14 +675,10 @@ data ndi/1/,ndi2/0/,nmaxpr/99/
 data kdate_s/-1/,ktime_s/-1/,leap/0/
 data nbox/1/,kbotu/0/
 data kblock/-1/
-data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
-data mloalpha/10/
 ! Dynamics options A & B      
-data mex/30/,mup/1/
-data nritch_t/300/
+data mex/30/
 data precon/-2900/,restol/4.e-7/
 data schmidt/1./,rlong0/0./,rlat0/90./,nrun/0/
-data helmmeth/0/,mfix_tr/0/
 
 ! Vertical mixing options
 data lgwd/0/
@@ -693,9 +686,9 @@ data cgmap_offset/0./,cgmap_scale/1./
 ! Soil, canopy, PBL options
 data nbarewet/0/,newrough/0/,nglacier/1/
 data nrungcm/-1/,nsib/3/
-data ntaft/2/,ntsea/6/,ntsur/6/,tss_sh/1./
+data ntaft/2/,ntsea/6/,ntsur/6/
 data zobgin/.02/,charnock/.018/,chn10/.00125/
-data newztsea/1/,newtop/1/                
+data newztsea/1/          
 data snmin/.11/  ! 1000. for 1-layer; ~.11 to turn on 3-layer snow
 data ccycle/0/
 ! I/O options

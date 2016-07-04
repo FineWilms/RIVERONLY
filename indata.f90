@@ -358,87 +358,87 @@ if (nsib>=1) then
     ! albvisnir at this point holds soil albedo for cable initialisation
     call loadcbmparm(vegfile,vegprev,vegnext,phenfile,casafile)
     ! albvisnir at this point holds net albedo
-  elseif (nsib==3) then
+  !~ elseif (nsib==3) then
     ! special options for standard land surface scheme
-    if(nspecial==35)then      ! test for Andy Cottrill
-      do iq=1,ifull
-        rlongd=rlongg(iq)*180./pi
-        rlatd=rlatt(iq)*180./pi
-        if(rlatd>-32..and.rlatd<-23.5)then
-          if(rlongd>145..and.rlongd<=150.)ivegt(iq)=4
-          if(rlongd>150..and.rlongd<154.)ivegt(iq)=2
-        endif
-      enddo
-    endif  ! (nspecial==35)
-    ! zap vegetation over SEQ for Andy
-    if(nspecial==41)then
-      do iq=1,ifull
-        rlongd=rlongg(iq)*180./pi
-        rlatd=rlatt(iq)*180./pi
-        if(rlatd>-32. .and. rlatd<-23.5)then
-          if(rlongd>145. .and. rlongd<=152.)ivegt(iq)=4 
-          if(rlongd>152. .and. rlongd< 154.)ivegt(iq)=2 
-        endif
-      enddo
-    endif  ! (nspecial==41)
-    do iq=1,ifull
-      ! check for littoral veg over Oz      
-      rlongd=rlongg(iq)*180./pi
-      rlatd=rlatt(iq)*180./pi
-      if(rlongd>110.and.rlongd<155.and.rlatd>-45.and.rlatd<-10)then
-        if(ivegt(iq)==28)then
-          write(6,*)'littoral vegt ',iq,rlongd,rlatd
-          if(rlongd>150.and.rlongd<152.and.rlatd>-28.and.rlatd<-26)then
-            ivegt(iq)=24   ! fix-up of Graetz data for Andy from July '07
-          endif
-        endif
-      endif
-    enddo
-    do iq=1,ifull
-      if(land(iq))then  
-        ! following line from 16/3/06 avoids sand on Himalayas        
-        if(zs(iq)>2000.*grav.and.isoilm(iq)<3)isoilm(iq)=3
-      endif
-    enddo
-    ! put in Antarctica ice-shelf fixes 5/3/07
-    do iq=1,ifull
-      if(zs(iq)<=0.)then
-        rlongd=rlongg(iq)*180./pi
-        rlatd=rlatt(iq)*180./pi
-        if((rlongd>165..and.rlongd<195..and.rlatd<-77.2-(rlongd-165.)/30.).or.      & ! Ross shelf
-           (rlongd>300..and.rlongd<330..and.rlatd<-75.2-(rlongd-300.)*2.8/30.).or.  & ! Ronne shelf
-           (rlongd>68..and.rlongd<75..and.rlatd<-64.-(rlongd-60.)*5.8/15.))then       ! Amery shelf
-             zs(iq)=1.
-             land(iq)=.true.
-             isoilm(iq)=9
-             ivegt(iq)=42
-             if(mydiag)write(6,*)'setting sea to ice sheet for iq = ',iq
-        endif
-      endif  ! (zs(iq)<=0.)
-    enddo
+    !~ if(nspecial==35)then      ! test for Andy Cottrill
+      !~ do iq=1,ifull
+        !~ rlongd=rlongg(iq)*180./pi
+        !~ rlatd=rlatt(iq)*180./pi
+        !~ if(rlatd>-32..and.rlatd<-23.5)then
+          !~ if(rlongd>145..and.rlongd<=150.)ivegt(iq)=4
+          !~ if(rlongd>150..and.rlongd<154.)ivegt(iq)=2
+        !~ endif
+      !~ enddo
+    !~ endif  ! (nspecial==35)
+    !~ ! zap vegetation over SEQ for Andy
+    !~ if(nspecial==41)then
+      !~ do iq=1,ifull
+        !~ rlongd=rlongg(iq)*180./pi
+        !~ rlatd=rlatt(iq)*180./pi
+        !~ if(rlatd>-32. .and. rlatd<-23.5)then
+          !~ if(rlongd>145. .and. rlongd<=152.)ivegt(iq)=4 
+          !~ if(rlongd>152. .and. rlongd< 154.)ivegt(iq)=2 
+        !~ endif
+      !~ enddo
+    !~ endif  ! (nspecial==41)
+    !~ do iq=1,ifull
+      !~ ! check for littoral veg over Oz      
+      !~ rlongd=rlongg(iq)*180./pi
+      !~ rlatd=rlatt(iq)*180./pi
+      !~ if(rlongd>110.and.rlongd<155.and.rlatd>-45.and.rlatd<-10)then
+        !~ if(ivegt(iq)==28)then
+          !~ write(6,*)'littoral vegt ',iq,rlongd,rlatd
+          !~ if(rlongd>150.and.rlongd<152.and.rlatd>-28.and.rlatd<-26)then
+            !~ ivegt(iq)=24   ! fix-up of Graetz data for Andy from July '07
+          !~ endif
+        !~ endif
+      !~ endif
+    !~ enddo
+    !~ do iq=1,ifull
+      !~ if(land(iq))then  
+        !~ ! following line from 16/3/06 avoids sand on Himalayas        
+        !~ if(zs(iq)>2000.*grav.and.isoilm(iq)<3)isoilm(iq)=3
+      !~ endif
+    !~ enddo
+    !~ ! put in Antarctica ice-shelf fixes 5/3/07
+    !~ do iq=1,ifull
+      !~ if(zs(iq)<=0.)then
+        !~ rlongd=rlongg(iq)*180./pi
+        !~ rlatd=rlatt(iq)*180./pi
+        !~ if((rlongd>165..and.rlongd<195..and.rlatd<-77.2-(rlongd-165.)/30.).or.      & ! Ross shelf
+           !~ (rlongd>300..and.rlongd<330..and.rlatd<-75.2-(rlongd-300.)*2.8/30.).or.  & ! Ronne shelf
+           !~ (rlongd>68..and.rlongd<75..and.rlatd<-64.-(rlongd-60.)*5.8/15.))then       ! Amery shelf
+             !~ zs(iq)=1.
+             !~ land(iq)=.true.
+             !~ isoilm(iq)=9
+             !~ ivegt(iq)=42
+             !~ if(mydiag)write(6,*)'setting sea to ice sheet for iq = ',iq
+        !~ endif
+      !~ endif  ! (zs(iq)<=0.)
+    !~ enddo
   end if ! (nsib==6.or.nsib==7) ..else..
   if (nsib/=6.and.nsib/=7) then
-    ! JJK special option for adjusting surface albedo and roughness
-    if(nspecial<-10)then
-      do iq=1,ifull
-        rlongd=rlongg(iq)*180./pi
-        rlatd=rlatt(iq)*180./pi
-        if((rlatdn<rlatd .and. rlatd<rlatdx).and.(rlongdn<rlongd .and. rlongd<rlongdx))then
-          ! assume nspecial = -vvir where vv = % vis alb and ir = % nir alb
-          newzo=real(abs(nspecial)/10000)
-          visalb=real((abs(nspecial)-nint(newzo)*10000)/100)
-          niralb=real(abs(nspecial)-nint(newzo)*10000-nint(visalb)*100)
-          if ( newzo  > 1. ) zolnd(iq)=newzo/1000. ! input mm, output m
-          if ( visalb > 1. ) albvisnir(iq,1)=visalb/100. ! (to make 0-1)
-          if ( niralb > 1. ) albvisnir(iq,2)=niralb/100. ! (to make 0-1)
-          if ( .not. land(iq) ) then
-            land(iq)=.true.
-            ivegt(iq)=42
-            isoilm(iq)=7
-          end if
-        endif
-      enddo
-    endif  ! (nspecial<-10)	
+    !~ ! JJK special option for adjusting surface albedo and roughness
+    !~ if(nspecial<-10)then
+      !~ do iq=1,ifull
+        !~ rlongd=rlongg(iq)*180./pi
+        !~ rlatd=rlatt(iq)*180./pi
+        !~ if((rlatdn<rlatd .and. rlatd<rlatdx).and.(rlongdn<rlongd .and. rlongd<rlongdx))then
+          !~ ! assume nspecial = -vvir where vv = % vis alb and ir = % nir alb
+          !~ newzo=real(abs(nspecial)/10000)
+          !~ visalb=real((abs(nspecial)-nint(newzo)*10000)/100)
+          !~ niralb=real(abs(nspecial)-nint(newzo)*10000-nint(visalb)*100)
+          !~ if ( newzo  > 1. ) zolnd(iq)=newzo/1000. ! input mm, output m
+          !~ if ( visalb > 1. ) albvisnir(iq,1)=visalb/100. ! (to make 0-1)
+          !~ if ( niralb > 1. ) albvisnir(iq,2)=niralb/100. ! (to make 0-1)
+          !~ if ( .not. land(iq) ) then
+            !~ land(iq)=.true.
+            !~ ivegt(iq)=42
+            !~ isoilm(iq)=7
+          !~ end if
+        !~ endif
+      !~ enddo
+    !~ endif  ! (nspecial<-10)	
   end if ! (nsib/=6.and.nsib/=7)
 end if   ! nsib>=1
 
@@ -540,61 +540,61 @@ if ( io_in<4 ) then
     call ccmpi_abort(-1)
   endif
 
-  ! adjust input for differences in orography
-  if(newtop==2)then
-    ! reduce sea tss to mslp      e.g. for qcca in ncep gcm
-    do iq=1,ifull
-      if(tss(iq)<0.)then
-        if (abs(zss(iq))>1000.) then
-          write(6,*)'zss,tss_sea in, out',iq,zss(iq),tss(iq),tss(iq)-zss(iq)*stdlapse/grav
-        end if
-        tss(iq)=tss(iq)-zss(iq)*stdlapse/grav
-      endif
-    enddo
-  endif                  ! (newtop==2)
+  !~ ! adjust input for differences in orography
+  !~ if(newtop==2)then
+    !~ ! reduce sea tss to mslp      e.g. for qcca in ncep gcm
+    !~ do iq=1,ifull
+      !~ if(tss(iq)<0.)then
+        !~ if (abs(zss(iq))>1000.) then
+          !~ write(6,*)'zss,tss_sea in, out',iq,zss(iq),tss(iq),tss(iq)-zss(iq)*stdlapse/grav
+        !~ end if
+        !~ tss(iq)=tss(iq)-zss(iq)*stdlapse/grav
+      !~ endif
+    !~ enddo
+  !~ endif                  ! (newtop==2)
   tss(1:ifull)=abs(tss(1:ifull)) ! not done in infile because -ve needed for onthefly
   hourst=.01*ktime
-  if ( myid==0 ) then
-    write(6,*)'rlongg(1),rlongg(ifull) ',rlongg(1),rlongg(ifull)
-    write(6,*)'using em: ',(em(ii),ii=1,10)
-    write(6,*)'using  f: ',(f(ii),ii=1,10)
-    write(6,*)'in indata hourst = ',hourst
-    write(6,*)'sigmas: ',sig
-    write(6,*)'sigmh: ',sigmh
-  end if
-  if ( mydiag ) then
-    write(6,*)'newtop, zsold, zs,tss_in,land ',newtop,zss(idjd),zs(idjd),tss(idjd),land(idjd)
-  end if
-  if (newtop>=1.) then    
-    if (nproc==1) then
-      pslavge=sum(psl(1:ifull)*wts(1:ifull))
-      write (6,"(' initial pslavge ',f10.6)") pslavge
-    endif 
-    do iq=1,ifull
-      if (land(iq)) then
-        tss(iq)=tss(iq)+(zss(iq)-zs(iq))*stdlapse/grav
-        do k=1,ms
-          tgg(iq,k)=tgg(iq,k)+(zss(iq)-zs(iq))*stdlapse/grav
-        enddo
-      endif     ! (land(iq))
-    enddo        ! iq loop
-    if ( mydiag ) then
-      write(6,*)'newtop>=1 new_land_tss,zsold,zs: ',tss(idjd),zss(idjd),zs(idjd)
-      ! compensate psl, t(,,1), qg as read in from infile
-      write(6,"(' zs#  in     ',9f8.1)") diagvals(zs)
-      write(6,"(' zss# in     ',9f8.1)") diagvals(zss)
-      write(6,"(' 100*psl#  in',9f8.2)") 100.*diagvals(psl)
-      write(6,*) 'now call retopo from indata'
-    end if ! ( mydiag )
-    call retopo(psl,zss,zs,t,qg)
-    if(nmaxpr==1.and.mydiag)then
-      write(6,"(' 100*psl# out',9f8.2)") 100.*diagvals(psl)
-    endif
-    if (nproc==1) then
-      pslavge=sum(psl(1:ifull)*wts(1:ifull))
-      write (6,"(' after retopo pslavge ',f10.6)") pslavge
-    endif 
-  endif   ! (newtop>=1.and..not.lrestart)
+  !~ if ( myid==0 ) then
+    !~ write(6,*)'rlongg(1),rlongg(ifull) ',rlongg(1),rlongg(ifull)
+    !~ write(6,*)'using em: ',(em(ii),ii=1,10)
+    !~ write(6,*)'using  f: ',(f(ii),ii=1,10)
+    !~ write(6,*)'in indata hourst = ',hourst
+    !~ write(6,*)'sigmas: ',sig
+    !~ write(6,*)'sigmh: ',sigmh
+  !~ end if
+  !~ if ( mydiag ) then
+    !~ write(6,*)'newtop, zsold, zs,tss_in,land ',newtop,zss(idjd),zs(idjd),tss(idjd),land(idjd)
+  !~ end if
+  !~ if (newtop>=1.) then    
+    !~ if (nproc==1) then
+      !~ pslavge=sum(psl(1:ifull)*wts(1:ifull))
+      !~ write (6,"(' initial pslavge ',f10.6)") pslavge
+    !~ endif 
+    !~ do iq=1,ifull
+      !~ if (land(iq)) then
+        !~ tss(iq)=tss(iq)+(zss(iq)-zs(iq))*stdlapse/grav
+        !~ do k=1,ms
+          !~ tgg(iq,k)=tgg(iq,k)+(zss(iq)-zs(iq))*stdlapse/grav
+        !~ enddo
+      !~ endif     ! (land(iq))
+    !~ enddo        ! iq loop
+    !~ if ( mydiag ) then
+      !~ write(6,*)'newtop>=1 new_land_tss,zsold,zs: ',tss(idjd),zss(idjd),zs(idjd)
+      !~ ! compensate psl, t(,,1), qg as read in from infile
+      !~ write(6,"(' zs#  in     ',9f8.1)") diagvals(zs)
+      !~ write(6,"(' zss# in     ',9f8.1)") diagvals(zss)
+      !~ write(6,"(' 100*psl#  in',9f8.2)") 100.*diagvals(psl)
+      !~ write(6,*) 'now call retopo from indata'
+    !~ end if ! ( mydiag )
+    !~ call retopo(psl,zss,zs,t,qg)
+    !~ if(nmaxpr==1.and.mydiag)then
+      !~ write(6,"(' 100*psl# out',9f8.2)") 100.*diagvals(psl)
+    !~ endif
+    !~ if (nproc==1) then
+      !~ pslavge=sum(psl(1:ifull)*wts(1:ifull))
+      !~ write (6,"(' after retopo pslavge ',f10.6)") pslavge
+    !~ endif 
+  !~ endif   ! (newtop>=1.and..not.lrestart)
 
   qg(1:ifull,:)=max(qg(1:ifull,:),0.)
   ps(1:ifull)=1.e5*exp(psl(1:ifull))
@@ -978,6 +978,7 @@ if(nproc==1)then
     enddo
   enddo
 endif  ! (nproc==1)
+
 
 call END_LOG(indata_end)
 return
