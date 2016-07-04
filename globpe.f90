@@ -92,7 +92,7 @@ integer mins_dt, mins_gmt, mspeca, mtimer_in, nalpha
 integer nlx, nmaxprsav, npa, npb, n3hr
 integer nwrite, nwtsav, mins_rad, secs_rad, mtimer_sav
 integer nn, i, j, mstn, ierr, nperhr, nversion
-integer ierr2, kmax, isoth, nsig, lapsbot, mbd_min
+integer ierr2, kmax, isoth, nsig, lapsbot
 real, dimension(:,:), allocatable, save :: dums, dumliq
 real, dimension(:), allocatable, save :: spare1, spare2
 real, dimension(:), allocatable, save :: spmean
@@ -113,8 +113,8 @@ logical odcalc
 namelist/defaults/nversion
 ! main namelist
 namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
-    ja,jb,id,jd,mex,mbd,             &
-    mbd_maxscale,ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
+    ja,jb,id,jd,mex,             &
+    ndi,ndi2,nlv,nmaxpr,ntaft,ntsea,ntsur, &
     restol,precon,kdate_s,ktime_s,leap,newtop,mup,lgwd,     &
     nextout,nalpha,ntbar,nwrite,  &
     irest,nrun,rel_lat,rel_long,nrungcm,nsib,&
@@ -337,18 +337,7 @@ end if
 ! some default values for unspecified parameters
 if ( ia<0 ) ia = il/2
 if ( ib<0 ) ib = ia + 3
-!~ if( mbd/=0 .and. nbd/=0 ) then
-  !~ write(6,*) 'setting nbd=0 because mbd/=0'
-  !~ nbd = 0
-!~ endif
-mbd_min = int(20.*112.*90.*schmidt/real(mbd_maxscale))
-if ( mbd<mbd_min .and. mbd/=0 ) then
-  if ( myid==0 ) then
-    write(6,*) "Increasing mbd to satisfy mbd_maxscale ",mbd_maxscale
-    write(6,*) "Original mbd and final mbd = ",mbd,mbd_min
-  end if
-  mbd = mbd_min
-end if
+
 ! **** do namelist fixes above this ***
       
 !--------------------------------------------------------------
@@ -687,7 +676,7 @@ common/nsib/nbarewet  ! Land-surface options
 data ia/1/,ib/3/,id/2/,ja/1/,jb/10/,jd/5/,nlv/1/
 data ndi/1/,ndi2/0/,nmaxpr/99/     
 data kdate_s/-1/,ktime_s/-1/,leap/0/
-data mbd/0/,mbd_maxscale/3000/,nbox/1/,kbotu/0/
+data nbox/1/,kbotu/0/
 data kblock/-1/
 data nud_sss/0/,nud_ouv/0/,nud_sfh/0/
 data mloalpha/10/

@@ -23,7 +23,7 @@
       integer meso,nrungcm,newtop,                                  &
      &        kountr,                                  &
      &        nhstest,nspecial,newrough,newsoilm,nsib,nsoil,       &
-     &        ntaft,ntsea,ntsur,ntsur2,lgwd,newztsea,nglacier,mbd,       &
+     &        ntaft,ntsea,ntsur,ntsur2,lgwd,newztsea,nglacier,       &
      &        kbotu,nbox,   &
      &        ktau,ndi,ndi2,ntau,nperavg,nperday,nmaxpr,nlv,    &
      &        ia,ib,ja,jb,id,jd,idjd,                                    &
@@ -31,7 +31,7 @@
      &        nwt,nqg,nrun,nextout,nclim,m_fly,nsemble,tblock,tbave,     &
      &        nud_sss,   &
      &        mloalpha,nud_ouv,nud_sfh,kblock,ccycle,   &
-     &        mbd_maxscale,nriver
+     &        nriver
       real qgmin,                                                        &
      &     aleadfr,snmin,tss_sh,charnock,chn10,zobgin,   &
      &     rlongdn,rlongdx,rlatdn,rlatdx,ds,dt,dtin,timea,panfg,panzo,   &
@@ -53,9 +53,8 @@
      &                panfg,panzo,ccycle,nriver
 
       common/parmnudg/kbotu,nbox,   &
-     &                mbd,nud_sss,      &
-     &                mloalpha,nud_ouv,nud_sfh,kblock,   &
-     &                mbd_maxscale
+     &                nud_sss,      &
+     &                mloalpha,nud_ouv,nud_sfh,kblock
 
       common/parmtime/ktau,ntau,nperavg,nperday,ds,dt,dtin,timea,nmaxpr, &
      &                diag,nlv,ia,ib,ja,jb,id,jd,idjd,ndi,ndi2
