@@ -167,16 +167,13 @@ eg(:)=0.
 fg(:)=0.
 cduv(:)=0.
 cdtq(:)=0.
-!~ swrsave(:)=0.5
 hourst=0.
 albvissav(:)=-1.
 albvisnir(:,:)=0.3
-!~ vlai(:)=0.
 ivegt(:)=1
 isoilm(:)=1
 zs(:)=0.
-zsmask(:)=0.
-!~ he(:)=0.         
+zsmask(:)=0.    
 land(:)=.false.
 kdate=kdate_s
 ktime=ktime_s
@@ -327,14 +324,12 @@ if ( io_in<=4 .and. nhstest>=0 ) then
  
 else                   ! aquaplanet test -1 to -8 or -22
   zs(:)=0.             ! or pgb from June 2003
-  zsmask(:)=0.
-  !~ he(:)=0.         
+  zsmask(:)=0.    
   land(:)=.false.
 endif  ! (io_in<=4.and.nhstest>=0)  ..else..
 
 if ( mydiag ) then
   write(6,"('zs#_topof ',9f8.1)") diagvals(zs)
-  !~ write(6,"('he#_topof ',9f8.1)") diagvals(he)
   write(6,"('zs#_mask ',9f8.2)") diagvals(zsmask)
 end if
 
@@ -358,88 +353,8 @@ if (nsib>=1) then
     ! albvisnir at this point holds soil albedo for cable initialisation
     call loadcbmparm(vegfile,vegprev,vegnext)
     ! albvisnir at this point holds net albedo
-  !~ elseif (nsib==3) then
-    ! special options for standard land surface scheme
-    !~ if(nspecial==35)then      ! test for Andy Cottrill
-      !~ do iq=1,ifull
-        !~ rlongd=rlongg(iq)*180./pi
-        !~ rlatd=rlatt(iq)*180./pi
-        !~ if(rlatd>-32..and.rlatd<-23.5)then
-          !~ if(rlongd>145..and.rlongd<=150.)ivegt(iq)=4
-          !~ if(rlongd>150..and.rlongd<154.)ivegt(iq)=2
-        !~ endif
-      !~ enddo
-    !~ endif  ! (nspecial==35)
-    !~ ! zap vegetation over SEQ for Andy
-    !~ if(nspecial==41)then
-      !~ do iq=1,ifull
-        !~ rlongd=rlongg(iq)*180./pi
-        !~ rlatd=rlatt(iq)*180./pi
-        !~ if(rlatd>-32. .and. rlatd<-23.5)then
-          !~ if(rlongd>145. .and. rlongd<=152.)ivegt(iq)=4 
-          !~ if(rlongd>152. .and. rlongd< 154.)ivegt(iq)=2 
-        !~ endif
-      !~ enddo
-    !~ endif  ! (nspecial==41)
-    !~ do iq=1,ifull
-      !~ ! check for littoral veg over Oz      
-      !~ rlongd=rlongg(iq)*180./pi
-      !~ rlatd=rlatt(iq)*180./pi
-      !~ if(rlongd>110.and.rlongd<155.and.rlatd>-45.and.rlatd<-10)then
-        !~ if(ivegt(iq)==28)then
-          !~ write(6,*)'littoral vegt ',iq,rlongd,rlatd
-          !~ if(rlongd>150.and.rlongd<152.and.rlatd>-28.and.rlatd<-26)then
-            !~ ivegt(iq)=24   ! fix-up of Graetz data for Andy from July '07
-          !~ endif
-        !~ endif
-      !~ endif
-    !~ enddo
-    !~ do iq=1,ifull
-      !~ if(land(iq))then  
-        !~ ! following line from 16/3/06 avoids sand on Himalayas        
-        !~ if(zs(iq)>2000.*grav.and.isoilm(iq)<3)isoilm(iq)=3
-      !~ endif
-    !~ enddo
-    !~ ! put in Antarctica ice-shelf fixes 5/3/07
-    !~ do iq=1,ifull
-      !~ if(zs(iq)<=0.)then
-        !~ rlongd=rlongg(iq)*180./pi
-        !~ rlatd=rlatt(iq)*180./pi
-        !~ if((rlongd>165..and.rlongd<195..and.rlatd<-77.2-(rlongd-165.)/30.).or.      & ! Ross shelf
-           !~ (rlongd>300..and.rlongd<330..and.rlatd<-75.2-(rlongd-300.)*2.8/30.).or.  & ! Ronne shelf
-           !~ (rlongd>68..and.rlongd<75..and.rlatd<-64.-(rlongd-60.)*5.8/15.))then       ! Amery shelf
-             !~ zs(iq)=1.
-             !~ land(iq)=.true.
-             !~ isoilm(iq)=9
-             !~ ivegt(iq)=42
-             !~ if(mydiag)write(6,*)'setting sea to ice sheet for iq = ',iq
-        !~ endif
-      !~ endif  ! (zs(iq)<=0.)
-    !~ enddo
   end if ! (nsib==6.or.nsib==7) ..else..
-  if (nsib/=6.and.nsib/=7) then
-    !~ ! JJK special option for adjusting surface albedo and roughness
-    !~ if(nspecial<-10)then
-      !~ do iq=1,ifull
-        !~ rlongd=rlongg(iq)*180./pi
-        !~ rlatd=rlatt(iq)*180./pi
-        !~ if((rlatdn<rlatd .and. rlatd<rlatdx).and.(rlongdn<rlongd .and. rlongd<rlongdx))then
-          !~ ! assume nspecial = -vvir where vv = % vis alb and ir = % nir alb
-          !~ newzo=real(abs(nspecial)/10000)
-          !~ visalb=real((abs(nspecial)-nint(newzo)*10000)/100)
-          !~ niralb=real(abs(nspecial)-nint(newzo)*10000-nint(visalb)*100)
-          !~ if ( newzo  > 1. ) zolnd(iq)=newzo/1000. ! input mm, output m
-          !~ if ( visalb > 1. ) albvisnir(iq,1)=visalb/100. ! (to make 0-1)
-          !~ if ( niralb > 1. ) albvisnir(iq,2)=niralb/100. ! (to make 0-1)
-          !~ if ( .not. land(iq) ) then
-            !~ land(iq)=.true.
-            !~ ivegt(iq)=42
-            !~ isoilm(iq)=7
-          !~ end if
-        !~ endif
-      !~ enddo
-    !~ endif  ! (nspecial<-10)	
-  end if ! (nsib/=6.and.nsib/=7)
+ 
 end if   ! nsib>=1
 
 
@@ -540,61 +455,9 @@ if ( io_in<4 ) then
     call ccmpi_abort(-1)
   endif
 
-  !~ ! adjust input for differences in orography
-  !~ if(newtop==2)then
-    !~ ! reduce sea tss to mslp      e.g. for qcca in ncep gcm
-    !~ do iq=1,ifull
-      !~ if(tss(iq)<0.)then
-        !~ if (abs(zss(iq))>1000.) then
-          !~ write(6,*)'zss,tss_sea in, out',iq,zss(iq),tss(iq),tss(iq)-zss(iq)*stdlapse/grav
-        !~ end if
-        !~ tss(iq)=tss(iq)-zss(iq)*stdlapse/grav
-      !~ endif
-    !~ enddo
-  !~ endif                  ! (newtop==2)
+
   tss(1:ifull)=abs(tss(1:ifull)) ! not done in infile because -ve needed for onthefly
   hourst=.01*ktime
-  !~ if ( myid==0 ) then
-    !~ write(6,*)'rlongg(1),rlongg(ifull) ',rlongg(1),rlongg(ifull)
-    !~ write(6,*)'using em: ',(em(ii),ii=1,10)
-    !~ write(6,*)'using  f: ',(f(ii),ii=1,10)
-    !~ write(6,*)'in indata hourst = ',hourst
-    !~ write(6,*)'sigmas: ',sig
-    !~ write(6,*)'sigmh: ',sigmh
-  !~ end if
-  !~ if ( mydiag ) then
-    !~ write(6,*)'newtop, zsold, zs,tss_in,land ',newtop,zss(idjd),zs(idjd),tss(idjd),land(idjd)
-  !~ end if
-  !~ if (newtop>=1.) then    
-    !~ if (nproc==1) then
-      !~ pslavge=sum(psl(1:ifull)*wts(1:ifull))
-      !~ write (6,"(' initial pslavge ',f10.6)") pslavge
-    !~ endif 
-    !~ do iq=1,ifull
-      !~ if (land(iq)) then
-        !~ tss(iq)=tss(iq)+(zss(iq)-zs(iq))*stdlapse/grav
-        !~ do k=1,ms
-          !~ tgg(iq,k)=tgg(iq,k)+(zss(iq)-zs(iq))*stdlapse/grav
-        !~ enddo
-      !~ endif     ! (land(iq))
-    !~ enddo        ! iq loop
-    !~ if ( mydiag ) then
-      !~ write(6,*)'newtop>=1 new_land_tss,zsold,zs: ',tss(idjd),zss(idjd),zs(idjd)
-      !~ ! compensate psl, t(,,1), qg as read in from infile
-      !~ write(6,"(' zs#  in     ',9f8.1)") diagvals(zs)
-      !~ write(6,"(' zss# in     ',9f8.1)") diagvals(zss)
-      !~ write(6,"(' 100*psl#  in',9f8.2)") 100.*diagvals(psl)
-      !~ write(6,*) 'now call retopo from indata'
-    !~ end if ! ( mydiag )
-    !~ call retopo(psl,zss,zs,t,qg)
-    !~ if(nmaxpr==1.and.mydiag)then
-      !~ write(6,"(' 100*psl# out',9f8.2)") 100.*diagvals(psl)
-    !~ endif
-    !~ if (nproc==1) then
-      !~ pslavge=sum(psl(1:ifull)*wts(1:ifull))
-      !~ write (6,"(' after retopo pslavge ',f10.6)") pslavge
-    !~ endif 
-  !~ endif   ! (newtop>=1.and..not.lrestart)
 
   qg(1:ifull,:)=max(qg(1:ifull,:),0.)
   ps(1:ifull)=1.e5*exp(psl(1:ifull))
@@ -820,9 +683,6 @@ WRITe(6,*) 'NRUNGCM = ',nrungcm
   endif          !  (nrungcm==2)
 !~ end if ! ( .not.lrestart )
 
-
-
-
 !--------------------------------------------------------------
 ! FINAL FIXES FOR SURFACE DATA
 
@@ -901,14 +761,11 @@ if ( mydiag ) then
   write(6,"('wbice(1-ms)',9f7.3)")(wbice(idjd,k),k=1,ms)
 end if
 
-
-
 !**************************************************************
 !**************************************************************
 ! No changes to input data allowed after this point
 !**************************************************************
 !**************************************************************
-
 
 !-----------------------------------------------------------------
 ! UPDATE GENERAL MODEL VARIABLES
@@ -929,18 +786,12 @@ albnirsav(:)=albvisnir(:,2) ! NIR
 ps(1:ifull)=1.e5*exp(psl(1:ifull))
 
 !--------------------------------------------------------------
-! UPDATE GRAVITY WAVE DRAG DATA (lgwd)
-!~ gwdfac=.01*lgwd       ! most runs used .02 up to fri  10-10-1997
-!~ if(myid==0)write(6,*)'gwdfac: ',gwdfac
-
-!--------------------------------------------------------------
 ! UPDATE BIOSPHERE DATA (nsib)
 if (nsib==6.or.nsib==7) then
   ! Load CABLE data
   if (myid==0) write(6,*) 'Importing CABLE data'
   call loadtile
 end if
-
 
 !--------------------------------------------------------------     
 ! WRITE FORT.22 FILE FOR GRID INFO
@@ -984,7 +835,6 @@ call END_LOG(indata_end)
 return
 end subroutine indataf
 
-
 !--------------------------------------------------------------
 ! READ BIOSPHERIC FILES
 subroutine rdnsib
@@ -997,7 +847,6 @@ use nsibd_m                  ! Land-surface arrays
 use pbl_m                    ! Boundary layer arrays
 use soil_m                   ! Soil and surface data
 use soilsnow_m               ! Soil, snow and surface data
-!~ use vegpar_m                 ! Vegetation arrays
 
 implicit none
 
@@ -1097,7 +946,6 @@ zolnd(:) = max( zolnd(:), zobgin )
 
 return
 end subroutine rdnsib
-
 
 !--------------------------------------------------------------
 ! FUNCTIONS TO CHECK DATA
@@ -1211,7 +1059,6 @@ xidatacheck = err
 return
 end function xidatacheck
 
-    
 !--------------------------------------------------------------
 ! READ INTEGER TEXT FILES
 subroutine readint(filename,itss,ifully)
@@ -1270,67 +1117,6 @@ end if
 return
 end subroutine readint
 
-    
-!--------------------------------------------------------------
-! READ REAL TEXT FILES
-subroutine readreal(filename,tss,ifully)
- 
-use cc_mpi            ! CC MPI routines
- 
-implicit none
-      
-include 'newmpar.h'   ! Grid parameters
-include 'parm.h'      ! Model configuration
-include 'parmgeom.h'  ! Coordinate data
-
-integer ierr
-integer ilx,jlx,ifully
-real, dimension(ifully) :: tss
-real, dimension(ifull_g) :: glob2d
-real rlong0x,rlat0x,schmidtx,dsx
-character(len=*) filename
-character(len=47) header
-
-if ( myid == 0 ) then
-  write(6,*) 'reading data via readreal from ',trim(filename)
-  open(87,file=filename,status='old')
-  read(87,*,iostat=ierr) ilx,jlx,rlong0x,rlat0x,schmidtx,dsx,header
-  if ( ierr == 0 ) then
-    write(6,*) ilx,jlx,rlong0x,rlat0x,schmidtx,dsx,header
-    if(ilx/=il_g.or.jlx/=jl_g.or.abs(rlong0x-rlong0)>1.e-6.or.abs(rlat0x-rlat0)>1.E-6.or.abs(schmidtx-schmidt)>1.E-6) then
-      write(6,*) 'wrong data file supplied'
-      call ccmpi_abort(-1)
-    end if
-    read(87,*) glob2d
-    close(87)
-  else if ( ierr < 0 ) then ! Error, so really unformatted file
-    close(87)
-    write(6,*) 'now doing unformatted read'
-    open(87,file=filename,status='old',form='unformatted')
-    read(87) glob2d
-    close(87)
-  else
-    write(6,*) "error in readreal",trim(filename),ierr
-    call ccmpi_abort(-1)
-  end if
-  if (ifully==ifull) then
-    call ccmpi_distribute(tss, glob2d)
-  else if (ifully==ifull_g) then
-    tss=glob2d
-  else
-    write(6,*) "ERROR: Invalid ifully for readreal"
-    call ccmpi_abort(-1)
-  end if
-  write(6,*) trim(header), glob2d(id+(jd-1)*il_g)
-else
-  if (ifully==ifull) then
-    call ccmpi_distribute(tss)
-  end if
-end if
-return
-end subroutine readreal
-
-
 !--------------------------------------------------------------
 ! INITALISE SOIL PARAMETERS
 subroutine insoil
@@ -1369,262 +1155,5 @@ end do
 
 return
 end subroutine insoil
-
-      
-!--------------------------------------------------------------
-! CALCULATE ROUGHNESS LENGTH
-subroutine calczo
-      
-use arrays_m        ! Atmosphere dyamics prognostic arrays
-use map_m           ! Grid map arrays
-use nsibd_m         ! Land-surface arrays
-use soil_m          ! Soil and surface data
-use soilsnow_m      ! Soil, snow and surface data
-      
-implicit none
-      
-include 'newmpar.h' ! Grid parameters
-include 'parm.h'    ! Model configuration
-      
-integer iq,iveg
-real zomax,zomin,tsoil,sdep
-      
-real xhc(0:44)
-!     vegetation height
-data xhc    / 0.0,                                                   & ! 0
-              30.0,28.0,25.0,17.0,12.0,10.0, 9.0, 7.0, 5.5, 3.0,     & ! 1-10
-              2.5, 2.0, 1.0, 0.6, 0.5, 0.5,0.45,0.75, 0.6,0.45,      &
-              0.4, 0.6, 0.6,0.24,0.25,0.35, 0.3, 2.5, 0.0, 0.0,      &
-              0.0,                                                   & ! 31
-              32.,20.,20.,17.,17., 1., 1., 1., 0.5, 0.6, 0., 1.,0./    !sellers 1996 j.climate
-
-zomax=-1.e29
-zomin= 1.e29
-if(newrough==2)then
-  do iq=1,ifull
-    if(land(iq))then
-      iveg=ivegt(iq)
-      zolnd(iq)=max(zobgin , .1*xhc(iveg))
-      zomax=max(zomax,zolnd(iq))
-      zomin=min(zomin,zolnd(iq))
-    endif  ! (land(iq))then
-  enddo   ! iq loop
-elseif(newrough==3)then
-  do iq=1,ifull
-    if(land(iq))then
-      iveg=ivegt(iq)
-      zolnd(iq)=max(zobgin , .13*xhc(iveg))  ! French factor
-      zomax=max(zomax,zolnd(iq))
-      zomin=min(zomin,zolnd(iq))
-    endif  ! (land(iq))then
-  enddo   ! iq loop
-else
-  do iq=1,ifull
-    if(land(iq))then
-      iveg=ivegt(iq)
-      tsoil  = 0.5*(tgg(iq,ms)+tgg(iq,2))
-      sdep=0.
-      call cruf1 (iveg,tsoil,sdep,zolnd(iq),zobgin)
-      zomax=max(zomax,zolnd(iq))
-      zomin=min(zomin,zolnd(iq))
-    endif  ! (land(iq))then
-  enddo   ! iq loop
-endif
-
-write(6,*)"calczo zolnd: zomin,zomax=",zomin,zomax
-return ! calczo
-end subroutine calczo
-
-subroutine cruf1(iv,tsoil,sdep,zolnd,zobgin)
-      
-implicit none
-      
-! kf, 1997
-! for each vegetation type (= iv), assign veg height, total lai, albedo,
-! and computed aerodynamic, radiative and interception properties.
-! jmax0 assigned due to table by ray leuning and estimates  21-08-97 
-! apply seasonal variations in lai and height. return via /canopy/
-! nb: total lai = xrlai, veglai = xvlai, veg cover fraction = xpfc,
-!     with xrlai = xvlai*xpfc
-! type  0 to 31: 2d version with graetz veg types
-! type 32 to 43: 2d version with gcm veg types
-! type 44:       stand-alone version
-!-----------------------------------------------------------------------
-!   name                             symbol  code hc:cm pfc:%  veglai
-!   ocean                                o!     0     0     0  0.0
-!   tall dense forest                    t4     1  4200   100  4.8
-!   tall mid-dense forest                t3     2  3650    85  6.3
-!   dense forest                         m4     3  2500    85  5.0  (?)
-!   mid-dense forest                     m3     4  1700    50  3.75
-!   sparse forest (woodland)             m2     5  1200    20  2.78
-!   very sparse forest (woodland)        m1     6  1000     5  2.5
-!   low dense forest                     l4     7   900    85  3.9
-!   low mid-dense forest                 l3     8   700    50  2.77
-!   low sparse forest (woodland)         l2     9   550    20  2.04
-!   tall mid-dense shrubland (scrub)     s3    10   300    50  2.6
-!   tall sparse shrubland                s2    11   250    20  1.69
-!   tall very sparse shrubland           s1    12   200     5  1.9
-!   low mid-dense shrubland              z3    13   100    50  1.37
-!   low sparse shrubland                 z2    14    60    20  1.5
-!   low very sparse shrubland            z1    15    50     5  1.21
-!   sparse hummock grassland             h2    16    50    20  1.58
-!   very sparse hummock grassland        h1    17    45     5  1.41
-!   dense tussock grassland              g4    18    75    85  2.3
-!   mid-dense tussock grassland          g3    19    60    50  1.2
-!   sparse tussock grassland             g2    20    45    20  1.71
-!   very sparse tussock grassland        g1    21    40     5  1.21
-!   dense pasture/herbfield (perennial)  f4    22    60    85  2.3
-!   dense pasture/herbfield (seasonal)  f4s    23    60    85  2.3
-!   mid-dense pasture/herb (perennial)   f3    24    45    50  1.2
-!   mid-dense pasture/herb  (seasonal)  f3s    25    45    50  1.2
-!   sparse herbfield*                    f2    26    35    20  1.87
-!   very sparse herbfield                f1    27    30     5  1.0
-!   littoral                             ll    28   250    50  3.0
-!   permanent lake                       pl    29     0     0  0
-!   ephemeral lake (salt)                sl    30     0     0  0
-!   urban                                 u    31     0     0  0
-!   stand alone: hc,rlai from param1      -    44     -   100  -
-
-!   above are dean's. below are sib (added 31 to get model iveg)
-!  32  1 - broadleaf evergreen trees (tropical forest)
-!  33  2 - broadleaf deciduous trees
-!  34  3 - broadleaf and needleaf trees
-!  35  4 - needleaf evergreen trees
-!  36  5 - needleaf deciduous trees 
-!  37  6 - broadleaf trees with ground cover (savannah)
-!  38  7 - groundcover only (perennial)
-!  39  8 - broadleaf shrubs with groundcover
-!  40  9 - broadleaf shrubs with bare soil
-!  41 10 - dwarf trees and shrubs with groundcover
-!  42 11 - bare soil
-!  43 12 - agriculture or C3 grassland (newer defn)
- 
-!                             soil type
-!       texture               
-!  0   water/ocean
-!  1   coarse               sand/loamy_sand
-!  2   medium               clay-loam/silty-clay-loam/silt-loam
-!  3   fine                 clay
-!  4   coarse-medium        sandy-loam/loam
-!  5   coarse-fine          sandy-clay
-!  6   medium-fine          silty-clay 
-!  7   coarse-medium-fine   sandy-clay-loam
-!  8   organi!              peat
-!  9   land ice
-!-----------------------------------------------------------------------
-
-integer iv
-real ftsoil,vrlai,hc,tsoil,sdep,zolnd,zobgin
-real rlai,usuh,disp,coexp
-real xhc(0:44),xpfc(0:44),xvlai(0:44),xslveg(0:44)
-! aerodynamic parameters, diffusivities, water density:
-real vonk,a33,csw,ctl
-parameter(vonk   = 0.40)     ! von karman constant
-parameter(a33    = 1.25)     ! inertial sublayer sw/us
-parameter(csw    = 0.50)     ! canopy sw decay (weil theory)
-parameter(ctl    = 0.40)     ! wagga wheat (rdd 1992, challenges)
-! vegetation height
-data xhc    / 0.0,                                                   & ! 0
-              30.0,28.0,25.0,17.0,12.0,10.0, 9.0, 7.0, 5.5, 3.0,     & ! 1-10
-              2.5, 2.0, 1.0, 0.6, 0.5, 0.5,0.45,0.75, 0.6,0.45,      &
-              0.4, 0.6, 0.6,0.24,0.25,0.35, 0.3, 2.5, 0.0, 0.0,      &
-              0.0,                                                   & ! 31
-              32.,20.,20.,17.,17., 1., 1., 1., 0.5, 0.6, 0., 1.,0./    !sellers 1996 j.climate
-
-! vegetation fractional cover
-data xpfc   /0.00,                                                   &
-             1.00,0.85,0.85,0.50,0.20,0.05,0.85,0.50,0.20,0.50,      &
-             0.20,0.05,0.50,0.20,0.05,0.20,0.05,0.85,0.50,0.20,      &
-             0.05,0.85,0.85,0.50,0.50,0.20,0.05,0.50,0.00,0.00,      &
-             0.00,                                                   &
-             .98,.75,.75,.75,.50,.86,.65,.79,.30,.42,.02,.54,  1.0/
-
-! veg lai from graetz table of 283 veg types (iv=0 to 31), and maximum 
-! veg lai for gcm veg types (iv=32 to 43)  stand-alone: 44
-data xvlai  / 0.0,                                                   &
-              4.80,6.30,5.00,3.75,2.78,2.50,3.90,2.77,2.04,2.60,     &
-              1.69,1.90,1.37,1.50,1.21,1.58,1.41,2.30,1.20,1.71,     &
-              1.21,2.30,2.30,1.20,1.20,1.87,1.00,3.00,0.00,0.00,     &
-              0.00,                                                  &
-              6.0,5.0,4.0,4.0,4.0,3.0,3.0,3.0,1.0,4.0,0.5,3.0,  0.0/     ! 32-44
-
-! for seasonally varying lai, amplitude of veg lai seasonal change
-data xslveg  /0.00,                                                  &
-              0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,     & 
-              0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,     &
-              0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00,     &
-              0.00,                                                  &
-              2.0,2.0,2.0,2.0,2.0,1.5,1.5,1.5,1.0,0.5,0.5,0.5,  0.0/
-!-----------------------------------------------------------------------
-! assign aerodynamic, radiative, stomatal, interception properties
-! assign total lai (xrlai) from veg lai and pfc, and assign seasonal 
-!   variation in lai and veg height where necessary. this is controlled
-!   by the factor season (0 =< season =< 1).
-ftsoil=max(0.,1.-.0016*(298.-tsoil)**2)
-if( tsoil >= 298. ) ftsoil=1.
-vrlai = max(0.0,(xvlai(iv)-xslveg(iv)*(1.-ftsoil))*xpfc(iv))
-hc    = max(0.0,xhc(iv) - sdep)
-rlai  = vrlai*hc/max(0.01,xhc(iv))
-!   find roughness length zolnd from hc and rlai:
-call cruf2(hc,rlai,usuh,zolnd,disp,coexp)
-!   set aerodynamic variables for bare soil and vegetated cases:
-zolnd=max(zolnd, zobgin)
-if (rlai<0.001 .or. hc<.05) then
-  zolnd    = zobgin      ! bare soil surface
-  hc     = 0.0  
-  rlai   = 0.0
-endif
-return
-end subroutine cruf1
-!=======================================================================
-subroutine cruf2(h,rlai,usuh,z0,d,coexp)
-      
-implicit none
-      
-!-----------------------------------------------------------------------
-! m.r. raupach, 24-oct-92
-! see: raupach, 1992, blm 60 375-395
-!      mrr notes "simplified wind model for canopy", 23-oct-92
-!      mrr draft paper "simplified expressions...", dec-92
-!-----------------------------------------------------------------------
-! inputs:
-!   h     = roughness height
-!   rlai  = leaf area index (assume rl = frontal area index = rlai/2)
-! output:
-!   usuh  = us/uh (us=friction velocity, uh = mean velocity at z=h)
-!   z0    = roughness length
-!   d     = zero-plane displacement
-!   coexp = coefficient in exponential in-canopy wind profile
-!           u(z) = u(h)*exp(coexp*(z/h-1)), found by gradient-matching
-!           canopy and roughness-sublayer u(z) at z=h
-!-----------------------------------------------------------------------
-real h,rlai,usuh,z0,d,coexp
-real psih,rl,usuhl,xx,dh,z0h
-! preset parameters:
-real cr,cs,beta,ccd,ccw,usuhm,vonk
-parameter (cr    = 0.3)          ! element drag coefficient
-parameter (cs    = 0.003)        ! substrate drag coefficient
-parameter (beta  = cr/cs)        ! ratio cr/cs
-parameter (ccd   = 15.0)         ! constant in d/h equation
-parameter (ccw   = 2.0)          ! ccw=(zw-d)/(h-d)
-parameter (usuhm = 0.3)          ! (max of us/uh)
-parameter (vonk  = 0.4)          ! von karman constant
-psih=alog(ccw)-1.0+1.0/ccw  ! i.e. .19315
-rl = rlai*0.5
-! find uh/us
-usuhl  = sqrt(cs+cr*rl)            ! sqrt(.003 + .15*rlai)
-usuh   = min(usuhl,usuhm)
-! find d/h and d 
-xx     = sqrt(ccd*max(rl,0.0005))  ! sqrt(7.5*rlai)
-dh     = 1.0 - (1.0 - exp(-xx))/xx ! .5*xx -.166*xx*xx + .
-
-d      = dh*h                      ! not used
-! find z0h and z0:
-z0h    = (1.0 - dh) * exp(psih - vonk/usuh)
-z0     = z0h*h 
-! find coexp: see notes "simplified wind model ..." eq 34a
-coexp  = usuh / (vonk*ccw*(1.0 - dh))
-return ! ruff
-end subroutine cruf2
 !=======================================================================
 end module indata
