@@ -21,25 +21,18 @@
 
 
 !     this is a list of files, read in once at beginning of the run.
-      common/filesin/maskfile                            &
-     &          ,snowfile,topofile                        &
-     &          ,soilfile,vegfile                       &
-     &          ,soil2file     &
+      common/filesin/topofile                        &
+     &          ,soilfile,vegfile		&
      &          ,restfile                        &
-     &          ,surfile                                     &
      &          ,surf_00,surf_12         &
      &          ,ifile,ofile                            &
      &          ,eigenv                    &
      &          ,vegprev,vegnext   
 
-      character(len=160) maskfile                        &
-     &          ,snowfile,topofile                        &
+      character(len=160) topofile                        &
      &          ,soilfile,vegfile                       &
-     &          ,soil2file     &
      &          ,restfile                       &
-     &          ,surfile                                     &
      &          ,surf_00,surf_12         &
      &          ,ifile,ofile                            &
      &          ,eigenv                    &
      &          ,vegprev,vegnext  
-

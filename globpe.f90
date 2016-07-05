@@ -130,9 +130,9 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
 ! file namelist
 namelist/datafile/ifile,ofile,eigenv,     &
     restfile,     &
-    snowfile,soilfile,surfile, &
+    soilfile,&
     topofile,vegfile,  &
-    soil2file,surf_00,         &
+    surf_00,         &
     surf_12,    &
     vegprev,vegnext
 
@@ -693,11 +693,11 @@ data nperavg/-99/,nwt/-99/
 data nextout/3/,localhist/.false./
 
 ! initialize file names to something
-data maskfile/' '/
-data snowfile/' '/,topofile/' '/
+!~ data maskfile/' '/
+data topofile/' '/
 data soilfile/' '/,vegfile/' '/
-data soil2file/' '/,restfile/' '/
-data surfile/' '/,surf_00/'s_00a '/
+data restfile/' '/
+data surf_00/'s_00a '/
 data surf_12/'s_12a '/
 data ifile/' '/,ofile/' '/
 data eigenv/' '/
