@@ -292,13 +292,10 @@ use latlong_m                                  ! Lat/lon coordinates
 use morepbl_m                                  ! Additional boundary layer diagnostics
 use nsibd_m, only : isoilm                     ! Land-surface arrays
 use river                                      ! River routing
-use savuvt_m                                   ! Saved dynamic arrays
-use savuv1_m                                   ! Saved dynamic arrays
 use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
-!~ use vvel_m, only : dpsldt,sdot                 ! Additional vertical velocity
 use workglob_m                                 ! Additional grid interpolation
 use work2_m                                    ! Diagnostic arrays
 

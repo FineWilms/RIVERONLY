@@ -47,8 +47,6 @@ use outcdf                                 ! Output file routines
 use pbl_m                                  ! Boundary layer arrays
 use permsurf_m, only : permsurf_init       ! Fixed surface arrays
 use river                                  ! River routing
-use savuvt_m                               ! Saved dynamic arrays
-use savuv1_m                               ! Saved dynamic arrays
 use sigs_m                                 ! Atmosphere sigma levels
 use soil_m                                 ! Soil and surface data
 use soilsnow_m                             ! Soil, snow and surface data
@@ -431,14 +429,11 @@ end if
 !--------------------------------------------------------------
 ! INITIALISE LOCAL ARRAYS
 call arrays_init(ifull,iextra,kl)
-!~ call extraout_init(ifull,iextra,kl,nextout)
 call histave_init(ifull,iextra,kl,ms)
 call morepbl_init(ifull,iextra,kl)
 call nsibd_init(ifull,iextra,kl,nsib)
 call pbl_init(ifull,iextra,kl)
 call permsurf_init(ifull,iextra,kl)
-call savuvt_init(ifull,iextra,kl)
-call savuv1_init(ifull,iextra,kl)
 call sigs_init(ifull,iextra,kl)
 call soil_init(ifull,iextra,kl,nsib)
 call soilsnow_init(ifull,iextra,kl,ms,nsib)
@@ -513,7 +508,7 @@ if ( mex/=1) then
   mspeca = 2
   dt     = dtin*.5
 endif
-call gettin(0)              ! preserve initial mass & T fields
+!~ call gettin(0)              ! preserve initial mass & T fields
 
 nmaxprsav = nmaxpr
 nwtsav    = nwt

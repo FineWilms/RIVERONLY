@@ -351,8 +351,6 @@ use morepbl_m                                    ! Additional boundary layer dia
 use nsibd_m                                      ! Land-surface arrays
 use pbl_m                                        ! Boundary layer arrays
 use river                                        ! River routing
-use savuvt_m                                     ! Saved dynamic arrays
-use savuv1_m                                     ! Saved dynamic arrays
 use sigs_m                                       ! Atmosphere sigma levels
 use soil_m                                       ! Soil and surface data
 use soilsnow_m                                   ! Soil, snow and surface data
