@@ -369,12 +369,12 @@ if ( .not.allocated(nface4) ) then
   allocate( nface4(ifull,4), xg4(ifull,4), yg4(ifull,4) )
 end if
 if ( newfile ) then
-  if ( allocated(sigin) ) then
-    deallocate( sigin, land_a, sea_a )
-    deallocate( axs_a, ays_a, azs_a )
-    deallocate( bxs_a, bys_a, bzs_a )          
-  end if
-  allocate( sigin(kk), land_a(fwsize), sea_a(fwsize) )
+  !~ if ( allocated(sigin) ) then
+    !~ deallocate( sigin, land_a, sea_a )
+    !~ deallocate( axs_a, ays_a, azs_a )
+    !~ deallocate( bxs_a, bys_a, bzs_a )          
+  !~ end if
+  !~ allocate( sigin(kk), land_a(fwsize), sea_a(fwsize) )
   allocate( axs_a(dk*dk*6), ays_a(dk*dk*6), azs_a(dk*dk*6) )
   allocate( bxs_a(dk*dk*6), bys_a(dk*dk*6), bzs_a(dk*dk*6) )
 end if
@@ -481,45 +481,45 @@ end if ! newfile .and. .not.iotest
 if ( newfile ) then
 
   ! read vertical levels and missing data checks
-  if ( myid==0 .or. pfall ) then
-    if ( myid==0 ) write(6,*) "Reading time invariant fields"
-    call ccnf_inq_varid(ncid,'lev',idv,tst)
-    if ( tst ) call ccnf_inq_varid(ncid,'layer',idv,tst)
-    if ( tst ) call ccnf_inq_varid(ncid,'sigma',idv,tst)
-    if ( tst) then
-      if ( myid==0 ) then
-        write(6,*) "No sigma data found in input file"
-      end if
-      if ( kk>1 ) then
-        if ( myid==0 ) then
-          write(6,*) "ERORR: multiple levels expected but no sigma data found ",kk
-        end if
-        call ccmpi_abort(-1)
-      end if
-      sigin(:) = 1.
-    else
-      call ccnf_get_vara(ncid,idv,1,kk,sigin)
-      if ( myid==0 ) then
-        write(6,'(" sigin=",(9f7.4))') (sigin(k),k=1,kk)
-      end if
-    end if
+  !~ if ( myid==0 .or. pfall ) then
+    !~ if ( myid==0 ) write(6,*) "Reading time invariant fields"
+    !~ call ccnf_inq_varid(ncid,'lev',idv,tst)
+    !~ if ( tst ) call ccnf_inq_varid(ncid,'layer',idv,tst)
+    !~ if ( tst ) call ccnf_inq_varid(ncid,'sigma',idv,tst)
+    !~ if ( tst) then
+      !~ if ( myid==0 ) then
+        !~ write(6,*) "No sigma data found in input file"
+      !~ end if
+      !~ if ( kk>1 ) then
+        !~ if ( myid==0 ) then
+          !~ write(6,*) "ERORR: multiple levels expected but no sigma data found ",kk
+        !~ end if
+        !~ call ccmpi_abort(-1)
+      !~ end if
+      !~ sigin(:) = 1.
+    !~ else
+      !~ call ccnf_get_vara(ncid,idv,1,kk,sigin)
+      !~ if ( myid==0 ) then
+        !~ write(6,'(" sigin=",(9f7.4))') (sigin(k),k=1,kk)
+      !~ end if
+    !~ end if
     ! check for missing data
-    iers(1:3) = 0
-    call ccnf_inq_varid(ncid,'mixr',idv,tst)
-    if ( tst ) iers(1) = -1
-    call ccnf_inq_varid(ncid,'siced',idv,tst)
-    if ( tst ) iers(2) = -1
-    call ccnf_inq_varid(ncid,'fracice',idv,tst)
-    if ( tst ) iers(3) = -1
-  end if
+    !~ iers(1:3) = 0
+    !~ call ccnf_inq_varid(ncid,'mixr',idv,tst)
+    !~ if ( tst ) iers(1) = -1
+    !~ call ccnf_inq_varid(ncid,'siced',idv,tst)
+    !~ if ( tst ) iers(2) = -1
+    !~ call ccnf_inq_varid(ncid,'fracice',idv,tst)
+    !~ if ( tst ) iers(3) = -1
+  !~ end if
   
   ! bcast data to all processors unless all processes are reading input files
   if ( .not.pfall ) then
-    dumr(1:kk)      = sigin(1:kk)
+    !~ dumr(1:kk)      = sigin(1:kk)
     dumr(kk+1:kk+3) = real(iers(1:3))
     call ccmpi_bcast(dumr(1:kk+3),0,comm_world)
-    sigin(1:kk) = dumr(1:kk)
-    iers(1:3)   = nint(dumr(kk+1:kk+3))
+    !~ sigin(1:kk) = dumr(1:kk)
+    !~ iers(1:3)   = nint(dumr(kk+1:kk+3))
   end if
 
   ! determine whether surface temperature needs to be interpolated (tsstest=.false.)
