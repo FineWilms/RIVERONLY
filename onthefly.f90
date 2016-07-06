@@ -290,7 +290,7 @@ use latlong_m                                  ! Lat/lon coordinates
 use morepbl_m                                  ! Additional boundary layer diagnostics
 use nsibd_m, only : isoilm                     ! Land-surface arrays
 use river                                      ! River routing
-use sigs_m                                     ! Atmosphere sigma levels
+!~ use sigs_m                                     ! Atmosphere sigma levels
 use soil_m                                     ! Soil and surface data
 use utilities                                  ! Grid utilities
 use vecsuv_m                                   ! Map to cartesian coordinates
@@ -557,30 +557,30 @@ endif ! newfile ..else..
 
 ! -------------------------------------------------------------------
 ! detemine the reference level below sig=0.9 (used to calculate psl)
-levk = 0
-levkin = 0
-if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
-  do while( sig(levk+1)>0.9 ) ! nested grid
-    levk = levk + 1
-  end do
-  do while( sigin(levkin+1)>0.9 ) ! host grid
-    levkin = levkin + 1
-  end do
-  if ( levkin==0 ) then
-    write(6,*) "ERROR: Invalid sigma levels in input file"
-    write(6,*) "sigin = ",sigin
-    call ccmpi_abort(-1)
-  end if
-end if
+!~ levk = 0
+!~ levkin = 0
+!~ if ( nested==0 .or. ( nested==1.and.nud_test/=0 ) ) then
+  !~ do while( sig(levk+1)>0.9 ) ! nested grid
+    !~ levk = levk + 1
+  !~ end do
+  !~ do while( sigin(levkin+1)>0.9 ) ! host grid
+    !~ levkin = levkin + 1
+  !~ end do
+  !~ if ( levkin==0 ) then
+    !~ write(6,*) "ERROR: Invalid sigma levels in input file"
+    !~ write(6,*) "sigin = ",sigin
+    !~ call ccmpi_abort(-1)
+  !~ end if
+!~ end if
 ! -------------------------------------------------------------------
 ! read atmospheric fields for nested=0 or nested=1.and.nud/=0
 
-! winds
-! read for nested=0 or nested=1
-u(1:ifull,:) = 0.
-v(1:ifull,:) = 0.
-! mixing ratio
-qg(1:ifull,:) = qgmin
+!~ ! winds
+!~ ! read for nested=0 or nested=1
+!~ u(1:ifull,:) = 0.
+!~ v(1:ifull,:) = 0.
+!~ ! mixing ratio
+!~ qg(1:ifull,:) = qgmin
 !**************************************************************
 ! This is the end of reading the nudging arrays
 !**************************************************************
