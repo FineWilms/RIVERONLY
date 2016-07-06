@@ -59,7 +59,7 @@ real, dimension(:), allocatable, save :: axs_a, ays_a, azs_a  ! vector rotation 
 real, dimension(:), allocatable, save :: bxs_a, bys_a, bzs_a  ! vector rotation data 
 real, dimension(:), allocatable, save :: axs_w, ays_w, azs_w  ! vector rotation data
 real, dimension(:), allocatable, save :: bxs_w, bys_w, bzs_w  ! vector rotation data
-real, dimension(:), allocatable, save :: sigin                ! input vertical coordinates
+!~ real, dimension(:), allocatable, save :: sigin                ! input vertical coordinates
 logical iotest, newfile                                       ! tests for interpolation and new metadata
 logical, dimension(0:5), save :: nfacereq = .false.           ! list of panels required for interpolation
 logical, save :: bcst_allocated = .false.                     ! Bcast communicator groups have been defined
