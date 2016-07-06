@@ -36,7 +36,7 @@ use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
 use river                          ! River routing
-use sigs_m                         ! Atmosphere sigma levels
+!~ use sigs_m                         ! Atmosphere sigma levels
 use soil_m                         ! Soil and surface data
 use soilsnow_m                     ! Soil, snow and surface data
 use vecsuv_m                       ! Map to cartesian coordinates
@@ -54,7 +54,7 @@ include 'soilv.h'                  ! Soil parameters
 
 integer iq,k,it,ip
 integer, intent(in) :: nalpha
-real ri_max,zologbgin,ztv,z1onzt,chnsea
+real ri_max,zologbgin,ztv
 real srcp,afrootpan,es,constz,drst
 real xx,consea,afroot,fm,con,dtsol,daf
 real con1,den,dden,dfm,root,denma,denha
@@ -101,8 +101,8 @@ real, parameter :: fmroot=.57735     ! was .4 till 7 Feb 1996
 ri_max=(1./fmroot -1.)/bprm    ! i.e. .14641
 zologbgin=log(zmin/zobgin)     ! pre-calculated for all except snow points
 ztv=exp(vkar/sqrt(chn10))/10.  ! proper inverse of ztsea
-z1onzt=300.*rdry*(1.-sig(1))*ztv/grav
-chnsea=(vkar/log(z1onzt))**2   ! should give .00085 for csiro9
+!~ z1onzt=300.*rdry*(1.-sig(1))*ztv/grav
+!~ chnsea=(vkar/log(z1onzt))**2   ! should give .00085 for csiro9
 oldrunoff(:)=runoff(:)
 zo=999.        ! dummy value
 factch=999.    ! dummy value
