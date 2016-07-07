@@ -179,111 +179,9 @@ kdate=kdate_s
 ktime=ktime_s
 
 !--------------------------------------------------------------
-! READ AND PROCESS ATMOSPHERE SIGMA LEVELS
-if (myid==0) then
-  read(28,*)(dumc(k),k=1,kl),(dumc(2*kl+k),k=1,kl)
- 
-  write(6,*) 'kl,lapsbot,sig from eigenv file: ',kl,lapsbot,dumc(1:kl)
-  ! File has an sigmh(kl+1) which is not required. Causes bounds violation
-  ! to read this.
-  read(28,*)(dumc(kl+k),k=1,kl)
-  close(28) 
-  write(6,*) 'tbar: ',dumc(2*kl+1:3*kl)
-  !~ write(6,*) 'bam:  ',bam
-       
-  ! test netcdf for CABLE input
-  if (nsib>=6) then
-    call ccnf_open(vegfile,ncidveg,ierr)
-    if (ierr==0) then
-      dumc(3*kl+1)=1.
-    else
-      dumc(3*kl+1)=0.  
-    end if
-  else if (nsib==5) then
-    call ccnf_open(vegfile,ncidveg,ierr)
-    if (ierr==0) then
-      dumc(3*kl+1)=1.
-    else
-      dumc(3*kl+1)=0.  
-    end if
-  else
-    dumc(3*kl+1)=0.
-  end if
-endif ! (myid==0)
-
-! distribute vertical and vegfile data to all processors
-! dumc(1:kl)   = sig,   dumc(kl+1:2*kl) = sigmh, dumc(2*kl+1:3*kl) = tbar
-! dumc(3*kl+1) = lncveg
-call ccmpi_bcast(dumc(1:3*kl+1),0,comm_world)
-sig   =dumc(1:kl)
-sigmh =dumc(kl+1:2*kl)
-tbar  =dumc(2*kl+1:3*kl)
-lncveg=nint(dumc(3*kl+1))
-
-dsig(1:kl-1)=sigmh(2:kl)-sigmh(1:kl-1)
-dsig(kl)=-sigmh(kl)
-sumdsig=0.
-do k=1,kl
-  sumdsig=sumdsig-dsig(k)
-  tbardsig(k)=0.
-enddo
-if (myid==0) write(6,*)'dsig,sumdsig ',dsig,sumdsig
-if (isoth>=0) then
-  dtmax=1./(sig(1)*log(sig(1)/sig(2)))
-  tbardsig(1)=dtmax*(tbar(1)-tbar(2))
-  do k=2,kl-1
-    tbardsig(k)=(tbar(k+1)-tbar(k-1))/(2.*dsig(k))
-  enddo
-endif
-!     rata and ratb are used to interpolate half level values to full levels
-!     ratha and rathb are used to interpolate full level values to half levels
-ratha(kl) = 0. ! not used
-rathb(kl) = 0. ! not used
-rata(kl)=(sigmh(kl)-sig(kl))/sigmh(kl)
-ratb(kl)=sig(kl)/sigmh(kl)
-do k=1,kl-1
-  bet(k+1)=rdry*log(sig(k)/sig(k+1))*.5
-  rata(k)=(sigmh(k)-sig(k))/(sigmh(k)-sigmh(k+1))
-  ratb(k)=(sig(k)-sigmh(k+1))/(sigmh(k)-sigmh(k+1))
-  ratha(k)=(sigmh(k+1)-sig(k))/(sig(k+1)-sig(k))
-  rathb(k)=(sig(k+1)-sigmh(k+1))/(sig(k+1)-sig(k))
-enddo
-if (myid==0) then
-  write(6,*)'rata ',rata
-  write(6,*)'ratb ',ratb
-  write(6,*)'ratha ',ratha
-  write(6,*)'rathb ',rathb
-end if
-   
-c=grav/stdlapse
-bet(1)=c *(sig(1)**(-rdry/c)-1.)
-if(lapsbot==1)bet(1)=-rdry*log(sig(1))
-betm(1:kl)=bet(1:kl)
-if(lapsbot==2)then     ! may need refinement for non-equal spacing
-  do k=2,kl
-    bet(k)=.5*rdry*(sig(k-1)-sig(k))/sig(k)
-    betm(k)=.5*rdry*(sig(k-1)-sig(k))/sig(k-1)
-  enddo
-  bet(1)=rdry*(1.-sig(1))/sig(1)
-elseif(lapsbot==3)then ! possibly suits nh
-  betm(:)=0.
-  do k=2,kl
-    bet(k)=rdry*log(sig(k-1)/sig(k))
-  enddo
-  bet(1)=-rdry*log(sig(1))
-endif
-
-if ( myid==0 ) then
-  write(6,*) 'bet  ',bet
-  write(6,*) 'betm ',betm
-end if
-
-
-
-! zmin here is approx height of the lowest level in the model
-zmin = -rdry*280.*log(sig(1))/grav
-if ( myid==0 ) write(6,*) 'zmin = ',zmin
-
+!~ ! READ AND PROCESS ATMOSPHERE SIGMA LEVELS
+call ccnf_open(vegfile,ncidveg,ierr)
+lncveg=1
 
 !--------------------------------------------------------------
 ! READ OROGRAPHY (io_in and nhstest)
@@ -383,7 +281,6 @@ if(nsib>=1)then   !  check here for soil & veg mismatches
     endif    ! (land(iq))
   enddo    !  iq loop
 endif      ! (nsib>=1)
-
 
 !-----------------------------------------------------------------
 ! INTIALISE MIXED LAYER OCEAN (nmlo)
@@ -697,11 +594,11 @@ enddo     ! iq loop
 snalb=.8
 do iq=1,ifull
 
-    if(.not.land(iq))then
-      ! from June '03 tgg1	holds actual sea temp, tss holds net temp 
-      tgg(iq,1)=max(271.3,tss(iq)) 
-      tggsn(iq,1)=tss(iq)         ! a default
-    endif   ! (.not.land(iq))
+    !~ if(.not.land(iq))then
+      !~ ! from June '03 tgg1	holds actual sea temp, tss holds net temp 
+      !~ tgg(iq,1)=max(271.3,tss(iq)) 
+      !~ tggsn(iq,1)=tss(iq)         ! a default
+    !~ endif   ! (.not.land(iq))
     if(sicedep(iq)>0.)then
       ! at beginning of month set sice temperatures
       tggsn(iq,1)=min(271.2,tss(iq),t(iq,1)+.04*6.5) ! for 40 m level 1
@@ -891,12 +788,6 @@ if ( nsib >= 6 ) then
       write(6,*) "Reading albedo data"
       call surfread(duma(:,1),'albvis',netcdfid=ncidveg)
       call surfread(duma(:,2),'albnir',netcdfid=ncidveg)
-    else
-      write(6,*) "Cannot open vegfile as a netcdf file ",vegfile
-      write(6,*) "Assuming ASCII file format"
-      call surfread(duma(:,3),'soilt', filename=soilfile)
-      !~ call surfread(duma(:,2),'albnir',filename=albnirfile)
-      duma(:,1:2) = 0.01*duma(:,1:2)
     end if
     call ccmpi_distribute(dumb(:,1:3),duma(:,1:3))
     deallocate( duma )
