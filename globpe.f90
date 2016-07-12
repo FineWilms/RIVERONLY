@@ -90,7 +90,7 @@ integer mins_dt, mins_gmt, mspeca, mtimer_in, nalpha
 integer nlx, nmaxprsav, npa, npb, n3hr
 integer nwrite, nwtsav, mtimer_sav
 integer nn, i, j, ierr, nperhr, nversion
-integer ierr2, kmax, isoth, nsig, lapsbot
+integer ierr2, kmax, isoth, nsig
 real, dimension(:,:), allocatable, save :: dums, dumliq
 real, dimension(:), allocatable, save :: spare1, spare2
 real, dimension(:), allocatable, save :: spmean
@@ -137,7 +137,7 @@ namelist/datafile/ifile,ofile,eigenv,     &
 data nversion/0/
 data comment/' '/,comm/' '/,irest/1/,nalpha/1/
 data nwrite/0/
-data lapsbot/0/,io_nest/1/
+data io_nest/1/
       
 #ifndef stacklimit
 ! For linux only - removes stacklimit on all processors
@@ -258,12 +258,12 @@ if ( myid == 0 ) then
     write(6,*) "Error opening eigenv file ",trim(eigenv)
     call ccmpi_abort(-1)
   end if
-  read(28,*)kmax,lapsbot,isoth,nsig
+  read(28,*)kmax,isoth,nsig
   kl = kmax
   write(6,*)'kl:              ',kl
-  write(6,*)'lapsbot,isoth,nsig: ',lapsbot,isoth,nsig
+  write(6,*)'isoth,nsig: ', isoth,nsig
   temparray(5) = real(kl)
-  temparray(6) = real(lapsbot)
+  !~ temparray(6) = real(lapsbot)
   temparray(7) = real(isoth)
   temparray(8) = real(nsig)
 end if
@@ -277,7 +277,7 @@ rlat0   = temparray(2)
 schmidt = temparray(3)
 il_g    = nint(temparray(4))
 kl      = nint(temparray(5))
-lapsbot = nint(temparray(6))
+!~ lapsbot = nint(temparray(6))
 isoth   = nint(temparray(7))
 nsig    = nint(temparray(8))
 
@@ -460,7 +460,7 @@ end if
 if ( myid == 0 ) then
   write(6,*) "Calling indata"
 end if
-call indataf(hourst,lapsbot,isoth,nsig,io_nest)
+call indataf(hourst,isoth,nsig,io_nest)
 
 !--------------------------------------------------------------
 ! NRUN COUNTER

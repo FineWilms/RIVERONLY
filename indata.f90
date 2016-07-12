@@ -37,7 +37,7 @@ end interface datacheck
 
 contains
     
-subroutine indataf(hourst,lapsbot,isoth,nsig,io_nest)
+subroutine indataf(hourst,isoth,nsig,io_nest)
      
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use bigxy4_m                                     ! Grid interpolation
@@ -89,7 +89,7 @@ integer ii, imo, indexi, indexl, indexs, ip, iq, isoil, isoth
 integer iveg, iyr, jj, k, kdate_sav, ktime_sav, l
 integer nface, nn, nsig, i, j, n
 integer ierr, ic, jc, iqg, ig, jg
-integer isav, jsav, ier, lapsbot
+integer isav, jsav, ier
 
 character(len=160) :: surfin
 character(len=80) :: header
@@ -607,14 +607,14 @@ do iq=1,ifull
       albvisnir(iq,2)=.5*fracice(iq)+.1*(1.-fracice(iq))
     endif   ! (sicedep(iq)>0.)
 
-  if(isoilm(iq)==9.and.(nsib==3.or.nsib==5))then
+  !~ if(isoilm(iq)==9.and.(nsib==3.or.nsib==5))then
     ! also at beg. of month ensure cold deep temps over permanent ice
-    do k=2,ms
-      tgg(iq,k)=min(tgg(iq,k),273.1) ! was 260
-      wb(iq,k)=max(wb(iq,k),sfc(9))  ! restart value may exceed sfc
-      if(wbice(iq,k)<=0.)wbice(iq,k)=.8*wb(iq,k)  ! Dec 07       
-    enddo
-  endif   ! (isoilm(iq)==9)
+    !~ do k=2,ms
+      !~ tgg(iq,k)=min(tgg(iq,k),273.1) ! was 260
+      !~ wb(iq,k)=max(wb(iq,k),sfc(9))  ! restart value may exceed sfc
+      !~ if(wbice(iq,k)<=0.)wbice(iq,k)=.8*wb(iq,k)  ! Dec 07       
+    !~ enddo
+  !~ endif   ! (isoilm(iq)==9)
 enddo    ! iq loop
 tpan(1:ifull)=t(1:ifull,1) ! default for land_sflux and outcdf
 
