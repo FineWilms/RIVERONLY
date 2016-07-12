@@ -37,7 +37,7 @@ end interface datacheck
 
 contains
     
-subroutine indataf(hourst,isoth,nsig,io_nest)
+subroutine indataf(hourst,io_nest)
      
 use arrays_m                                     ! Atmosphere dyamics prognostic arrays
 use bigxy4_m                                     ! Grid interpolation
@@ -85,9 +85,9 @@ real, parameter :: rkappa = 2./7.
 
 
 integer, intent(inout) :: io_nest
-integer ii, imo, indexi, indexl, indexs, ip, iq, isoil, isoth
+integer ii, imo, indexi, indexl, indexs, ip, iq, isoil
 integer iveg, iyr, jj, k, kdate_sav, ktime_sav, l
-integer nface, nn, nsig, i, j, n
+integer nface, nn, i, j, n
 integer ierr, ic, jc, iqg, ig, jg
 integer isav, jsav, ier
 
