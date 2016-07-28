@@ -30,13 +30,12 @@
      &        nwt,nrun,nextout,m_fly,nsemble,     &
      &        kblock,ccycle,   &
      &        nriver
-      real qgmin,                                                        &
-     &     snmin,chn10,zobgin,   &
+      real snmin,                                                        &
+     &     chn10,zobgin,   &
      &     rlongdn,rlongdx,rlatdn,rlatdx,ds,dt,dtin,timea,   &
      &     bpyear
       logical diag,localhist
-      common/parm1/nrungcm,bpyear,      &
-     &  qgmin     ! min value, esp. for stratosphere [1.e-6]
+      common/parm1/nrungcm,bpyear
 
       common/parmtest/nhstest,nsemble,rlongdn,rlongdx,    &
      &                rlatdn,rlatdx

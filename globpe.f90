@@ -120,7 +120,7 @@ namelist/cardin/comment,dt,ntau,nwt,npa,npb,nperavg,ia,ib, &
     rlatdn,rlatdx,rlongdn,rlongdx,newrough,nglacier,     &
     chn10,snmin,     &
     zobgin,rlong0,rlat0,schmidt,nbox, &
-    nbarewet,qgmin,io_in,io_nest,io_out,io_rest,    &
+    nbarewet,io_in,io_nest,io_out,io_rest,    &
     localhist,m_fly,     &
     bpyear, &
     ccycle,kblock,  &
@@ -249,21 +249,10 @@ temparray(4) = real(il_g)
 
 
 !--------------------------------------------------------------
-! READ EIGENV FILE TO DEFINE VERTICAL LEVELS
+!  DEFINE VERTICAL LEVELS
 if ( myid == 0 ) then
-  ! Remanded of file is read in indata.f
-  WRITE(6,*) "EIGENV file is ", eigenv
-  open(28,file=eigenv,status='old',form='formatted',iostat=ierr)
-  if ( ierr /= 0 ) then
-    write(6,*) "Error opening eigenv file ",trim(eigenv)
-    call ccmpi_abort(-1)
-  end if
-  read(28,*)kmax
-  kl = kmax
-  write(6,*)'kl:              ',kl
-
+  kl = 35
   temparray(5) = real(kl)
-
 end if
       
 ! Broadcast grid data to all processors
