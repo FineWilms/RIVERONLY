@@ -253,7 +253,6 @@ temparray(4) = real(il_g)
 if ( myid == 0 ) then
   kl = 18
   temparray(5) = real(kl)
-
 end if
       
 ! Broadcast grid data to all processors
