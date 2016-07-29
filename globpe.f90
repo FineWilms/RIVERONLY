@@ -251,7 +251,7 @@ temparray(4) = real(il_g)
 !--------------------------------------------------------------
 ! READ EIGENV FILE TO DEFINE VERTICAL LEVELS
 if ( myid == 0 ) then
-  kl = 18
+  kl = 6
   temparray(5) = real(kl)
 end if
       
