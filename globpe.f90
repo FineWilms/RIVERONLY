@@ -249,10 +249,11 @@ temparray(4) = real(il_g)
 
 
 !--------------------------------------------------------------
-!  DEFINE VERTICAL LEVELS
+! READ EIGENV FILE TO DEFINE VERTICAL LEVELS
 if ( myid == 0 ) then
-  kl = 35
+  kl = 18
   temparray(5) = real(kl)
+
 end if
       
 ! Broadcast grid data to all processors
@@ -571,6 +572,7 @@ do kktau = 1,ntau   ! ****** start of main time loop
     do k=1,ms
       wb_ave(1:ifull,k) = wb_ave(1:ifull,k)/min(ntau,nperavg)
     end do
+    
   end if    ! (ktau==ntau.or.mod(ktau,nperavg)==0)
 
   call log_off()
@@ -587,7 +589,9 @@ do kktau = 1,ntau   ! ****** start of main time loop
       end if
       call START_LOG(maincalc_begin)
     endif  ! (ktau==ntau.and.irest==1)
+      
   endif    ! (ktau==ntau.or.mod(ktau,nwt)==0)
+    
   call log_on()
  
   if ( mod(ktau,nperavg) == 0 ) then   
@@ -601,6 +605,7 @@ do kktau = 1,ntau   ! ****** start of main time loop
 #endif
 
 end do                  ! *** end of main time loop
+
 call END_LOG(maincalc_end)
 call log_off()
 

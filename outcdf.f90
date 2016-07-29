@@ -64,41 +64,41 @@ if ( myid==0 ) then
   write(6,*) "kdate,ktime,mtimer:     ",kdate,ktime,mtimer
 end if
 
-if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
-  if ( ktau==nwrite/2 .or. ktau==nwrite ) then
-!        usually after first 24 hours, save soil variables for next run
-    if ( ktau==nwrite ) then  ! 24 hour write
-      if ( ktime==1200 ) then
-        surfout=surf_12   ! 'current.1200'
-      else
-        surfout=surf_00   ! 'current.0000'
-      endif
-    else                    ! 12 hour write
-      if(ktime==1200) then
-        surfout=surf_00   ! 'current.0000'
-      else
-        surfout=surf_12   ! 'current.1200'
-      endif
-    endif               ! (ktau.eq.nwrite)
-    if ( myid == 0 ) then
-      write(6,*) "writing current soil & snow variables to ",surfout
-      open(unit=77,file=surfout,form='formatted',status='unknown')
-      write (77,*) kdate,ktime,' ktau = ',ktau
-    end if
-    call writeglobvar(77, wb, fmt='(14f6.3)')
-    call writeglobvar(77, tss, fmt='(12f7.2)')
-    call writeglobvar(77, snowd, fmt='(12f7.1)')
-    if ( myid == 0 ) close (77)
-    if ( nrungcm==-2 .or. nrungcm==-5 ) then
-      if ( myid == 0 ) then
-        write(6,*) "writing special qgout file: ",qgout
-        open(unit=77,file=qgout,form='unformatted',status='unknown')
-      end if
-      call writeglobvar(77, qg)
-      if ( myid == 0 ) close (77)
-    endif  ! (nrungcm.eq.-2.or.nrungcm.eq.-5)
-  endif    ! (ktau.eq.nwrite/2.or.ktau.eq.nwrite)
-endif      ! (nrungcm.eq.-2.or.nrungcm.eq.-3.or.nrungcm.eq.-5)
+!~ if ( nrungcm==-2 .or. nrungcm==-3 .or. nrungcm==-5 ) then
+  !~ if ( ktau==nwrite/2 .or. ktau==nwrite ) then
+!~ !        usually after first 24 hours, save soil variables for next run
+    !~ if ( ktau==nwrite ) then  ! 24 hour write
+      !~ if ( ktime==1200 ) then
+        !~ surfout=surf_12   ! 'current.1200'
+      !~ else
+        !~ surfout=surf_00   ! 'current.0000'
+      !~ endif
+    !~ else                    ! 12 hour write
+      !~ if(ktime==1200) then
+        !~ surfout=surf_00   ! 'current.0000'
+      !~ else
+        !~ surfout=surf_12   ! 'current.1200'
+      !~ endif
+    !~ endif               ! (ktau.eq.nwrite)
+    !~ if ( myid == 0 ) then
+      !~ write(6,*) "writing current soil & snow variables to ",surfout
+      !~ open(unit=77,file=surfout,form='formatted',status='unknown')
+      !~ write (77,*) kdate,ktime,' ktau = ',ktau
+    !~ end if
+    !~ call writeglobvar(77, wb, fmt='(14f6.3)')
+    !~ call writeglobvar(77, tss, fmt='(12f7.2)')
+    !~ call writeglobvar(77, snowd, fmt='(12f7.1)')
+    !~ if ( myid == 0 ) close (77)
+    !~ if ( nrungcm==-2 .or. nrungcm==-5 ) then
+      !~ if ( myid == 0 ) then
+        !~ write(6,*) "writing special qgout file: ",qgout
+        !~ open(unit=77,file=qgout,form='unformatted',status='unknown')
+      !~ end if
+      !~ call writeglobvar(77, qg)
+      !~ if ( myid == 0 ) close (77)
+    !~ endif  ! (nrungcm.eq.-2.or.nrungcm.eq.-5)
+  !~ endif    ! (ktau.eq.nwrite/2.or.ktau.eq.nwrite)
+!~ endif      ! (nrungcm.eq.-2.or.nrungcm.eq.-3.or.nrungcm.eq.-5)
 
 !---------------------------------------------------------------------------
 if ( iout==19 ) then
@@ -311,6 +311,7 @@ if ( myid==0 .or. localhist ) then
       write(6,'(" nahead=",(20i4))') nahead
       write(6,*) "ahead=",ahead
     end if
+    
     call ccnf_put_attg(idnc,'int_header',nahead)
     call ccnf_put_attg(idnc,'real_header',ahead)
     call ccnf_put_attg(idnc,'date_header',rundate)
@@ -319,17 +320,22 @@ if ( myid==0 .or. localhist ) then
 
 
   else
+  
     if ( myid==0 ) write(6,'(" outcdf itype,idnc,iarch,cdffile=",i5,i8,i5," ",a80)') itype,idnc,iarch,cdffile
   endif ! ( iarch=1 ) ..else..
 endif ! (myid==0.or.localhist)
-      
+    
 ! openhist writes some fields so needs to be called by all processes
 call openhist(iarch,itype,dima,localhist,idnc,ixp,iyp,idlev,idms,idoc)
 
 if ( myid==0 .or. localhist ) then
+ 
   if ( ktau==ntau ) then
+ 
     if ( myid==0 ) write(6,*) "closing netCDF file idnc=",idnc      
+
     call ccnf_close(idnc)
+         
   endif
 endif    ! (myid==0.or.local)
 
@@ -625,6 +631,7 @@ end if
 if ( myid==0 ) then
   write(6,*) "finished writing to ofile"    
 end if
+
 
 return
 end subroutine openhist
