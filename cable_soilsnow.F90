@@ -1632,7 +1632,7 @@ END SUBROUTINE remove_trans
 !	 dt_in - time step in sec
 !	 ktau_in - time step no.
 !	 ga	 - ground heat flux W/m^2
-!	 dgdtg	 -
+!	 dgdtg	 - derivative of ground heat flux wrt soil temperature
 !	 condxpr - total precip reaching the ground (liquid and solid)
 !	 scondxpr - precip (solid only)
 !	 fev   - transpiration (W/m2)

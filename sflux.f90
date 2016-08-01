@@ -36,7 +36,6 @@ use nsibd_m                        ! Land-surface arrays
 use pbl_m                          ! Boundary layer arrays
 use permsurf_m                     ! Fixed surface arrays
 use river                          ! River routing
-!~ use sigs_m                         ! Atmosphere sigma levels
 use soil_m                         ! Soil and surface data
 use soilsnow_m                     ! Soil, snow and surface data
 use vecsuv_m                       ! Map to cartesian coordinates
@@ -83,82 +82,45 @@ real, parameter :: bprm=5.,cms=5.,chs=2.6,vkar=.4
 real, parameter :: d3=2.5
 real, parameter :: cgsoil=1000.,gksoil=.300e-6,rhog=1600.
 real, parameter :: d1land=.03
-real, parameter :: fmroot=.57735     ! was .4 till 7 Feb 1996
+real, parameter :: fmroot=.57735     
 
-!     stability dependent drag coefficients using Louis (1979,blm) f'
-!     n.b. cduv, cdtq are returned as drag coeffs mult by vmod
-!          (cduv=cduv*vmod; cdtq=cdtq*vmod)
 
-!     t, u, v, qg are current values
-!     tss is surface temperature
-!     dw is soil wetness availability (1. for ocean) - not needed here
-!     fg is sensible heat flux (was h0)
-!     eg is latent heat flux (was wv)
-!     dfgdt is dfgdt (was csen in surfupa/b)
-!     degdt is degdt (was ceva in surfupa/b)
-
-      
 ri_max=(1./fmroot -1.)/bprm    ! i.e. .14641
 zologbgin=log(zmin/zobgin)     ! pre-calculated for all except snow points
 ztv=exp(vkar/sqrt(chn10))/10.  ! proper inverse of ztsea
-!~ z1onzt=300.*rdry*(1.-sig(1))*ztv/grav
-!~ chnsea=(vkar/log(z1onzt))**2   ! should give .00085 for csiro9
 oldrunoff(:)=runoff(:)
 zo=999.        ! dummy value
 factch=999.    ! dummy value
-!~ taux=0.        ! dummy value
-!~ tauy=0.        ! dummy value
 gamm=3.471e+05 ! dummy value
 root=0.        ! dummy value
 denha=0.       ! dummy value
 denma=0.       ! dummy value
 fm=0.          ! dummy value
 
-!     using av_vmod (1. for no time averaging)
-!      *****  check next comment
-!       sflux called at beginning of time loop, hence savu, savv
 
 rho(:) = ps(1:ifull)/(rdry*tss(:))
 
 !--------------------------------------------------------------
 call START_LOG(sfluxwater_begin)
-                                                                            ! sea
   if ( nriver==1 ) then                                                                          ! river
     where ( .not.land(1:ifull) )                                                                 ! river
       watbdy(1:ifull) = 0. ! water enters ocean and is removed from rivers                       ! river
     end where                                                                                    ! river
   end if                                                                                         ! river
-                                                                                        
 call END_LOG(sfluxwater_end)                                                                     
 !--------------------------------------------------------------      
 call START_LOG(sfluxland_begin)    
-
 select case(nsib)                                                                                ! land
   case(7)                                                                                        ! cable
-    if (nmaxpr==1) then                                                                          ! cable
-      if (myid==0) then                                                                          ! cable
-        write(6,*) "Before CABLE"                                                                ! cable
-      end if                                                                                     ! cable
-      call ccmpi_barrier(comm_world)                                                             ! cable
-    end if                                                                                       ! cable
-    ! call cable                                                                                 ! cable
     call sib4                                                                                    ! cable
     ! update remaining diagnostic arrays                                                         ! cable
     where ( land(1:ifull) )                                                                      ! cable
       sno(1:ifull) = sno(1:ifull) + conds(1:ifull)                                               ! cable
       grpl(1:ifull) = grpl(1:ifull) + condg(1:ifull)                                             ! cable
     end where                                                                                    ! cable
-    if (nmaxpr==1) then                                                                          ! cable
-      if (myid==0) then                                                                          ! cable
-        write(6,*) "After CABLE"                                                                 ! cable
-      end if                                                                                     ! cable
-      call ccmpi_barrier(comm_world)                                                             ! cable
-    end if                                                                                       ! cable
-                                                                                                 ! cable
   case DEFAULT                                                                                   ! land
     write(6,*) "ERROR: Unknown land-use option nsib=",nsib                                       ! land
     call ccmpi_abort(-1)                                                                         ! land
-                                                                                                 ! land
 end select                                                                                       ! land
 call END_LOG(sfluxland_end)                                                                      ! land
 !----------------------------------------------------------

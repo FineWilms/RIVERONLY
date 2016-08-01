@@ -528,19 +528,7 @@ do kktau = 1,ntau   ! ****** start of main time loop
 
     ! RIVER ROUTING ------------------------------------------------------
     call START_LOG(river_begin)
-    if ( nmaxpr==1 ) then
-      if ( myid==0 ) then
-        write(6,*) "Before river"
-      end if
-      call ccmpi_barrier(comm_world)
-    end if
-    call rvrrouter
-    if ( nmaxpr==1 ) then
-      if ( myid==0 ) then
-        write(6,*) "After river"
-      end if
-      call ccmpi_barrier(comm_world)
-    end if
+    call rvrrouter  !returns a watbdy
     call END_LOG(river_end)
 
   ! SURFACE FLUXES ---------------------------------------------
@@ -552,12 +540,14 @@ do kktau = 1,ntau   ! ****** start of main time loop
   endif   ! (ntsur>1)    
 
   call END_LOG(sfluxnet_end)
-  
+  !sflux calls sib4 (located in cable_ccam1), sib4 calls soil_snow
   ! ***********************************************************************
   ! DIAGNOSTICS AND OUTPUT
   ! ***********************************************************************
   ! DIAGNOSTICS ------------------------------------------------
-
+!ntau is total number of iterations
+  !nperavg=nwt and is the number of iterations required before an output is given
+  !this will happen only when all simulation steps have been completed, ktau=ntau
   if ( mod(ktau,nmaxpr)==0 .or. ktau==ntau ) then
     call maxmin(wb,'wb',ktau,1.,ms)
   endif                  ! (mod(ktau,nmaxpr)==0)
@@ -567,11 +557,12 @@ do kktau = 1,ntau   ! ****** start of main time loop
   wb_ave(1:ifull,1:ms) = wb_ave(1:ifull,1:ms) + wb
 
 
+  !ktau mod nperavg will be 0  either if ktau=nperavg or is a multiple of it
+  ! i.e. this will happen each time output should be given and at end of sim
   if ( ktau==ntau .or. mod(ktau,nperavg)==0 ) then
     do k=1,ms
       wb_ave(1:ifull,k) = wb_ave(1:ifull,k)/min(ntau,nperavg)
     end do
-    
   end if    ! (ktau==ntau.or.mod(ktau,nperavg)==0)
 
   call log_off()
