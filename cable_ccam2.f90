@@ -274,7 +274,6 @@ real, dimension(ifull) :: albsoil, savannafrac
 real, dimension(12) :: xkmlabp,xpsorbmax,xfPleach
 character(len=*), intent(in) :: fveg,fvegprev,fvegnext
 
-WRITE(6,*) 'IN loadcbmparam'
 if ( myid==0 ) write(6,*) "Initialising CABLE"
 
 if ( cbm_ms/=ms ) then

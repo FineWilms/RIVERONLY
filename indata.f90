@@ -325,7 +325,9 @@ if ( io_in<4 ) then
   if ( myid==0 ) then
     write(6,*) 'Read initial conditions from ifile'
   end if
+  WRITE(6,*) 'TEST01'
   call histopen(ncid,ifile,ier) ! open parallel initial condition files (onthefly will close ncid)
+  WRITE(6,*) 'TEST02'
   call ncmsg("ifile",ier)       ! report error messages
   if (myid==0) then
     write(6,*) 'ncid,ifile ',ncid,trim(ifile)
